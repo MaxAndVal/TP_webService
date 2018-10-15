@@ -10,43 +10,45 @@ class UserController
     public function listAction(Request $request, Application $app)
     {
         $users = $app['repository.user']->getAll();
+        $init = array($status = 200, $statusText = "succed");
 
-        return new Response();
+
+        return $myResponse = new Response($init, $users);
     }
 
-    public function deleteAction(Request $request, Application $app)
-    {
-        $parameters = $request->attributes->all();
-        $app['repository.user']->delete($parameters['id']);
+    // public function deleteAction(Request $request, Application $app)
+    // {
+    //     $parameters = $request->attributes->all();
+    //     $app['repository.user']->delete($parameters['id']);
 
-        return new Response();
-    }
+    //     return new Response();
+    // }
 
-    public function editAction(Request $request, Application $app)
-    {
-        $parameters = $request->attributes->all();
+    // public function editAction(Request $request, Application $app)
+    // {
+    //     $parameters = $request->attributes->all();
 
-        $user = $app['repository.user']->getById($parameters['id']);
-        $users = $app['repository.user']->getAll();
-        return new Response();
-    }
+    //     $user = $app['repository.user']->getById($parameters['id']);
+    //     $users = $app['repository.user']->getAll();
+    //     return new Response();
+    // }
 
-    public function saveAction(Request $request, Application $app)
-    {
-        $parameters = $request->request->all();
-        if ($parameters['id']) {
-            $user = new Response();
-        } else {
-            $user = new Response();
-        }
+    // public function saveAction(Request $request, Application $app)
+    // {
+    //     $parameters = $request->request->all();
+    //     if ($parameters['id']) {
+    //         $user = new Response();
+    //     } else {
+    //         $user = new Response();
+    //     }
 
-        return $user;
-    }
+    //     return $user;
+    // }
 
-    public function newAction(Request $request, Application $app)
-    {
-        $users = $app['repository.user']->getAll();
+    // public function newAction(Request $request, Application $app)
+    // {
+    //     $users = $app['repository.user']->getAll();
 
-        return new Response();
-    }
+    //     return new Response();
+    // }
 }
