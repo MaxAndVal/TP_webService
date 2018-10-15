@@ -11,9 +11,9 @@ class UserController
     {
         $users = $app['repository.user']->getAll();
         $init = array($status = 200, $statusText = "succed");
-
-
-        return $myResponse = new Response($init, $users);
+        $myResponse = new Response($init, $users);
+        echo $myResponse;
+        return $myResponse;
     }
 
     // public function deleteAction(Request $request, Application $app)
