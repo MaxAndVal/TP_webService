@@ -19,7 +19,7 @@ USERS :<br/>
 
 /users/userConnection<br/>
 key : user_email (truc@test.fr) user_password (truc123)<br/>
-/users/userConnect<br/>
+/users/createUser<br/>
 key : userName, userEmail, userPassword<br/>
 
 CARDS :<br/>
