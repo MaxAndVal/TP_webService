@@ -12,11 +12,17 @@ Trade and Collect cards from all Rick and Morty Universe !! wubba lubba dub dub 
 more functionality are coming soon
 
 WebService :<br/>
-https://api-rickandmorty-tcg.herokuapp.com (home page)<br/>
+https://api-rickandmorty-tcg.herokuapp.com (root)<br/>
 USERS :<br/>
-https://api-rickandmorty-tcg.herokuapp.com/users/getAllUsers<br/>
-https://api-rickandmorty-tcg.herokuapp.com/users/getUserById{id}<br/>
+/users/getAllUsers<br/>
+/users/getUserById{id}<br/>
+
+/users/userConnection<br/>
+key : user_email (truc@test.fr) user_password (truc123)<br/>
+/users/userConnect<br/>
+key : userName, userEmail, userPassword<br/>
+
 CARDS :<br/>
-https://api-rickandmorty-tcg.herokuapp.com/cards/getAll<br/>
-https://api-rickandmorty-tcg.herokuapp.com/cards/randomDeckGenerator?user_id={1}<br/>
+/cards/getAll<br/>
+/cards/randomDeckGenerator?user_id={1}<br/>
 Return JSON with 10 cards selected randomly AND add or update in table deck card_id with user_id and amount of this card for this player
