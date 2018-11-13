@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">RickAndMortyAPP</string>
+    <string name="facebook_app_id">715136128867008</string>
+    <string name="fb_login_protocol_scheme">fb715136128867008</string>
+
+    <string name="empty"> </string>
+</resources>
