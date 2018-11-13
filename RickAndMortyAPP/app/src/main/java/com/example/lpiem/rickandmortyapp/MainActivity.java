@@ -252,5 +252,8 @@ public class MainActivity extends AppCompatActivity {
         disconnectGoogleBtn.setVisibility(View.INVISIBLE);
     }
 
-
+    @Override
+    public void onBackPressed() {
+        moveTaskToBack(true);
+    }
 }
