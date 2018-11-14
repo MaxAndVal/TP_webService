@@ -48,14 +48,14 @@ public class MainActivity extends AppCompatActivity {
     private String userNameGG;
     private String userNameFB;
     private GoogleSignInAccount account;
-    private Intent dispalyIntent;
+    private Intent displayIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        dispalyIntent = new Intent(MainActivity.this, DisplayActivity.class);
+        displayIntent = new Intent(MainActivity.this, DisplayActivity.class);
 
 
         userNameTV = findViewById(R.id.userNameTV);
@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
                                                 userNameTV.setVisibility(View.VISIBLE);
                                                 Log.d(TAG, "onCompleted: name = " + userNameFB);
                                                 Toast.makeText(getApplicationContext(), "Bienvenue " + userNameFB, Toast.LENGTH_SHORT).show();
-                                                startActivity(dispalyIntent);
+                                                startActivity(displayIntent);
                                             } catch (JSONException e) {
                                                 e.printStackTrace();
                                             }
@@ -182,7 +182,7 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 userNameTV.setVisibility(View.INVISIBLE);
             }
-            startActivity(dispalyIntent);
+            startActivity(displayIntent);
         }
     }
 
