@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View
 import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 
@@ -48,6 +49,11 @@ class MainActivity : AppCompatActivity() {
     private var userNameFB: String? = null
     private var account: GoogleSignInAccount? = null
     private var displayIntent: Intent? = null
+    private lateinit var etEmail: EditText
+    private lateinit var etPassword: EditText
+    private lateinit var btnRegularConnection: Button
+    private lateinit var etLogin: EditText
+    private var rickAndMortyAPI: RickAndMortyAPI? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,6 +61,12 @@ class MainActivity : AppCompatActivity() {
 
         displayIntent = Intent(this@MainActivity, DisplayActivity::class.java)
 
+        etEmail = findViewById(R.id.etEmail)
+        etPassword  =findViewById(R.id.etPassword)
+        btnRegularConnection = findViewById(R.id.btnRegularConnection)
+        etLogin = findViewById(R.id.etLogin)
+
+        btnRegularConnection.setOnClickListener { regularConnection() }
 
         userNameTV = findViewById(R.id.userNameTV)
         userNameTV.visibility = View.INVISIBLE
@@ -72,7 +84,6 @@ class MainActivity : AppCompatActivity() {
 
         // FACEBOOK
 
-        // Callback registration
         loginButton.setReadPermissions("email")
 
         Log.d(TAG, "onCreate: callBackManager = $callbackManager")
@@ -216,6 +227,18 @@ class MainActivity : AppCompatActivity() {
         }
         signInButton.visibility = View.VISIBLE
         disconnectGoogleBtn.visibility = View.INVISIBLE
+    }
+
+
+    private fun regularConnection() {
+
+        val name = etLogin.text.toString()
+        val mail = etEmail.text.toString()
+        val pass = etPassword.text.toString()
+        rickAndMortyAPI = RickAndMortyRetrofitSingleton.instance
+        rickAndMortyAPI!!.createUser(name, mail, pass)
+        //TODO : to finish
+
     }
 
     override fun onBackPressed() {

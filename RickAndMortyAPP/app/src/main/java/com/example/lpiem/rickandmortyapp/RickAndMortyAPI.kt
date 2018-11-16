@@ -17,8 +17,10 @@ interface RickAndMortyAPI {
             @Query("page") page: Int
     ): Call<Result>
 
+    @FormUrlEncoded
     @POST("/users/createUser")
     fun createUser(
+            @Body
             @Field("user_name") userName: String,
             @Field("user_email") userEmail: String,
             @Field("user_password") userPassword: String

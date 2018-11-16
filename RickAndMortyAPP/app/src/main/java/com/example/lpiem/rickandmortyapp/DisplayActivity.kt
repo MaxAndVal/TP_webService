@@ -40,7 +40,7 @@ class DisplayActivity : AppCompatActivity(), Callback<Result> {
         //RaMRetrofitController raMRetrofitController = new RaMRetrofitController();
         //listName = raMRetrofitController.callWS();
 
-        callWS()
+        //callWS()//TODO: uncomment after
 
     }
 
