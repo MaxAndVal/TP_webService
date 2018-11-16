@@ -1,5 +1,6 @@
 package com.example.lpiem.rickandmortyapp
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -138,23 +139,27 @@ class MainActivity : AppCompatActivity() {
 
 
         // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
-        if (requestCode == RC_SIGN_IN) {
-            // The Task returned from this call is always completed, no need to attach
-            // a listener.
-            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-            handleSignInResult(task)
-            signInButton.visibility = View.INVISIBLE
-            disconnectGoogleBtn.visibility = View.VISIBLE
-            val account = GoogleSignIn.getLastSignedInAccount(this)
-            if (account != null) {
-                userNameGG = account.displayName
-                userNameTV.text = userNameGG
-                userNameTV.visibility = View.VISIBLE
-            } else {
-                userNameTV.visibility = View.INVISIBLE
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == RC_SIGN_IN) {
+
+                // The Task returned from this call is always completed, no need to attach
+                // a listener.
+                val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+                handleSignInResult(task)
+                signInButton.visibility = View.INVISIBLE
+                disconnectGoogleBtn.visibility = View.VISIBLE
+                val account = GoogleSignIn.getLastSignedInAccount(this)
+                if (account != null) {
+                    userNameGG = account.displayName
+                    userNameTV.text = userNameGG
+                    userNameTV.visibility = View.VISIBLE
+                } else {
+                    userNameTV.visibility = View.INVISIBLE
+                }
+                startActivity(displayIntent)
             }
-            startActivity(displayIntent)
         }
+
     }
 
     override fun onStart() {
