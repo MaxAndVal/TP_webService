@@ -2,9 +2,7 @@ package com.example.lpiem.rickandmortyapp
 
 
 import retrofit2.Call
-import retrofit2.http.GET
-import retrofit2.http.Path
-import retrofit2.http.Query
+import retrofit2.http.*
 
 
 interface RickAndMortyAPI {
@@ -19,4 +17,10 @@ interface RickAndMortyAPI {
             @Query("page") page: Int
     ): Call<Result>
 
+    @POST("/users/createUser")
+    fun createUser(
+            @Field("user_name") userName: String,
+            @Field("user_email") userEmail: String,
+            @Field("user_password") userPassword: String
+    ): Call<ResponseFromApi>
 }

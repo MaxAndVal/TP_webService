@@ -9,8 +9,8 @@ class Result : Parcelable {
 
     @JvmField val CREATOR: Parcelable.Creator<Result> = object : Parcelable.Creator<Result> {
 
-        override fun createFromParcel(`in`: Parcel): Result {
-            return Result(`in`)
+        override fun createFromParcel(inside: Parcel): Result {
+            return Result(inside)
         }
 
         override fun newArray(size: Int): Array<Result?> {
