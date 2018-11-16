@@ -52,7 +52,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        displayIntent = Intent(this, DisplayActivity::class.java)
+        displayIntent = Intent(this@MainActivity, DisplayActivity::class.java)
 
 
         userNameTV = findViewById(R.id.userNameTV)
@@ -62,68 +62,64 @@ class MainActivity : AppCompatActivity() {
         disconnectGoogleBtn.setOnClickListener { disconnectGoogleAccount() }
 
 
-        callbackManager = CallbackManager.Factory.create()
-
-        Log.d(TAG, "onCreate: callBackManager = $callbackManager")
-
         loginButton = findViewById(R.id.login_button)
-        loginButton.setReadPermissions("email")
-        loginButton.setReadPermissions("public_profile")
+        callbackManager = CallbackManager.Factory.create()
 
         signInButton = findViewById(R.id.sign_in_button)
         signInButton.setSize(SignInButton.SIZE_STANDARD)
 
 
         // FACEBOOK
-        loginButton.setOnClickListener {
-            // Callback registration
-            loginButton.registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
-                override fun onSuccess(loginResult: LoginResult) {
-                    token = loginResult.accessToken.token
-                    Log.d(TAG, "onSuccess: token = $token")
 
-                    val accessToken = AccessToken.getCurrentAccessToken()
-                    val isLoggedIn = accessToken != null && !accessToken.isExpired
+        // Callback registration
+        loginButton.setReadPermissions("email")
 
-                    if (isLoggedIn) {
-                        val request = GraphRequest.newMeRequest(
-                                accessToken
-                        ) { `object`, response ->
-                            val result = response.jsonObject
-                            try {
-                                userNameFB = result.getString("name")
-                                userNameTV.text = userNameFB
-                                userNameTV.visibility = View.VISIBLE
-                                Log.d(TAG, "onCompleted: name = $userNameFB")
-                                Toast.makeText(applicationContext, "Bienvenue $userNameFB", Toast.LENGTH_SHORT).show()
-                                startActivity(displayIntent)
-                            } catch (e: JSONException) {
-                                e.printStackTrace()
-                            }
+        Log.d(TAG, "onCreate: callBackManager = $callbackManager")
+        loginButton.registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
+            override fun onSuccess(loginResult: LoginResult) {
+                token = loginResult.accessToken.token
+                Log.d(TAG, "onSuccess: token = $token")
+
+                val accessToken = AccessToken.getCurrentAccessToken()
+                val isLoggedIn = accessToken != null && !accessToken.isExpired
+
+                if (isLoggedIn) {
+                    LoginManager.getInstance().logInWithReadPermissions(this@MainActivity, Arrays.asList("public_profile"))
+                    val request = GraphRequest.newMeRequest(
+                            accessToken
+                    ) { `object`, response ->
+                        val result = response.jsonObject
+                        try {
+                            userNameFB = result.getString("name")
+                            userNameTV.text = userNameFB
+                            userNameTV.visibility = View.VISIBLE
+                            Log.d(TAG, "onCompleted: name = $userNameFB")
+                            Toast.makeText(applicationContext, "Bienvenue $userNameFB", Toast.LENGTH_SHORT).show()
+                            startActivity(displayIntent)
+                        } catch (e: JSONException) {
+                            e.printStackTrace()
                         }
-                        val parameters = Bundle()
-                        parameters.putString("fields", "id,name,link")
-                        request.parameters = parameters
-                        request.executeAsync()
                     }
-
+                    val parameters = Bundle()
+                    parameters.putString("fields", "id,name,link")
+                    request.parameters = parameters
+                    request.executeAsync()
                 }
 
-                override fun onCancel() {
-                    Log.d(TAG, "onCancel: ")
-                }
+            }
 
-                override fun onError(exception: FacebookException) {
-                    Toast.makeText(applicationContext, exception.toString(), Toast.LENGTH_SHORT).show()
-                    Log.d(TAG, "onError: " + exception.toString())
-                }
-            })
-        }
+            override fun onCancel() {
+                Log.d(TAG, "onCancel: ")
+            }
+
+            override fun onError(exception: FacebookException) {
+                Toast.makeText(applicationContext, exception.toString(), Toast.LENGTH_SHORT).show()
+                Log.d(TAG, "onError: " + exception.toString())
+            }
+        })
 
 
         // GOOGLE
-        LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile"))
-
         gso = GoogleSignInOptions
                 .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
@@ -137,8 +133,9 @@ class MainActivity : AppCompatActivity() {
 
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
+        callbackManager?.onActivityResult(requestCode, resultCode, data)
         super.onActivityResult(requestCode, resultCode, data)
-        callbackManager!!.onActivityResult(requestCode, resultCode, data)
+
 
         // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
@@ -198,7 +195,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun disconnectGoogleAccount() {
-        mGoogleSignInClient!!.signOut().addOnCompleteListener { task ->
+        mGoogleSignInClient?.signOut()?.addOnCompleteListener { task ->
             task.result
             Log.d(TAG, "onComplete: disconnectGoogle")
             //GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(getApplicationContext());

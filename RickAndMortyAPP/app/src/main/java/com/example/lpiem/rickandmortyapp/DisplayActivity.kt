@@ -6,6 +6,7 @@ import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.TextView
+import com.facebook.AccessToken
 
 import com.facebook.login.LoginManager
 
@@ -113,6 +114,7 @@ class DisplayActivity : AppCompatActivity(), Callback<Result> {
 
     override fun onBackPressed() {
         super.onBackPressed()
+
         LoginManager.getInstance().logOut()
     }
 }
