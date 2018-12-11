@@ -23,11 +23,14 @@ interface RickAndMortyAPI {
     ): Call<Result>
 
     @FormUrlEncoded
-    @POST("/users/createUser")
-    fun createUser(
-            @Body
-            @Field("user_name") userName: String,
+    @POST("/auth/login")
+    fun connectUser(
             @Field("user_email") userEmail: String,
             @Field("user_password") userPassword: String
     ): Call<ResponseFromApi>
+
+    @GET("/cards/randomDeckGenerator/{id}")
+    fun getRandomDeck(
+            @Path("id") userId: Int
+    ): Call<List<Character>>
 }

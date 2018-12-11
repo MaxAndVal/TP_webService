@@ -28,7 +28,7 @@ class ResponseFromApi : Parcelable {
     @Expose
     var success: String? = null
 
-    @SerializedName("response")
+    @SerializedName("user")
     @Expose
     var results: User? = null
         private set

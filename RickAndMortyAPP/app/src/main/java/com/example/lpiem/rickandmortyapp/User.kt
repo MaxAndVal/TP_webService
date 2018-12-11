@@ -31,7 +31,7 @@ class User : Parcelable {
     @SerializedName("user_email")
     @Expose
     var userEmail: String? = null
-    @SerializedName("deck_To_Open")
+    @SerializedName("deckToOpen")
     @Expose
     var deckToOpen: Int? = null
 
