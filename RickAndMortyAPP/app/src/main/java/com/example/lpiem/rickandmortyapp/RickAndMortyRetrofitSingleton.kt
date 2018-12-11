@@ -8,7 +8,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 object RickAndMortyRetrofitSingleton {
 
     //private const val BASE_URL = "https://rickandmortyapi.com/"
-    private const val BASE_URL = "https://api-rickandmorty-tcg.herokuapp.com/"
+    private const val BASE_URL = "https://api-rickandmorty-tcg.herokuapp.com"
 
     private var rickAndMortyAPIInstance: RickAndMortyAPI? = null
 

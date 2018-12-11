@@ -7,6 +7,7 @@ import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.TextView
 import com.facebook.AccessToken
+import com.facebook.login.LoginBehavior
 
 import com.facebook.login.LoginManager
 
@@ -37,47 +38,26 @@ class DisplayActivity : AppCompatActivity(), Callback<Result> {
         adapter = ArrayAdapter(this@DisplayActivity, android.R.layout.simple_list_item_1, listName)
         listView.adapter = adapter
 
-        //RaMRetrofitController raMRetrofitController = new RaMRetrofitController();
-        //listName = raMRetrofitController.callWS();
-
-        //callWS()//TODO: uncomment after
+        callWS()//TODO: uncomment after
 
     }
 
     private fun callWS() {
-
         rickAndMortyAPI = RickAndMortyRetrofitSingleton.instance
-        getNextListCharacter()
-
-        val characterCall = rickAndMortyAPI!!.getCharacterById(1)
-        characterCall.enqueue(object : Callback<Character> {
-            override fun onResponse(call: Call<Character>, response: Response<Character>) {
-                if (response.isSuccessful) {
-                    val character = response.body()
-                    Log.d("test", "onResponse: " + character!!)
-                    message = character.name
-                    tv.text = message
-                }
-
-            }
-
-            override fun onFailure(call: Call<Character>, t: Throwable) {
-                t.printStackTrace()
-            }
-        })
-
+        getAllCharacter()
     }
 
-    private fun getNextListCharacter() {
-        val resultCall = rickAndMortyAPI!!.getListCharacter(nextPage)
+    private fun getAllCharacter() {
+        val resultCall = rickAndMortyAPI!!.getAllCharacters(nextPage)
         resultCall.enqueue(this)
     }
+
 
     override fun onResponse(call: Call<Result>, response: Response<Result>) {
         if (response.isSuccessful) {
             fetchData(response)
             if (nextPage < nbPages) {
-                getNextListCharacter()
+                getAllCharacter()
             }
         } else {
             Log.d("SwapiRetrofitController", "error : " + response.errorBody()!!)
@@ -93,7 +73,7 @@ class DisplayActivity : AppCompatActivity(), Callback<Result> {
         else
             nbPages = nextPage
 
-        val listPeople = result.results
+        val listPeople = result!!.results
         message += "list people : \n\n"
         for (character in listPeople!!) {
             Log.d("SwapiRetrofitController", "people name : " + character.name)
@@ -114,7 +94,7 @@ class DisplayActivity : AppCompatActivity(), Callback<Result> {
 
     override fun onBackPressed() {
         super.onBackPressed()
-
+        //moveTaskToBack(true)
         LoginManager.getInstance().logOut()
     }
 }

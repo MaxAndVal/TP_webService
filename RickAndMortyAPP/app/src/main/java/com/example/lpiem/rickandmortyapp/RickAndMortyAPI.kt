@@ -17,6 +17,11 @@ interface RickAndMortyAPI {
             @Query("page") page: Int
     ): Call<Result>
 
+    @GET("/cards/getAll/{page}")
+    fun getAllCharacters(
+            @Path("page") page: Int
+    ): Call<Result>
+
     @FormUrlEncoded
     @POST("/users/createUser")
     fun createUser(
