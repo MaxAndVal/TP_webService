@@ -69,7 +69,7 @@ class DisplayActivity : AppCompatActivity() {
                         val responseFromApi = response.body() as ResponseFromApi
                     }
                 } else {
-                    Log.d("TAG", "error : " + response.errorBody()!!)
+                    Log.d(TAG, "error : " + response.errorBody()!!)
 
                 }
 
