@@ -1,6 +1,7 @@
 package com.example.lpiem.rickandmortyapp
 
 
+import com.google.gson.JsonObject
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -17,16 +18,14 @@ interface RickAndMortyAPI {
             @Query("page") page: Int
     ): Call<Result>
 
-    @GET("/cards/getAll/{page}")
+    @GET("/cards/all/{page}")
     fun getAllCharacters(
             @Path("page") page: Int
     ): Call<Result>
 
-    @FormUrlEncoded
     @POST("/auth/login")
     fun connectUser(
-            @Field("user_email") userEmail: String,
-            @Field("user_password") userPassword: String
+            @Body body: JsonObject
     ): Call<ResponseFromApi>
 
     @GET("/cards/randomDeckGenerator/{id}")

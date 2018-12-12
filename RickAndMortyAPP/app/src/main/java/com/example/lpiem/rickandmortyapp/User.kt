@@ -2,6 +2,7 @@ package com.example.lpiem.rickandmortyapp
 
 import android.os.Parcel
 import android.os.Parcelable
+import android.util.Log
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
@@ -36,6 +37,7 @@ class User : Parcelable {
     var deckToOpen: Int? = null
 
     constructor(inside: Parcel) {
+        Log.d(TAG, "inside = $inside")
         this.userId = inside.readValue(Int::class.java.classLoader) as Int
         this.userName = inside.readValue(String::class.java.classLoader) as String
         this.userEmail = inside.readValue(String::class.java.classLoader) as String

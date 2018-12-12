@@ -25,6 +25,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.SignInButton
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
+import com.google.gson.JsonObject
 
 import org.json.JSONException
 import retrofit2.Call
@@ -236,7 +237,11 @@ class MainActivity : AppCompatActivity(), Callback<ResponseFromApi> {
         val mail = etEmail.text.toString()
         val pass = etPassword.text.toString()
         rickAndMortyAPI = RickAndMortyRetrofitSingleton.instance
-        var connection = rickAndMortyAPI!!.connectUser(mail, pass)
+        val jsonBody = JsonObject()
+        jsonBody.addProperty("user_email", mail)
+        jsonBody.addProperty("user_password", pass)
+        var connection = rickAndMortyAPI!!.connectUser(jsonBody)
+        Log.d(TAG, "jsonBody : $jsonBody")
         Log.d(TAG, "$connection")
         connection.enqueue(this)
     }

@@ -67,16 +67,18 @@ class DisplayActivity : AppCompatActivity() {
                         Log.d(TAG, "test character = $character")
                     } else if(i == 3) {
                         val responseFromApi = response.body() as ResponseFromApi
+                        Log.d(TAG, "responseFromApi: ${responseFromApi.code} / success: ${responseFromApi.success} / ${responseFromApi.results}")
                     }
                 } else {
-                    Log.d(TAG, "error : " + response.errorBody()!!)
+                    val responseError = response.body() as ResponseError
+                    Log.d(TAG, "error code:${responseError.code} + message: ${responseError.message} ")
 
                 }
 
             }
 
             override fun onFailure(call: Call<T>, t: Throwable) {
-                Log.d(TAG, "$t")
+                Log.d(TAG, "fail : $t")
             }
         })
 
