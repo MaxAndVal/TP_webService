@@ -1,5 +1,6 @@
 package com.example.lpiem.rickandmortyapp
 
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -33,7 +34,12 @@ class DisplayActivity : AppCompatActivity() {
         ivCard = findViewById(R.id.iv_card_image)
         btnDeck = findViewById(R.id.btn_deck)
         btnRandomDeck = findViewById(R.id.btn_generate_deck)
-        btnDeck.setOnClickListener { getListOfDecks() }
+
+        btnDeck.setOnClickListener {
+            getListOfDecks()
+            val intent = Intent(this, BottomActivity::class.java)
+            startActivity(intent)
+        }
         btnRandomDeck.setOnClickListener { generateDeck() }
 
         tv = findViewById(R.id.textView)

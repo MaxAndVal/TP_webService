@@ -4,4 +4,11 @@
     <string name="fb_login_protocol_scheme">fb715136128867008</string>
 
     <string name="empty"> </string>
+    <string name="title_activity_bottom">BottomActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="collection">collection</string>
+    <string name="social">social</string>
+    <string name="profilSettings">profil</string>
 </resources>

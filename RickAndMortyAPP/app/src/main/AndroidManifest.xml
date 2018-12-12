@@ -11,7 +11,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.example.lpiem.rickandmortyapp.SplashScreen">
+        <activity android:name=".SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -40,9 +40,12 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.example.lpiem.rickandmortyapp.DisplayActivity"
+            android:name=".DisplayActivity"
             android:theme="@style/AppTheme" />
-        <activity android:name="com.example.lpiem.rickandmortyapp.MainActivity"></activity>
+        <activity android:name=".MainActivity" />
+        <activity
+            android:name=".BottomActivity"
+            android:label="@string/title_activity_bottom"></activity>
     </application>
 
 </manifest>
