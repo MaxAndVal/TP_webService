@@ -3,16 +3,8 @@ package com.example.lpiem.rickandmortyapp
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.View
-import android.widget.ArrayAdapter
-import android.widget.Button
-import android.widget.ListView
-import android.widget.TextView
-import com.example.lpiem.rickandmortyapp.R.id.btn_generate_deck
-import com.facebook.AccessToken
-import com.facebook.login.LoginBehavior
-
-import com.facebook.login.LoginManager
+import android.widget.*
+import com.squareup.picasso.Picasso
 
 import java.util.ArrayList
 
@@ -29,7 +21,8 @@ class DisplayActivity : AppCompatActivity() {
     private var rickAndMortyAPI: RickAndMortyAPI? = null
     private val listName = ArrayList<String>()
     private lateinit var btnRandomDeck: Button
-
+    private lateinit var btnDeck: Button
+    private lateinit var ivCard: ImageView
     private var adapter: ArrayAdapter<String>? = null
 
 
@@ -38,7 +31,10 @@ class DisplayActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_display)
 
+        ivCard = findViewById(R.id.iv_card_image)
+        btnDeck = findViewById(R.id.btn_deck)
         btnRandomDeck = findViewById(R.id.btn_generate_deck)
+        btnDeck.setOnClickListener { getListOfDecks() }
         btnRandomDeck.setOnClickListener { generateDeck() }
 
         tv = findViewById(R.id.textView)
@@ -57,7 +53,7 @@ class DisplayActivity : AppCompatActivity() {
             override fun onResponse(call: Call<T>, response: Response<T>) {
                 if (response.isSuccessful) {
                     if (i == 1) {
-                        val result = response.body() as Result // use the user object for the other fields
+                        val result = response.body() as Result
                         fetchData(response as Response<Result>)
                         if (nextPage < nbPages) {
                             getAllCharacter()
@@ -68,10 +64,18 @@ class DisplayActivity : AppCompatActivity() {
                     } else if(i == 3) {
                         val responseFromApi = response.body() as ResponseFromApi
                         Log.d(TAG, "responseFromApi: ${responseFromApi.code} / success: ${responseFromApi.success} / ${responseFromApi.results}")
+                    } else if (i == 4) {
+                        val listOfDecks = response.body() as ListOfDecks
+                        Log.d(TAG, "deck: ${listOfDecks.decks?.get(0)?.cardName} , ${listOfDecks.decks?.get(2)?.cardName}")
+                        val image = listOfDecks.decks?.get(0)?.cardImage
+                        Picasso.get().load(image).into(ivCard)
                     }
                 } else {
-                    val responseError = response.body() as ResponseError
-                    Log.d(TAG, "error code:${responseError.code} + message: ${responseError.message} ")
+                    if (response != null) {
+                        val responseError = response.body() as ResponseError
+                        Log.d(TAG, "error code:${responseError.code} + message: ${responseError.message} ")
+                    }
+
 
                 }
 
@@ -82,6 +86,11 @@ class DisplayActivity : AppCompatActivity() {
             }
         })
 
+    }
+
+    private fun getListOfDecks() {
+        val resultListDeck = rickAndMortyAPI!!.getListOfDecksById(1)
+        callRetrofit(resultListDeck, 4)
     }
 
     private fun generateDeck() {

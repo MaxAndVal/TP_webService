@@ -26,29 +26,34 @@ class Deck : Parcelable {
     @SerializedName("user_id")
     @Expose
     var userId: Int? = null
-    @SerializedName("user_name")
+    @SerializedName("card_id")
     @Expose
-    var userName: String? = null
-    @SerializedName("user_email")
+    var cardId: Int? = null
+    @SerializedName("card_name")
     @Expose
-    var userEmail: String? = null
-    @SerializedName("deckToOpen")
+    var cardName: String? = null
+    @SerializedName("card_image")
     @Expose
-    var deckToOpen: Int? = null
+    var cardImage: String? = null
+    @SerializedName("amount")
+    @Expose
+    var amount: Int? = null
 
     constructor(inside: Parcel) {
         Log.d(TAG, "inside = $inside")
         this.userId = inside.readValue(Int::class.java.classLoader) as Int
-        this.userName = inside.readValue(String::class.java.classLoader) as String
-        this.userEmail = inside.readValue(String::class.java.classLoader) as String
-        this.deckToOpen = inside.readValue(Int::class.java.classLoader) as Int
+        this.cardId = inside.readValue(Int::class.java.classLoader) as Int
+        this.cardName = inside.readValue(String::class.java.classLoader) as String
+        this.cardImage = inside.readValue(String::class.java.classLoader) as String
+        this.amount = inside.readValue(Int::class.java.classLoader) as Int
     }
 
     override fun writeToParcel(dest: Parcel, flags: Int) {
         dest.writeValue(userId)
-        dest.writeValue(userName)
-        dest.writeValue(userEmail)
-        dest.writeValue(deckToOpen)
+        dest.writeValue(cardId)
+        dest.writeValue(cardName)
+        dest.writeValue(cardImage)
+        dest.writeValue(amount)
     }
 
     override fun describeContents(): Int {
