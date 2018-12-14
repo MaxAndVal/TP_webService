@@ -15,7 +15,8 @@ class BottomActivity : AppCompatActivity() {
                 val fragmentManager = supportFragmentManager
                 val fragmentTransaction = fragmentManager.beginTransaction()
                 val fragment = CollectionFragment.newInstance("coucou", "ca va${i++}")
-                fragmentTransaction.add(R.id.fragmentLayout, fragment)
+                fragmentTransaction.addToBackStack("stack")
+                fragmentTransaction.replace(R.id.fragmentLayout, fragment)
                 fragmentTransaction.commit()
                 return@OnNavigationItemSelectedListener true
             }
@@ -23,7 +24,8 @@ class BottomActivity : AppCompatActivity() {
                 val fragmentManager = supportFragmentManager
                 val fragmentTransaction = fragmentManager.beginTransaction()
                 val fragment = CollectionFragment.newInstance("coucou", "ca va${i++}")
-                fragmentTransaction.add(R.id.fragmentLayout, fragment)
+                fragmentTransaction.addToBackStack("stack")
+                fragmentTransaction.replace(R.id.fragmentLayout, fragment)
                 fragmentTransaction.commit()
                 return@OnNavigationItemSelectedListener true
             }

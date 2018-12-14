@@ -9,12 +9,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
-
-import com.facebook.AccessToken
-import com.facebook.CallbackManager
-import com.facebook.FacebookCallback
-import com.facebook.FacebookException
-import com.facebook.GraphRequest
+import com.facebook.*
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
 import com.facebook.login.widget.LoginButton
@@ -26,13 +21,11 @@ import com.google.android.gms.common.SignInButton
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.google.gson.JsonObject
-
 import org.json.JSONException
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-
-import java.util.Arrays
+import java.util.*
 
 const val TAG = "TAG_M"
 const val RC_SIGN_IN = 1
@@ -97,9 +90,6 @@ class MainActivity : AppCompatActivity(), Callback<ResponseFromApi> {
             override fun onSuccess(loginResult: LoginResult) {
                 token = loginResult.accessToken.token
                 Log.d(TAG, "onSuccess: token = $token")
-
-
-
             }
 
             override fun onCancel() {

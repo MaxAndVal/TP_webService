@@ -1,14 +1,12 @@
 package com.example.lpiem.rickandmortyapp
 
-import android.content.Context
-import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import kotlinx.android.synthetic.main.fragment_collection.*
-import kotlinx.android.synthetic.main.fragment_collection.view.*
+import android.widget.TextView
+import com.example.lpiem.rickandmortyapp.R.id.textFragment
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -27,21 +25,18 @@ class CollectionFragment : Fragment() {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
+
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-        if(savedInstanceState != null){
-            testCollectionFragment.text =  savedInstanceState.get(ARG_PARAM2) as String
-        }
         return inflater.inflate(R.layout.fragment_collection, container, false)
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if(savedInstanceState != null){
-            view.testCollectionFragment.text =  savedInstanceState.get(ARG_PARAM2) as String
-        }
+        view.findViewById<TextView>(textFragment).text = arguments?.get(ARG_PARAM2) as String
+
     }
 
     companion object {
