@@ -14,16 +14,17 @@ class BottomActivity : AppCompatActivity() {
                 message.setText(R.string.title_home)
                 val fragmentManager = supportFragmentManager
                 val fragmentTransaction = fragmentManager.beginTransaction()
-                val fragment = CollectionFragment.newInstance("coucou", "ca va${i++}")
+                val fragment = HomeFragment.newInstance("coucou", "ca va ${i++}")
                 fragmentTransaction.addToBackStack("stack")
                 fragmentTransaction.replace(R.id.fragmentLayout, fragment)
                 fragmentTransaction.commit()
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_collection -> {
+                message.setText(R.string.collection)
                 val fragmentManager = supportFragmentManager
                 val fragmentTransaction = fragmentManager.beginTransaction()
-                val fragment = CollectionFragment.newInstance("coucou", "ca va${i++}")
+                val fragment = CollectionFragment.newInstance("coucou", "2ca va ${i++}")
                 fragmentTransaction.addToBackStack("stack")
                 fragmentTransaction.replace(R.id.fragmentLayout, fragment)
                 fragmentTransaction.commit()
