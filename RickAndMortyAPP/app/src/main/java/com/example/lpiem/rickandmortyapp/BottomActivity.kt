@@ -6,15 +6,25 @@ import android.support.v7.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_bottom.*
 
 class BottomActivity : AppCompatActivity() {
+    private var i =0
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.navigation_home -> {
                 message.setText(R.string.title_home)
+                val fragmentManager = supportFragmentManager
+                val fragmentTransaction = fragmentManager.beginTransaction()
+                val fragment = CollectionFragment.newInstance("coucou", "ca va${i++}")
+                fragmentTransaction.add(R.id.fragmentLayout, fragment)
+                fragmentTransaction.commit()
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_collection -> {
-                message.setText(R.string.collection)
+                val fragmentManager = supportFragmentManager
+                val fragmentTransaction = fragmentManager.beginTransaction()
+                val fragment = CollectionFragment.newInstance("coucou", "ca va${i++}")
+                fragmentTransaction.add(R.id.fragmentLayout, fragment)
+                fragmentTransaction.commit()
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_social -> {
