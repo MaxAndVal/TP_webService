@@ -5,8 +5,9 @@ import android.os.Parcelable
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
-class Character : Parcelable {
+class Character : Parcelable, Serializable {
 
     companion object {
         @JvmField val CREATOR: Parcelable.Creator<Character> = object : Parcelable.Creator<Character> {

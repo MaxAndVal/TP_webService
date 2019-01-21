@@ -32,4 +32,9 @@ interface RickAndMortyAPI {
     fun getRandomDeck(
             @Path("id") userId: Int
     ): Call<List<Character>>
+
+    @GET("/users/deck/{id}")
+    fun getListOfDecksById(
+            @Path("id") page: Int
+    ): Call<ListOfDecks>
 }

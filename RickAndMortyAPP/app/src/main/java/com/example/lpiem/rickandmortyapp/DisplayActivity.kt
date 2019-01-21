@@ -1,24 +1,17 @@
 package com.example.lpiem.rickandmortyapp
 
-import android.support.v7.app.AppCompatActivity
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.View
-import android.widget.ArrayAdapter
-import android.widget.Button
-import android.widget.ListView
-import android.widget.TextView
-import com.example.lpiem.rickandmortyapp.R.id.btn_generate_deck
-import com.facebook.AccessToken
-import com.facebook.login.LoginBehavior
-
+import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
 import com.facebook.login.LoginManager
-
-import java.util.ArrayList
-
+import com.squareup.picasso.Picasso
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.*
 
 class DisplayActivity : AppCompatActivity() {
 
@@ -29,16 +22,24 @@ class DisplayActivity : AppCompatActivity() {
     private var rickAndMortyAPI: RickAndMortyAPI? = null
     private val listName = ArrayList<String>()
     private lateinit var btnRandomDeck: Button
-
+    private lateinit var btnDeck: Button
+    private lateinit var ivCard: ImageView
     private var adapter: ArrayAdapter<String>? = null
-
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_display)
 
+        ivCard = findViewById(R.id.iv_card_image)
+        btnDeck = findViewById(R.id.btn_deck)
         btnRandomDeck = findViewById(R.id.btn_generate_deck)
+
+        btnDeck.setOnClickListener {
+            getListOfDecks()
+            val intent = Intent(this, BottomActivity::class.java)
+            startActivity(intent)
+        }
         btnRandomDeck.setOnClickListener { generateDeck() }
 
         tv = findViewById(R.id.textView)
@@ -47,32 +48,35 @@ class DisplayActivity : AppCompatActivity() {
         listView.adapter = adapter
 
         rickAndMortyAPI = RickAndMortyRetrofitSingleton.instance
-        callWS()//TODO: uncomment after
+        callWS()
 
     }
 
-    fun <T> callRetrofit(call: Call<T>, i: Int) {
+    private fun <T> callRetrofit(call: Call<T>, i: Int) {
 
         call.enqueue(object : Callback<T> {
             override fun onResponse(call: Call<T>, response: Response<T>) {
                 if (response.isSuccessful) {
                     if (i == 1) {
-                        val result = response.body() as Result // use the user object for the other fields
                         fetchData(response as Response<Result>)
                         if (nextPage < nbPages) {
                             getAllCharacter()
                         }
                     } else if (i == 2) {
                         val character = response.body() as List<Character>
-                        Log.d(TAG, "test character = $character")
-                    } else if(i == 3) {
+                        Log.d(TAG, "test character = ${character[0]}")
+                    } else if (i == 3) {
                         val responseFromApi = response.body() as ResponseFromApi
                         Log.d(TAG, "responseFromApi: ${responseFromApi.code} / success: ${responseFromApi.success} / ${responseFromApi.results}")
+                    } else if (i == 4) {
+                        val listOfDecks = response.body() as ListOfDecks
+                        Log.d(TAG, "deck: ${listOfDecks.cards?.get(0)?.cardName} , ${listOfDecks.cards?.get(2)?.cardName}")
+                        val image = listOfDecks.cards?.get(0)?.cardImage
+                        Picasso.get().load(image).into(ivCard)
                     }
                 } else {
-                    val responseError = response.body() as ResponseError
-                    Log.d(TAG, "error code:${responseError.code} + message: ${responseError.message} ")
-
+                    val responseError = response.errorBody() as ResponseBody
+                    Log.d(TAG, "error: ${responseError.string()}")
                 }
 
             }
@@ -82,6 +86,11 @@ class DisplayActivity : AppCompatActivity() {
             }
         })
 
+    }
+
+    private fun getListOfDecks() {
+        val resultListDeck = rickAndMortyAPI!!.getListOfDecksById(1)
+        callRetrofit(resultListDeck, 4)
     }
 
     private fun generateDeck() {
@@ -98,23 +107,6 @@ class DisplayActivity : AppCompatActivity() {
         callRetrofit(resultCall, 1)
     }
 
-
-    /*override fun onResponse(call: Call<Any>, response: Response<Any>) {
-        if (response.isSuccessful) {
-            fetchData(response)
-            if (nextPage < nbPages) {
-                getAllCharacter()
-            }
-        } else {
-            Log.d("SwapiRetrofitController", "error : " + response.errorBody()!!)
-        }
-    }
-
-    override fun onFailure(call: Call<Any>, t: Throwable) {
-        t.printStackTrace()
-    }*/
-
-
     @Synchronized
     private fun fetchData(response: Response<Result>) {
         val result = response.body()
@@ -127,12 +119,11 @@ class DisplayActivity : AppCompatActivity() {
         val listPeople = result!!.results
         message += "list people : \n\n"
         for (character in listPeople!!) {
-            Log.d("SwapiRetrofitController", "people name : " + character.name)
+            Log.d(TAG, "people name : " + character.name)
             character.name?.let { listName.add(it) }
         }
         adapter?.notifyDataSetChanged()
     }
-
 
 
     override fun onResume() {
@@ -143,6 +134,6 @@ class DisplayActivity : AppCompatActivity() {
     override fun onBackPressed() {
         super.onBackPressed()
         //moveTaskToBack(true)
-        //LoginManager.getInstance().logOut()
+        LoginManager.getInstance().logOut()
     }
 }
