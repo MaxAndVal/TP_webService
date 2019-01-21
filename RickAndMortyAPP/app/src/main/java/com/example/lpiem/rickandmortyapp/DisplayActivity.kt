@@ -5,7 +5,9 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import com.facebook.login.LoginManager
 import com.squareup.picasso.Picasso
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -62,19 +64,19 @@ class DisplayActivity : AppCompatActivity() {
                         }
                     } else if (i == 2) {
                         val character = response.body() as List<Character>
-                        Log.d(TAG, "test character = $character")
+                        Log.d(TAG, "test character = ${character[0]}")
                     } else if (i == 3) {
                         val responseFromApi = response.body() as ResponseFromApi
                         Log.d(TAG, "responseFromApi: ${responseFromApi.code} / success: ${responseFromApi.success} / ${responseFromApi.results}")
                     } else if (i == 4) {
                         val listOfDecks = response.body() as ListOfDecks
-                        Log.d(TAG, "deck: ${listOfDecks.decks?.get(0)?.cardName} , ${listOfDecks.decks?.get(2)?.cardName}")
-                        val image = listOfDecks.decks?.get(0)?.cardImage
+                        Log.d(TAG, "deck: ${listOfDecks.cards?.get(0)?.cardName} , ${listOfDecks.cards?.get(2)?.cardName}")
+                        val image = listOfDecks.cards?.get(0)?.cardImage
                         Picasso.get().load(image).into(ivCard)
                     }
                 } else {
-                    val responseError = response.errorBody() as ResponseError
-                    Log.d(TAG, "error: ${responseError.message}")
+                    val responseError = response.errorBody() as ResponseBody
+                    Log.d(TAG, "error: ${responseError.string()}")
                 }
 
             }
@@ -117,7 +119,7 @@ class DisplayActivity : AppCompatActivity() {
         val listPeople = result!!.results
         message += "list people : \n\n"
         for (character in listPeople!!) {
-            Log.d("SwapiRetrofitController", "people name : " + character.name)
+            Log.d(TAG, "people name : " + character.name)
             character.name?.let { listName.add(it) }
         }
         adapter?.notifyDataSetChanged()
@@ -132,6 +134,6 @@ class DisplayActivity : AppCompatActivity() {
     override fun onBackPressed() {
         super.onBackPressed()
         //moveTaskToBack(true)
-        //LoginManager.getInstance().logOut()
+        LoginManager.getInstance().logOut()
     }
 }

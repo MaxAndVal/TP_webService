@@ -6,17 +6,17 @@ import android.util.Log
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-class Deck : Parcelable {
+class Card : Parcelable {
 
     companion object {
-        @JvmField val CREATOR: Parcelable.Creator<Deck> = object : Parcelable.Creator<Deck> {
+        @JvmField val CREATOR: Parcelable.Creator<Card> = object : Parcelable.Creator<Card> {
 
 
-            override fun createFromParcel(inside: Parcel): Deck {
-                return Deck(inside)
+            override fun createFromParcel(inside: Parcel): Card {
+                return Card(inside)
             }
 
-            override fun newArray(size: Int): Array<Deck?> {
+            override fun newArray(size: Int): Array<Card?> {
                 return arrayOfNulls(size)
             }
 

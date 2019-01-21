@@ -7,6 +7,7 @@ import kotlinx.android.synthetic.main.activity_bottom.*
 
 class BottomActivity : AppCompatActivity() {
     private var i =0
+    private lateinit var characterList: List<Character>
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
@@ -24,7 +25,7 @@ class BottomActivity : AppCompatActivity() {
                 message.setText(R.string.collection)
                 val fragmentManager = supportFragmentManager
                 val fragmentTransaction = fragmentManager.beginTransaction()
-                val fragment = CollectionFragment.newInstance("coucou", "2ca va ${i++}")
+                val fragment = CollectionFragment()
                 fragmentTransaction.addToBackStack("stack")
                 fragmentTransaction.replace(R.id.fragmentLayout, fragment)
                 fragmentTransaction.commit()
@@ -48,4 +49,6 @@ class BottomActivity : AppCompatActivity() {
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
     }
+
+
 }
