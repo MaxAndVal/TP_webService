@@ -162,7 +162,7 @@ class MainActivity : AppCompatActivity(), Callback<ResponseFromApi> {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             handleSignInResult(task)
             signInButton.visibility = View.INVISIBLE
-            disconnectGoogleBtn.visibility = View.VISIBLE
+            //disconnectGoogleBtn.visibility = View.VISIBLE
             val account = GoogleSignIn.getLastSignedInAccount(this)
             if (account != null) {
                 userNameGG = account.displayName
