@@ -1,10 +1,10 @@
 package com.example.lpiem.rickandmortyapp
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.google.gson.JsonObject
 import kotlinx.android.synthetic.main.activity_signin_activity.*
 import okhttp3.ResponseBody
@@ -91,7 +91,7 @@ class SigninActivity : AppCompatActivity(), Callback<ResponseFromApi> {
                         Log.d(TAG, "body = ${response.body()}")
                         Toast.makeText(applicationContext, "code : $code, bienvenue $results id:$user_id", Toast.LENGTH_SHORT).show()
                         var intent = Intent(this@SigninActivity, BottomActivity::class.java)
-                        intent.putExtra("user", responseFromApi)
+                        intent.putExtra("user", responseFromApi.results)
                         startActivity(intent)
                     } else {
                         Log.d(TAG, "error : ${response.errorBody()}")
