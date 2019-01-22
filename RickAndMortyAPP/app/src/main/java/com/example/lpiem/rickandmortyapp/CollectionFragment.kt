@@ -47,7 +47,7 @@ class CollectionFragment : androidx.fragment.app.Fragment() {
         rv_collection.layoutManager = GridLayoutManager(context, 3)
         getListOfDecks()
         //FIXME: just a test for the Manager
-        galleryManager.doStuff(context!!)
+        galleryManager.doStuff()
     }
 
     companion object {

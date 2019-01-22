@@ -15,8 +15,8 @@ class BottomActivity : AppCompatActivity() {
                 message.setText(R.string.title_home)
                 val fragmentManager = supportFragmentManager
                 val fragmentTransaction = fragmentManager.beginTransaction()
-                val fragment = HomeFragment.newInstance("coucou", "ca va ${i++}")
-                fragmentTransaction.addToBackStack("stack")
+                val fragment = HomeFragment()
+                fragmentTransaction.addToBackStack(null)
                 fragmentTransaction.replace(R.id.fragmentLayout, fragment)
                 fragmentTransaction.commit()
                 return@OnNavigationItemSelectedListener true
@@ -26,7 +26,7 @@ class BottomActivity : AppCompatActivity() {
                 val fragmentManager = supportFragmentManager
                 val fragmentTransaction = fragmentManager.beginTransaction()
                 val fragment = CollectionFragment()
-                fragmentTransaction.addToBackStack("stack")
+                fragmentTransaction.addToBackStack(null)
                 fragmentTransaction.replace(R.id.fragmentLayout, fragment)
                 fragmentTransaction.commit()
                 return@OnNavigationItemSelectedListener true

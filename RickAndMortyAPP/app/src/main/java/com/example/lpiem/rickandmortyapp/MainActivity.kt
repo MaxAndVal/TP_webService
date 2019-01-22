@@ -57,6 +57,7 @@ class MainActivity : AppCompatActivity(), Callback<ResponseFromApi> {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+
         displayIntent = Intent(this@MainActivity, DisplayActivity::class.java)
 
         etEmail = findViewById(R.id.etEmail)

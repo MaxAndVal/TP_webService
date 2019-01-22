@@ -24,7 +24,7 @@ class ResponseFromApi : Parcelable {
     @SerializedName("code")
     @Expose
     var code: Int? = null
-    @SerializedName("success")
+    @SerializedName("message")
     @Expose
     var success: String? = null
 
