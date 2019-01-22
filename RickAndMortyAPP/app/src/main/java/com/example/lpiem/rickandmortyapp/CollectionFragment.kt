@@ -26,6 +26,7 @@ class CollectionFragment : androidx.fragment.app.Fragment() {
     private var rickAndMortyAPI: RickAndMortyAPI? = null
     private var dataset: ListOfDecks? = null
     private lateinit var galleryManager: GalleryManager
+    private var user : User? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,6 +35,9 @@ class CollectionFragment : androidx.fragment.app.Fragment() {
             param1 = it.getParcelable<Character>(ARG_DATASET)
             param2 = it.getString(ARG_PARAM2)
         }
+        user = activity?.intent?.getParcelableExtra<User>("user")
+        Log.d("userIntent : ", user.toString())
+
         rickAndMortyAPI = RickAndMortyRetrofitSingleton.instance
         galleryManager = GalleryManager.getInstance(context!!)
     }
@@ -77,7 +81,7 @@ class CollectionFragment : androidx.fragment.app.Fragment() {
 //                        Log.d(TAG, "test character = ${character[0]}")
                     } else if (i == 3) {
                         val responseFromApi = response.body() as ResponseFromApi
-                        Log.d(TAG, "responseFromApi: ${responseFromApi.code} / success: ${responseFromApi.success} / ${responseFromApi.results}")
+                        Log.d(TAG, "responseFromApi: ${responseFromApi.code} / message: ${responseFromApi.message} / ${responseFromApi.results}")
                     } else if (i == 4) {
                         dataset = response.body() as ListOfDecks
                         //Log.d(TAG, "deck: ${listOfDecks.cards?.get(0)?.cardName} , ${listOfDecks.cards?.get(2)?.cardName}")
@@ -103,7 +107,9 @@ class CollectionFragment : androidx.fragment.app.Fragment() {
 
     @Synchronized
     private fun getListOfDecks() {
-        val resultListDeck = rickAndMortyAPI!!.getListOfDecksById(1)
+        var userId = user?.userId?:-1
+        Log.d("user id", userId.toString())
+        val resultListDeck = rickAndMortyAPI!!.getListOfDecksById(userId)
         callRetrofit(resultListDeck, 4)
     }
 
