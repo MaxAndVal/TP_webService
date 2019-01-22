@@ -25,6 +25,7 @@ class CollectionFragment : androidx.fragment.app.Fragment() {
     private var param2: String? = null
     private var rickAndMortyAPI: RickAndMortyAPI? = null
     private var dataset: ListOfDecks? = null
+    private lateinit var galleryManager: GalleryManager
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,17 +35,19 @@ class CollectionFragment : androidx.fragment.app.Fragment() {
             param2 = it.getString(ARG_PARAM2)
         }
         rickAndMortyAPI = RickAndMortyRetrofitSingleton.instance
+        galleryManager = GalleryManager.getInstance(context!!)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_collection, container, false)
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         rv_collection.layoutManager = GridLayoutManager(context, 3)
         getListOfDecks()
+        //FIXME: just a test for the Manager
+        galleryManager.doStuff(context!!)
     }
 
     companion object {
