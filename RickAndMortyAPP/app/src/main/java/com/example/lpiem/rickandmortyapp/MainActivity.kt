@@ -49,28 +49,29 @@ class MainActivity : AppCompatActivity(), Callback<ResponseFromApi> {
     private lateinit var etEmail: EditText
     private lateinit var etPassword: EditText
     private lateinit var btnRegularConnection: Button
-    private lateinit var etLogin: EditText
     private var rickAndMortyAPI: RickAndMortyAPI? = null
+    private lateinit var btnSignin: TextView
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        displayIntent = Intent(this@MainActivity, DisplayActivity::class.java)
+        displayIntent = Intent(this@MainActivity, BottomActivity::class.java)
 
         etEmail = findViewById(R.id.etEmail)
-        etPassword  =findViewById(R.id.etPassword)
+        etPassword = findViewById(R.id.etPassword)
         btnRegularConnection = findViewById(R.id.btnRegularConnection)
-        etLogin = findViewById(R.id.etLogin)
+        btnSignin = findViewById(R.id.tv_signin)
 
         btnRegularConnection.setOnClickListener { regularConnection() }
+        btnSignin.setOnClickListener { regularSignIn() }
 
         userNameTV = findViewById(R.id.userNameTV)
         userNameTV.visibility = View.INVISIBLE
-        disconnectGoogleBtn = findViewById(R.id.disconnectGoogle)
-        disconnectGoogleBtn.visibility = View.INVISIBLE
-        disconnectGoogleBtn.setOnClickListener { disconnectGoogleAccount() }
+        //disconnectGoogleBtn = findViewById(R.id.disconnectGoogle)
+        //disconnectGoogleBtn.visibility = View.INVISIBLE
+        //disconnectGoogleBtn.setOnClickListener { disconnectGoogleAccount() }
 
 
         facebookLoginButton = findViewById(R.id.login_button)
@@ -137,6 +138,13 @@ class MainActivity : AppCompatActivity(), Callback<ResponseFromApi> {
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
 
         signInButton.setOnClickListener { signIn() }
+
+    }
+
+    private fun regularSignIn() {
+        var signInIntent = Intent(this@MainActivity, SigninActivity::class.java)
+        startActivity(signInIntent)
+
 
     }
 
@@ -240,10 +248,15 @@ class MainActivity : AppCompatActivity(), Callback<ResponseFromApi> {
     override fun onResponse(call: Call<ResponseFromApi>, response: Response<ResponseFromApi>) {
         if (response.isSuccessful) {
             var code = response.body()?.code
-            var results = response.body()?.results?.userName
-            Log.d(TAG, "body = ${response.body()}")
-            Toast.makeText(this, "code : $code, bienvenue $results", Toast.LENGTH_SHORT).show()
-            startActivity(displayIntent)
+            if (response.body()?.code == 200) {
+                var results = response.body()?.results?.userName
+                Log.d(TAG, "body = ${response.body()}")
+                Toast.makeText(this, "code : $code, bienvenue $results", Toast.LENGTH_SHORT).show()
+                displayIntent?.putExtra("user", response.body()?.results)
+                startActivity(displayIntent)
+            } else {
+                Toast.makeText(this, "code : $code, message ${response.body()?.message}", Toast.LENGTH_SHORT).show()
+            }
         } else {
             Log.d(TAG, "error : ${response.errorBody()}")
         }

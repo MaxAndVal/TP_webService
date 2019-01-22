@@ -24,10 +24,9 @@ class ResponseFromApi : Parcelable {
     @SerializedName("code")
     @Expose
     var code: Int? = null
-    @SerializedName("success")
+    @SerializedName("message")
     @Expose
-    var success: String? = null
-
+    var message: String? = null
     @SerializedName("user")
     @Expose
     var results: User? = null
@@ -35,14 +34,14 @@ class ResponseFromApi : Parcelable {
 
     constructor(inside: Parcel) {
         this.code = inside.readValue(Int::class.java.classLoader) as Int
-        this.success = inside.readValue(String::class.java.classLoader) as String
+        this.message = inside.readValue(String::class.java.classLoader) as String
         this.results = inside.readValue(User::class.java.classLoader) as User
     }
 
 
     override fun writeToParcel(dest: Parcel, flags: Int) {
         dest.writeValue(code)
-        dest.writeValue(success)
+        dest.writeValue(message)
         dest.writeValue(results)
     }
 
