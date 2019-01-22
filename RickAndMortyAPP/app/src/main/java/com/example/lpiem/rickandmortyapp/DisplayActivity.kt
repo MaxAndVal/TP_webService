@@ -25,6 +25,7 @@ class DisplayActivity : AppCompatActivity() {
     private lateinit var btnDeck: Button
     private lateinit var ivCard: ImageView
     private var adapter: ArrayAdapter<String>? = null
+    private var userId: Int? =-1
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,6 +41,7 @@ class DisplayActivity : AppCompatActivity() {
             val intent = Intent(this, BottomActivity::class.java)
             startActivity(intent)
         }
+
         btnRandomDeck.setOnClickListener { generateDeck() }
 
         tv = findViewById(R.id.textView)
@@ -70,7 +72,6 @@ class DisplayActivity : AppCompatActivity() {
                         Log.d(TAG, "responseFromApi: ${responseFromApi.code} / message: ${responseFromApi.message} / ${responseFromApi.results}")
                     } else if (i == 4) {
                         val listOfDecks = response.body() as ListOfDecks
-                        Log.d(TAG, "deck: ${listOfDecks.cards?.get(0)?.cardName} , ${listOfDecks.cards?.get(2)?.cardName}")
                         val image = listOfDecks.cards?.get(0)?.cardImage
                         Picasso.get().load(image).into(ivCard)
                     }
@@ -85,16 +86,15 @@ class DisplayActivity : AppCompatActivity() {
                 Log.d(TAG, "fail : $t")
             }
         })
-
     }
 
     private fun getListOfDecks() {
-        val resultListDeck = rickAndMortyAPI!!.getListOfDecksById(1)
+        val resultListDeck = rickAndMortyAPI!!.getListOfDecksById(userId?:-1)
         callRetrofit(resultListDeck, 4)
     }
 
     private fun generateDeck() {
-        val resultDecks = rickAndMortyAPI!!.getRandomDeck(19)
+        val resultDecks = rickAndMortyAPI!!.getRandomDeck(userId?:-1)
         callRetrofit(resultDecks, 2)
     }
 

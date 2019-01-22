@@ -7,13 +7,12 @@ import android.util.Log
 import android.widget.Toast
 import com.google.gson.JsonObject
 import kotlinx.android.synthetic.main.activity_signin_activity.*
-import kotlinx.android.synthetic.main.fragment_collection.*
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class signin_activity : AppCompatActivity(), Callback<ResponseFromApi> {
+class SigninActivity : AppCompatActivity(), Callback<ResponseFromApi> {
     override fun onFailure(call: Call<ResponseFromApi>, t: Throwable) {
         Log.d(TAG, "failure : $t")
     }
@@ -86,11 +85,13 @@ class signin_activity : AppCompatActivity(), Callback<ResponseFromApi> {
                         }
                     } else if (i == 2) {
                         val responseFromApi = response.body() as ResponseFromApi
-                        var code = responseFromApi.code
-                        var results = responseFromApi.results?.userName
+                        val code = responseFromApi.code
+                        val results = responseFromApi.results?.userName
+                        val user_id = responseFromApi.results?.userId
                         Log.d(TAG, "body = ${response.body()}")
-                        Toast.makeText(applicationContext, "code : $code, bienvenue $results", Toast.LENGTH_SHORT).show()
-                        var intent = Intent(this@signin_activity, DisplayActivity::class.java)
+                        Toast.makeText(applicationContext, "code : $code, bienvenue $results id:$user_id", Toast.LENGTH_SHORT).show()
+                        var intent = Intent(this@SigninActivity, BottomActivity::class.java)
+                        intent.putExtra("user", responseFromApi)
                         startActivity(intent)
                     } else {
                         Log.d(TAG, "error : ${response.errorBody()}")
@@ -111,7 +112,7 @@ class signin_activity : AppCompatActivity(), Callback<ResponseFromApi> {
     }
 
     private fun goBack() {
-        var mainIntent = Intent(this@signin_activity, MainActivity::class.java)
+        var mainIntent = Intent(this@SigninActivity, MainActivity::class.java)
         startActivity(mainIntent)
     }
 

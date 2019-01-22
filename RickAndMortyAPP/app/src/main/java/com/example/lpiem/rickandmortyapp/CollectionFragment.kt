@@ -25,6 +25,7 @@ class CollectionFragment : androidx.fragment.app.Fragment() {
     private var param2: String? = null
     private var rickAndMortyAPI: RickAndMortyAPI? = null
     private var dataset: ListOfDecks? = null
+    private var user : User? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,6 +34,9 @@ class CollectionFragment : androidx.fragment.app.Fragment() {
             param1 = it.getParcelable<Character>(ARG_DATASET)
             param2 = it.getString(ARG_PARAM2)
         }
+        user = activity?.intent?.getParcelableExtra<User>("user")
+        Log.d("userIntent : ", user.toString())
+
         rickAndMortyAPI = RickAndMortyRetrofitSingleton.instance
     }
 
@@ -100,7 +104,9 @@ class CollectionFragment : androidx.fragment.app.Fragment() {
 
     @Synchronized
     private fun getListOfDecks() {
-        val resultListDeck = rickAndMortyAPI!!.getListOfDecksById(1)
+        var userId = user?.userId?:-1
+        Log.d("user id", userId.toString())
+        val resultListDeck = rickAndMortyAPI!!.getListOfDecksById(userId)
         callRetrofit(resultListDeck, 4)
     }
 

@@ -40,6 +40,6 @@ interface RickAndMortyAPI {
 
     @GET("/users/deck/{id}")
     fun getListOfDecksById(
-            @Path("id") page: Int
+            @Path("id") userId: Int
     ): Call<ListOfDecks>
 }
