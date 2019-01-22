@@ -67,7 +67,7 @@ class DisplayActivity : AppCompatActivity() {
                         Log.d(TAG, "test character = ${character[0]}")
                     } else if (i == 3) {
                         val responseFromApi = response.body() as ResponseFromApi
-                        Log.d(TAG, "responseFromApi: ${responseFromApi.code} / success: ${responseFromApi.success} / ${responseFromApi.results}")
+                        Log.d(TAG, "responseFromApi: ${responseFromApi.code} / message: ${responseFromApi.message} / ${responseFromApi.results}")
                     } else if (i == 4) {
                         val listOfDecks = response.body() as ListOfDecks
                         Log.d(TAG, "deck: ${listOfDecks.cards?.get(0)?.cardName} , ${listOfDecks.cards?.get(2)?.cardName}")

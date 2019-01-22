@@ -49,8 +49,8 @@ class MainActivity : AppCompatActivity(), Callback<ResponseFromApi> {
     private lateinit var etEmail: EditText
     private lateinit var etPassword: EditText
     private lateinit var btnRegularConnection: Button
-    private lateinit var etLogin: EditText
     private var rickAndMortyAPI: RickAndMortyAPI? = null
+    private lateinit var btnSignin: TextView
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,15 +62,16 @@ class MainActivity : AppCompatActivity(), Callback<ResponseFromApi> {
         etEmail = findViewById(R.id.etEmail)
         etPassword  =findViewById(R.id.etPassword)
         btnRegularConnection = findViewById(R.id.btnRegularConnection)
-        etLogin = findViewById(R.id.etLogin)
+        btnSignin = findViewById(R.id.tv_signin)
 
         btnRegularConnection.setOnClickListener { regularConnection() }
+        btnSignin.setOnClickListener { regularSignIn() }
 
         userNameTV = findViewById(R.id.userNameTV)
         userNameTV.visibility = View.INVISIBLE
-        disconnectGoogleBtn = findViewById(R.id.disconnectGoogle)
-        disconnectGoogleBtn.visibility = View.INVISIBLE
-        disconnectGoogleBtn.setOnClickListener { disconnectGoogleAccount() }
+        //disconnectGoogleBtn = findViewById(R.id.disconnectGoogle)
+        //disconnectGoogleBtn.visibility = View.INVISIBLE
+        //disconnectGoogleBtn.setOnClickListener { disconnectGoogleAccount() }
 
 
         facebookLoginButton = findViewById(R.id.login_button)
@@ -137,6 +138,13 @@ class MainActivity : AppCompatActivity(), Callback<ResponseFromApi> {
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
 
         signInButton.setOnClickListener { signIn() }
+
+    }
+
+    private fun regularSignIn() {
+       var signInIntent = Intent(this@MainActivity, signin_activity::class.java)
+        startActivity(signInIntent)
+
 
     }
 
