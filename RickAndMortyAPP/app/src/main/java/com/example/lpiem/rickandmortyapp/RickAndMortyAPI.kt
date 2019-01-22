@@ -39,7 +39,7 @@ interface RickAndMortyAPI {
     ): Call<List<Character>>
 
     @GET("/users/deck/{id}")
-    fun getListOfDecksById(
+    fun getListOfCardsById(
             @Path("id") userId: Int
-    ): Call<ListOfDecks>
+    ): Call<ListOfCards>
 }

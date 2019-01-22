@@ -5,17 +5,17 @@ import android.os.Parcelable
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-class ListOfDecks : Parcelable {
+class ListOfCards : Parcelable {
 
     companion object {
-        @JvmField val CREATOR: Parcelable.Creator<ListOfDecks> = object : Parcelable.Creator<ListOfDecks> {
+        @JvmField val CREATOR: Parcelable.Creator<ListOfCards> = object : Parcelable.Creator<ListOfCards> {
 
 
-            override fun createFromParcel(inside: Parcel): ListOfDecks {
-                return ListOfDecks(inside)
+            override fun createFromParcel(inside: Parcel): ListOfCards {
+                return ListOfCards(inside)
             }
 
-            override fun newArray(size: Int): Array<ListOfDecks?> {
+            override fun newArray(size: Int): Array<ListOfCards?> {
                 return arrayOfNulls(size)
             }
 
@@ -36,7 +36,7 @@ class ListOfDecks : Parcelable {
     constructor(inside: Parcel) {
         this.code = inside.readValue(Int::class.java.classLoader) as Int
         this.message = inside.readValue(String::class.java.classLoader) as String
-        inside.readList(this.cards, com.example.lpiem.rickandmortyapp.ListOfDecks::class.java.classLoader)
+        inside.readList(this.cards, com.example.lpiem.rickandmortyapp.ListOfCards::class.java.classLoader)
     }
 
     override fun writeToParcel(dest: Parcel, flags: Int) {

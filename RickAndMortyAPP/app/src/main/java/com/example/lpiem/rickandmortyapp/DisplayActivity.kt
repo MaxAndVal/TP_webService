@@ -71,7 +71,7 @@ class DisplayActivity : AppCompatActivity() {
                         val responseFromApi = response.body() as ResponseFromApi
                         Log.d(TAG, "responseFromApi: ${responseFromApi.code} / message: ${responseFromApi.message} / ${responseFromApi.results}")
                     } else if (i == 4) {
-                        val listOfDecks = response.body() as ListOfDecks
+                        val listOfDecks = response.body() as ListOfCards
                         val image = listOfDecks.cards?.get(0)?.cardImage
                         Picasso.get().load(image).into(ivCard)
                     }
@@ -89,7 +89,7 @@ class DisplayActivity : AppCompatActivity() {
     }
 
     private fun getListOfDecks() {
-        val resultListDeck = rickAndMortyAPI!!.getListOfDecksById(userId?:-1)
+        val resultListDeck = rickAndMortyAPI!!.getListOfCardsById(userId?:-1)
         callRetrofit(resultListDeck, 4)
     }
 

@@ -24,7 +24,7 @@ class CollectionFragment : androidx.fragment.app.Fragment() {
     private var param1: Parcelable? = null
     private var param2: String? = null
     private var rickAndMortyAPI: RickAndMortyAPI? = null
-    private var dataset: ListOfDecks? = null
+    private var mDataset: ListOfCards? = null
     private lateinit var galleryManager: GalleryManager
     private var user : User? = null
 
@@ -66,27 +66,19 @@ class CollectionFragment : androidx.fragment.app.Fragment() {
     }
 
 
-    private fun <T> callRetrofit(call: Call<T>, i: Int) {
+    private fun <T> callRetrofit(call: Call<T>, type: RetrofitCallTypes) {
 
         call.enqueue(object : Callback<T> {
             override fun onResponse(call: Call<T>, response: Response<T>) {
                 if (response.isSuccessful) {
-                    if (i == 1) {
-//                        fetchData(response as Response<Result>)
-//                        if (nextPage < nbPages) {
-//                            getAllCharacter()
-//                        }
-                    } else if (i == 2) {
-//                        characterList = response.body() as List<Character>
-//                        Log.d(TAG, "test character = ${character[0]}")
-                    } else if (i == 3) {
+                    if (type == RetrofitCallTypes.RESPONSE_FROM_API) {
                         val responseFromApi = response.body() as ResponseFromApi
                         Log.d(TAG, "responseFromApi: ${responseFromApi.code} / message: ${responseFromApi.message} / ${responseFromApi.results}")
-                    } else if (i == 4) {
-                        dataset = response.body() as ListOfDecks
+                    } else if (type == RetrofitCallTypes.LIST_OF_CARDS) {
+                        mDataset = response.body() as ListOfCards
                         //Log.d(TAG, "deck: ${listOfDecks.cards?.get(0)?.cardName} , ${listOfDecks.cards?.get(2)?.cardName}")
-                        if (dataset != null) {
-                            rv_collection.adapter = CollectionAdapter(dataset!!)
+                        if (mDataset != null) {
+                            rv_collection.adapter = CollectionAdapter(mDataset!!)
                             rv_collection.adapter?.notifyDataSetChanged()
                         }
                     }
@@ -109,8 +101,8 @@ class CollectionFragment : androidx.fragment.app.Fragment() {
     private fun getListOfDecks() {
         var userId = user?.userId?:-1
         Log.d("user id", userId.toString())
-        val resultListDeck = rickAndMortyAPI!!.getListOfDecksById(userId)
-        callRetrofit(resultListDeck, 4)
+        val resultListCard = rickAndMortyAPI!!.getListOfCardsById(userId)
+        callRetrofit(resultListCard, RetrofitCallTypes.LIST_OF_CARDS)
     }
 
 
