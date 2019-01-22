@@ -11,7 +11,7 @@ class CollectionAdapter(private val dataSet: ListOfDecks): RecyclerView.Adapter<
 
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.cardAmount.text = dataSet.cards!![position].amount.toString()
+        holder.cardAmount.text = "X ${dataSet.cards!![position].amount} "
         holder.cardId.text = dataSet.cards!![position].cardId.toString()
         holder.title.text = dataSet.cards!![position].cardName.toString()
         Picasso.get().load(dataSet.cards!![position].cardImage).into(holder.image)

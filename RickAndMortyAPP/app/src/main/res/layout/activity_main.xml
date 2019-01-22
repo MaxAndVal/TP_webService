@@ -7,11 +7,6 @@
     android:background="@color/colorPrimary"
     tools:context=".MainActivity"
     tools:layout_editor_absoluteY="81dp">
-    <FrameLayout
-        android:id="@+id/fragmentCollection"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"></FrameLayout>
-
 
     <com.facebook.login.widget.LoginButton
         android:id="@+id/login_button"
