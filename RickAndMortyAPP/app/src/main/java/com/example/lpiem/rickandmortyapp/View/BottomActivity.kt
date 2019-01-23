@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.lpiem.rickandmortyapp.R
 import com.example.lpiem.rickandmortyapp.View.Collection.CollectionFragment
 import com.example.lpiem.rickandmortyapp.View.Home.HomeFragment
+import com.example.lpiem.rickandmortyapp.View.Social.SocialFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_bottom.*
 
@@ -34,6 +35,11 @@ class BottomActivity : AppCompatActivity() {
             }
             R.id.navigation_social -> {
                 message.setText(R.string.social)
+                val fragmentManager = supportFragmentManager
+                val fragmentTransaction = fragmentManager.beginTransaction()
+                val fragment = SocialFragment()
+                fragmentTransaction.replace(R.id.fragmentLayout, fragment)
+                fragmentTransaction.commit()
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_profil -> {
