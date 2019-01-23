@@ -1,9 +1,11 @@
-package com.example.lpiem.rickandmortyapp
+package com.example.lpiem.rickandmortyapp.View.Collection
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.lpiem.rickandmortyapp.Model.ListOfCards
+import com.example.lpiem.rickandmortyapp.R
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.collection_item.view.*
 
@@ -17,7 +19,7 @@ class CollectionAdapter(private val dataSet: ListOfCards): RecyclerView.Adapter<
         Picasso.get().load(dataSet.cards!![position].cardImage).into(holder.image)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CollectionAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val v = LayoutInflater.from(parent.context)
                 .inflate(R.layout.collection_item, parent, false)
 

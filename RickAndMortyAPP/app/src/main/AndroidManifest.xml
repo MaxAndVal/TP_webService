@@ -11,8 +11,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".SigninActivity"></activity>
-        <activity android:name=".SplashScreen">
+        <activity android:name=".View.SigninActivity"></activity>
+        <activity android:name=".View.SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -41,14 +41,14 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".DisplayActivity"
+            android:name=".View.DisplayActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".MainActivity"
+            android:name=".View.MainActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".BottomActivity"
+            android:name=".View.BottomActivity"
             android:label="@string/title_activity_bottom"
             android:screenOrientation="portrait" />
     </application>

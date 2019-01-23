@@ -1,4 +1,4 @@
-package com.example.lpiem.rickandmortyapp
+package com.example.lpiem.rickandmortyapp.Model
 
 import android.os.Parcel
 import android.os.Parcelable

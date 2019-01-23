@@ -1,4 +1,4 @@
-package com.example.lpiem.rickandmortyapp
+package com.example.lpiem.rickandmortyapp.Model
 
 import android.os.Parcel
 import android.os.Parcelable
@@ -29,7 +29,7 @@ class Result : Parcelable {
 
     constructor(inside: Parcel) {
         this.info = inside.readValue(Info::class.java.classLoader) as Info
-        inside.readList(this.results, com.example.lpiem.rickandmortyapp.Result::class.java.classLoader)
+        inside.readList(this.results, Result::class.java.classLoader)
     }
 
 

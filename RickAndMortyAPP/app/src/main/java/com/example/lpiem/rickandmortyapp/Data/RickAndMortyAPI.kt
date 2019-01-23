@@ -1,6 +1,10 @@
-package com.example.lpiem.rickandmortyapp
+package com.example.lpiem.rickandmortyapp.Data
 
 
+import com.example.lpiem.rickandmortyapp.Model.Character
+import com.example.lpiem.rickandmortyapp.Model.ListOfCards
+import com.example.lpiem.rickandmortyapp.Model.ResponseFromApi
+import com.example.lpiem.rickandmortyapp.Model.Result
 import com.google.gson.JsonObject
 import retrofit2.Call
 import retrofit2.http.*

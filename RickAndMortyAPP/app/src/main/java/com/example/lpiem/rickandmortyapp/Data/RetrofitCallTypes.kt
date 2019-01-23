@@ -1,4 +1,4 @@
-package com.example.lpiem.rickandmortyapp
+package com.example.lpiem.rickandmortyapp.Data
 
 enum class RetrofitCallTypes {
     RESPONSE_FROM_API,
