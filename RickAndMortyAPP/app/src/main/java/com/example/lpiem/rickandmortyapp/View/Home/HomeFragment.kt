@@ -31,7 +31,8 @@ class HomeFragment : androidx.fragment.app.Fragment() {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
-
+        homeManager = HomeManager.getInstance(context!!)
+        homeManager?.getFragment(this)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -42,10 +43,7 @@ class HomeFragment : androidx.fragment.app.Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        homeManager = HomeManager.getInstance(context!!)
-        var listResult = homeManager?.getRandomQuote()
-        tv_citation.text = listResult?.first
-        tv_auteur.text = listResult?.second
+        homeManager?.getRandomQuote()
 
     }
 
