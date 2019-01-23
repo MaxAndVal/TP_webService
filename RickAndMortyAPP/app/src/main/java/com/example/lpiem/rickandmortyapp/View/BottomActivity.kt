@@ -10,7 +10,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_bottom.*
 
 class BottomActivity : AppCompatActivity() {
-    private var i =0
+    private var i = 0
     private lateinit var characterList: List<Character>
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
