@@ -1,9 +1,10 @@
-package com.example.lpiem.rickandmortyapp
+package com.example.lpiem.rickandmortyapp.View
 
 import android.content.Intent
 import android.os.Handler
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.example.lpiem.rickandmortyapp.R
 
 class SplashScreen : AppCompatActivity() {
 

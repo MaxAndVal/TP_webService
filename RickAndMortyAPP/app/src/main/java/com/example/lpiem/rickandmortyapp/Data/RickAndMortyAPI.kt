@@ -1,6 +1,7 @@
-package com.example.lpiem.rickandmortyapp
+package com.example.lpiem.rickandmortyapp.Data
 
 
+import com.example.lpiem.rickandmortyapp.Model.*
 import com.google.gson.JsonObject
 import retrofit2.Call
 import retrofit2.http.*
@@ -39,9 +40,9 @@ interface RickAndMortyAPI {
     ): Call<List<Character>>
 
     @GET("/users/deck/{id}")
-    fun getListOfDecksById(
+    fun getListOfCardsById(
             @Path("id") userId: Int
-    ): Call<ListOfDecks>
+    ): Call<ListOfCards>
 
     @GET("/kaamelott/randomQuote")
     fun getRamdomQuote(

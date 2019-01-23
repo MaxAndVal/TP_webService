@@ -1,8 +1,9 @@
-package com.example.lpiem.rickandmortyapp
+package com.example.lpiem.rickandmortyapp.Model
 
 import android.os.Parcel
 import android.os.Parcelable
 import android.util.Log
+import com.example.lpiem.rickandmortyapp.View.TAG
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 

@@ -1,24 +1,25 @@
-package com.example.lpiem.rickandmortyapp
+package com.example.lpiem.rickandmortyapp.Model
 
 import android.os.Parcel
 import android.os.Parcelable
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
+class ResponseError : Parcelable {
+
+    companion object {
+        @JvmField val CREATOR: Parcelable.Creator<ResponseError> = object : Parcelable.Creator<ResponseError> {
 
 
-class ResponseFromApi : Parcelable {
+            override fun createFromParcel(inside: Parcel): ResponseError {
+                return ResponseError(inside)
+            }
 
-    @JvmField val CREATOR: Parcelable.Creator<ResponseFromApi> = object : Parcelable.Creator<ResponseFromApi> {
+            override fun newArray(size: Int): Array<ResponseError?> {
+                return arrayOfNulls(size)
+            }
 
-        override fun createFromParcel(inside: Parcel): ResponseFromApi {
-            return ResponseFromApi(inside)
         }
-
-        override fun newArray(size: Int): Array<ResponseFromApi?> {
-            return arrayOfNulls(size)
-        }
-
     }
 
     @SerializedName("code")
@@ -27,22 +28,15 @@ class ResponseFromApi : Parcelable {
     @SerializedName("message")
     @Expose
     var message: String? = null
-    @SerializedName("user")
-    @Expose
-    var results: User? = null
-        private set
 
     constructor(inside: Parcel) {
         this.code = inside.readValue(Int::class.java.classLoader) as Int
         this.message = inside.readValue(String::class.java.classLoader) as String
-        this.results = inside.readValue(User::class.java.classLoader) as User
     }
-
 
     override fun writeToParcel(dest: Parcel, flags: Int) {
         dest.writeValue(code)
         dest.writeValue(message)
-        dest.writeValue(results)
     }
 
     override fun describeContents(): Int {

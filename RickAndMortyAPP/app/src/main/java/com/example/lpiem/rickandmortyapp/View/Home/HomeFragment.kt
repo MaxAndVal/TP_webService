@@ -1,4 +1,4 @@
-package com.example.lpiem.rickandmortyapp
+package com.example.lpiem.rickandmortyapp.View.Home
 
 import android.os.Bundle
 import android.util.Log
@@ -6,6 +6,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import com.example.lpiem.rickandmortyapp.Data.RickAndMortyAPI
+import com.example.lpiem.rickandmortyapp.Data.RickAndMortyRetrofitSingleton
+import com.example.lpiem.rickandmortyapp.Model.KaamlottQuote
+import com.example.lpiem.rickandmortyapp.View.Collection.CollectionFragment
+import com.example.lpiem.rickandmortyapp.View.TAG
 import kotlinx.android.synthetic.main.fragment_home.*
 import okhttp3.ResponseBody
 import retrofit2.Call

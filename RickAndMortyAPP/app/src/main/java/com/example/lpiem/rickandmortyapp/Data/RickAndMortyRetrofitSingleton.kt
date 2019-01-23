@@ -1,4 +1,4 @@
-package com.example.lpiem.rickandmortyapp
+package com.example.lpiem.rickandmortyapp.Data
 
 import com.google.gson.GsonBuilder
 

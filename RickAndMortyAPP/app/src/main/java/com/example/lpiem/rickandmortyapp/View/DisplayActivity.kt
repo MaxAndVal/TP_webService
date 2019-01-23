@@ -1,10 +1,17 @@
-package com.example.lpiem.rickandmortyapp
+package com.example.lpiem.rickandmortyapp.View
 
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import com.example.lpiem.rickandmortyapp.Data.RickAndMortyAPI
+import com.example.lpiem.rickandmortyapp.Data.RickAndMortyRetrofitSingleton
+import com.example.lpiem.rickandmortyapp.Model.Character
+import com.example.lpiem.rickandmortyapp.Model.ListOfCards
+import com.example.lpiem.rickandmortyapp.Model.ResponseFromApi
+import com.example.lpiem.rickandmortyapp.Model.Result
+import com.example.lpiem.rickandmortyapp.R
 import com.facebook.login.LoginManager
 import com.squareup.picasso.Picasso
 import okhttp3.ResponseBody
@@ -71,7 +78,7 @@ class DisplayActivity : AppCompatActivity() {
                         val responseFromApi = response.body() as ResponseFromApi
                         Log.d(TAG, "responseFromApi: ${responseFromApi.code} / message: ${responseFromApi.message} / ${responseFromApi.results}")
                     } else if (i == 4) {
-                        val listOfDecks = response.body() as ListOfDecks
+                        val listOfDecks = response.body() as ListOfCards
                         val image = listOfDecks.cards?.get(0)?.cardImage
                         Picasso.get().load(image).into(ivCard)
                     }
@@ -89,7 +96,7 @@ class DisplayActivity : AppCompatActivity() {
     }
 
     private fun getListOfDecks() {
-        val resultListDeck = rickAndMortyAPI!!.getListOfDecksById(userId?:-1)
+        val resultListDeck = rickAndMortyAPI!!.getListOfCardsById(userId?:-1)
         callRetrofit(resultListDeck, 4)
     }
 
@@ -116,7 +123,7 @@ class DisplayActivity : AppCompatActivity() {
         else
             nbPages = nextPage
 
-        val listPeople = result!!.results
+        val listPeople = result.results
         message += "list people : \n\n"
         for (character in listPeople!!) {
             Log.d(TAG, "people name : " + character.name)

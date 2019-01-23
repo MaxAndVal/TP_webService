@@ -5,7 +5,7 @@
     android:id="@+id/collectionFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CollectionFragment"
+    tools:context=".View.Collection.CollectionFragment"
     tools:layout_editor_absoluteY="81dp">
 
     <!-- TODO: Update blank fragment layout -->

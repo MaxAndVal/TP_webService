@@ -1,4 +1,4 @@
-package com.example.lpiem.rickandmortyapp
+package com.example.lpiem.rickandmortyapp.View
 
 import android.content.Intent
 import android.os.Bundle
@@ -9,6 +9,10 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.lpiem.rickandmortyapp.Data.RickAndMortyAPI
+import com.example.lpiem.rickandmortyapp.Data.RickAndMortyRetrofitSingleton
+import com.example.lpiem.rickandmortyapp.Model.ResponseFromApi
+import com.example.lpiem.rickandmortyapp.R
 import com.facebook.*
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
@@ -56,6 +60,7 @@ class MainActivity : AppCompatActivity(), Callback<ResponseFromApi> {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
 
         displayIntent = Intent(this@MainActivity, BottomActivity::class.java)
 
@@ -161,7 +166,7 @@ class MainActivity : AppCompatActivity(), Callback<ResponseFromApi> {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             handleSignInResult(task)
             signInButton.visibility = View.INVISIBLE
-            disconnectGoogleBtn.visibility = View.VISIBLE
+            //disconnectGoogleBtn.visibility = View.VISIBLE
             val account = GoogleSignIn.getLastSignedInAccount(this)
             if (account != null) {
                 userNameGG = account.displayName

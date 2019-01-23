@@ -1,7 +1,10 @@
-package com.example.lpiem.rickandmortyapp
+package com.example.lpiem.rickandmortyapp.View
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.example.lpiem.rickandmortyapp.Model.Character
+import com.example.lpiem.rickandmortyapp.View.Collection.CollectionFragment
+import com.example.lpiem.rickandmortyapp.View.Home.HomeFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_bottom.*
 
@@ -16,7 +19,7 @@ class BottomActivity : AppCompatActivity() {
                 val fragmentManager = supportFragmentManager
                 val fragmentTransaction = fragmentManager.beginTransaction()
                 val fragment = HomeFragment()
-                fragmentTransaction.addToBackStack("stack")
+                //fragmentTransaction.addToBackStack("home")
                 fragmentTransaction.replace(R.id.fragmentLayout, fragment)
                 fragmentTransaction.commit()
                 return@OnNavigationItemSelectedListener true
@@ -26,7 +29,7 @@ class BottomActivity : AppCompatActivity() {
                 val fragmentManager = supportFragmentManager
                 val fragmentTransaction = fragmentManager.beginTransaction()
                 val fragment = CollectionFragment()
-                fragmentTransaction.addToBackStack("stack")
+                //fragmentTransaction.addToBackStack("collection")
                 fragmentTransaction.replace(R.id.fragmentLayout, fragment)
                 fragmentTransaction.commit()
                 return@OnNavigationItemSelectedListener true
@@ -50,5 +53,9 @@ class BottomActivity : AppCompatActivity() {
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
     }
 
+    override fun onBackPressed() {
+
+        super.onBackPressed()
+    }
 
 }

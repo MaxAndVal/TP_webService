@@ -1,10 +1,13 @@
-package com.example.lpiem.rickandmortyapp
+package com.example.lpiem.rickandmortyapp.View
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import com.example.lpiem.rickandmortyapp.Model.ResponseFromApi
+import com.example.lpiem.rickandmortyapp.R
+import com.example.lpiem.rickandmortyapp.Data.RickAndMortyRetrofitSingleton
 import com.google.gson.JsonObject
 import kotlinx.android.synthetic.main.activity_signin_activity.*
 import okhttp3.ResponseBody
