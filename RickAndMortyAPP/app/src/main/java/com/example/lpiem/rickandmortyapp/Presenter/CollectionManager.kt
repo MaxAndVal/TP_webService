@@ -2,7 +2,6 @@ package com.example.lpiem.rickandmortyapp.Presenter
 
 import android.content.Context
 import android.util.Log
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lpiem.rickandmortyapp.Data.RetrofitCallTypes
 import com.example.lpiem.rickandmortyapp.Data.RickAndMortyRetrofitSingleton
@@ -29,10 +28,6 @@ class CollectionManager private constructor(private val context: Context) {
 
     companion object : SingletonHolder<CollectionManager, Context>(::CollectionManager)
 
-    fun doStuff() {
-        Toast.makeText(context, "Wubba Lubba Dub Dub !!!", Toast.LENGTH_SHORT).show()
-    }
-
     fun captureFragmentInstance(fragment: CollectionFragment) {
         collectionFragment = fragment
     }
@@ -47,15 +42,17 @@ class CollectionManager private constructor(private val context: Context) {
         call.enqueue(object : Callback<T> {
             override fun onResponse(call: Call<T>, response: Response<T>) {
                 if (response.isSuccessful) {
-                    if (type == RetrofitCallTypes.RESPONSE_FROM_API) {
-                        val responseFromApi = response.body() as ResponseFromApi
-                        Log.d(TAG, "responseFromApi: ${responseFromApi.code} / message: ${responseFromApi.message} / ${responseFromApi.results}")
-                    } else if (type == RetrofitCallTypes.LIST_OF_CARDS) {
-                        collectionFragment?.listOfCards = response.body() as ListOfCards
-                        //Log.d(TAG, "deck: ${listOfDecks.cards?.get(0)?.cardName} , ${listOfDecks.cards?.get(2)?.cardName}")
-                        if (collectionFragment?.listOfCards != null) {
-                            recyclerView.adapter = CollectionAdapter(collectionFragment?.listOfCards!!)
-                            recyclerView.adapter?.notifyDataSetChanged()
+                    when (type) {
+                        RetrofitCallTypes.RESPONSE_FROM_API -> {
+                            val responseFromApi = response.body() as ResponseFromApi
+                            Log.d(TAG, "responseFromApi: ${responseFromApi.code} / message: ${responseFromApi.message} / ${responseFromApi.results}")
+                        }
+                        RetrofitCallTypes.LIST_OF_CARDS -> {
+                            collectionFragment?.listOfCards = response.body() as ListOfCards
+                            if (collectionFragment?.listOfCards != null) {
+                                recyclerView.adapter = CollectionAdapter(collectionFragment?.listOfCards!!)
+                                recyclerView.adapter?.notifyDataSetChanged()
+                            }
                         }
                     }
                 } else {
