@@ -45,7 +45,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".View.MainActivity"
+            android:name=".View.LoginActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".View.BottomActivity"

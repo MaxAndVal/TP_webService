@@ -35,7 +35,7 @@ const val TAG = "TAG_M"
 const val RC_SIGN_IN = 1
 
 
-class MainActivity : AppCompatActivity(), Callback<ResponseFromApi> {
+class LoginActivity : AppCompatActivity(), Callback<ResponseFromApi> {
 
 
     private var callbackManager: CallbackManager? = null
@@ -62,7 +62,7 @@ class MainActivity : AppCompatActivity(), Callback<ResponseFromApi> {
         setContentView(R.layout.activity_main)
 
 
-        displayIntent = Intent(this@MainActivity, BottomActivity::class.java)
+        displayIntent = Intent(this@LoginActivity, BottomActivity::class.java)
 
         etEmail = findViewById(R.id.etEmail)
         etPassword = findViewById(R.id.etPassword)
@@ -147,7 +147,7 @@ class MainActivity : AppCompatActivity(), Callback<ResponseFromApi> {
     }
 
     private fun regularSignIn() {
-        var signInIntent = Intent(this@MainActivity, SignInActivity::class.java)
+        var signInIntent = Intent(this@LoginActivity, SignInActivity::class.java)
         startActivity(signInIntent)
 
 
