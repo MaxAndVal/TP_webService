@@ -147,7 +147,7 @@ class MainActivity : AppCompatActivity(), Callback<ResponseFromApi> {
     }
 
     private fun regularSignIn() {
-        var signInIntent = Intent(this@MainActivity, SigninActivity::class.java)
+        var signInIntent = Intent(this@MainActivity, SignInActivity::class.java)
         startActivity(signInIntent)
 
 
