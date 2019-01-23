@@ -1,21 +1,15 @@
 package com.example.lpiem.rickandmortyapp.View.Home
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.example.lpiem.rickandmortyapp.Data.RickAndMortyAPI
 import com.example.lpiem.rickandmortyapp.Data.RickAndMortyRetrofitSingleton
-import com.example.lpiem.rickandmortyapp.Model.KaamlottQuote
+import com.example.lpiem.rickandmortyapp.Presenter.HomeManager
+import com.example.lpiem.rickandmortyapp.R
 import com.example.lpiem.rickandmortyapp.View.Collection.CollectionFragment
-import com.example.lpiem.rickandmortyapp.View.TAG
 import kotlinx.android.synthetic.main.fragment_home.*
-import okhttp3.ResponseBody
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -26,6 +20,7 @@ class HomeFragment : androidx.fragment.app.Fragment() {
 
 
     private var rickAndMortyAPI: RickAndMortyAPI? = null
+    private var homeManager: HomeManager? = null
 
 
     // TODO: Rename and change types of parameters
@@ -51,7 +46,10 @@ class HomeFragment : androidx.fragment.app.Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        getRandomQuote();
+        homeManager = HomeManager.getInstance(context!!)
+        var listResult = homeManager?.getRandomQuote()
+        tv_citation.text = listResult?.first
+        tv_auteur.text = listResult?.second
 
     }
 
@@ -66,7 +64,7 @@ class HomeFragment : androidx.fragment.app.Fragment() {
                 }
     }
 
-    @Synchronized
+/*    @Synchronized
     private fun getRandomQuote() {
         val resultCall = rickAndMortyAPI!!.getRamdomQuote()
         callRetrofit(resultCall, 5)
@@ -100,9 +98,8 @@ class HomeFragment : androidx.fragment.app.Fragment() {
             override fun onFailure(call: Call<T>, t: Throwable) {
                 Log.d(TAG, "fail : $t")
             }
-        })
+        })*/
 
-    }
 
 }
 

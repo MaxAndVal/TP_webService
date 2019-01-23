@@ -3,6 +3,7 @@ package com.example.lpiem.rickandmortyapp.View
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.lpiem.rickandmortyapp.Model.Character
+import com.example.lpiem.rickandmortyapp.R
 import com.example.lpiem.rickandmortyapp.View.Collection.CollectionFragment
 import com.example.lpiem.rickandmortyapp.View.Home.HomeFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
