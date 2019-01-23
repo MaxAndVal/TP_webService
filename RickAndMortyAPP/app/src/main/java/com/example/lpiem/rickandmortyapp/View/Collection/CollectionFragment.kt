@@ -38,7 +38,7 @@ class CollectionFragment : androidx.fragment.app.Fragment() {
             param1 = it.getParcelable<Character>(ARG_DATASET)
             param2 = it.getString(ARG_PARAM2)
         }
-        user = activity?.intent?.getParcelableExtra<User>("user")
+        user = activity?.intent?.getParcelableExtra("user")
         Log.d("userIntent : ", user.toString())
 
         rickAndMortyAPI = RickAndMortyRetrofitSingleton.instance
