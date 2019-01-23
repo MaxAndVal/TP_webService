@@ -42,4 +42,8 @@ interface RickAndMortyAPI {
     fun getListOfDecksById(
             @Path("id") userId: Int
     ): Call<ListOfDecks>
+
+    @GET("/api/kaamlott/randomQuote")
+    fun getRamdomQuote(
+    ): Call<KaamlottQuote>
 }

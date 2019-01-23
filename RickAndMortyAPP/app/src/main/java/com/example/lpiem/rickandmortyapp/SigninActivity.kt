@@ -91,7 +91,7 @@ class SigninActivity : AppCompatActivity(), Callback<ResponseFromApi> {
                         Log.d(TAG, "body = ${response.body()}")
                         Toast.makeText(applicationContext, "code : $code, bienvenue $results id:$user_id", Toast.LENGTH_SHORT).show()
                         var intent = Intent(this@SigninActivity, BottomActivity::class.java)
-                        intent.putExtra("user", responseFromApi)
+                        intent.putExtra("user", responseFromApi.results)
                         startActivity(intent)
                     } else {
                         Log.d(TAG, "error : ${response.errorBody()}")
