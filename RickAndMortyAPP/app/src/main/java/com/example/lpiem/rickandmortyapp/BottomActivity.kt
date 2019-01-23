@@ -6,7 +6,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_bottom.*
 
 class BottomActivity : AppCompatActivity() {
-    private var i =0
+    private var i = 0
     private lateinit var characterList: List<Character>
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
@@ -15,7 +15,7 @@ class BottomActivity : AppCompatActivity() {
                 message.setText(R.string.title_home)
                 val fragmentManager = supportFragmentManager
                 val fragmentTransaction = fragmentManager.beginTransaction()
-                val fragment = HomeFragment.newInstance("coucou", "ca va ${i++}")
+                val fragment = HomeFragment()
                 fragmentTransaction.addToBackStack("stack")
                 fragmentTransaction.replace(R.id.fragmentLayout, fragment)
                 fragmentTransaction.commit()

@@ -8,7 +8,8 @@ import com.google.gson.annotations.SerializedName
 
 class KaamlottQuote : Parcelable {
 
-    @JvmField val CREATOR: Parcelable.Creator<ResponseFromApi> = object : Parcelable.Creator<ResponseFromApi> {
+    @JvmField
+    val CREATOR: Parcelable.Creator<ResponseFromApi> = object : Parcelable.Creator<ResponseFromApi> {
 
         override fun createFromParcel(inside: Parcel): ResponseFromApi {
             return ResponseFromApi(inside)
@@ -36,8 +37,8 @@ class KaamlottQuote : Parcelable {
     constructor(inside: Parcel) {
         this.code = inside.readValue(Int::class.java.classLoader) as Int
         this.message = inside.readValue(String::class.java.classLoader) as String
-        this.citation = inside.readValue(User::class.java.classLoader) as String
-        this.personnage = inside.readValue(User::class.java.classLoader) as String
+        this.citation = inside.readValue(String::class.java.classLoader) as String
+        this.personnage = inside.readValue(String::class.java.classLoader) as String
 
     }
 

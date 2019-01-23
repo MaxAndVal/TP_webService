@@ -6,8 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.fragment_collection.*
+import kotlinx.android.synthetic.main.fragment_home.*
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
@@ -64,7 +63,6 @@ class HomeFragment : androidx.fragment.app.Fragment() {
 
     @Synchronized
     private fun getRandomQuote() {
-        Log.d(tag, "ici")
         val resultCall = rickAndMortyAPI!!.getRamdomQuote()
         callRetrofit(resultCall, 5)
     }
@@ -74,13 +72,15 @@ class HomeFragment : androidx.fragment.app.Fragment() {
         call.enqueue(object : Callback<T> {
             override fun onResponse(call: Call<T>, response: Response<T>) {
                 if (response.isSuccessful) {
+                    Log.d(TAG, response.toString())
                     if (i == 5) {
                         var kaamlott = response.body() as KaamlottQuote
                         var code = kaamlott.code
                         if (kaamlott.code == 200) {
                             var citation = kaamlott.citation
-                            Log.d(TAG, "body = ${response.body()}")
-                            Toast.makeText(context, "code : $code, bienvenue $citation", Toast.LENGTH_SHORT).show()
+                            tv_citation.text = citation
+                            tv_auteur.text = kaamlott.personnage
+
                         } else {
                             Toast.makeText(context, "code : $code, message ${kaamlott.message}", Toast.LENGTH_SHORT).show()
                         }
