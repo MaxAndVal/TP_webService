@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.lpiem.rickandmortyapp.Data.RetrofitCallTypes
 import com.example.lpiem.rickandmortyapp.Data.RickAndMortyRetrofitSingleton
 import com.example.lpiem.rickandmortyapp.Model.ResponseFromApi
 import com.example.lpiem.rickandmortyapp.R
@@ -17,6 +18,16 @@ import retrofit2.Response
 
 class SignInActivity : AppCompatActivity() {
 
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_signin_activity)
+
+        tv_alreadyAccount.setOnClickListener { goBack() }
+        btn_confSignIn.setOnClickListener { signIn() }
+
+    }
+
     private fun regularConnection() {
         Toast.makeText(this, "compte crée", Toast.LENGTH_SHORT).show()
         val email = "${ed_email.text}"
@@ -28,16 +39,7 @@ class SignInActivity : AppCompatActivity() {
         val connection = rickAndMortyAPI!!.connectUser(jsonBody)
         Log.d(TAG, "jsonBody : $jsonBody")
         Log.d(TAG, "$connection")
-        callRetrofit(connection, 2)
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_signin_activity)
-
-        tv_alreadyAccount.setOnClickListener { goBack() }
-        btn_confSignIn.setOnClickListener { signIn() }
-
+        callRetrofit(connection, RetrofitCallTypes.CONNECTION)
     }
 
     private fun signIn() {
@@ -52,35 +54,37 @@ class SignInActivity : AppCompatActivity() {
         val subscribe = rickAndMortyAPI!!.signinUser(jsonBody)
         Log.d(TAG, "jsonBody : $jsonBody")
         Log.d(TAG, "$subscribe")
-        callRetrofit(subscribe, 1)
+        callRetrofit(subscribe, RetrofitCallTypes.SIGN_IN)
     }
 
-    private fun <T> callRetrofit(call: Call<T>, i: Int) {
+    private fun <T> callRetrofit(call: Call<T>, type: RetrofitCallTypes) {
 
         call.enqueue(object : Callback<T> {
             override fun onResponse(call: Call<T>, response: Response<T>) {
                 if (response.isSuccessful) {
-                    if (i == 1) {
-                        val responseFromApi = response.body() as ResponseFromApi
-                        val code = responseFromApi.code
-                        val message = responseFromApi.message
-                        if (code == 200) {
-                            regularConnection()
-                        } else {
-                            Toast.makeText(applicationContext, "code : $code, message : $message", Toast.LENGTH_SHORT).show()
+                    when (type) {
+                        RetrofitCallTypes.SIGN_IN -> {
+                            val responseFromApi = response.body() as ResponseFromApi
+                            val code = responseFromApi.code
+                            val message = responseFromApi.message
+                            if (code == 200) {
+                                regularConnection()
+                            } else {
+                                Toast.makeText(applicationContext, "code : $code, message : $message", Toast.LENGTH_SHORT).show()
+                            }
                         }
-                    } else if (i == 2) {
-                        val responseFromApi = response.body() as ResponseFromApi
-                        val code = responseFromApi.code
-                        val results = responseFromApi.results?.userName
-                        val userId = responseFromApi.results?.userId
-                        Log.d(TAG, "body = ${response.body()}")
-                        Toast.makeText(applicationContext, "code : $code, bienvenue $results id:$userId", Toast.LENGTH_SHORT).show()
-                        val intent = Intent(this@SignInActivity, BottomActivity::class.java)
-                        intent.putExtra("user", responseFromApi.results)
-                        startActivity(intent)
-                    } else {
-                        Log.d(TAG, "error : ${response.errorBody()}")
+                        RetrofitCallTypes.CONNECTION -> {
+                            val responseFromApi = response.body() as ResponseFromApi
+                            val code = responseFromApi.code
+                            val results = responseFromApi.results?.userName
+                            val userId = responseFromApi.results?.userId
+                            Log.d(TAG, "body = ${response.body()}")
+                            Toast.makeText(applicationContext, "code : $code, bienvenue $results id:$userId", Toast.LENGTH_SHORT).show()
+                            val intent = Intent(this@SignInActivity, BottomActivity::class.java)
+                            intent.putExtra("user", responseFromApi.results)
+                            startActivity(intent)
+                        }
+                        else -> Log.d(TAG, "error : ${response.errorBody()}")
                     }
 
                 } else {
