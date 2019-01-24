@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.Toast
 import com.example.lpiem.rickandmortyapp.Data.RickAndMortyAPI
 import com.example.lpiem.rickandmortyapp.Data.RickAndMortyRetrofitSingleton
 import com.example.lpiem.rickandmortyapp.Presenter.HomeManager
@@ -43,8 +45,34 @@ class HomeFragment : androidx.fragment.app.Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        homeManager?.getRandomQuote()
 
+
+        val listResult = homeManager!!.getRandomQuote()
+        val solution = listResult.second
+
+        if (solution != "") {
+            tv_citation.text = listResult.first
+            var shuffleList = listOf(solution, listResult.third[0], listResult.third[1], listResult.third[2])
+            shuffleList = shuffleList.shuffled()
+            btn_perso1.text = shuffleList[0]
+            btn_perso2.text = shuffleList[1]
+            btn_perso3.text = shuffleList[2]
+            btn_perso4.text = shuffleList[3]
+
+            btn_perso1.setOnClickListener { isThereWinner(it as Button, solution) }
+            btn_perso2.setOnClickListener { isThereWinner(it as Button, solution) }
+            btn_perso3.setOnClickListener { isThereWinner(it as Button, solution) }
+            btn_perso4.setOnClickListener { isThereWinner(it as Button, solution) }
+        }
+
+    }
+
+    private fun isThereWinner(button: Button, solution: String) {
+        if (button.text == solution ) {
+            Toast.makeText(context, "Bonne réponse !!!", Toast.LENGTH_LONG).show()
+        } else {
+            Toast.makeText(context, "Mauvaise réponse ...", Toast.LENGTH_LONG).show()
+        }
     }
 
     companion object {

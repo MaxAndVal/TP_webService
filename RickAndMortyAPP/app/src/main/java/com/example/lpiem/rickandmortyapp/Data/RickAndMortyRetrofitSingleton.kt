@@ -65,7 +65,7 @@ object RickAndMortyRetrofitSingleton {
                                 var citation = kaamlott.citation!!
                                 var personnage = kaamlott.personnage!!
                                 fragment.tv_citation.text = citation
-                                fragment.tv_auteur.text = personnage
+                                //fragment.tv_auteur.text = personnage
 
 
                             } else {
@@ -80,6 +80,7 @@ object RickAndMortyRetrofitSingleton {
                             fragment as CollectionFragment
                             fragment.listOfCards = response.body() as ListOfCards
                             if (fragment.listOfCards != null) {
+                                //FIXME: here the fragment instance can be different. Need to uniform method to call Retrofit
                                 fragment.rv_collection.adapter = CollectionAdapter(fragment?.listOfCards!!)
                                 fragment.rv_collection.adapter?.notifyDataSetChanged()
                             }

@@ -5,16 +5,8 @@ import android.util.Log
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lpiem.rickandmortyapp.Data.RetrofitCallTypes
 import com.example.lpiem.rickandmortyapp.Data.RickAndMortyRetrofitSingleton
-import com.example.lpiem.rickandmortyapp.Model.ListOfCards
-import com.example.lpiem.rickandmortyapp.Model.ResponseFromApi
 import com.example.lpiem.rickandmortyapp.Model.User
-import com.example.lpiem.rickandmortyapp.View.Collection.CollectionAdapter
 import com.example.lpiem.rickandmortyapp.View.Collection.CollectionFragment
-import com.example.lpiem.rickandmortyapp.View.TAG
-import okhttp3.ResponseBody
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class CollectionManager private constructor(private val context: Context) {
 
@@ -77,8 +69,10 @@ class CollectionManager private constructor(private val context: Context) {
         val userId = user?.userId?:-1
         Log.d("user id", userId.toString())
         val resultListCard = rickAndMortyAPI!!.getListOfCardsById(userId)
-        RickAndMortyRetrofitSingleton.callRetrofit(resultListCard, RetrofitCallTypes.LIST_OF_CARDS, context, fragment!!)
+        RickAndMortyRetrofitSingleton.callRetrofit(resultListCard, RetrofitCallTypes.LIST_OF_CARDS, context, collectionFragment!!)
     }
+
     fun getFragment(fragment: CollectionFragment){
         this.fragment = fragment
-    }}
+    }
+}
