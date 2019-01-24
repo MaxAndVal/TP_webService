@@ -7,6 +7,7 @@ import com.example.lpiem.rickandmortyapp.Data.RetrofitCallTypes
 import com.example.lpiem.rickandmortyapp.Data.RetrofitCallTypes.KAAMELOTT_QUOTE
 import com.example.lpiem.rickandmortyapp.Data.RickAndMortyRetrofitSingleton
 import com.example.lpiem.rickandmortyapp.Model.KaamlottQuote
+import com.example.lpiem.rickandmortyapp.View.Home.HomeFragment
 import com.example.lpiem.rickandmortyapp.View.TAG
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -19,6 +20,7 @@ class HomeManager private constructor(private var context: Context) {
     private var citation = ""
     private var personnage = ""
     private var personnageNameList = listOf("")
+    private var fragment : HomeFragment?=null
 
     companion object : SingletonHolder<HomeManager, Context>(::HomeManager)
 
@@ -30,6 +32,8 @@ class HomeManager private constructor(private var context: Context) {
     fun getRandomQuote(): Triple<String, String, List<String>> {
         val resultCall = rickAndMortyAPI!!.getRamdomQuote()
         callRetrofit(resultCall, KAAMELOTT_QUOTE)
+        //TODO: migrate like that
+        //RickAndMortyRetrofitSingleton.callRetrofit(resultCall, RetrofitCallTypes.KAAMELOTT_QUOTE, context, fragment!!)
         return Triple(citation, personnage, personnageNameList)
     }
 
@@ -64,5 +68,9 @@ class HomeManager private constructor(private var context: Context) {
             }
         })
 
+    }
+
+    fun getFragment(fragment: HomeFragment){
+        this.fragment = fragment
     }
 }

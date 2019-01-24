@@ -110,9 +110,10 @@ class LoginActivity : AppCompatActivity(), Callback<ResponseFromApi> {
 
         val accessToken = AccessToken.getCurrentAccessToken()
         val isLoggedIn = accessToken != null && !accessToken.isExpired
+        Log.d(TAG, "isLoggedIn = $isLoggedIn")
 
         if (isLoggedIn) {
-            LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile"))
+            LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile", ""))
             val request = GraphRequest.newMeRequest(
                     accessToken
             ) { `object`, response ->
@@ -121,10 +122,12 @@ class LoginActivity : AppCompatActivity(), Callback<ResponseFromApi> {
                     userNameFB = result.getString("name")
                     userNameTV.text = userNameFB
                     userNameTV.visibility = View.VISIBLE
-                    Log.d(TAG, "onCompleted: name = $userNameFB")
+                    Log.d(TAG, "onCompleted: name = $userNameFB , id = ${result.getString("id")} ")
                     Toast.makeText(applicationContext, "Bienvenue $userNameFB", Toast.LENGTH_SHORT).show()
-                    startActivity(displayIntent)
+                    val intent = Intent(this@LoginActivity, BottomActivity::class.java)
+                    startActivity(intent)
                 } catch (e: JSONException) {
+                    Log.d(TAG, "error : $e")
                     e.printStackTrace()
                 }
             }

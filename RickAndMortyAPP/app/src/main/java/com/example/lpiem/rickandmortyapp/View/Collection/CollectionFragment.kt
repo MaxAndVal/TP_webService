@@ -29,7 +29,7 @@ class CollectionFragment : androidx.fragment.app.Fragment() {
     private var rickAndMortyAPI: RickAndMortyAPI? = null
     var listOfCards: ListOfCards? = null
     private lateinit var collectionManager: CollectionManager
-    private var user: User? = null
+    private var user : User? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -69,6 +69,8 @@ class CollectionFragment : androidx.fragment.app.Fragment() {
                     }
                 }
     }
+
+
 
 
 }
