@@ -5,9 +5,14 @@ import android.util.Log
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.lpiem.rickandmortyapp.Model.KaamlottQuote
+import com.example.lpiem.rickandmortyapp.Model.ListOfCards
+import com.example.lpiem.rickandmortyapp.Model.ResponseFromApi
+import com.example.lpiem.rickandmortyapp.View.Collection.CollectionAdapter
+import com.example.lpiem.rickandmortyapp.View.Collection.CollectionFragment
 import com.example.lpiem.rickandmortyapp.View.Home.HomeFragment
 import com.example.lpiem.rickandmortyapp.View.TAG
 import com.google.gson.GsonBuilder
+import kotlinx.android.synthetic.main.fragment_collection.*
 import kotlinx.android.synthetic.main.fragment_home.*
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -52,6 +57,7 @@ object RickAndMortyRetrofitSingleton {
                     Log.d(TAG, response.toString())
                     when (type) {
                         RetrofitCallTypes.KAAMELOTT_QUOTE -> {
+                            fragment as HomeFragment
                             var kaamlott = response.body() as KaamlottQuote
                             var code = kaamlott.code
                             if (kaamlott.code == 200) {
@@ -64,6 +70,18 @@ object RickAndMortyRetrofitSingleton {
 
                             } else {
                                 Toast.makeText(context, "code : $code, message ${kaamlott.message}", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                        RetrofitCallTypes.RESPONSE_FROM_API -> {
+                            val responseFromApi = response.body() as ResponseFromApi
+                            Log.d(TAG, "responseFromApi: ${responseFromApi.code} / message: ${responseFromApi.message} / ${responseFromApi.results}")
+                        }
+                        RetrofitCallTypes.LIST_OF_CARDS -> {
+                            fragment as CollectionFragment
+                            fragment.listOfCards = response.body() as ListOfCards
+                            if (fragment.listOfCards != null) {
+                                fragment.rv_collection.adapter = CollectionAdapter(fragment?.listOfCards!!)
+                                fragment.rv_collection.adapter?.notifyDataSetChanged()
                             }
                         }
                     }

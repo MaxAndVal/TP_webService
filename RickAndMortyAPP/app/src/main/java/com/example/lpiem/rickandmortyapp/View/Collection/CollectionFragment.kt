@@ -32,6 +32,7 @@ class CollectionFragment : androidx.fragment.app.Fragment() {
     private var user : User? = null
 
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -40,9 +41,10 @@ class CollectionFragment : androidx.fragment.app.Fragment() {
         }
         user = activity?.intent?.getParcelableExtra("user")
         Log.d("userIntent : ", user.toString())
+        collectionManager = CollectionManager.getInstance(context!!)
+        collectionManager?.getFragment(this)
 
         rickAndMortyAPI = RickAndMortyRetrofitSingleton.instance
-        collectionManager = CollectionManager.getInstance(context!!)
         if (collectionManager.collectionFragment == null) {
             collectionManager.captureFragmentInstance(this)
         }
