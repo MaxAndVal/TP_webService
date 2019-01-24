@@ -169,13 +169,15 @@ class LoginActivity : AppCompatActivity(), Callback<ResponseFromApi> {
             //disconnectGoogleBtn.visibility = View.VISIBLE
             val account = GoogleSignIn.getLastSignedInAccount(this)
             if (account != null) {
+                Log.d(TAG, account.toString())
                 userNameGG = account.displayName
+                var userEmailGG= account.email
+                var userIdGG=account.id
                 userNameTV.text = userNameGG
                 userNameTV.visibility = View.VISIBLE
             } else {
                 userNameTV.visibility = View.INVISIBLE
             }
-            startActivity(displayIntent)
         }
 
 
