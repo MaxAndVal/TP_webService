@@ -21,6 +21,8 @@ class CollectionManager private constructor(private val context: Context) {
     private var rickAndMortyAPI = RickAndMortyRetrofitSingleton.instance
     var collectionFragment: CollectionFragment? = null
     private lateinit var recyclerView: RecyclerView
+    private var fragment : CollectionFragment?=null
+
 
     init {
 
@@ -37,37 +39,37 @@ class CollectionManager private constructor(private val context: Context) {
     }
 
 
-    private fun <T> callRetrofit(call: Call<T>, type: RetrofitCallTypes) {
-
-        call.enqueue(object : Callback<T> {
-            override fun onResponse(call: Call<T>, response: Response<T>) {
-                if (response.isSuccessful) {
-                    when (type) {
-                        RetrofitCallTypes.RESPONSE_FROM_API -> {
-                            val responseFromApi = response.body() as ResponseFromApi
-                            Log.d(TAG, "responseFromApi: ${responseFromApi.code} / message: ${responseFromApi.message} / ${responseFromApi.results}")
-                        }
-                        RetrofitCallTypes.LIST_OF_CARDS -> {
-                            collectionFragment?.listOfCards = response.body() as ListOfCards
-                            if (collectionFragment?.listOfCards != null) {
-                                recyclerView.adapter = CollectionAdapter(collectionFragment?.listOfCards!!)
-                                recyclerView.adapter?.notifyDataSetChanged()
-                            }
-                        }
-                    }
-                } else {
-                    val responseError = response.errorBody() as ResponseBody
-                    Log.d(TAG, "error: ${responseError.string()}")
-                }
-
-            }
-
-            override fun onFailure(call: Call<T>, t: Throwable) {
-                Log.d(TAG, "fail : $t")
-            }
-        })
-
-    }
+//    private fun <T> callRetrofit(call: Call<T>, type: RetrofitCallTypes) {
+//
+//        call.enqueue(object : Callback<T> {
+//            override fun onResponse(call: Call<T>, response: Response<T>) {
+//                if (response.isSuccessful) {
+//                    when (type) {
+//                        RetrofitCallTypes.RESPONSE_FROM_API -> {
+//                            val responseFromApi = response.body() as ResponseFromApi
+//                            Log.d(TAG, "responseFromApi: ${responseFromApi.code} / message: ${responseFromApi.message} / ${responseFromApi.results}")
+//                        }
+//                        RetrofitCallTypes.LIST_OF_CARDS -> {
+//                            collectionFragment?.listOfCards = response.body() as ListOfCards
+//                            if (collectionFragment?.listOfCards != null) {
+//                                recyclerView.adapter = CollectionAdapter(collectionFragment?.listOfCards!!)
+//                                recyclerView.adapter?.notifyDataSetChanged()
+//                            }
+//                        }
+//                    }
+//                } else {
+//                    val responseError = response.errorBody() as ResponseBody
+//                    Log.d(TAG, "error: ${responseError.string()}")
+//                }
+//
+//            }
+//
+//            override fun onFailure(call: Call<T>, t: Throwable) {
+//                Log.d(TAG, "fail : $t")
+//            }
+//        })
+//
+//    }
 
 
     @Synchronized
@@ -75,6 +77,8 @@ class CollectionManager private constructor(private val context: Context) {
         val userId = user?.userId?:-1
         Log.d("user id", userId.toString())
         val resultListCard = rickAndMortyAPI!!.getListOfCardsById(userId)
-        callRetrofit(resultListCard, RetrofitCallTypes.LIST_OF_CARDS)
+        RickAndMortyRetrofitSingleton.callRetrofit(resultListCard, RetrofitCallTypes.LIST_OF_CARDS, context, fragment!!)
     }
-}
+    fun getFragment(fragment: CollectionFragment){
+        this.fragment = fragment
+    }}
