@@ -29,7 +29,7 @@ class CollectionFragment : androidx.fragment.app.Fragment() {
     private var rickAndMortyAPI: RickAndMortyAPI? = null
     var listOfCards: ListOfCards? = null
     private lateinit var collectionManager: CollectionManager
-    private var user : User? = null
+    private var user: User? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,15 +43,15 @@ class CollectionFragment : androidx.fragment.app.Fragment() {
 
         rickAndMortyAPI = RickAndMortyRetrofitSingleton.instance
         collectionManager = CollectionManager.getInstance(context!!)
-        if (collectionManager.collectionFragment == null) {
-            collectionManager.captureFragmentInstance(this)
-        }
+        collectionManager.captureFragmentInstance(this)
+
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_collection, container, false)
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         rv_collection.layoutManager = GridLayoutManager(context, 3)
@@ -69,8 +69,6 @@ class CollectionFragment : androidx.fragment.app.Fragment() {
                     }
                 }
     }
-
-
 
 
 }

@@ -2,6 +2,7 @@ package com.example.lpiem.rickandmortyapp.View
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import com.example.lpiem.rickandmortyapp.R
 import com.example.lpiem.rickandmortyapp.View.Collection.CollectionFragment
 import com.example.lpiem.rickandmortyapp.View.Home.HomeFragment
@@ -15,31 +16,16 @@ class BottomActivity : AppCompatActivity() {
         when (item.itemId) {
             R.id.navigation_home -> {
                 message.setText(R.string.title_home)
-                val fragmentManager = supportFragmentManager
-                val fragmentTransaction = fragmentManager.beginTransaction()
-                val fragment = HomeFragment()
-                //fragmentTransaction.addToBackStack("home")
-                fragmentTransaction.replace(R.id.fragmentLayout, fragment)
-                fragmentTransaction.commit()
+                openFragment(HomeFragment())
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_collection -> {
                 message.setText(R.string.collection)
-                val fragmentManager = supportFragmentManager
-                val fragmentTransaction = fragmentManager.beginTransaction()
-                val fragment = CollectionFragment()
-                //fragmentTransaction.addToBackStack("collection")
-                fragmentTransaction.replace(R.id.fragmentLayout, fragment)
-                fragmentTransaction.commit()
+                openFragment(CollectionFragment())
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_social -> {
-                message.setText(R.string.social)
-                val fragmentManager = supportFragmentManager
-                val fragmentTransaction = fragmentManager.beginTransaction()
-                val fragment = SocialFragment()
-                fragmentTransaction.replace(R.id.fragmentLayout, fragment)
-                fragmentTransaction.commit()
+                openFragment(SocialFragment())
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_profil -> {
@@ -55,11 +41,21 @@ class BottomActivity : AppCompatActivity() {
         setContentView(R.layout.activity_bottom)
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
+
+        openFragment(HomeFragment())
+
     }
 
     override fun onBackPressed() {
-
         super.onBackPressed()
+        finish()
+    }
+
+    private fun openFragment(fragment: Fragment) {
+        val fragmentManager = supportFragmentManager
+        val fragmentTransaction = fragmentManager.beginTransaction()
+        fragmentTransaction.replace(R.id.fragmentLayout, fragment)
+        fragmentTransaction.commit()
     }
 
 }

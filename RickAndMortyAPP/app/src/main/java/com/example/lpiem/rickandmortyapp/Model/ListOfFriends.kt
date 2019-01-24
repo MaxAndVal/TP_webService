@@ -14,6 +14,8 @@ class ListOfFriends : Parcelable {
     }
 
     override fun writeToParcel(dest: Parcel, flags: Int) {
+        dest.writeValue(code)
+        dest.writeValue(message)
         dest.writeValue(friends)
     }
 
