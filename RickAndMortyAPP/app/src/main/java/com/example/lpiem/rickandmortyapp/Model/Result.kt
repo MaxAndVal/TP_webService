@@ -42,6 +42,4 @@ class Result : Parcelable {
         return 0
     }
 
-
-
 }
