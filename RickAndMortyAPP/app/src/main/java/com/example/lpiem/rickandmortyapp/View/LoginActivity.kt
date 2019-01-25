@@ -142,6 +142,7 @@ class LoginActivity : AppCompatActivity(), Callback<ResponseFromApi> {
         gso = GoogleSignInOptions
                 .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
+                .requestId()
                 .build()
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
@@ -153,8 +154,6 @@ class LoginActivity : AppCompatActivity(), Callback<ResponseFromApi> {
     private fun regularSignIn() {
         var signInIntent = Intent(this@LoginActivity, SignInActivity::class.java)
         startActivity(signInIntent)
-
-
     }
 
 
@@ -173,6 +172,7 @@ class LoginActivity : AppCompatActivity(), Callback<ResponseFromApi> {
             //disconnectGoogleBtn.visibility = View.VISIBLE
             val account = GoogleSignIn.getLastSignedInAccount(this)
             if (account != null) {
+                Log.d(TAG, "name Google = ${account.displayName} / id : ${account.id} / email : ${account.email}")
                 userNameGG = account.displayName
                 userNameTV.text = userNameGG
                 userNameTV.visibility = View.VISIBLE
