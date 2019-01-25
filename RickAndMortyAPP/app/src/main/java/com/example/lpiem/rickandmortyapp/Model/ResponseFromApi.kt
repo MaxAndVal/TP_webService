@@ -49,6 +49,9 @@ class ResponseFromApi : Parcelable {
         return 0
     }
 
+    override fun toString(): String {
+        return "ResponseFromApi(CREATOR=$CREATOR, code=$code, message=$message, results=${results.toString()})"
+    }
 
 
 }
