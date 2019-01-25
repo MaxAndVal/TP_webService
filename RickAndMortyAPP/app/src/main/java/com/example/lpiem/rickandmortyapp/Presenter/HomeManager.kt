@@ -29,12 +29,12 @@ class HomeManager private constructor(private var context: Context) {
     }
 
     //@Synchronized
-    fun getRandomQuote(): Triple<String, String, List<String>> {
+    fun getRandomQuote() /*: Triple<String, String, List<String>>*/ {
         val resultCall = rickAndMortyAPI!!.getRamdomQuote()
         callRetrofit(resultCall, KAAMELOTT_QUOTE)
         //TODO: migrate like that
         //RickAndMortyRetrofitSingleton.callRetrofit(resultCall, RetrofitCallTypes.KAAMELOTT_QUOTE, context, fragment!!)
-        return Triple(citation, personnage, personnageNameList)
+        //return Triple(citation, personnage, personnageNameList)
     }
 
     private fun <T> callRetrofit(call: Call<T>, type: RetrofitCallTypes) {
@@ -51,6 +51,8 @@ class HomeManager private constructor(private var context: Context) {
                                 citation = kaamlott.citation!!
                                 personnage = kaamlott.personnage!!
                                 personnageNameList = kaamlott.personnageList!!
+                                val list = Triple(citation, personnage, personnageNameList)
+                                fragment?.updateUI(list)
                             } else {
                                 Toast.makeText(context, "code : $code, message ${kaamlott.message}", Toast.LENGTH_SHORT).show()
                             }
