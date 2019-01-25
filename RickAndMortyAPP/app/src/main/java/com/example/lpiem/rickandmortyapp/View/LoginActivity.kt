@@ -95,6 +95,7 @@ class LoginActivity : AppCompatActivity(), Callback<ResponseFromApi> {
 
             override fun onSuccess(loginResult: LoginResult) {
                 token = loginResult.accessToken.token
+                Log.d(TAG, "login onSuccess = ${loginResult.accessToken.userId}")
                 Log.d(TAG, "onSuccess: token = $token")
             }
 
@@ -113,7 +114,7 @@ class LoginActivity : AppCompatActivity(), Callback<ResponseFromApi> {
         Log.d(TAG, "isLoggedIn = $isLoggedIn")
 
         if (isLoggedIn) {
-            LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile", ""))
+            LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile"))
             val request = GraphRequest.newMeRequest(
                     accessToken
             ) { `object`, response ->
@@ -122,7 +123,7 @@ class LoginActivity : AppCompatActivity(), Callback<ResponseFromApi> {
                     userNameFB = result.getString("name")
                     userNameTV.text = userNameFB
                     userNameTV.visibility = View.VISIBLE
-                    Log.d(TAG, "onCompleted: name = $userNameFB , id = ${result.getString("id")} ")
+                    Log.d(TAG, "onCompleted: name = $userNameFB , id = ${result.getString("id")} ${result.getString("email")}")
                     Toast.makeText(applicationContext, "Bienvenue $userNameFB", Toast.LENGTH_SHORT).show()
                     val intent = Intent(this@LoginActivity, BottomActivity::class.java)
                     startActivity(intent)
@@ -132,7 +133,7 @@ class LoginActivity : AppCompatActivity(), Callback<ResponseFromApi> {
                 }
             }
             val parameters = Bundle()
-            parameters.putString("fields", "id,name,link")
+            parameters.putString("fields", "id,name,link,email")
             request.parameters = parameters
             request.executeAsync()
         }
@@ -141,6 +142,7 @@ class LoginActivity : AppCompatActivity(), Callback<ResponseFromApi> {
         gso = GoogleSignInOptions
                 .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
+                .requestId()
                 .build()
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
@@ -152,8 +154,6 @@ class LoginActivity : AppCompatActivity(), Callback<ResponseFromApi> {
     private fun regularSignIn() {
         var signInIntent = Intent(this@LoginActivity, SignInActivity::class.java)
         startActivity(signInIntent)
-
-
     }
 
 
@@ -172,6 +172,7 @@ class LoginActivity : AppCompatActivity(), Callback<ResponseFromApi> {
             //disconnectGoogleBtn.visibility = View.VISIBLE
             val account = GoogleSignIn.getLastSignedInAccount(this)
             if (account != null) {
+                Log.d(TAG, "name Google = ${account.displayName} / id : ${account.id} / email : ${account.email}")
                 userNameGG = account.displayName
                 userNameTV.text = userNameGG
                 userNameTV.visibility = View.VISIBLE

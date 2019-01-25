@@ -28,7 +28,7 @@ class SignInManager private constructor(private var context: Context) {
     companion object : SingletonHolder<SignInManager, Context>(::SignInManager)
 
     init {
-
+        intent = Intent(context, BottomActivity::class.java)
     }
 
     fun regularConnection() {
@@ -78,7 +78,7 @@ class SignInManager private constructor(private var context: Context) {
                             val userId = responseFromApi.results?.userId
                             Log.d(TAG, "body = ${response.body()}")
                             Toast.makeText(context, "code : $code, bienvenue $results id:$userId", Toast.LENGTH_SHORT).show()
-                            intent = Intent(context, BottomActivity::class.java)
+                            //intent = Intent(context, BottomActivity::class.java)
                             intent.putExtra("user", responseFromApi.results)
                             context.startActivity(intent)
                         }
