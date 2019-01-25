@@ -9,13 +9,13 @@ import com.google.gson.annotations.SerializedName
 class KaamlottQuote : Parcelable {
 
     @JvmField
-    val CREATOR: Parcelable.Creator<ResponseFromApi> = object : Parcelable.Creator<ResponseFromApi> {
+    val CREATOR: Parcelable.Creator<KaamlottQuote> = object : Parcelable.Creator<KaamlottQuote> {
 
-        override fun createFromParcel(inside: Parcel): ResponseFromApi {
-            return ResponseFromApi(inside)
+        override fun createFromParcel(inside: Parcel): KaamlottQuote {
+            return KaamlottQuote(inside)
         }
 
-        override fun newArray(size: Int): Array<ResponseFromApi?> {
+        override fun newArray(size: Int): Array<KaamlottQuote?> {
             return arrayOfNulls(size)
         }
 
@@ -33,12 +33,16 @@ class KaamlottQuote : Parcelable {
     @SerializedName("personnage")
     @Expose
     var personnage: String? = null
+    @SerializedName("personnages")
+    @Expose
+    var personnageList: List<String>? = null
 
     constructor(inside: Parcel) {
         this.code = inside.readValue(Int::class.java.classLoader) as Int
         this.message = inside.readValue(String::class.java.classLoader) as String
         this.citation = inside.readValue(String::class.java.classLoader) as String
         this.personnage = inside.readValue(String::class.java.classLoader) as String
+        inside.readList(this.personnageList, String::class.java.classLoader)
 
     }
 

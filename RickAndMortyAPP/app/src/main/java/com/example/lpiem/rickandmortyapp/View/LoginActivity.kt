@@ -95,6 +95,7 @@ class LoginActivity : AppCompatActivity(), Callback<ResponseFromApi> {
 
             override fun onSuccess(loginResult: LoginResult) {
                 token = loginResult.accessToken.token
+                Log.d(TAG, "login onSuccess = ${loginResult.accessToken.userId}")
                 Log.d(TAG, "onSuccess: token = $token")
             }
 
@@ -110,6 +111,7 @@ class LoginActivity : AppCompatActivity(), Callback<ResponseFromApi> {
 
         val accessToken = AccessToken.getCurrentAccessToken()
         val isLoggedIn = accessToken != null && !accessToken.isExpired
+        Log.d(TAG, "isLoggedIn = $isLoggedIn")
 
         if (isLoggedIn) {
             LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile"))
@@ -121,15 +123,17 @@ class LoginActivity : AppCompatActivity(), Callback<ResponseFromApi> {
                     userNameFB = result.getString("name")
                     userNameTV.text = userNameFB
                     userNameTV.visibility = View.VISIBLE
-                    Log.d(TAG, "onCompleted: name = $userNameFB")
+                    Log.d(TAG, "onCompleted: name = $userNameFB , id = ${result.getString("id")} ${result.getString("email")}")
                     Toast.makeText(applicationContext, "Bienvenue $userNameFB", Toast.LENGTH_SHORT).show()
-                    startActivity(displayIntent)
+                    val intent = Intent(this@LoginActivity, BottomActivity::class.java)
+                    startActivity(intent)
                 } catch (e: JSONException) {
+                    Log.d(TAG, "error : $e")
                     e.printStackTrace()
                 }
             }
             val parameters = Bundle()
-            parameters.putString("fields", "id,name,link")
+            parameters.putString("fields", "id,name,link,email")
             request.parameters = parameters
             request.executeAsync()
         }
@@ -138,6 +142,7 @@ class LoginActivity : AppCompatActivity(), Callback<ResponseFromApi> {
         gso = GoogleSignInOptions
                 .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
+                .requestId()
                 .build()
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
@@ -160,6 +165,7 @@ class LoginActivity : AppCompatActivity(), Callback<ResponseFromApi> {
 
         // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
+
             // The Task returned from this call is always completed, no need to attach
             // a listener.
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
