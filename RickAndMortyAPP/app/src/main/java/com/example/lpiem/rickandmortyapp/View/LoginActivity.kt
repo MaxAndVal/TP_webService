@@ -61,7 +61,6 @@ class LoginActivity : AppCompatActivity(), Callback<ResponseFromApi> {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
         displayIntent = Intent(this@LoginActivity, BottomActivity::class.java)
 
         etEmail = findViewById(R.id.etEmail)
@@ -253,6 +252,7 @@ class LoginActivity : AppCompatActivity(), Callback<ResponseFromApi> {
         Log.d(TAG, "$connection")
         connection.enqueue(this)
     }
+
 
     override fun onResponse(call: Call<ResponseFromApi>, response: Response<ResponseFromApi>) {
         if (response.isSuccessful) {
