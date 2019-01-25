@@ -160,7 +160,6 @@ class LoginActivity : AppCompatActivity(), Callback<ResponseFromApi> {
 
         // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
-
             // The Task returned from this call is always completed, no need to attach
             // a listener.
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
@@ -169,14 +168,21 @@ class LoginActivity : AppCompatActivity(), Callback<ResponseFromApi> {
             //disconnectGoogleBtn.visibility = View.VISIBLE
             val account = GoogleSignIn.getLastSignedInAccount(this)
             if (account != null) {
-                Log.d(TAG, account.toString())
-                userNameGG = account.displayName
-                var userEmailGG= account.email
-                var userIdGG=account.id
-                userNameTV.text = userNameGG
-                userNameTV.visibility = View.VISIBLE
+                var userName = account?.displayName
+                var userEmail = account?.email
+                var userId = account?.id
+                var userImage = account?.photoUrl
+                rickAndMortyAPI = RickAndMortyRetrofitSingleton.instance
+                val jsonBody = JsonObject()
+                jsonBody.addProperty("user_email", userEmail)
+                jsonBody.addProperty("user_name", userName)
+                jsonBody.addProperty("user_password", userId)
+                jsonBody.addProperty("user_image", userImage.toString())
+                jsonBody.addProperty("external_id", userId)
+                var connection = rickAndMortyAPI!!.connectUser(jsonBody)
+                connection.enqueue(this)
             } else {
-                userNameTV.visibility = View.INVISIBLE
+                Toast.makeText(applicationContext, "erreur", Toast.LENGTH_LONG).show()
             }
         }
 
@@ -213,7 +219,6 @@ class LoginActivity : AppCompatActivity(), Callback<ResponseFromApi> {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
             Log.w(TAG, "signInResult:failed code=" + e.statusCode)
-
         }
 
     }
@@ -224,10 +229,8 @@ class LoginActivity : AppCompatActivity(), Callback<ResponseFromApi> {
             Log.d(TAG, "onComplete: disconnectGoogle")
             //GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
             if (account != null) {
-                userNameGG = account!!.displayName
-                userNameTV.text = userNameGG
-                userNameTV.visibility = View.VISIBLE
-                userNameTV.setText(R.string.empty)
+
+
             } else {
                 userNameTV.visibility = View.INVISIBLE
 
@@ -257,7 +260,7 @@ class LoginActivity : AppCompatActivity(), Callback<ResponseFromApi> {
             var code = response.body()?.code
             if (response.body()?.code == 200) {
                 var results = response.body()?.results?.userName
-                Log.d(TAG, "body = ${response.body()}")
+                Log.d(TAG, "body = ${response.body().toString()}")
                 Toast.makeText(this, "code : $code, bienvenue $results", Toast.LENGTH_SHORT).show()
                 displayIntent?.putExtra("user", response.body()?.results)
                 startActivity(displayIntent)
