@@ -72,7 +72,7 @@ class HomeFragment : androidx.fragment.app.Fragment() {
                 }
     }
 
-    fun updateUI(listResult: Triple<String, String, List<String>>) {
+    internal fun updateUI(listResult: Triple<String, String, List<String>>) {
         val solution = listResult.second
         if (solution != "") {
             tv_citation.text = listResult.first

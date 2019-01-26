@@ -3,10 +3,7 @@ package com.example.lpiem.rickandmortyapp.View
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.lpiem.rickandmortyapp.Data.RickAndMortyAPI
@@ -16,7 +13,6 @@ import com.example.lpiem.rickandmortyapp.R
 import com.facebook.*
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
-import com.facebook.login.widget.LoginButton
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -25,7 +21,7 @@ import com.google.android.gms.common.SignInButton
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.google.gson.JsonObject
-import org.json.JSONException
+import kotlinx.android.synthetic.main.activity_main.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -34,69 +30,87 @@ import java.util.*
 const val TAG = "TAG_M"
 const val RC_SIGN_IN = 1
 
-
 class LoginActivity : AppCompatActivity(), Callback<ResponseFromApi> {
 
-
     private var callbackManager: CallbackManager? = null
-    private lateinit var facebookLoginButton: LoginButton
-    private var token: String? = null
     private lateinit var gso: GoogleSignInOptions
     private var mGoogleSignInClient: GoogleSignInClient? = null
-    private lateinit var signInButton: SignInButton
-    private lateinit var userNameTV: TextView
-    private lateinit var disconnectGoogleBtn: Button
-    private var userNameGG: String? = null
     private var userNameFB: String? = null
     private var account: GoogleSignInAccount? = null
     private var displayIntent: Intent? = null
-    private lateinit var etEmail: EditText
-    private lateinit var etPassword: EditText
-    private lateinit var btnRegularConnection: Button
     private var rickAndMortyAPI: RickAndMortyAPI? = null
-    private lateinit var btnSignin: TextView
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
         displayIntent = Intent(this@LoginActivity, BottomActivity::class.java)
+        rickAndMortyAPI = RickAndMortyRetrofitSingleton.instance
 
-        etEmail = findViewById(R.id.etEmail)
-        etPassword = findViewById(R.id.etPassword)
-        btnRegularConnection = findViewById(R.id.btnRegularConnection)
-        btnSignin = findViewById(R.id.tv_signin)
+        //REGULAR CONNECTION AND SIGN IN
 
         btnRegularConnection.setOnClickListener { regularConnection() }
-        btnSignin.setOnClickListener { regularSignIn() }
+        tv_signin.setOnClickListener { regularSignIn() }
 
-        userNameTV = findViewById(R.id.userNameTV)
-        userNameTV.visibility = View.INVISIBLE
-        //disconnectGoogleBtn = findViewById(R.id.disconnectGoogle)
-        //disconnectGoogleBtn.visibility = View.INVISIBLE
-        //disconnectGoogleBtn.setOnClickListener { disconnectGoogleAccount() }
+        // GOOGLE
 
+        sign_in_button.setSize(SignInButton.SIZE_STANDARD)
+        sign_in_button.setOnClickListener { signIn() }
 
-        facebookLoginButton = findViewById(R.id.login_button)
-        callbackManager = CallbackManager.Factory.create()
+        gso = GoogleSignInOptions
+                .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .requestId()
+                .build()
 
-        signInButton = findViewById(R.id.sign_in_button)
-        signInButton.setSize(SignInButton.SIZE_STANDARD)
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
 
 
         // FACEBOOK
 
-        facebookLoginButton.setReadPermissions("email")
+        callbackManager = CallbackManager.Factory.create()
+        facebook_login_button.setReadPermissions("email")
 
-        Log.d(TAG, "onCreate: callBackManager = $callbackManager")
-        facebookLoginButton.registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
+        facebook_login_button.registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
 
             override fun onSuccess(loginResult: LoginResult) {
-                token = loginResult.accessToken.token
+                val token = loginResult.accessToken.token
                 Log.d(TAG, "login onSuccess = ${loginResult.accessToken.userId}")
                 Log.d(TAG, "onSuccess: token = $token")
+                val accessToken = loginResult.accessToken
+                val isLoggedIn = accessToken != null && !accessToken.isExpired
+                Log.d(TAG, "isLoggedIn on success = $isLoggedIn")
+                var connection : Call<ResponseFromApi>?
+                if (isLoggedIn) {
+                    val request = GraphRequest.newMeRequest(
+                            accessToken
+                    ) { `object`, response ->
+                        val result = response.jsonObject
+                        try {
+                            userNameFB = result.getString("name")
+                            val userEmail = result.getString("email")
+                            val userId = result.getString("id")
+                            val userImage = result.getString("picture")
+                            val jsonBody = JsonObject()
+                            jsonBody.addProperty("user_email", userEmail)
+                            jsonBody.addProperty("user_name", userNameFB)
+                            jsonBody.addProperty("user_password", userId)
+                            jsonBody.addProperty("user_image", userImage)
+                            jsonBody.addProperty("external_id", userId)
+                            Log.d(TAG, "just after graph request")
+                            connection = rickAndMortyAPI!!.connectUser(jsonBody)
+                            connection?.enqueue(this@LoginActivity)
+                        } catch (e: Throwable) {
+                            Log.d(TAG, "error : $e")
+                            e.printStackTrace()
+                        }
+                    }
+                    val parameters = Bundle()
+                    parameters.putString("fields", "id,name,link,email,picture")
+                    request.parameters = parameters
+                    request.executeAsync()
+                }
             }
 
             override fun onCancel() {
@@ -115,47 +129,13 @@ class LoginActivity : AppCompatActivity(), Callback<ResponseFromApi> {
 
         if (isLoggedIn) {
             LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile"))
-            val request = GraphRequest.newMeRequest(
-                    accessToken
-            ) { `object`, response ->
-                val result = response.jsonObject
-                try {
-                    userNameFB = result.getString("name")
-                    userNameTV.text = userNameFB
-                    userNameTV.visibility = View.VISIBLE
-                    Log.d(TAG, "onCompleted: name = $userNameFB , id = ${result.getString("id")} ${result.getString("email")}")
-                    Toast.makeText(applicationContext, "Bienvenue $userNameFB", Toast.LENGTH_SHORT).show()
-                    val intent = Intent(this@LoginActivity, BottomActivity::class.java)
-                    startActivity(intent)
-                } catch (e: JSONException) {
-                    Log.d(TAG, "error : $e")
-                    e.printStackTrace()
-                }
-            }
-            val parameters = Bundle()
-            parameters.putString("fields", "id,name,link,email")
-            request.parameters = parameters
-            request.executeAsync()
         }
-
-        // GOOGLE
-        gso = GoogleSignInOptions
-                .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .requestId()
-                .build()
-
-        mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
-
-        signInButton.setOnClickListener { signIn() }
 
     }
 
     private fun regularSignIn() {
-        var signInIntent = Intent(this@LoginActivity, SignInActivity::class.java)
+        val signInIntent = Intent(this@LoginActivity, SignInActivity::class.java)
         startActivity(signInIntent)
-
-
     }
 
 
@@ -170,56 +150,38 @@ class LoginActivity : AppCompatActivity(), Callback<ResponseFromApi> {
             // a listener.
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             handleSignInResult(task)
-            signInButton.visibility = View.INVISIBLE
-            //disconnectGoogleBtn.visibility = View.VISIBLE
+            Log.d(TAG, "child : ${(sign_in_button.getChildAt(0) as Button).text}" )
+            (sign_in_button.getChildAt(0) as Button).text = "Se déconnecter"
+            sign_in_button.setOnClickListener { disconnectGoogleAccount() }
             val account = GoogleSignIn.getLastSignedInAccount(this)
             if (account != null) {
-                var userName = account?.displayName
-                var userEmail = account?.email
-                var userId = account?.id
-                var userImage = account?.photoUrl
-                rickAndMortyAPI = RickAndMortyRetrofitSingleton.instance
+                val userName = account.displayName
+                val userEmail = account.email
+                val userId = account.id
+                val userImage = account.photoUrl
                 val jsonBody = JsonObject()
                 jsonBody.addProperty("user_email", userEmail)
                 jsonBody.addProperty("user_name", userName)
                 jsonBody.addProperty("user_password", userId)
                 jsonBody.addProperty("user_image", userImage.toString())
                 jsonBody.addProperty("external_id", userId)
-                var connection = rickAndMortyAPI!!.connectUser(jsonBody)
+                val connection = rickAndMortyAPI!!.connectUser(jsonBody)
                 connection.enqueue(this)
             } else {
                 Toast.makeText(applicationContext, "erreur", Toast.LENGTH_LONG).show()
             }
-        }
-
-
-    }
-
-    override fun onStart() {
-        super.onStart()
-        // Check for existing Google Sign In account, if the user is already signed in
-        // the GoogleSignInAccount will be non-null.
-
-        if (account != null) {
-            userNameGG = account!!.displayName
-            userNameTV.text = userNameGG
-            userNameTV.visibility = View.VISIBLE
-        } else {
-            userNameTV.visibility = View.INVISIBLE
         }
     }
 
     private fun signIn() {
         val signInIntent = mGoogleSignInClient?.signInIntent
         startActivityForResult(signInIntent, RC_SIGN_IN)
-
     }
 
     private fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
         try {
             account = completedTask.getResult(ApiException::class.java)
             Log.d(TAG, "handleSignInResult: connected")
-            // Signed in successfully, show authenticated UI.
 
         } catch (e: ApiException) {
             // The ApiException status code indicates the detailed failure reason.
@@ -233,39 +195,31 @@ class LoginActivity : AppCompatActivity(), Callback<ResponseFromApi> {
         mGoogleSignInClient?.signOut()?.addOnCompleteListener { task ->
             task.result
             Log.d(TAG, "onComplete: disconnectGoogle")
-            //GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
-            if (account != null) {
-
-
-            } else {
-                userNameTV.visibility = View.INVISIBLE
-
-            }
+            Toast.makeText(applicationContext, "Déconnecté de votre compte Google", Toast.LENGTH_SHORT).show()
+            (sign_in_button.getChildAt(0) as Button).text = "Se connecter"
+            sign_in_button.setOnClickListener { signIn() }
         }
-        signInButton.visibility = View.VISIBLE
-        disconnectGoogleBtn.visibility = View.INVISIBLE
     }
-
 
     private fun regularConnection() {
 
         val mail = etEmail.text.toString()
         val pass = etPassword.text.toString()
-        rickAndMortyAPI = RickAndMortyRetrofitSingleton.instance
         val jsonBody = JsonObject()
         jsonBody.addProperty("user_email", mail)
         jsonBody.addProperty("user_password", pass)
-        var connection = rickAndMortyAPI!!.connectUser(jsonBody)
+        val connection = rickAndMortyAPI!!.connectUser(jsonBody)
         Log.d(TAG, "jsonBody : $jsonBody")
         Log.d(TAG, "$connection")
         connection.enqueue(this)
     }
 
+
     override fun onResponse(call: Call<ResponseFromApi>, response: Response<ResponseFromApi>) {
         if (response.isSuccessful) {
-            var code = response.body()?.code
+            val code = response.body()?.code
             if (response.body()?.code == 200) {
-                var results = response.body()?.results?.userName
+                val results = response.body()?.results?.userName
                 Log.d(TAG, "body = ${response.body().toString()}")
                 Toast.makeText(this, "code : $code, bienvenue $results", Toast.LENGTH_SHORT).show()
                 displayIntent?.putExtra("user", response.body()?.results)
@@ -285,13 +239,8 @@ class LoginActivity : AppCompatActivity(), Callback<ResponseFromApi> {
 
 
     override fun onBackPressed() {
-        moveTaskToBack(true)
+        finish()
     }
 
-
-    override fun onResume() {
-        super.onResume()
-
-    }
 }
 

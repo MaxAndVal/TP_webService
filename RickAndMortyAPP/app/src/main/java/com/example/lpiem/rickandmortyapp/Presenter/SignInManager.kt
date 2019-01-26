@@ -20,7 +20,7 @@ import retrofit2.Response
 
 class SignInManager private constructor(private var context: Context) {
 
-    private lateinit var intent: Intent
+    private var intent: Intent = Intent(context, BottomActivity::class.java)
     private lateinit var email: String
     private lateinit var username: String
     private lateinit var password: String
@@ -28,7 +28,7 @@ class SignInManager private constructor(private var context: Context) {
     companion object : SingletonHolder<SignInManager, Context>(::SignInManager)
 
     init {
-        intent = Intent(context, BottomActivity::class.java)
+
     }
 
     fun regularConnection() {
