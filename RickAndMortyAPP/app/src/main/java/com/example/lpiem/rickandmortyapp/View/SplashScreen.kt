@@ -1,9 +1,9 @@
 package com.example.lpiem.rickandmortyapp.View
 
 import android.content.Intent
+import android.os.Bundle
 import android.os.Handler
 import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
 import com.example.lpiem.rickandmortyapp.R
 
 class SplashScreen : AppCompatActivity() {
@@ -16,6 +16,7 @@ class SplashScreen : AppCompatActivity() {
         handler.postDelayed({
             val mainActivityIntent = Intent(this@SplashScreen, LoginActivity::class.java)
             startActivity(mainActivityIntent)
+            finish()
         }, 2000L)
 
     }
