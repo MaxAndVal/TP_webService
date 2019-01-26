@@ -3,6 +3,8 @@ package com.example.lpiem.rickandmortyapp.View
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -21,7 +23,7 @@ import com.google.android.gms.common.SignInButton
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.google.gson.JsonObject
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_login.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -43,7 +45,7 @@ class LoginActivity : AppCompatActivity(), Callback<ResponseFromApi> {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_login)
 
         displayIntent = Intent(this@LoginActivity, BottomActivity::class.java)
         rickAndMortyAPI = RickAndMortyRetrofitSingleton.instance
@@ -75,6 +77,7 @@ class LoginActivity : AppCompatActivity(), Callback<ResponseFromApi> {
         facebook_login_button.registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
 
             override fun onSuccess(loginResult: LoginResult) {
+                login_progressBar.visibility = VISIBLE
                 val token = loginResult.accessToken.token
                 Log.d(TAG, "login onSuccess = ${loginResult.accessToken.userId}")
                 Log.d(TAG, "onSuccess: token = $token")
@@ -174,6 +177,7 @@ class LoginActivity : AppCompatActivity(), Callback<ResponseFromApi> {
     }
 
     private fun signIn() {
+        login_progressBar.visibility = VISIBLE
         val signInIntent = mGoogleSignInClient?.signInIntent
         startActivityForResult(signInIntent, RC_SIGN_IN)
     }
@@ -203,6 +207,7 @@ class LoginActivity : AppCompatActivity(), Callback<ResponseFromApi> {
 
     private fun regularConnection() {
 
+        login_progressBar.visibility = VISIBLE
         val mail = etEmail.text.toString()
         val pass = etPassword.text.toString()
         val jsonBody = JsonObject()
@@ -219,15 +224,22 @@ class LoginActivity : AppCompatActivity(), Callback<ResponseFromApi> {
         if (response.isSuccessful) {
             val code = response.body()?.code
             if (response.body()?.code == 200) {
+                login_progressBar.visibility = GONE
                 val results = response.body()?.results?.userName
                 Log.d(TAG, "body = ${response.body().toString()}")
                 Toast.makeText(this, "code : $code, bienvenue $results", Toast.LENGTH_SHORT).show()
                 displayIntent?.putExtra("user", response.body()?.results)
                 startActivity(displayIntent)
             } else {
-                Toast.makeText(this, "code : $code, message ${response.body()?.message}", Toast.LENGTH_SHORT).show()
+                login_progressBar.visibility = GONE
+                if (etEmail.text.toString() == "" || etPassword.text.toString() == "") {
+                    Toast.makeText(this, "Merci de remplir l'ensemble des champs pour vous connecter", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(this, "code : $code, message ${response.body()?.message}", Toast.LENGTH_SHORT).show()
+                }
             }
         } else {
+            login_progressBar.visibility = GONE
             Log.d(TAG, "error : ${response.errorBody()}")
         }
     }
