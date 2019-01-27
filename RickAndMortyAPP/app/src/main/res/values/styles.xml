@@ -58,4 +58,12 @@
         <item name="android:textColor">@android:color/black</item>
     </style>
 
+    <style name="tvWallet">
+        <item name="android:textAlignment">center</item>
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:drawableTop">@drawable/pickle_rick_coin</item>
+        <item name="android:textStyle">italic</item>
+        <item name="android:fontFamily">@font/rick_and_morty_by_shi</item>
+    </style>
 </resources>
