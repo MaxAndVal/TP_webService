@@ -21,7 +21,7 @@
         <item name="android:textColor">#FFFFFF</item>
         <item name="android:fontFamily">@font/rick_and_morty_by_shi</item>
         <item name="android:textAllCaps">true</item>
-        <item name="android:textSize">14sp</item>
+        <item name="android:textSize">17sp</item>
 
     </style>
 
@@ -37,6 +37,25 @@
         <item name="android:fontFamily">@font/rick_and_morty_by_shi</item>
         <item name="android:textAllCaps">true</item>
         <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="etStyle">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textColorHint">@color/etHints</item>
+        <item name="colorControlNormal">@color/etHints</item>
+        <item name="colorControlActivated">@color/colorAccent</item>
+    </style>
+
+    <style name="noAccountStyle">
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily">@font/get_schwifty</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="alreadyAccountStyle">
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily">@font/get_schwifty</item>
+        <item name="android:textColor">@android:color/black</item>
     </style>
 
 </resources>

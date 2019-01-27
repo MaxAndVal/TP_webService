@@ -56,13 +56,14 @@ object RickAndMortyRetrofitSingleton {
                 if (response.isSuccessful) {
                     Log.d(TAG, response.toString())
                     when (type) {
+                        //FIXME: unused
                         RetrofitCallTypes.KAAMELOTT_QUOTE -> {
                             fragment as HomeFragment
-                            var kaamlott = response.body() as KaamlottQuote
-                            var code = kaamlott.code
+                            val kaamlott = response.body() as KaamlottQuote
+                            val code = kaamlott.code
                             if (kaamlott.code == 200) {
 
-                                var citation = kaamlott.citation!!
+                                val citation = kaamlott.citation!!
                                 var personnage = kaamlott.personnage!!
                                 fragment.tv_citation.text = citation
                                 //fragment.tv_auteur.text = personnage
