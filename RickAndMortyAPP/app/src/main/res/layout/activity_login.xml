@@ -40,7 +40,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="10dp"
-        android:text="E-mail"
+        android:text="@string/tv_e_mail"
         app:layout_constraintBottom_toTopOf="@+id/etEmail"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -55,7 +55,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="15dp"
         android:ems="10"
-        android:hint="E-Mail"
+        android:hint="@string/e_mail_hint"
         android:inputType="textEmailAddress"
         app:layout_constraintBottom_toTopOf="@+id/tvPassword"
         app:layout_constraintEnd_toEndOf="parent"
@@ -64,13 +64,14 @@
 
     <TextView
         android:id="@+id/tvPassword"
+        style="@style/TextViewStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="10dp"
-        android:text="Mot de passe"
+        android:text="@string/tv_password"
         app:layout_constraintBottom_toTopOf="@+id/etPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -85,7 +86,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="16dp"
         android:ems="10"
-        android:hint="Mot de passe"
+        android:hint="@string/et_password"
         android:inputType="textPassword"
         app:layout_constraintBottom_toTopOf="@+id/btnRegularConnection"
         app:layout_constraintEnd_toEndOf="parent"
@@ -99,7 +100,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="20dp"
-        android:text="Connexion"
+        android:text="@string/btn_connection"
         app:layout_constraintBottom_toTopOf="@+id/facebook_login_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -112,7 +113,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="14dp"
-        android:text="Login"
+        android:text="@string/tv_login_title"
         android:textSize="36sp"
         app:layout_constraintBottom_toTopOf="@+id/tvEmail"
         app:layout_constraintEnd_toEndOf="parent"
@@ -121,36 +122,35 @@
         app:layout_constraintVertical_chainStyle="spread_inside" />
 
     <TextView
-        android:id="@+id/tv_signinTitle"
+        android:id="@+id/tv_signInTitle"
         style="@style/TextViewStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="75dp"
         android:layout_marginBottom="12dp"
-        android:text="Sign In"
+        android:text="@string/tv_sign_in_title"
         android:textSize="36sp"
-        app:layout_constraintBottom_toTopOf="@+id/tv_signin"
+        app:layout_constraintBottom_toTopOf="@+id/tv_signIn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.526"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/sign_in_button" />
 
     <TextView
-        android:id="@+id/tv_signin"
+        android:id="@+id/tv_signIn"
+        style="@style/noAccountStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="12dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="100dp"
-        android:fontFamily="@font/get_schwifty"
-        android:text="No account? click here to get schwifty !"
-        android:textColor="#FFF"
+        android:text="@string/no_account"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_signinTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_signInTitle" />
 
     <ProgressBar
         android:id="@+id/login_progressBar"
@@ -159,7 +159,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@id/tv_signinTitle"
+        app:layout_constraintBottom_toTopOf="@id/tv_signInTitle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 

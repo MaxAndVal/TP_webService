@@ -9,7 +9,9 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
+import com.example.lpiem.rickandmortyapp.Model.User
 import com.example.lpiem.rickandmortyapp.Presenter.HomeManager
+import com.example.lpiem.rickandmortyapp.Presenter.LoginAppManager
 import com.example.lpiem.rickandmortyapp.R
 import com.example.lpiem.rickandmortyapp.View.Collection.CollectionFragment
 import com.example.lpiem.rickandmortyapp.View.TAG
@@ -23,6 +25,8 @@ private const val ARG_PARAM2 = "param2"
 class HomeFragment : androidx.fragment.app.Fragment() {
 
     private var homeManager: HomeManager? = null
+    private lateinit var loginAppManager: LoginAppManager
+    private var user : User? = null
 
 
     // TODO: Rename and change types of parameters
@@ -35,6 +39,10 @@ class HomeFragment : androidx.fragment.app.Fragment() {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
+        loginAppManager = LoginAppManager.getInstance(context!!)
+        user = loginAppManager.connectedUser
+        Log.d(TAG, "user : $user")
+
         homeManager = HomeManager.getInstance(context!!)
         homeManager?.getFragment(this)
     }

@@ -6,5 +6,6 @@ enum class RetrofitCallTypes {
     KAAMELOTT_QUOTE,
     SIGN_IN,
     CONNECTION,
-    LIST_OF_FRIENDS
+    LIST_OF_FRIENDS,
+    LOGIN
 }

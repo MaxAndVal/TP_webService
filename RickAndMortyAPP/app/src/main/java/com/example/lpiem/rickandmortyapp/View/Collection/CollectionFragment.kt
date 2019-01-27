@@ -13,7 +13,9 @@ import com.example.lpiem.rickandmortyapp.Model.Character
 import com.example.lpiem.rickandmortyapp.Model.ListOfCards
 import com.example.lpiem.rickandmortyapp.Model.User
 import com.example.lpiem.rickandmortyapp.Presenter.CollectionManager
+import com.example.lpiem.rickandmortyapp.Presenter.LoginAppManager
 import com.example.lpiem.rickandmortyapp.R
+import com.example.lpiem.rickandmortyapp.View.TAG
 import kotlinx.android.synthetic.main.fragment_collection.*
 
 
@@ -29,6 +31,7 @@ class CollectionFragment : androidx.fragment.app.Fragment() {
     private var rickAndMortyAPI: RickAndMortyAPI? = null
     var listOfCards: ListOfCards? = null
     private lateinit var collectionManager: CollectionManager
+    private lateinit var loginAppManager: LoginAppManager
     private var user : User? = null
 
 
@@ -38,8 +41,9 @@ class CollectionFragment : androidx.fragment.app.Fragment() {
             param1 = it.getParcelable<Character>(ARG_DATASET)
             param2 = it.getString(ARG_PARAM2)
         }
-        user = activity?.intent?.getParcelableExtra("user")
-        Log.d("userIntent : ", user.toString())
+        loginAppManager = LoginAppManager.getInstance(context!!)
+        user = loginAppManager.connectedUser
+        Log.d(TAG, "user : $user")
 
         rickAndMortyAPI = RickAndMortyRetrofitSingleton.instance
         collectionManager = CollectionManager.getInstance(context!!)

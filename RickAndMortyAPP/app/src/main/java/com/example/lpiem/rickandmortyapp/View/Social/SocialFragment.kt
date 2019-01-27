@@ -1,20 +1,19 @@
 package com.example.lpiem.rickandmortyapp.View.Social
 
-import android.app.Application
-import android.net.Uri
 import android.os.Bundle
-import android.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.lpiem.rickandmortyapp.Data.RickAndMortyAPI
 import com.example.lpiem.rickandmortyapp.Data.RickAndMortyRetrofitSingleton
 import com.example.lpiem.rickandmortyapp.Model.ListOfFriends
 import com.example.lpiem.rickandmortyapp.Model.User
+import com.example.lpiem.rickandmortyapp.Presenter.LoginAppManager
 import com.example.lpiem.rickandmortyapp.Presenter.SocialManager
 import com.example.lpiem.rickandmortyapp.R
+import com.example.lpiem.rickandmortyapp.View.TAG
 import kotlinx.android.synthetic.main.fragment_social.*
 
 
@@ -30,6 +29,7 @@ class SocialFragment : androidx.fragment.app.Fragment() {
     private var rickAndMortyAPI: RickAndMortyAPI?=null
     var listOfFriends: ListOfFriends? = null
     private lateinit var socialManager: SocialManager
+    private lateinit var loginAppManager: LoginAppManager
     private var user : User?=null
 
 
@@ -39,7 +39,10 @@ class SocialFragment : androidx.fragment.app.Fragment() {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
-        user = activity?.intent?.getParcelableExtra("user")
+        loginAppManager = LoginAppManager.getInstance(context!!)
+        user = loginAppManager.connectedUser
+        Log.d(TAG, "user : $user")
+
         rickAndMortyAPI = RickAndMortyRetrofitSingleton.instance
         socialManager = SocialManager.getInstance(context!!)
         if (socialManager.socialFragment == null) {
@@ -52,11 +55,6 @@ class SocialFragment : androidx.fragment.app.Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_social, container, false)
-    }
-
-    interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        fun onFragmentInteraction(uri: Uri)
     }
 
     companion object {

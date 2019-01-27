@@ -20,10 +20,7 @@ import retrofit2.Response
 
 class SignInManager private constructor(private var context: Context) {
 
-    private var intent: Intent = Intent(context, BottomActivity::class.java)
-    private lateinit var email: String
-    private lateinit var username: String
-    private lateinit var password: String
+    private var loginAppManager = LoginAppManager.getInstance(context)
 
     companion object : SingletonHolder<SignInManager, Context>(::SignInManager)
 
@@ -79,7 +76,9 @@ class SignInManager private constructor(private var context: Context) {
                             Log.d(TAG, "body = ${response.body()}")
                             Toast.makeText(context, "code : $code, bienvenue $results id:$userId", Toast.LENGTH_SHORT).show()
                             //intent = Intent(context, BottomActivity::class.java)
-                            intent.putExtra("user", responseFromApi.results)
+                            loginAppManager.connectedUser = responseFromApi.results!!
+                            val intent = Intent(context, BottomActivity::class.java)
+                            //intent.putExtra("user", responseFromApi.results)
                             context.startActivity(intent)
                         }
                         else -> Log.d(TAG, "error : ${response.errorBody()}")
@@ -100,7 +99,7 @@ class SignInManager private constructor(private var context: Context) {
     }
 
     fun goBack() {
-        val mainIntent = Intent(context, LoginActivity::class.java)
-        context.startActivity(mainIntent)
+        val loginIntent = Intent(context, LoginActivity::class.java)
+        context.startActivity(loginIntent)
     }
 }
