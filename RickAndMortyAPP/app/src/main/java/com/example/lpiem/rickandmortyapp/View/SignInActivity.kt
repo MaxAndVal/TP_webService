@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.lpiem.rickandmortyapp.Presenter.SignInManager
 import com.example.lpiem.rickandmortyapp.R
-import kotlinx.android.synthetic.main.activity_signin_activity.*
+import kotlinx.android.synthetic.main.activity_signin.*
 
 class SignInActivity : AppCompatActivity() {
 
@@ -12,7 +12,7 @@ class SignInActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_signin_activity)
+        setContentView(R.layout.activity_signin)
 
         signInManager = SignInManager.getInstance(this)
         tv_alreadyAccount.setOnClickListener { signInManager.goBack() }

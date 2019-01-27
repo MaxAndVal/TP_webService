@@ -12,7 +12,7 @@ import com.example.lpiem.rickandmortyapp.View.LoginActivity
 import com.example.lpiem.rickandmortyapp.View.SignInActivity
 import com.example.lpiem.rickandmortyapp.View.TAG
 import com.google.gson.JsonObject
-import kotlinx.android.synthetic.main.activity_signin_activity.*
+import kotlinx.android.synthetic.main.activity_signin.*
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback

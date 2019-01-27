@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <item android:gravity="center">
+        <shape
+            android:shape="oval"
+            android:tint="@color/colorPrimaryDark">
+            <size
+                android:width="40dp"
+                android:height="40dp" />
+        </shape>
+    </item>
+    <item
+        android:bottom="2dp"
+        android:left="2dp"
+        android:right="2dp"
+        android:top="2dp">
+        <shape
+            android:shape="oval"
+            android:tint="@color/colorAccent" />
+    </item>
+
+    <item
+        android:drawable="@drawable/pickle_rick_transparent"
+        android:height="30dp"
+        android:width="25dp"
+        android:gravity="center">
+    </item>
+
+</layer-list>
+
