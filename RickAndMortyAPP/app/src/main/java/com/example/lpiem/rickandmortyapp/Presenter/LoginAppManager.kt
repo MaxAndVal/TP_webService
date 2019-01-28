@@ -43,6 +43,7 @@ class LoginAppManager private constructor(private var context: Context){
     private lateinit var googleBtnTextView: Button
     private val loginActivity = (context as LoginActivity)
     lateinit var connectedUser: User
+    var gameInProgress = true
 
     companion object : SingletonHolder<LoginAppManager, Context>(::LoginAppManager)
 
