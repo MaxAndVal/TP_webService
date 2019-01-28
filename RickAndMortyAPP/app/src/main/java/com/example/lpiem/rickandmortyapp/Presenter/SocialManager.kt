@@ -24,13 +24,14 @@ class SocialManager private constructor(private val context: Context) {
     private var userId = -1
     private var userName = ""
     var socialFragment: SocialFragment? = null
-    private lateinit var recyclerView: RecyclerView
+    internal lateinit var recyclerView: RecyclerView
 
     companion object : SingletonHolder<SocialManager, Context>(::SocialManager)
 
     init {
 
     }
+
     fun captureFragmentInstance(fragment: SocialFragment) {
         socialFragment = fragment
     }
@@ -38,11 +39,13 @@ class SocialManager private constructor(private val context: Context) {
     fun captureRecyclerView(rv: RecyclerView) {
         recyclerView = rv
     }
+
     @Synchronized
-    fun getListOfFriends(userId:Int){
+    fun getListOfFriends(userId: Int) {
         val resultCall = rickAndMortyAPI!!.getListOfFriends(userId)
         callRetrofit(resultCall, RetrofitCallTypes.LIST_OF_FRIENDS)
     }
+
     private fun <T> callRetrofit(call: Call<T>, type: RetrofitCallTypes) {
 
         call.enqueue(object : Callback<T> {
@@ -63,6 +66,21 @@ class SocialManager private constructor(private val context: Context) {
                                 //Toast.makeText(context, "code : $code, message ${kaamlott.message}", Toast.LENGTH_SHORT).show()
                             }
                         }
+                        RetrofitCallTypes.RESULT_FRIENDS_SEARCHING -> {
+                            var social = response.body() as ListOfFriends
+                            var code = social.code
+                            Log.d(TAG,social.toString())
+                            if (code == 200) {
+                                socialFragment?.resultFromSearch = response.body() as ListOfFriends
+                                if (socialFragment?.resultFromSearch != null) {
+                                    recyclerView.adapter = SocialAdapter(socialFragment?.resultFromSearch!!)
+                                    recyclerView.adapter?.notifyDataSetChanged()
+                                } else {
+                                    Toast.makeText(context, "code : $code, message ${social.message}", Toast.LENGTH_SHORT).show()
+
+                                }
+                            }
+                        }
                     }
                 } else {
                     val responseError = response.errorBody() as ResponseBody
@@ -76,5 +94,10 @@ class SocialManager private constructor(private val context: Context) {
             }
         })
 
+    }
+
+    fun searchForFriends(friends: String?) {
+        val resultCall = rickAndMortyAPI!!.searchForFriends(friends)
+        callRetrofit(resultCall, RetrofitCallTypes.RESULT_FRIENDS_SEARCHING)
     }
 }

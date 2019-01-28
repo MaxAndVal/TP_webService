@@ -52,4 +52,9 @@ interface RickAndMortyAPI {
     fun getListOfFriends(
             @Path("id") userId: Int
     ): Call<ListOfFriends>
+
+    @GET("/friends/search/{new_friends}")
+    fun searchForFriends(
+            @Path("new_friends") newFriends: String?
+    ): Call<ListOfFriends>
 }

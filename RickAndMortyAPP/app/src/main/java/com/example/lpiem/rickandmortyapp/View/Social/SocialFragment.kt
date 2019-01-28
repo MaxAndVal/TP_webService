@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.lpiem.rickandmortyapp.Data.RickAndMortyAPI
 import com.example.lpiem.rickandmortyapp.Data.RickAndMortyRetrofitSingleton
@@ -26,12 +27,12 @@ class SocialFragment : androidx.fragment.app.Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
-    private var rickAndMortyAPI: RickAndMortyAPI?=null
+    private var rickAndMortyAPI: RickAndMortyAPI? = null
     var listOfFriends: ListOfFriends? = null
-    private lateinit var socialManager: SocialManager
+    internal lateinit var socialManager: SocialManager
     private lateinit var loginAppManager: LoginAppManager
-    private var user : User?=null
-
+    private var user: User? = null
+    var resultFromSearch : ListOfFriends? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,13 +49,17 @@ class SocialFragment : androidx.fragment.app.Fragment() {
         if (socialManager.socialFragment == null) {
             socialManager.captureFragmentInstance(this)
         }
-
-
     }
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_social, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        btn_searchFriends.setOnClickListener { socialManager.searchForFriends(sv_friends.query.toString()) }
     }
 
     companion object {
@@ -69,11 +74,4 @@ class SocialFragment : androidx.fragment.app.Fragment() {
                 }
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        rv_social.layoutManager = LinearLayoutManager(context)
-        socialManager.captureRecyclerView(rv_social)
-        var userId= if(user!=null)user?.userId else -1
-        socialManager.getListOfFriends(userId!!)
-    }
 }

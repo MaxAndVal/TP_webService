@@ -23,6 +23,10 @@ class ListOfFriends : Parcelable {
         return 0
     }
 
+    override fun toString(): String {
+        return "ListOfFriends(code=$code, message=$message, friends=$friends)"
+    }
+
     companion object {
         @JvmField val CREATOR: Parcelable.Creator<ListOfFriends> = object : Parcelable.Creator<ListOfFriends> {
 
@@ -47,4 +51,5 @@ class ListOfFriends : Parcelable {
     @SerializedName("friends")
     @Expose
     var friends: List<Friend>? = null
+
 }

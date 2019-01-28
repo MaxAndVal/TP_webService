@@ -6,18 +6,24 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.lpiem.rickandmortyapp.Model.KaamlottQuote
 import com.example.lpiem.rickandmortyapp.Model.ListOfCards
+import com.example.lpiem.rickandmortyapp.Model.ListOfFriends
 import com.example.lpiem.rickandmortyapp.Model.ResponseFromApi
 import com.example.lpiem.rickandmortyapp.View.Collection.CollectionAdapter
 import com.example.lpiem.rickandmortyapp.View.Collection.CollectionFragment
 import com.example.lpiem.rickandmortyapp.View.Home.HomeFragment
+import com.example.lpiem.rickandmortyapp.View.Social.SocialFragment
 import com.example.lpiem.rickandmortyapp.View.TAG
 import com.google.gson.GsonBuilder
 import kotlinx.android.synthetic.main.fragment_collection.*
 import kotlinx.android.synthetic.main.fragment_home.*
+import kotlinx.android.synthetic.main.fragment_social.*
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import android.widget.SearchView
+import com.example.lpiem.rickandmortyapp.View.Social.SocialAdapter
+
 
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -86,6 +92,21 @@ object RickAndMortyRetrofitSingleton {
                                 fragment.rv_collection.adapter?.notifyDataSetChanged()
                             }
                         }
+                        RetrofitCallTypes.RESULT_FRIENDS_SEARCHING->{
+                            fragment as SocialFragment
+                            var social = response.body() as ListOfFriends
+                            var code = social.code
+                            if (code == 200) {
+                                fragment.resultFromSearch = response.body() as ListOfFriends
+                                if (fragment?.listOfFriends != null) {
+                                    fragment.socialManager.recyclerView.adapter = SocialAdapter(fragment?.resultFromSearch!!)
+                                    fragment.socialManager.recyclerView.adapter?.notifyDataSetChanged()
+                                } else {
+                                    Toast.makeText(context, "code : $code, message ${social.message}", Toast.LENGTH_SHORT).show()
+
+                                }
+                            }
+                                                    }
                     }
                 } else {
                     val responseError = response.errorBody() as ResponseBody
