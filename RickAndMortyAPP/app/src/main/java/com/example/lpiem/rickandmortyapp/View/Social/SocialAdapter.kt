@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lpiem.rickandmortyapp.Model.ListOfFriends
 import com.example.lpiem.rickandmortyapp.R
-import com.example.lpiem.rickandmortyapp.View.Collection.CollectionAdapter
 import kotlinx.android.synthetic.main.social_item.view.*
 
 class SocialAdapter(private val dataSet: ListOfFriends) : RecyclerView.Adapter<SocialAdapter.ViewHolder>() {
