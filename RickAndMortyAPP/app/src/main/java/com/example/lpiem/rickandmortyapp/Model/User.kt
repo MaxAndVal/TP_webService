@@ -39,6 +39,9 @@ class User : Parcelable {
     @SerializedName("user_wallet")
     @Expose
     var userWallet: Int? = null
+    @SerializedName("user_last_game")
+    @Expose
+    var userLastGame: String? = null
 
     constructor(inside: Parcel) {
         Log.d(TAG, "inside = $inside")
@@ -47,7 +50,7 @@ class User : Parcelable {
         this.userEmail = inside.readValue(String::class.java.classLoader) as String
         this.deckToOpen = inside.readValue(Int::class.java.classLoader) as Int
         this.userWallet = inside.readValue(Int::class.java.classLoader) as Int
-
+        this.userLastGame = inside.readValue(String::class.java.classLoader) as String
     }
 
     override fun writeToParcel(dest: Parcel, flags: Int) {
@@ -56,6 +59,7 @@ class User : Parcelable {
         dest.writeValue(userEmail)
         dest.writeValue(deckToOpen)
         dest.writeValue(userWallet)
+        dest.writeValue(userLastGame)
     }
 
     override fun describeContents(): Int {
@@ -63,7 +67,7 @@ class User : Parcelable {
     }
 
     override fun toString(): String {
-        return "User(userId=$userId, userName=$userName, userEmail=$userEmail, deckToOpen=$deckToOpen, userWallet=$userWallet)"
+        return "User(userId=$userId, userName=$userName, userEmail=$userEmail, deckToOpen=$deckToOpen, userWallet=$userWallet, userLastGameDate=$userLastGame)"
     }
 
 

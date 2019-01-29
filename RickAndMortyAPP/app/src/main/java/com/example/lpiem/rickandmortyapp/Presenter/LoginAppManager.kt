@@ -44,12 +44,9 @@ class LoginAppManager private constructor(private var context: Context){
     private val loginActivity = (context as LoginActivity)
     lateinit var connectedUser: User
     var gameInProgress = true
+    var handlerTime = 1500L
 
     companion object : SingletonHolder<LoginAppManager, Context>(::LoginAppManager)
-
-    init {
-
-    }
 
     //REGULAR CONNECTION AND SIGN IN
 
@@ -238,7 +235,7 @@ class LoginAppManager private constructor(private var context: Context){
                                     if (loginActivity.etEmail.text.toString() == "" || loginActivity.etPassword.text.toString() == "") {
                                         Toast.makeText(context, context.getString(R.string.thanks_to_fill_all_fields), Toast.LENGTH_SHORT).show()
                                     } else {
-                                        Toast.makeText(context, "code : $code, message ${responseBody.message}", Toast.LENGTH_SHORT).show()
+                                        Toast.makeText(context, "login error code : $code, message ${responseBody.message}", Toast.LENGTH_LONG).show()
                                     }
                                 }
                             } else {

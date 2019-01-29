@@ -34,6 +34,26 @@ interface RickAndMortyAPI {
             @Body body: JsonObject
     ): Call<ResponseFromApi>
 
+    @GET("/users/{id}")
+    fun getUserById(
+            @Path("id") userId: Int
+    ): Call<User>
+
+    @PUT("/users/playGame/{id}")
+    fun putNewDate(
+            @Path("id") userId: Int, @Body body: JsonObject
+    ): Call<ResponseFromApi>
+
+    @PUT("/users/wallet/{id}")
+    fun updateWallet(
+            @Path("id") userId: Int, @Body body: JsonObject
+    ): Call<ResponseFromApi>
+
+    @GET("/users/wallet/{id}")
+    fun getWallet(
+            @Path("id") userId: Int
+    ): Call<Wallet>
+
     @GET("/cards/randomDeckGenerator/{id}")
     fun getRandomDeck(
             @Path("id") userId: Int

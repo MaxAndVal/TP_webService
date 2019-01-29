@@ -40,4 +40,7 @@
     <string name="actual_turn">%1d\/5</string>
     <string name="actual_score">score : %1d\/5</string>
     <string name="final_score">Votre score final est de :\n%1d\/5</string>
+    <string name="good_answer">Bonne réponse !!!</string>
+    <string name="wrong_answer">Mauvaise réponse ...</string>
+    <string name="try_an_other_game_later">Game over Retentez votre chance demain !!!</string>
 </resources>
