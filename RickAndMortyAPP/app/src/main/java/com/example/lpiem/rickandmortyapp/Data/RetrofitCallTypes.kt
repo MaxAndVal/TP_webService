@@ -7,5 +7,9 @@ enum class RetrofitCallTypes {
     SIGN_IN,
     CONNECTION,
     LIST_OF_FRIENDS,
-    LOGIN
+    LOGIN,
+    GET_USER_BY_ID,
+    PUT_DATE,
+    UPDATE_WALLET,
+    GET_WALLET
 }

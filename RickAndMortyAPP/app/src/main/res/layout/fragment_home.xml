@@ -13,9 +13,11 @@
         android:id="@+id/tv_actual_score"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="@string/actual_score"
+        android:visibility="invisible"
+        tools:visibility="visible"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:text="@string/actual_score"
         />
 
     <TextView
@@ -24,9 +26,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
+        android:visibility="invisible"
+        tools:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
 
     <ScrollView
         android:id="@+id/scrollView"
@@ -47,6 +50,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
+                android:visibility="invisible"
+                tools:visibility="visible"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -60,6 +65,8 @@
         android:layout_height="82dp"
         android:layout_margin="2dp"
         tools:text="Perceval"
+        android:visibility="invisible"
+        tools:visibility="visible"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/btn_perso2"
         app:layout_constraintTop_toBottomOf="@id/scrollView"/>
@@ -70,6 +77,8 @@
         android:layout_height="82dp"
         android:layout_margin="2dp"
         tools:text="Arthur"
+        android:visibility="invisible"
+        tools:visibility="visible"
         app:layout_constraintStart_toEndOf="@id/btn_perso1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/scrollView"/>
@@ -80,6 +89,8 @@
         android:layout_height="82dp"
         android:layout_margin="2dp"
         tools:text="Leodagan"
+        android:visibility="invisible"
+        tools:visibility="visible"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/btn_perso4"
         app:layout_constraintTop_toBottomOf="@id/btn_perso1"/>
@@ -90,6 +101,8 @@
         android:layout_height="82dp"
         android:layout_margin="2dp"
         tools:text="Yvain"
+        android:visibility="invisible"
+        tools:visibility="visible"
         app:layout_constraintStart_toEndOf="@id/btn_perso3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/btn_perso2"/>
@@ -98,7 +111,7 @@
         android:id="@+id/tv_game_over"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Game over\nRetentez votre chance demain !!!"
+        android:text="@string/try_an_other_game_later"
         android:textAlignment="center"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -106,16 +119,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/tv_final_score"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/final_score"
-        android:layout_marginTop="12dp"
-        android:textAlignment="center"
-        android:visibility="gone"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_game_over"
-        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
