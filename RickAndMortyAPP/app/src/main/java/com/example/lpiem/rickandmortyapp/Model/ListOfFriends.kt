@@ -27,6 +27,7 @@ class ListOfFriends : Parcelable {
         return "ListOfFriends(code=$code, message=$message, friends=$friends)"
     }
 
+
     companion object {
         @JvmField val CREATOR: Parcelable.Creator<ListOfFriends> = object : Parcelable.Creator<ListOfFriends> {
 

@@ -9,6 +9,7 @@ import android.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.lpiem.rickandmortyapp.Data.RickAndMortyAPI
 import com.example.lpiem.rickandmortyapp.Data.RickAndMortyRetrofitSingleton
+import com.example.lpiem.rickandmortyapp.Model.Friend
 import com.example.lpiem.rickandmortyapp.Model.ListOfFriends
 import com.example.lpiem.rickandmortyapp.Model.User
 import com.example.lpiem.rickandmortyapp.Presenter.LoginAppManager
@@ -33,6 +34,8 @@ class SocialFragment : androidx.fragment.app.Fragment() {
     private lateinit var loginAppManager: LoginAppManager
     private var user: User? = null
     var resultFromSearch : ListOfFriends? = null
+    var listOfActualFriends: List<Friend>?=null
+    var listOfPotentialFriends: List<Friend>?=null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,6 +62,10 @@ class SocialFragment : androidx.fragment.app.Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        rv_social.layoutManager = LinearLayoutManager(context)
+        socialManager.captureRecyclerView(rv_social)
+        var userId= if(user!=null)user?.userId else -1
+        socialManager.getListOfFriends(userId!!)
         btn_searchFriends.setOnClickListener { socialManager.searchForFriends(sv_friends.query.toString()) }
     }
 

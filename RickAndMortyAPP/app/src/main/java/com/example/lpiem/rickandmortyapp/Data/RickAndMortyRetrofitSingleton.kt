@@ -99,7 +99,7 @@ object RickAndMortyRetrofitSingleton {
                             if (code == 200) {
                                 fragment.resultFromSearch = response.body() as ListOfFriends
                                 if (fragment?.listOfFriends != null) {
-                                    fragment.socialManager.recyclerView.adapter = SocialAdapter(fragment?.resultFromSearch!!)
+                                    fragment.socialManager.recyclerView.adapter = SocialAdapter(fragment?.resultFromSearch!!.friends!!)
                                     fragment.socialManager.recyclerView.adapter?.notifyDataSetChanged()
                                 } else {
                                     Toast.makeText(context, "code : $code, message ${social.message}", Toast.LENGTH_SHORT).show()

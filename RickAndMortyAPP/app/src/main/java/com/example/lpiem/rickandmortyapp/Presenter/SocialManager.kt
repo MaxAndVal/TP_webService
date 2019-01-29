@@ -59,8 +59,14 @@ class SocialManager private constructor(private val context: Context) {
                             if (code == 200) {
                                 socialFragment?.listOfFriends = response.body() as ListOfFriends
                                 if (socialFragment?.listOfFriends != null) {
-                                    recyclerView.adapter = SocialAdapter(socialFragment?.listOfFriends!!)
+                                    //socialFragment?.listOfActualFriends = response.body() as ListOfFriends
+                                    //socialFragment?.listOfActualFriends= socialFragment?.listOfActualFriends.returnFriends()
+                                    socialFragment?.listOfPotentialFriends = socialFragment?.listOfFriends?.friends!!.filter { it.accepted==false!! }
+                                    socialFragment?.listOfActualFriends = socialFragment?.listOfFriends?.friends!!.filter { it.accepted!! }
+                                    Log.d(TAG, "List : "+socialFragment?.listOfPotentialFriends)
+                                    recyclerView.adapter = SocialAdapter(socialFragment?.listOfActualFriends!!)
                                     recyclerView.adapter?.notifyDataSetChanged()
+
                                 }
                             } else {
                                 //Toast.makeText(context, "code : $code, message ${kaamlott.message}", Toast.LENGTH_SHORT).show()
@@ -73,7 +79,7 @@ class SocialManager private constructor(private val context: Context) {
                             if (code == 200) {
                                 socialFragment?.resultFromSearch = response.body() as ListOfFriends
                                 if (socialFragment?.resultFromSearch != null) {
-                                    recyclerView.adapter = SocialAdapter(socialFragment?.resultFromSearch!!)
+                                    recyclerView.adapter = SocialAdapter(socialFragment?.resultFromSearch!!.friends!!)
                                     recyclerView.adapter?.notifyDataSetChanged()
                                 } else {
                                     Toast.makeText(context, "code : $code, message ${social.message}", Toast.LENGTH_SHORT).show()
