@@ -75,7 +75,7 @@ class HomeFragment : androidx.fragment.app.Fragment() {
         if (turn<=5 && loginAppManager.gameInProgress) {
             if (button.text == solution ) {
                 Toast.makeText(context, "Bonne réponse !!!", Toast.LENGTH_SHORT).show()
-                score++
+                tv_actual_score.text = String.format(getString(R.string.actual_score), ++score)
                 tv_actual_turn.text = String.format(getString(R.string.actual_turn), ++turn)
                 if (turn <= 4) homeManager!!.getRandomQuote()
                 if (turn == 5) {
@@ -130,9 +130,10 @@ class HomeFragment : androidx.fragment.app.Fragment() {
     }
 
     private fun makeGameDisplayed(display: Boolean) {
-        val displayedItems = listOf(tv_citation, btn_perso1, btn_perso2, btn_perso3, btn_perso4, tv_actual_turn)
+        val displayedItems = listOf(tv_citation, btn_perso1, btn_perso2, btn_perso3, btn_perso4, tv_actual_turn, tv_actual_score)
         if (display) {
             tv_actual_turn.text = String.format(getString(R.string.actual_turn, turn))
+            tv_actual_score.text = String.format(getString(R.string.actual_score, score))
             for (item in displayedItems) {
                 item.visibility = VISIBLE
             }
@@ -148,11 +149,15 @@ class HomeFragment : androidx.fragment.app.Fragment() {
         loginAppManager.gameInProgress = false
         handler.postDelayed({
             Log.d(TAG, "date : ${getDate()}")
-            val UIElements = listOf(btn_perso1, btn_perso2, btn_perso3, btn_perso4, tv_citation, tv_actual_turn)
+            val UIElements = listOf(btn_perso1, btn_perso2, btn_perso3, btn_perso4, tv_citation, tv_actual_turn, tv_actual_score)
             for (element in UIElements) {
                 element.visibility = GONE
             }
             tv_game_over.visibility = VISIBLE
+            tv_final_score.let {
+                it.visibility = VISIBLE
+                it.text = String.format(getString(R.string.final_score), score)
+            }
         }, 1000L)
     }
 
