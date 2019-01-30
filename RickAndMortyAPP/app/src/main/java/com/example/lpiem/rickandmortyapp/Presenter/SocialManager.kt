@@ -3,13 +3,12 @@ package com.example.lpiem.rickandmortyapp.Presenter
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
-import androidx.core.util.Pair
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lpiem.rickandmortyapp.Data.RetrofitCallTypes
 import com.example.lpiem.rickandmortyapp.Data.RickAndMortyRetrofitSingleton
-import com.example.lpiem.rickandmortyapp.Model.KaamlottQuote
+import com.example.lpiem.rickandmortyapp.Model.Friend
 import com.example.lpiem.rickandmortyapp.Model.ListOfFriends
-import com.example.lpiem.rickandmortyapp.View.Collection.CollectionFragment
+import com.example.lpiem.rickandmortyapp.Model.OnClickListenerInterface
 import com.example.lpiem.rickandmortyapp.View.Social.SocialAdapter
 import com.example.lpiem.rickandmortyapp.View.Social.SocialFragment
 import com.example.lpiem.rickandmortyapp.View.TAG
@@ -18,7 +17,12 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class SocialManager private constructor(private val context: Context) {
+class SocialManager private constructor(private val context: Context):OnClickListenerInterface{
+    override fun addFriends(item: Friend) {
+        Log.d(TAG, item.toString() + "user :" + socialFragment?.user!!.userId)
+        val resultCall = rickAndMortyAPI!!.addAfriends(item.userId!!, socialFragment?.user!!.userId!!)
+        callRetrofit(resultCall, RetrofitCallTypes.ADD_A_FRIENDS)
+    }
 
     private val rickAndMortyAPI = RickAndMortyRetrofitSingleton.instance
     private var userId = -1
@@ -64,7 +68,7 @@ class SocialManager private constructor(private val context: Context) {
                                     socialFragment?.listOfPotentialFriends = socialFragment?.listOfFriends?.friends!!.filter { it.accepted==false!! }
                                     socialFragment?.listOfActualFriends = socialFragment?.listOfFriends?.friends!!.filter { it.accepted!! }
                                     Log.d(TAG, "List : "+socialFragment?.listOfPotentialFriends)
-                                    recyclerView.adapter = SocialAdapter(socialFragment?.listOfActualFriends!!)
+                                    recyclerView.adapter = SocialAdapter(socialFragment?.listOfActualFriends!!, this@SocialManager)
                                     recyclerView.adapter?.notifyDataSetChanged()
 
                                 }
@@ -79,7 +83,8 @@ class SocialManager private constructor(private val context: Context) {
                             if (code == 200) {
                                 socialFragment?.resultFromSearch = response.body() as ListOfFriends
                                 if (socialFragment?.resultFromSearch != null) {
-                                    recyclerView.adapter = SocialAdapter(socialFragment?.resultFromSearch!!.friends!!)
+
+                                    recyclerView.adapter = SocialAdapter(socialFragment?.resultFromSearch!!.friends!!, this@SocialManager)
                                     recyclerView.adapter?.notifyDataSetChanged()
                                 } else {
                                     Toast.makeText(context, "code : $code, message ${social.message}", Toast.LENGTH_SHORT).show()
@@ -105,5 +110,8 @@ class SocialManager private constructor(private val context: Context) {
     fun searchForFriends(friends: String?) {
         val resultCall = rickAndMortyAPI!!.searchForFriends(friends)
         callRetrofit(resultCall, RetrofitCallTypes.RESULT_FRIENDS_SEARCHING)
+    }
+
+    fun iconFriendsAction() {
     }
 }

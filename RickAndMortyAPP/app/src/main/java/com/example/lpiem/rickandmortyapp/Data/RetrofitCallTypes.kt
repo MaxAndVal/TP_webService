@@ -8,5 +8,6 @@ enum class RetrofitCallTypes {
     CONNECTION,
     LIST_OF_FRIENDS,
     LOGIN,
-    RESULT_FRIENDS_SEARCHING
+    RESULT_FRIENDS_SEARCHING,
+    ADD_A_FRIENDS
 }
