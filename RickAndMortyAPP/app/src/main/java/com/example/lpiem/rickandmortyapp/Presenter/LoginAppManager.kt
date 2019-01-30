@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.Toast
+import com.example.lpiem.rickandmortyapp.Data.JsonProperty.*
 import com.example.lpiem.rickandmortyapp.Data.RetrofitCallTypes
 import com.example.lpiem.rickandmortyapp.Data.RetrofitCallTypes.LIST_OF_FRIENDS
 import com.example.lpiem.rickandmortyapp.Data.RetrofitCallTypes.LOGIN
@@ -42,14 +43,11 @@ class LoginAppManager private constructor(private var context: Context){
     private var account: GoogleSignInAccount? = null
     private lateinit var googleBtnTextView: Button
     private val loginActivity = (context as LoginActivity)
-    lateinit var connectedUser: User
+    var connectedUser: User? = null
     var gameInProgress = true
+    var handlerTime = 1500L
 
     companion object : SingletonHolder<LoginAppManager, Context>(::LoginAppManager)
-
-    init {
-
-    }
 
     //REGULAR CONNECTION AND SIGN IN
 
@@ -58,8 +56,8 @@ class LoginAppManager private constructor(private var context: Context){
         val mail = loginActivity.etEmail.text.toString()
         val pass = loginActivity.etPassword.text.toString()
         val jsonBody = JsonObject()
-        jsonBody.addProperty("user_email", mail)
-        jsonBody.addProperty("user_password", pass)
+        jsonBody.addProperty(UserEmail.string, mail)
+        jsonBody.addProperty(UserPassword.string, pass)
         val connection = rickAndMortyAPI!!.connectUser(jsonBody)
         callRetrofit(connection, LOGIN)
     }
@@ -117,11 +115,11 @@ class LoginAppManager private constructor(private var context: Context){
             val userId = account.id
             val userImage = account.photoUrl
             val jsonBody = JsonObject()
-            jsonBody.addProperty("user_email", userEmail)
-            jsonBody.addProperty("user_name", userName)
-            jsonBody.addProperty("user_password", userId)
-            jsonBody.addProperty("user_image", userImage.toString())
-            jsonBody.addProperty("external_id", userId)
+            jsonBody.addProperty(UserEmail.string, userEmail)
+            jsonBody.addProperty(UserName.string, userName)
+            jsonBody.addProperty(UserPassword.string, userId)
+            jsonBody.addProperty(UserImage.string, userImage.toString())
+            jsonBody.addProperty(ExternalID.string, userId)
             val connection = rickAndMortyAPI!!.connectUser(jsonBody)
             callRetrofit(connection, LOGIN)
         } else {
@@ -169,11 +167,11 @@ class LoginAppManager private constructor(private var context: Context){
                             val jsonBody = JsonObject()
                             //Log.d(TAG, "image : $userImage")
                             //Log.d(TAG, "data : $jj")
-                            jsonBody.addProperty("user_email", userEmail)
-                            jsonBody.addProperty("user_name", userNameFB)
-                            jsonBody.addProperty("user_password", userId)
-                            //jsonBody.addProperty("user_image", userImage)
-                            jsonBody.addProperty("external_id", userId)
+                            jsonBody.addProperty(UserEmail.string, userEmail)
+                            jsonBody.addProperty(UserName.string, userNameFB)
+                            jsonBody.addProperty(UserPassword.string, userId)
+                            //jsonBody.addProperty(UserImage.string, userImage)
+                            jsonBody.addProperty(ExternalID.string, userId)
                             val connection = rickAndMortyAPI!!.connectUser(jsonBody)
                             callRetrofit(connection, LOGIN)
                         } catch (e: Throwable) {
@@ -238,7 +236,7 @@ class LoginAppManager private constructor(private var context: Context){
                                     if (loginActivity.etEmail.text.toString() == "" || loginActivity.etPassword.text.toString() == "") {
                                         Toast.makeText(context, context.getString(R.string.thanks_to_fill_all_fields), Toast.LENGTH_SHORT).show()
                                     } else {
-                                        Toast.makeText(context, "code : $code, message ${responseBody.message}", Toast.LENGTH_SHORT).show()
+                                        Toast.makeText(context, "login error code : $code, message ${responseBody.message}", Toast.LENGTH_LONG).show()
                                     }
                                 }
                             } else {

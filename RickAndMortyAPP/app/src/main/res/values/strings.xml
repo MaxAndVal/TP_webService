@@ -1,33 +1,23 @@
 <resources>
+
+    //APP
     <string name="app_name">RickAndMortyAPP</string>
     <string name="facebook_app_id">715136128867008</string>
     <string name="fb_login_protocol_scheme">fb715136128867008</string>
 
-    <string name="empty"> </string>
+    //Main Activity
     <string name="title_activity_bottom">BottomActivity</string>
     <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
     <string name="collection">collection</string>
     <string name="social">social</string>
     <string name="profilSettings">profil</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_test_bottom_nav_x">TestBottomNavX</string>
-    <string name="title_activity_main2">Main2Activity</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
-    <string name="nav_header_desc">Navigation header</string>
-    <string name="action_settings">Settings</string>
-    <string name="no_account">No account? <b><u>click here</u></b> to get schwifty !</string>
-    <string name="already_an_account">Already an account? <b><u>click here</u></b> to get schwifty !</string>
+    //Login and Sign In Activity
     <string name="thanks_to_fill_all_fields">Merci de remplir l\'ensemble des champs pour vous connecter</string>
     <string name="google_disconnected">Déconnecté de votre compte Google</string>
     <string name="btn_connection_google">Se connecter</string>
     <string name="btn_disconnection_google">Se déconnecter</string>
+    <string name="no_account">No account? <b><u>click here</u></b> to get schwifty !</string>
     <string name="tv_password">Mot de passe</string>
     <string name="e_mail_hint">E-Mail</string>
     <string name="et_password">Mot de passe</string>
@@ -35,9 +25,19 @@
     <string name="tv_login_title">Login</string>
     <string name="tv_sign_in_title">Sign In</string>
     <string name="tv_e_mail">E-mail</string>
+    <string name="already_an_account">Already an account? <b><u>click here</u></b> to get schwifty !</string>
+    <string name="game_is_over">Partie terminée. Votre score final est de %1$d.\nVous avez gagné %2$d PickleRick !!</string>
+
+    //Home Fragment
     <string name="pickle_rick">I\'m piclke Rick !!!</string>
     <string name="wallet_amount"> %1$d $%2$s</string>
     <string name="actual_turn">%1d\/5</string>
     <string name="actual_score">score : %1d\/5</string>
     <string name="final_score">Votre score final est de :\n%1d\/5</string>
+    <string name="good_answer">Bonne réponse !!!</string>
+    <string name="wrong_answer">Mauvaise réponse ...</string>
+    <string name="try_an_other_game_later">Game over Retentez votre chance demain !!!</string>
+
+    //Collection Frgament
+
 </resources>
