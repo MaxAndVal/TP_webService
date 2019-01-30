@@ -15,6 +15,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
+
 class SocialManager private constructor(private val context: Context) {
 
     private val rickAndMortyAPI = RickAndMortyRetrofitSingleton.instance
