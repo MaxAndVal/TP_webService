@@ -4,12 +4,11 @@ import android.content.Context
 import android.util.Log
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import com.example.lpiem.rickandmortyapp.Model.KaamlottQuote
-import com.example.lpiem.rickandmortyapp.Model.ListOfCards
-import com.example.lpiem.rickandmortyapp.Model.ResponseFromApi
+import com.example.lpiem.rickandmortyapp.Model.*
 import com.example.lpiem.rickandmortyapp.View.Collection.CollectionAdapter
 import com.example.lpiem.rickandmortyapp.View.Collection.CollectionFragment
 import com.example.lpiem.rickandmortyapp.View.Home.HomeFragment
+import com.example.lpiem.rickandmortyapp.View.Social.SocialFragment
 import com.example.lpiem.rickandmortyapp.View.TAG
 import com.google.gson.GsonBuilder
 import kotlinx.android.synthetic.main.fragment_collection.*
@@ -18,11 +17,17 @@ import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import com.example.lpiem.rickandmortyapp.View.Social.SocialAdapter
+
 
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-object RickAndMortyRetrofitSingleton {
+object RickAndMortyRetrofitSingleton: OnClickListenerInterface{
+
+    override fun addFriends(item: Friend) {
+        Log.d(TAG, item.toString())
+    }
 
     //private const val BASE_URL = "https://rickandmortyapi.com/"
     private const val BASE_URL = "https://api-rickandmorty-tcg.herokuapp.com"
@@ -86,6 +91,21 @@ object RickAndMortyRetrofitSingleton {
                                 fragment.rv_collection.adapter?.notifyDataSetChanged()
                             }
                         }
+                        RetrofitCallTypes.RESULT_FRIENDS_SEARCHING->{
+                            fragment as SocialFragment
+                            var social = response.body() as ListOfFriends
+                            var code = social.code
+                            if (code == 200) {
+                                fragment.resultFromSearch = response.body() as ListOfFriends
+                                if (fragment?.listOfFriends != null) {
+                                    fragment.socialManager.recyclerView.adapter = SocialAdapter(fragment?.resultFromSearch!!.friends!!, this@RickAndMortyRetrofitSingleton  )
+                                    fragment.socialManager.recyclerView.adapter?.notifyDataSetChanged()
+                                } else {
+                                    Toast.makeText(context, "code : $code, message ${social.message}", Toast.LENGTH_SHORT).show()
+
+                                }
+                            }
+                                                    }
                     }
                 } else {
                     val responseError = response.errorBody() as ResponseBody
