@@ -40,7 +40,7 @@ class HomeManager private constructor(private var context: Context) {
     fun getRandomQuote() /*: Triple<String, String, List<String>>*/ {
         val resultCall = rickAndMortyAPI!!.getRamdomQuote()
         callRetrofit(resultCall, KAAMELOTT_QUOTE)
-        //TODO: migrate like that
+        //TODO: migrate like that or not
         //RickAndMortyRetrofitSingleton.callRetrofit(resultCall, RetrofitCallTypes.KAAMELOTT_QUOTE, context, fragment!!)
         //return Triple(citation, personnage, personnageNameList)
     }
