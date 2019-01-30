@@ -76,4 +76,5 @@ class SocialFragment : androidx.fragment.app.Fragment() {
         var userId= if(user!=null)user?.userId else -1
         socialManager.getListOfFriends(userId!!)
     }
+
 }

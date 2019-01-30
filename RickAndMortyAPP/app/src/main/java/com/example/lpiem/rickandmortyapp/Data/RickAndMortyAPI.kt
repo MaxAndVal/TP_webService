@@ -37,7 +37,7 @@ interface RickAndMortyAPI {
     @GET("/users/{id}")
     fun getUserById(
             @Path("id") userId: Int
-    ): Call<User>
+    ): Call<ResponseFromApi>
 
     @PUT("/users/playGame/{id}")
     fun putNewDate(
