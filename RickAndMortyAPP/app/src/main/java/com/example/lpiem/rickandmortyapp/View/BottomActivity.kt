@@ -48,8 +48,7 @@ class BottomActivity : AppCompatActivity() {
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
         Log.d(TAG, "game beginned : ${loginAppManager.gameInProgress}")
-        //loginAppManager = LoginAppManager.getInstance(this)
-        tv_wallet.text = String.format(getString(R.string.wallet_amount), loginAppManager.connectedUser.userWallet, " ")
+        tv_wallet.text = String.format(getString(R.string.wallet_amount), loginAppManager.connectedUser?.userWallet, " ")
         tv_wallet.setOnLongClickListener { iAmPickleRick() }
         openFragment(HomeFragment())
 
@@ -57,6 +56,8 @@ class BottomActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         super.onBackPressed()
+        loginAppManager.connectedUser = null
+        loginAppManager.gameInProgress = true
         finish()
     }
 

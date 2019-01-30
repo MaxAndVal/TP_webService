@@ -4,6 +4,9 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import android.widget.Toast
+import com.example.lpiem.rickandmortyapp.Data.JsonProperty.UserEmail
+import com.example.lpiem.rickandmortyapp.Data.JsonProperty.UserName
+import com.example.lpiem.rickandmortyapp.Data.JsonProperty.UserPassword
 import com.example.lpiem.rickandmortyapp.Data.RetrofitCallTypes
 import com.example.lpiem.rickandmortyapp.Data.RickAndMortyRetrofitSingleton
 import com.example.lpiem.rickandmortyapp.Model.ResponseFromApi
@@ -32,8 +35,8 @@ class SignInManager private constructor(private var context: Context) {
         Toast.makeText(context, "compte crée", Toast.LENGTH_SHORT).show()
         val rickAndMortyAPI = RickAndMortyRetrofitSingleton.instance
         val jsonBody = JsonObject()
-        jsonBody.addProperty("user_email", (context as SignInActivity).ed_email.text.toString())
-        jsonBody.addProperty("user_password", (context as SignInActivity).ed_password.text.toString())
+        jsonBody.addProperty(UserEmail.string, (context as SignInActivity).ed_email.text.toString())
+        jsonBody.addProperty(UserPassword.string, (context as SignInActivity).ed_password.text.toString())
         val connection = rickAndMortyAPI!!.connectUser(jsonBody)
         Log.d(TAG, "jsonBody : $jsonBody")
         Log.d(TAG, "$connection")
@@ -43,9 +46,9 @@ class SignInManager private constructor(private var context: Context) {
     fun signIn() {
         val rickAndMortyAPI = RickAndMortyRetrofitSingleton.instance
         val jsonBody = JsonObject()
-        jsonBody.addProperty("user_name", (context as SignInActivity).ed_username.text.toString())
-        jsonBody.addProperty("user_email", (context as SignInActivity).ed_email.text.toString())
-        jsonBody.addProperty("user_password", (context as SignInActivity).ed_password.text.toString())
+        jsonBody.addProperty(UserName.string, (context as SignInActivity).ed_username.text.toString())
+        jsonBody.addProperty(UserEmail.string, (context as SignInActivity).ed_email.text.toString())
+        jsonBody.addProperty(UserPassword.string, (context as SignInActivity).ed_password.text.toString())
         val subscribe = rickAndMortyAPI!!.signinUser(jsonBody)
         Log.d(TAG, "jsonBody : $jsonBody")
         Log.d(TAG, "$subscribe")

@@ -2,6 +2,8 @@ package com.example.lpiem.rickandmortyapp.Presenter
 
 import android.content.Context
 import android.util.Log
+import com.example.lpiem.rickandmortyapp.Data.JsonProperty.NewDate
+import com.example.lpiem.rickandmortyapp.Data.JsonProperty.NewWallet
 import com.example.lpiem.rickandmortyapp.Data.RetrofitCallTypes
 import com.example.lpiem.rickandmortyapp.Data.RetrofitCallTypes.*
 import com.example.lpiem.rickandmortyapp.Data.RickAndMortyRetrofitSingleton
@@ -83,7 +85,7 @@ class HomeManager private constructor(private var context: Context) {
                             val walletUpdateResponse = response.body() as ResponseFromApi
                             if (walletUpdateResponse.code == SUCCESS) {
                                 Log.d(TAG,"success code : ${walletUpdateResponse.code}, message ${walletUpdateResponse.message}")
-                                val id = LoginAppManager.getInstance(context).connectedUser.userId
+                                val id = LoginAppManager.getInstance(context).connectedUser!!.userId
                                 val getWallet = rickAndMortyAPI!!.getWallet(id!!)
                                 callRetrofit(getWallet, GET_WALLET)
                             } else {
@@ -125,8 +127,8 @@ class HomeManager private constructor(private var context: Context) {
 
     fun putDateToken() {
         val jsonBody = JsonObject()
-        jsonBody.addProperty("newDate", getDate())
-        val putDate = rickAndMortyAPI!!.putNewDate(LoginAppManager.getInstance(context).connectedUser.userId!!, jsonBody)
+        jsonBody.addProperty(NewDate.string, getDate())
+        val putDate = rickAndMortyAPI!!.putNewDate(LoginAppManager.getInstance(context).connectedUser!!.userId!!, jsonBody)
         callRetrofit(putDate, PUT_DATE)
     }
 
@@ -145,7 +147,7 @@ class HomeManager private constructor(private var context: Context) {
     fun updatePickleRick(score: Int) {
         val user = LoginAppManager.getInstance(context).connectedUser
         val jsonBody = JsonObject()
-        jsonBody.addProperty("newWallet", (user.userWallet!! + (score * 10)))
+        jsonBody.addProperty(NewWallet.string, (user!!.userWallet!! + (score * 10)))
         val newWallet = rickAndMortyAPI!!.updateWallet(user.userId!!, jsonBody)
         callRetrofit(newWallet, UPDATE_WALLET)
     }

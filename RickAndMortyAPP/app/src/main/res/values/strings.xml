@@ -26,6 +26,7 @@
     <string name="tv_sign_in_title">Sign In</string>
     <string name="tv_e_mail">E-mail</string>
     <string name="already_an_account">Already an account? <b><u>click here</u></b> to get schwifty !</string>
+    <string name="game_is_over">Partie terminée. Votre score final est de %1$d.\nVous avez gagné %2$d PickleRick !!</string>
 
     //Home Fragment
     <string name="pickle_rick">I\'m piclke Rick !!!</string>
@@ -36,5 +37,7 @@
     <string name="good_answer">Bonne réponse !!!</string>
     <string name="wrong_answer">Mauvaise réponse ...</string>
     <string name="try_an_other_game_later">Game over Retentez votre chance demain !!!</string>
+
+    //Collection Frgament
 
 </resources>
