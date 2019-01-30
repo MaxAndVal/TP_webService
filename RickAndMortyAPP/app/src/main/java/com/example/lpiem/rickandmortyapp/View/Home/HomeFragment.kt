@@ -3,6 +3,7 @@ package com.example.lpiem.rickandmortyapp.View.Home
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
@@ -69,7 +70,7 @@ class HomeFragment : androidx.fragment.app.Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         if (loginAppManager.gameInProgress) {
-            homeManager?.gameAvailable(loginAppManager.connectedUser)
+            homeManager?.gameAvailable(loginAppManager.connectedUser!!)
         } else {
             gameOver()
         }
@@ -154,7 +155,9 @@ class HomeFragment : androidx.fragment.app.Fragment() {
             }
             tv_game_over.visibility = VISIBLE
             if (loginAppManager.gameInProgress) {
-                Toast.makeText(context, "Partie terminée. Votre score final est de $score.\nVous avez gagné ${score * 10} PickleRick !!", Toast.LENGTH_LONG).show()
+                val toast = Toast.makeText(context, String.format(getString(R.string.game_is_over),score, score * 10 ), Toast.LENGTH_LONG)
+                toast.setGravity(Gravity.CENTER, 0, 150)
+                toast.show()
                 homeManager?.updatePickleRick(score)
             }
             loginAppManager.gameInProgress = false

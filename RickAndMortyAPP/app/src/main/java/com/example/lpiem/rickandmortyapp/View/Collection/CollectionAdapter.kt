@@ -32,9 +32,9 @@ class CollectionAdapter(private val dataSet: ListOfCards): RecyclerView.Adapter<
 
 
     class ViewHolder(view: View): RecyclerView.ViewHolder(view) {
-        val image = view.iv_card
-        val cardId = view.tv_card_number
-        val cardAmount = view.tv_card_amount
-        val title = view.tv_title
+        val image = view.iv_card!!
+        val cardId = view.tv_card_number!!
+        val cardAmount = view.tv_card_amount!!
+        val title = view.tv_title!!
     }
 }

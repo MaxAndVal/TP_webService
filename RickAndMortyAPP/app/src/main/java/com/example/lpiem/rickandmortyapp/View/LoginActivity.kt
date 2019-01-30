@@ -11,7 +11,7 @@ import kotlinx.android.synthetic.main.activity_login.*
 const val TAG = "TAG_M"
 const val RC_SIGN_IN = 1
 
-class LoginActivity : AppCompatActivity()/*, Callback<ResponseFromApi>*/ {
+class LoginActivity : AppCompatActivity() {
 
     internal var FacebookCallbackManager: CallbackManager? = null
     private lateinit var loginAppManager: LoginAppManager
