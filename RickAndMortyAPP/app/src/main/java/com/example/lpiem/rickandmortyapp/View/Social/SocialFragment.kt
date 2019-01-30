@@ -17,6 +17,7 @@ import com.example.lpiem.rickandmortyapp.Presenter.SocialManager
 import com.example.lpiem.rickandmortyapp.R
 import com.example.lpiem.rickandmortyapp.View.TAG
 import kotlinx.android.synthetic.main.fragment_social.*
+import kotlinx.android.synthetic.main.social_item.*
 
 
 // TODO: Rename parameter arguments, choose names that match

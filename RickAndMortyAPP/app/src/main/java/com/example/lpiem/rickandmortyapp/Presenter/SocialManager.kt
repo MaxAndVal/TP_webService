@@ -1,5 +1,6 @@
 package com.example.lpiem.rickandmortyapp.Presenter
 
+import android.app.AlertDialog
 import android.content.Context
 import android.util.Log
 import com.example.lpiem.rickandmortyapp.Data.RetrofitCallTypes
@@ -17,10 +18,36 @@ import com.example.lpiem.rickandmortyapp.View.TAG
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import android.content.DialogInterface
+import android.os.Build
+
+
 
 class SocialManager private constructor(private val context: Context):OnClickListenerInterface{
+
+    override fun delFriends(item: Friend): Boolean {
+        val builder: AlertDialog.Builder
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            builder = AlertDialog.Builder(context, android.R.style.Theme_Material_Dialog_Alert)
+        } else {
+            builder = AlertDialog.Builder(context)
+        }
+        builder.setTitle("Delete a friends")
+                .setMessage("Are you sure you want to delete "+item.userName+" as a friend ?")
+                .setPositiveButton(android.R.string.yes, DialogInterface.OnClickListener { dialog, which ->
+                    val resultCall = rickAndMortyAPI!!.delAfriends(item.userId!!, socialFragment?.user!!.userId!!)
+                    callRetrofit(resultCall, RetrofitCallTypes.DEL_A_FRIEND)
+                    recyclerView.adapter!!.notifyDataSetChanged()
+                })
+                .setNegativeButton(android.R.string.no, DialogInterface.OnClickListener { dialog, which ->
+                    // do nothing
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show()
+
+        return true}
+
     override fun addFriends(item: Friend) {
-        Log.d(TAG, item.toString() + "user :" + socialFragment?.user!!.userId)
         val resultCall = rickAndMortyAPI!!.addAfriends(item.userId!!, socialFragment?.user!!.userId!!)
         callRetrofit(resultCall, RetrofitCallTypes.ADD_A_FRIENDS)
     }
