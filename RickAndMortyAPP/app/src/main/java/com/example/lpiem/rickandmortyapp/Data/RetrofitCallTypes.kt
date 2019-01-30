@@ -13,5 +13,5 @@ enum class RetrofitCallTypes {
     GET_USER_BY_ID,
     PUT_DATE,
     UPDATE_WALLET,
-    GET_WALLETg
+    GET_WALLET
 }
