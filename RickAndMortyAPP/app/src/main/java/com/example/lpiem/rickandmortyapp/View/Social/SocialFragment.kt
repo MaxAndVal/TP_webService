@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.lpiem.rickandmortyapp.Data.RickAndMortyAPI
 import com.example.lpiem.rickandmortyapp.Data.RickAndMortyRetrofitSingleton
+import com.example.lpiem.rickandmortyapp.Model.Friend
 import com.example.lpiem.rickandmortyapp.Model.ListOfFriends
 import com.example.lpiem.rickandmortyapp.Model.User
 import com.example.lpiem.rickandmortyapp.Presenter.LoginAppManager
@@ -28,10 +29,12 @@ class SocialFragment : androidx.fragment.app.Fragment() {
     private var param2: String? = null
     private var rickAndMortyAPI: RickAndMortyAPI?=null
     var listOfFriends: ListOfFriends? = null
-    private lateinit var socialManager: SocialManager
+    lateinit var socialManager: SocialManager
     private lateinit var loginAppManager: LoginAppManager
-    private var user : User?=null
-
+    internal var user: User? = null
+    var resultFromSearch : ListOfFriends? = null
+    var listOfActualFriends: List<Friend>?=null
+    var listOfPotentialFriends: List<Friend>?=null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,14 +51,24 @@ class SocialFragment : androidx.fragment.app.Fragment() {
         if (socialManager.socialFragment == null) {
             socialManager.captureFragmentInstance(this)
         }
-
-
     }
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_social, container, false)
     }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        rv_social.layoutManager = LinearLayoutManager(context)
+        socialManager.captureRecyclerView(rv_social)
+        var userId= if(user!=null)user?.userId else -1
+        socialManager.getListOfFriends(userId!!)
+        btn_searchFriends.setOnClickListener { socialManager.searchForFriends(sv_friends.query.toString()) }
+    }
+
+
 
     companion object {
         // TODO: Rename and change types and number of parameters
@@ -67,14 +80,8 @@ class SocialFragment : androidx.fragment.app.Fragment() {
                         putString(ARG_PARAM2, param2)
                     }
                 }
-    }
+        }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        rv_social.layoutManager = LinearLayoutManager(context)
-        socialManager.captureRecyclerView(rv_social)
-        var userId= if(user!=null)user?.userId else -1
-        socialManager.getListOfFriends(userId!!)
-    }
+
 
 }
