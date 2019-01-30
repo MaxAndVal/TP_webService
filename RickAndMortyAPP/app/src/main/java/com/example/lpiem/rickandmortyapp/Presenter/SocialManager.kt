@@ -14,6 +14,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
+
 class SocialManager private constructor(private val context: Context) {
 
     private val rickAndMortyAPI = RickAndMortyRetrofitSingleton.instance
@@ -24,9 +25,6 @@ class SocialManager private constructor(private val context: Context) {
 
     companion object : SingletonHolder<SocialManager, Context>(::SocialManager)
 
-    init {
-
-    }
     fun captureFragmentInstance(fragment: SocialFragment) {
         socialFragment = fragment
     }
@@ -74,4 +72,5 @@ class SocialManager private constructor(private val context: Context) {
         })
 
     }
+
 }
