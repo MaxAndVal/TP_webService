@@ -16,7 +16,7 @@ import com.example.lpiem.rickandmortyapp.Model.User
 import com.example.lpiem.rickandmortyapp.Presenter.CollectionManager
 import com.example.lpiem.rickandmortyapp.Presenter.LoginAppManager
 import com.example.lpiem.rickandmortyapp.R
-import com.example.lpiem.rickandmortyapp.View.RecyclerTouchListener
+import com.example.lpiem.rickandmortyapp.Util.RecyclerTouchListener
 import com.example.lpiem.rickandmortyapp.View.TAG
 import kotlinx.android.synthetic.main.fragment_collection.*
 
@@ -63,7 +63,7 @@ class CollectionFragment : androidx.fragment.app.Fragment() {
         rv_collection.layoutManager = GridLayoutManager(context, 3)
         collectionManager.captureRecyclerView(rv_collection)
         collectionManager.getListOfDecks(user)
-        rv_collection.addOnItemTouchListener(RecyclerTouchListener(context!!, rv_collection, object: RecyclerTouchListener.ClickListener{
+        rv_collection.addOnItemTouchListener(RecyclerTouchListener(context!!, rv_collection, object : RecyclerTouchListener.ClickListener {
             override fun onClick(view: View, position: Int) {
                 Toast.makeText(context, "click", Toast.LENGTH_SHORT).show()
             }
@@ -72,7 +72,7 @@ class CollectionFragment : androidx.fragment.app.Fragment() {
                 Toast.makeText(context, "long click", Toast.LENGTH_SHORT).show()
             }
 
-        } ))
+        }))
     }
 
     companion object {
