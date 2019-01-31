@@ -1,20 +1,24 @@
-package com.example.lpiem.rickandmortyapp.View.Collection
+package com.example.lpiem.rickandmortyapp.View.Collection.list
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.lpiem.rickandmortyapp.Data.RickAndMortyAPI
 import com.example.lpiem.rickandmortyapp.Data.RickAndMortyRetrofitSingleton
 import com.example.lpiem.rickandmortyapp.Model.Character
 import com.example.lpiem.rickandmortyapp.Model.ListOfCards
 import com.example.lpiem.rickandmortyapp.Model.User
-import com.example.lpiem.rickandmortyapp.Presenter.CollectionManager
+import com.example.lpiem.rickandmortyapp.Presenter.collection.CollectionManager
 import com.example.lpiem.rickandmortyapp.Presenter.LoginAppManager
 import com.example.lpiem.rickandmortyapp.R
+import com.example.lpiem.rickandmortyapp.Util.RecyclerTouchListener
+import com.example.lpiem.rickandmortyapp.View.Collection.detail.CollectionDetailActivity
 import com.example.lpiem.rickandmortyapp.View.TAG
 import kotlinx.android.synthetic.main.fragment_collection.*
 
@@ -61,6 +65,19 @@ class CollectionFragment : androidx.fragment.app.Fragment() {
         rv_collection.layoutManager = GridLayoutManager(context, 3)
         collectionManager.captureRecyclerView(rv_collection)
         collectionManager.getListOfDecks(user)
+        rv_collection.addOnItemTouchListener(RecyclerTouchListener(context!!, rv_collection, object : RecyclerTouchListener.ClickListener {
+            override fun onClick(view: View, position: Int) {
+                //Toast.makeText(context, "click", Toast.LENGTH_SHORT).show()
+                val detailIntent = Intent(context, CollectionDetailActivity::class.java)
+                detailIntent.putExtra("current_card", (rv_collection.adapter as CollectionAdapter).getDataSet().cards?.get(position))
+                context!!.startActivity(detailIntent)
+            }
+
+            override fun onLongClick(view: View, position: Int) {
+                Toast.makeText(context, "long click", Toast.LENGTH_SHORT).show()
+            }
+
+        }))
     }
 
     companion object {
@@ -72,6 +89,7 @@ class CollectionFragment : androidx.fragment.app.Fragment() {
                         putString(ARG_PARAM2, param2)
                     }
                 }
+
     }
 
 

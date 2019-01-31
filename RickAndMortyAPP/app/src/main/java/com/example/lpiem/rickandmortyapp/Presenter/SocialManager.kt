@@ -5,7 +5,6 @@ import android.content.Context
 import android.util.Log
 import com.example.lpiem.rickandmortyapp.Data.RetrofitCallTypes
 import okhttp3.ResponseBody
-
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lpiem.rickandmortyapp.Data.RickAndMortyRetrofitSingleton
@@ -34,10 +33,6 @@ class SocialManager private constructor(private val context: Context):OnClickLis
     internal lateinit var recyclerView: RecyclerView
 
     companion object : SingletonHolder<SocialManager, Context>(::SocialManager)
-
-    init {
-
-    }
 
     fun captureFragmentInstance(fragment: SocialFragment) {
         socialFragment = fragment
@@ -76,7 +71,6 @@ class SocialManager private constructor(private val context: Context):OnClickLis
                                     Log.d(TAG, "List : "+socialFragment?.listOfFriends)
                                     recyclerView.adapter = SocialAdapter(socialFragment?.listOfActualFriends!!, this@SocialManager)
                                     recyclerView.adapter?.notifyDataSetChanged()
-
                                 }
                             } else {
                                 //Toast.makeText(context, "code : $code, message ${kaamlott.message}", Toast.LENGTH_SHORT).show()

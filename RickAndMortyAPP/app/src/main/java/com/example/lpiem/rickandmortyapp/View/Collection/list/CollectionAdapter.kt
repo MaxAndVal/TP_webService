@@ -1,4 +1,4 @@
-package com.example.lpiem.rickandmortyapp.View.Collection
+package com.example.lpiem.rickandmortyapp.View.Collection.list
 
 import android.view.LayoutInflater
 import android.view.View
@@ -30,6 +30,10 @@ class CollectionAdapter(private val dataSet: ListOfCards): RecyclerView.Adapter<
         return dataSet.cards!!.size
     }
 
+    fun getDataSet(): ListOfCards {
+        return dataSet
+    }
+
 
     class ViewHolder(view: View): RecyclerView.ViewHolder(view) {
         val image = view.iv_card!!
@@ -37,4 +41,6 @@ class CollectionAdapter(private val dataSet: ListOfCards): RecyclerView.Adapter<
         val cardAmount = view.tv_card_amount!!
         val title = view.tv_title!!
     }
+
+
 }

@@ -2,7 +2,6 @@ package com.example.lpiem.rickandmortyapp.View.Social
 
 import android.os.Bundle
 import android.util.Log
-import android.util.Log.d
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,15 +24,13 @@ import kotlinx.android.synthetic.main.social_item.*
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
-class SocialFragment : androidx.fragment.app.Fragment(){
-
-
+class SocialFragment : androidx.fragment.app.Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
-    private var rickAndMortyAPI: RickAndMortyAPI? = null
+    private var rickAndMortyAPI: RickAndMortyAPI?=null
     var listOfFriends: ListOfFriends? = null
-    internal lateinit var socialManager: SocialManager
+    lateinit var socialManager: SocialManager
     private lateinit var loginAppManager: LoginAppManager
     internal var user: User? = null
     var resultFromSearch : ListOfFriends? = null
@@ -48,7 +45,7 @@ class SocialFragment : androidx.fragment.app.Fragment(){
         }
         loginAppManager = LoginAppManager.getInstance(context!!)
         user = loginAppManager.connectedUser
-        d(TAG, "user : $user")
+        Log.d(TAG, "user : $user")
 
         rickAndMortyAPI = RickAndMortyRetrofitSingleton.instance
         socialManager = SocialManager.getInstance(context!!)
@@ -86,5 +83,7 @@ class SocialFragment : androidx.fragment.app.Fragment(){
                     }
                 }
         }
-    }
 
+
+
+}

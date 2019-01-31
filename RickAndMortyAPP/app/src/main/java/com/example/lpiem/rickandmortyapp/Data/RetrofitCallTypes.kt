@@ -15,5 +15,6 @@ enum class RetrofitCallTypes {
     PUT_DATE,
     UPDATE_WALLET,
     GET_WALLET,
-    ACCEPTE_FRIENDSHIP
+    ACCEPTE_FRIENDSHIP,
+    GET_CARD_DETAILS
 }

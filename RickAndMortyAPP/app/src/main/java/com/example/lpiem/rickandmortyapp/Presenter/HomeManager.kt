@@ -2,6 +2,7 @@ package com.example.lpiem.rickandmortyapp.Presenter
 
 import android.content.Context
 import android.util.Log
+import android.widget.Toast
 import com.example.lpiem.rickandmortyapp.Data.JsonProperty.NewDate
 import com.example.lpiem.rickandmortyapp.Data.JsonProperty.NewWallet
 import com.example.lpiem.rickandmortyapp.Data.RetrofitCallTypes
@@ -68,10 +69,14 @@ class HomeManager private constructor(private var context: Context) {
                             }
                         }
                         GET_USER_BY_ID -> {
-                            val user = response.body() as User
+                            val responseFromApi = response.body() as ResponseFromApi
                             val loginAppManager = LoginAppManager.getInstance(context)
-                            loginAppManager.gameInProgress = getDate() != user.userLastGame
-                            fragment?.displayFragmentContent()
+                            if (responseFromApi.code == SUCCESS) {
+                                loginAppManager.gameInProgress = getDate() != responseFromApi.results?.userLastGame
+                                fragment?.displayFragmentContent()
+                            } else {
+                                Toast.makeText(context, "User not found, error : ${responseFromApi.message}", Toast.LENGTH_SHORT).show()
+                            }
                         }
                         PUT_DATE -> {
                             val newDateResponse = response.body() as ResponseFromApi

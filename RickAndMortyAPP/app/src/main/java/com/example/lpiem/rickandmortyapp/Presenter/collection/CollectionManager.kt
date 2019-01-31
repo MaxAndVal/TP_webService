@@ -1,4 +1,4 @@
-package com.example.lpiem.rickandmortyapp.Presenter
+package com.example.lpiem.rickandmortyapp.Presenter.collection
 
 import android.content.Context
 import android.util.Log
@@ -6,7 +6,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.lpiem.rickandmortyapp.Data.RetrofitCallTypes
 import com.example.lpiem.rickandmortyapp.Data.RickAndMortyRetrofitSingleton
 import com.example.lpiem.rickandmortyapp.Model.User
-import com.example.lpiem.rickandmortyapp.View.Collection.CollectionFragment
+import com.example.lpiem.rickandmortyapp.Presenter.SingletonHolder
+import com.example.lpiem.rickandmortyapp.View.Collection.list.CollectionFragment
 
 class CollectionManager private constructor(private val context: Context) {
 

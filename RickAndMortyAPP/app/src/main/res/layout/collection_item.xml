@@ -41,7 +41,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:layout_marginEnd="8dp"
-        android:background="@drawable/ellipse_card_number"
         android:gravity="center"
         android:paddingStart="2dp"
         android:paddingTop="3dp"
