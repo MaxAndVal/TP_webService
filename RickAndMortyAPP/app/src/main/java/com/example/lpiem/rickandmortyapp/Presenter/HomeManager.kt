@@ -33,11 +33,19 @@ class HomeManager private constructor(private var context: Context) {
     private var personnage = ""
     private var personnageNameList = listOf("")
     private var fragment : HomeFragment?=null
+    internal var score = 0
+    internal var turn = 0
+    private lateinit var currentCall: Call<*>
 
     companion object : SingletonHolder<HomeManager, Context>(::HomeManager)
 
     init {
 
+    }
+
+    fun cancelCall() {
+        currentCall.cancel()
+        Log.d(TAG, "call canceled !!")
     }
 
     fun getRandomQuote() /*: Triple<String, String, List<String>>*/ {
@@ -91,8 +99,8 @@ class HomeManager private constructor(private var context: Context) {
                             if (walletUpdateResponse.code == SUCCESS) {
                                 Log.d(TAG,"success code : ${walletUpdateResponse.code}, message ${walletUpdateResponse.message}")
                                 val id = LoginAppManager.getInstance(context).connectedUser!!.userId
-                                val getWallet = rickAndMortyAPI!!.getWallet(id!!)
-                                callRetrofit(getWallet, GET_WALLET)
+                                currentCall = rickAndMortyAPI!!.getWallet(id!!)
+                                callRetrofit(currentCall, GET_WALLET)
                             } else {
                                 Log.d(TAG,"error code : ${walletUpdateResponse.code}, message ${walletUpdateResponse.message}")
                             }
@@ -126,15 +134,15 @@ class HomeManager private constructor(private var context: Context) {
     }
 
     fun gameAvailable(user: User) {
-        val getUser = rickAndMortyAPI!!.getUserById(user.userId!!)
-        callRetrofit(getUser, RetrofitCallTypes.GET_USER_BY_ID)
+        currentCall = rickAndMortyAPI!!.getUserById(user.userId!!)
+        callRetrofit(currentCall, RetrofitCallTypes.GET_USER_BY_ID)
     }
 
     fun putDateToken() {
         val jsonBody = JsonObject()
         jsonBody.addProperty(NewDate.string, getDate())
-        val putDate = rickAndMortyAPI!!.putNewDate(LoginAppManager.getInstance(context).connectedUser!!.userId!!, jsonBody)
-        callRetrofit(putDate, PUT_DATE)
+        currentCall = rickAndMortyAPI!!.putNewDate(LoginAppManager.getInstance(context).connectedUser!!.userId!!, jsonBody)
+        callRetrofit(currentCall, PUT_DATE)
     }
 
     fun getDate(): String {
@@ -153,7 +161,7 @@ class HomeManager private constructor(private var context: Context) {
         val user = LoginAppManager.getInstance(context).connectedUser
         val jsonBody = JsonObject()
         jsonBody.addProperty(NewWallet.string, (user!!.userWallet!! + (score * 10)))
-        val newWallet = rickAndMortyAPI!!.updateWallet(user.userId!!, jsonBody)
-        callRetrofit(newWallet, UPDATE_WALLET)
+        currentCall = rickAndMortyAPI!!.updateWallet(user.userId!!, jsonBody)
+        callRetrofit(currentCall, UPDATE_WALLET)
     }
 }

@@ -87,7 +87,7 @@ class HomeFragment : androidx.fragment.app.Fragment() {
 
     internal fun updateUI(listResult: Triple<String, String, List<String>>) {
         val solution = listResult.second
-        if (solution != "") {
+        if (solution != "" && loginAppManager.connectedUser != null) {
             tv_citation.text = listResult.first
             val shuffleList = listOf(solution, listResult.third[0], listResult.third[1], listResult.third[2]).shuffled()
             val buttons = listOf(btn_perso1, btn_perso2, btn_perso3, btn_perso4)
@@ -105,8 +105,8 @@ class HomeFragment : androidx.fragment.app.Fragment() {
     private fun makeGameDisplayed(display: Boolean) {
         val displayedItems = listOf(tv_citation, btn_perso1, btn_perso2, btn_perso3, btn_perso4, tv_actual_turn, tv_actual_score)
         if (display) {
-            tv_actual_turn.text = String.format(getString(R.string.actual_turn, turn))
-            tv_actual_score.text = String.format(getString(R.string.actual_score, score))
+            tv_actual_turn.text = String.format(getString(R.string.actual_turn, homeManager!!.turn))
+            tv_actual_score.text = String.format(getString(R.string.actual_score, homeManager!!.score))
             for (item in displayedItems) {
                 item.visibility = VISIBLE
             }
@@ -118,21 +118,21 @@ class HomeFragment : androidx.fragment.app.Fragment() {
     }
 
     private fun checkForWinner(button: Button, solution: String) {
-        if (turn <= 5 && loginAppManager.gameInProgress) {
+        if (homeManager!!.turn <= 5 && loginAppManager.gameInProgress) {
             if (button.text == solution) {
                 Toast.makeText(context, getString(R.string.good_answer), Toast.LENGTH_SHORT).show()
-                tv_actual_score.text = String.format(getString(R.string.actual_score), ++score)
-                tv_actual_turn.text = String.format(getString(R.string.actual_turn), ++turn)
-                if (turn <= 4) homeManager!!.getRandomQuote()
-                if (turn == 5) {
+                tv_actual_score.text = String.format(getString(R.string.actual_score), ++homeManager!!.score)
+                tv_actual_turn.text = String.format(getString(R.string.actual_turn), ++homeManager!!.turn)
+                if (homeManager!!.turn <= 4) homeManager!!.getRandomQuote()
+                if (homeManager!!.turn == 5) {
                     gameOver()
                     homeManager?.putDateToken()
                 }
             } else {
                 Toast.makeText(context, getString(R.string.wrong_answer), Toast.LENGTH_SHORT).show()
-                tv_actual_turn.text = String.format(getString(R.string.actual_turn), ++turn)
-                if (turn <= 4) homeManager!!.getRandomQuote()
-                if (turn == 5) {
+                tv_actual_turn.text = String.format(getString(R.string.actual_turn), ++homeManager!!.turn)
+                if (homeManager!!.turn <= 4) homeManager!!.getRandomQuote()
+                if (homeManager!!.turn == 5) {
                     gameOver()
                     homeManager?.putDateToken()
                 }
@@ -149,21 +149,27 @@ class HomeFragment : androidx.fragment.app.Fragment() {
     private fun gameOver() {
         val handler = Handler()
         handler.postDelayed({
-            val UIElements = listOf(btn_perso1, btn_perso2, btn_perso3, btn_perso4, tv_citation, tv_actual_turn, tv_actual_score)
-            for (element in UIElements) {
-                element.visibility = GONE
+            if (loginAppManager.connectedUser != null) {
+                val UIElements = listOf(btn_perso1, btn_perso2, btn_perso3, btn_perso4, tv_citation, tv_actual_turn, tv_actual_score)
+                for (element in UIElements) {
+                    element.visibility = GONE
+                }
+                tv_game_over.visibility = VISIBLE
+                if (loginAppManager.gameInProgress) {
+                    val toast = Toast.makeText(context, String.format(getString(R.string.game_is_over), homeManager!!.score, homeManager!!.score * 10), Toast.LENGTH_LONG)
+                    toast.setGravity(Gravity.CENTER, 0, 150)
+                    toast.show()
+                    homeManager?.updatePickleRick(homeManager!!.score)
+                }
+                loginAppManager.gameInProgress = false
+                loginAppManager.handlerTime = 0L
             }
-            tv_game_over.visibility = VISIBLE
-            if (loginAppManager.gameInProgress) {
-                val toast = Toast.makeText(context, String.format(getString(R.string.game_is_over),score, score * 10 ), Toast.LENGTH_LONG)
-                toast.setGravity(Gravity.CENTER, 0, 150)
-                toast.show()
-                homeManager?.updatePickleRick(score)
-            }
-            loginAppManager.gameInProgress = false
-            loginAppManager.handlerTime = 0L
         }, loginAppManager.handlerTime)
     }
 
+    override fun onDestroyView() {
+        homeManager?.cancelCall()
+        super.onDestroyView()
+    }
 }
 

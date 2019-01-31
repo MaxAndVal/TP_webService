@@ -5,12 +5,12 @@ import android.content.Context
 import android.util.Log
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import com.example.lpiem.rickandmortyapp.Model.*
+import com.example.lpiem.rickandmortyapp.Model.KaamlottQuote
+import com.example.lpiem.rickandmortyapp.Model.ListOfCards
+import com.example.lpiem.rickandmortyapp.Model.ResponseFromApi
 import com.example.lpiem.rickandmortyapp.View.Collection.list.CollectionAdapter
 import com.example.lpiem.rickandmortyapp.View.Collection.list.CollectionFragment
 import com.example.lpiem.rickandmortyapp.View.Home.HomeFragment
-import com.example.lpiem.rickandmortyapp.View.Social.SocialAdapter
-import com.example.lpiem.rickandmortyapp.View.Social.SocialFragment
 import com.example.lpiem.rickandmortyapp.View.TAG
 import com.google.gson.GsonBuilder
 import kotlinx.android.synthetic.main.fragment_collection.*
@@ -49,6 +49,7 @@ object RickAndMortyRetrofitSingleton{
                 .build()
         rickAndMortyAPIInstance = retrofit.create(RickAndMortyAPI::class.java)
     }
+
     fun <T> callRetrofit(call: Call<T>, type: RetrofitCallTypes, context: Context, fragment:Fragment) {
 
         call.enqueue(object : Callback<T> {
