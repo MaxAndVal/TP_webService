@@ -13,13 +13,13 @@
 
     <item
         android:id="@+id/navigation_social"
-        android:icon="@drawable/com_facebook_button_icon_white"
+        android:icon="@drawable/ic_group_black_24dp"
         android:title="@string/social" />
 
 
     <item
         android:id="@+id/navigation_profil"
-        android:icon="@drawable/com_facebook_profile_picture_blank_portrait"
+        android:icon="@drawable/ic_settings_black_24dp"
         android:title="@string/profilSettings" />
 
 </menu>

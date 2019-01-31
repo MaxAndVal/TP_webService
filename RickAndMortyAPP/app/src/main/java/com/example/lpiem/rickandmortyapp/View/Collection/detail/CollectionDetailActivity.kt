@@ -49,7 +49,7 @@ class CollectionDetailActivity : AppCompatActivity(), CardDetailDisplay {
                 .load(details.image)
                 .fit()
                 .centerInside()
-                .placeholder(getDrawable(R.drawable.abc_btn_check_material))
+                .placeholder(getDrawable(R.drawable.vortex_ram))
                 .into(iv_detail_card_image)
     }
 
