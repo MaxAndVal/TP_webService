@@ -9,7 +9,7 @@ import com.example.lpiem.rickandmortyapp.R
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.collection_item.view.*
 
-class CollectionAdapter(private val dataSet: ListOfCards): RecyclerView.Adapter<CollectionAdapter.ViewHolder>() {
+class CollectionAdapter(private var dataSet: ListOfCards): RecyclerView.Adapter<CollectionAdapter.ViewHolder>() {
 
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -32,6 +32,10 @@ class CollectionAdapter(private val dataSet: ListOfCards): RecyclerView.Adapter<
 
     fun getDataSet(): ListOfCards {
         return dataSet
+    }
+
+    fun setDataSet(list: ListOfCards) {
+        dataSet = list
     }
 
 

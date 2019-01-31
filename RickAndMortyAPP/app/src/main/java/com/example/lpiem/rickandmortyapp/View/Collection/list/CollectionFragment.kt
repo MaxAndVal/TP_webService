@@ -14,30 +14,39 @@ import com.example.lpiem.rickandmortyapp.Data.RickAndMortyRetrofitSingleton
 import com.example.lpiem.rickandmortyapp.Model.Character
 import com.example.lpiem.rickandmortyapp.Model.ListOfCards
 import com.example.lpiem.rickandmortyapp.Model.User
-import com.example.lpiem.rickandmortyapp.Presenter.collection.CollectionManager
 import com.example.lpiem.rickandmortyapp.Presenter.LoginAppManager
+import com.example.lpiem.rickandmortyapp.Presenter.collection.CollectionManager
 import com.example.lpiem.rickandmortyapp.R
 import com.example.lpiem.rickandmortyapp.Util.RecyclerTouchListener
 import com.example.lpiem.rickandmortyapp.View.Collection.detail.CollectionDetailActivity
 import com.example.lpiem.rickandmortyapp.View.TAG
 import kotlinx.android.synthetic.main.fragment_collection.*
 
-
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_DATASET = "dataSet"
 private const val ARG_PARAM2 = "param2"
 
-class CollectionFragment : androidx.fragment.app.Fragment() {
-    // TODO: Rename and change types of parameters
+class CollectionFragment : androidx.fragment.app.Fragment(), CardListDisplay {
+
     private var param1: Parcelable? = null
     private var param2: String? = null
+
     private var rickAndMortyAPI: RickAndMortyAPI? = null
     var listOfCards: ListOfCards? = null
     private lateinit var collectionManager: CollectionManager
     private lateinit var loginAppManager: LoginAppManager
     private var user : User? = null
+    private var adapter: CollectionAdapter? = null
 
+    companion object {
+        @JvmStatic
+        fun newInstance(dataset: Character, param2: String) =
+                CollectionFragment().apply {
+                    arguments = Bundle().apply {
+                        putParcelable(ARG_DATASET, dataset)
+                        putString(ARG_PARAM2, param2)
+                    }
+                }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,7 +61,6 @@ class CollectionFragment : androidx.fragment.app.Fragment() {
         rickAndMortyAPI = RickAndMortyRetrofitSingleton.instance
         collectionManager = CollectionManager.getInstance(context!!)
         collectionManager.captureFragmentInstance(this)
-
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -64,8 +72,9 @@ class CollectionFragment : androidx.fragment.app.Fragment() {
         super.onViewCreated(view, savedInstanceState)
         rv_collection.layoutManager = GridLayoutManager(context, 3)
         collectionManager.captureRecyclerView(rv_collection)
-        collectionManager.getListOfDecks(user)
+        collectionManager.getListOfDecks(user, this)
         rv_collection.addOnItemTouchListener(RecyclerTouchListener(context!!, rv_collection, object : RecyclerTouchListener.ClickListener {
+
             override fun onClick(view: View, position: Int) {
                 //Toast.makeText(context, "click", Toast.LENGTH_SHORT).show()
                 val detailIntent = Intent(context, CollectionDetailActivity::class.java)
@@ -76,23 +85,27 @@ class CollectionFragment : androidx.fragment.app.Fragment() {
             override fun onLongClick(view: View, position: Int) {
                 Toast.makeText(context, "long click", Toast.LENGTH_SHORT).show()
             }
-
         }))
     }
 
-    companion object {
-        @JvmStatic
-        fun newInstance(dataset: Character, param2: String) =
-                CollectionFragment().apply {
-                    arguments = Bundle().apply {
-                        putParcelable(ARG_DATASET, dataset)
-                        putString(ARG_PARAM2, param2)
-                    }
-                }
-
+    private fun updateAdapter(list: ListOfCards) {
+        if (adapter == null) {
+            adapter = CollectionAdapter(list)
+            rv_collection.adapter = adapter
+            adapter!!.notifyDataSetChanged()
+        } else {
+            adapter!!.setDataSet(list)
+            adapter!!.notifyDataSetChanged()
+        }
     }
 
+    override fun displayResult(list: ListOfCards) {
+        updateAdapter(list)
+    }
 
-
+    override fun onDestroyView() {
+        collectionManager.cancelCall()
+        super.onDestroyView()
+    }
 
 }

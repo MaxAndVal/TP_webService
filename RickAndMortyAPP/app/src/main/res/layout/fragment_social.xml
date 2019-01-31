@@ -21,7 +21,6 @@
         android:id="@+id/sv_friends"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-
         android:layout_marginTop="10dp"
         android:queryHint="Search for friends"
         app:layout_constraintEnd_toStartOf="@+id/btn_searchFriends"

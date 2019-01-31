@@ -2,24 +2,29 @@ package com.example.lpiem.rickandmortyapp.Presenter.collection
 
 import android.content.Context
 import android.util.Log
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lpiem.rickandmortyapp.Data.RetrofitCallTypes
+import com.example.lpiem.rickandmortyapp.Data.RetrofitCallTypes.LIST_OF_CARDS
 import com.example.lpiem.rickandmortyapp.Data.RickAndMortyRetrofitSingleton
+import com.example.lpiem.rickandmortyapp.Model.ListOfCards
 import com.example.lpiem.rickandmortyapp.Model.User
 import com.example.lpiem.rickandmortyapp.Presenter.SingletonHolder
+import com.example.lpiem.rickandmortyapp.View.Collection.list.CardListDisplay
 import com.example.lpiem.rickandmortyapp.View.Collection.list.CollectionFragment
+import com.example.lpiem.rickandmortyapp.View.TAG
+import okhttp3.ResponseBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class CollectionManager private constructor(private val context: Context) {
 
     private var rickAndMortyAPI = RickAndMortyRetrofitSingleton.instance
     var collectionFragment: CollectionFragment? = null
     private lateinit var recyclerView: RecyclerView
-    private var fragment : CollectionFragment?=null
-
-
-    init {
-
-    }
+    lateinit var currentCall : Call<*>
+    lateinit var cardListDisplay : CardListDisplay
 
     companion object : SingletonHolder<CollectionManager, Context>(::CollectionManager)
 
@@ -31,49 +36,45 @@ class CollectionManager private constructor(private val context: Context) {
         recyclerView = rv
     }
 
-
-//    private fun <T> callRetrofit(call: Call<T>, type: RetrofitCallTypes) {
-//
-//        call.enqueue(object : Callback<T> {
-//            override fun onResponse(call: Call<T>, response: Response<T>) {
-//                if (response.isSuccessful) {
-//                    when (type) {
-//                        RetrofitCallTypes.RESPONSE_FROM_API -> {
-//                            val responseFromApi = response.body() as ResponseFromApi
-//                            Log.d(TAG, "responseFromApi: ${responseFromApi.code} / message: ${responseFromApi.message} / ${responseFromApi.results}")
-//                        }
-//                        RetrofitCallTypes.LIST_OF_CARDS -> {
-//                            collectionFragment?.listOfCards = response.body() as ListOfCards
-//                            if (collectionFragment?.listOfCards != null) {
-//                                recyclerView.adapter = CollectionAdapter(collectionFragment?.listOfCards!!)
-//                                recyclerView.adapter?.notifyDataSetChanged()
-//                            }
-//                        }
-//                    }
-//                } else {
-//                    val responseError = response.errorBody() as ResponseBody
-//                    Log.d(TAG, "error: ${responseError.string()}")
-//                }
-//
-//            }
-//
-//            override fun onFailure(call: Call<T>, t: Throwable) {
-//                Log.d(TAG, "fail : $t")
-//            }
-//        })
-//
-//    }
-
-
-    @Synchronized
-    fun getListOfDecks(user: User?) {
-        val userId = user?.userId?:-1
-        Log.d("user id", userId.toString())
-        val resultListCard = rickAndMortyAPI!!.getListOfCardsById(userId)
-        RickAndMortyRetrofitSingleton.callRetrofit(resultListCard, RetrofitCallTypes.LIST_OF_CARDS, context, collectionFragment!!)
+    fun cancelCall() {
+        currentCall.cancel()
+        Log.d(TAG, "call canceled")
     }
 
-    fun getFragment(fragment: CollectionFragment){
-        this.fragment = fragment
+    private fun <T> callRetrofit(call: Call<T>, type: RetrofitCallTypes) {
+
+        call.enqueue(object : Callback<T> {
+            override fun onResponse(call: Call<T>, response: Response<T>) {
+                if (response.isSuccessful) {
+                    when (type) {
+                        RetrofitCallTypes.LIST_OF_CARDS -> {
+                            collectionFragment!!.listOfCards = response.body() as ListOfCards
+                            val list = collectionFragment!!.listOfCards
+                            if (list?.code == 200) {
+                                cardListDisplay.displayResult(list)
+                            } else {
+                                Toast.makeText(context, "erreur code ${list?.code} message : ${list?.message}", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                    }
+                } else {
+                    val responseError = response.errorBody() as ResponseBody
+                    Log.d(TAG, "error: ${responseError.string()}")
+                }
+
+            }
+
+            override fun onFailure(call: Call<T>, t: Throwable) {
+                Log.d(TAG, "fail : $t")
+            }
+        })
+
+    }
+
+    fun getListOfDecks(user: User?, link: CardListDisplay) {
+        cardListDisplay = link
+        val userId = user?.userId?:-1
+        currentCall = rickAndMortyAPI!!.getListOfCardsById(userId)
+        callRetrofit(currentCall, LIST_OF_CARDS)
     }
 }
