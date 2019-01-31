@@ -6,8 +6,8 @@ import android.util.Log
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.lpiem.rickandmortyapp.Model.*
-import com.example.lpiem.rickandmortyapp.View.Collection.CollectionAdapter
-import com.example.lpiem.rickandmortyapp.View.Collection.CollectionFragment
+import com.example.lpiem.rickandmortyapp.View.Collection.list.CollectionAdapter
+import com.example.lpiem.rickandmortyapp.View.Collection.list.CollectionFragment
 import com.example.lpiem.rickandmortyapp.View.Home.HomeFragment
 import com.example.lpiem.rickandmortyapp.View.Social.SocialAdapter
 import com.example.lpiem.rickandmortyapp.View.Social.SocialFragment

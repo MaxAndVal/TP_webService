@@ -38,6 +38,7 @@
     <string name="wrong_answer">Mauvaise réponse ...</string>
     <string name="try_an_other_game_later">Game over Retentez votre chance demain !!!</string>
 
-    //Collection Frgament
+    //Collection Fragment
+    <string name="tv_description"><b>Status</b> : %s \n<b>Espece</b> : %s \n<b>Genre</b> : %s \n<b>Origine</b> : %s \n<b>Localisation actuelle</b> : %s</string>
 
 </resources>

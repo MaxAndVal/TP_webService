@@ -259,6 +259,8 @@ class LoginAppManager private constructor(private var context: Context){
 
             override fun onFailure(call: Call<T>, t: Throwable) {
                 Log.d(TAG, "fail : $t")
+                loginActivity.login_progressBar.visibility = View.GONE
+                Toast.makeText(context, "Problème de réseau, merci de tenter de vous connecter à nouveau", Toast.LENGTH_LONG).show()
             }
         })
 

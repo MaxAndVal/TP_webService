@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.lpiem.rickandmortyapp.Presenter.LoginAppManager
 import com.example.lpiem.rickandmortyapp.R
-import com.example.lpiem.rickandmortyapp.View.Collection.CollectionFragment
+import com.example.lpiem.rickandmortyapp.View.Collection.list.CollectionFragment
 import com.example.lpiem.rickandmortyapp.View.Home.HomeFragment
 import com.example.lpiem.rickandmortyapp.View.Social.SocialFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView

@@ -86,4 +86,9 @@ interface RickAndMortyAPI {
     @DELETE("/friends/{id1}/{id2}")
     fun delAfriends(
             @Path("id1") userId1: Int, @Path("id2") userId2: Int): Call<ResponseFromApi>
+
+    @GET("/cards/{id}")
+    fun getCardDetails(
+            @Path("id") userId: Int
+    ): Call<DetailledCard>
 }
