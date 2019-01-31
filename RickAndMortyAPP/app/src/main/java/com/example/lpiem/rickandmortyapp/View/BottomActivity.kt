@@ -31,11 +31,13 @@ class BottomActivity : AppCompatActivity() {
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_social -> {
+                message.text = "Social"
                 openFragment(SocialFragment())
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_profil -> {
-                message.setText(R.string.profilSettings)
+                message.text = "Settings"
+                openFragment(SettingsFragment())
                 return@OnNavigationItemSelectedListener true
             }
         }
