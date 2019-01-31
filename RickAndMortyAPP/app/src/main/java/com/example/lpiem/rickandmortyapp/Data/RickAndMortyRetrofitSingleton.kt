@@ -22,11 +22,7 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-object RickAndMortyRetrofitSingleton: OnClickListenerInterface{
-
-    override fun addFriends(item: Friend) {
-        Log.d(TAG, item.toString())
-    }
+object RickAndMortyRetrofitSingleton{
 
     //private const val BASE_URL = "https://rickandmortyapi.com/"
     private const val BASE_URL = "https://api-rickandmorty-tcg.herokuapp.com"
@@ -90,21 +86,6 @@ object RickAndMortyRetrofitSingleton: OnClickListenerInterface{
                                 fragment.rv_collection.adapter?.notifyDataSetChanged()
                             }
                         }
-                        RetrofitCallTypes.RESULT_FRIENDS_SEARCHING->{
-                            fragment as SocialFragment
-                            var social = response.body() as ListOfFriends
-                            var code = social.code
-                            if (code == 200) {
-                                fragment.resultFromSearch = response.body() as ListOfFriends
-                                if (fragment?.listOfFriends != null) {
-                                    fragment.socialManager.recyclerView.adapter = SocialAdapter(fragment?.resultFromSearch!!.friends!!, this@RickAndMortyRetrofitSingleton  )
-                                    fragment.socialManager.recyclerView.adapter?.notifyDataSetChanged()
-                                } else {
-                                    Toast.makeText(context, "code : $code, message ${social.message}", Toast.LENGTH_SHORT).show()
-
-                                }
-                            }
-                                                    }
                     }
                 } else {
                     val responseError = response.errorBody() as ResponseBody
