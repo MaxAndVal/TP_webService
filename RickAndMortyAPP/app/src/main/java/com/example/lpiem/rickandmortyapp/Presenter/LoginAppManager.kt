@@ -45,7 +45,6 @@ class LoginAppManager private constructor(private var context: Context){
     private val loginActivity = (context as LoginActivity)
     var connectedUser: User? = null
     var gameInProgress = true
-    var handlerTime = 1500L
 
     companion object : SingletonHolder<LoginAppManager, Context>(::LoginAppManager)
 
