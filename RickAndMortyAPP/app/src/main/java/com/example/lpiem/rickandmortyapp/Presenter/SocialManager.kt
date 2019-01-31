@@ -20,37 +20,12 @@ import retrofit2.Callback
 import retrofit2.Response
 import android.content.DialogInterface
 import android.os.Build
-
+import android.view.View
+import com.example.lpiem.rickandmortyapp.Model.ResponseFromApi
+import kotlinx.android.synthetic.main.fragment_social.*
 
 
 class SocialManager private constructor(private val context: Context):OnClickListenerInterface{
-
-    override fun delFriends(item: Friend): Boolean {
-        val builder: AlertDialog.Builder
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            builder = AlertDialog.Builder(context, android.R.style.Theme_Material_Dialog_Alert)
-        } else {
-            builder = AlertDialog.Builder(context)
-        }
-        builder.setTitle("Delete a friends")
-                .setMessage("Are you sure you want to delete "+item.userName+" as a friend ?")
-                .setPositiveButton(android.R.string.yes, DialogInterface.OnClickListener { dialog, which ->
-                    val resultCall = rickAndMortyAPI!!.delAfriends(item.userId!!, socialFragment?.user!!.userId!!)
-                    callRetrofit(resultCall, RetrofitCallTypes.DEL_A_FRIEND)
-                    recyclerView.adapter!!.notifyDataSetChanged()
-                })
-                .setNegativeButton(android.R.string.no, DialogInterface.OnClickListener { dialog, which ->
-                    // do nothing
-                })
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .show()
-
-        return true}
-
-    override fun addFriends(item: Friend) {
-        val resultCall = rickAndMortyAPI!!.addAfriends(item.userId!!, socialFragment?.user!!.userId!!)
-        callRetrofit(resultCall, RetrofitCallTypes.ADD_A_FRIENDS)
-    }
 
     private val rickAndMortyAPI = RickAndMortyRetrofitSingleton.instance
     private var userId = -1
@@ -74,8 +49,11 @@ class SocialManager private constructor(private val context: Context):OnClickLis
 
     @Synchronized
     fun getListOfFriends(userId: Int) {
+        this.userId = userId
         val resultCall = rickAndMortyAPI!!.getListOfFriends(userId)
         callRetrofit(resultCall, RetrofitCallTypes.LIST_OF_FRIENDS)
+        socialFragment!!.btn_friendsRequest.text="voir les requetes en attente"
+        socialFragment!!.btn_friendsRequest.setOnClickListener { friendsRequest() }
     }
 
     private fun <T> callRetrofit(call: Call<T>, type: RetrofitCallTypes) {
@@ -95,7 +73,7 @@ class SocialManager private constructor(private val context: Context):OnClickLis
                                     //socialFragment?.listOfActualFriends= socialFragment?.listOfActualFriends.returnFriends()
                                     socialFragment?.listOfPotentialFriends = socialFragment?.listOfFriends?.friends!!.filter { it.accepted==false!! }
                                     socialFragment?.listOfActualFriends = socialFragment?.listOfFriends?.friends!!.filter { it.accepted!! }
-                                    Log.d(TAG, "List : "+socialFragment?.listOfPotentialFriends)
+                                    Log.d(TAG, "List : "+socialFragment?.listOfFriends)
                                     recyclerView.adapter = SocialAdapter(socialFragment?.listOfActualFriends!!, this@SocialManager)
                                     recyclerView.adapter?.notifyDataSetChanged()
 
@@ -120,6 +98,15 @@ class SocialManager private constructor(private val context: Context):OnClickLis
                                 }
                             }
                         }
+                        RetrofitCallTypes.ACCEPTE_FRIENDSHIP ->{
+                            var social = response.body() as ResponseFromApi
+                            if(social.code == 200){
+                                Toast.makeText(context, "code : $social.code, message ${social.message}", Toast.LENGTH_SHORT).show()
+
+                            }else{
+                                Toast.makeText(context, "code : $social.code, message ${social.message}", Toast.LENGTH_SHORT).show()
+                            }
+                        }
                     }
                 } else {
                     val responseError = response.errorBody() as ResponseBody
@@ -138,6 +125,47 @@ class SocialManager private constructor(private val context: Context):OnClickLis
     fun searchForFriends(friends: String?) {
         val resultCall = rickAndMortyAPI!!.searchForFriends(friends)
         callRetrofit(resultCall, RetrofitCallTypes.RESULT_FRIENDS_SEARCHING)
+    }
+    override fun delFriends(item: Friend): Boolean {
+        val builder: AlertDialog.Builder
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            builder = AlertDialog.Builder(context, android.R.style.Theme_Material_Dialog_Alert)
+        } else {
+            builder = AlertDialog.Builder(context)
+        }
+        builder.setTitle("Delete a friends")
+                .setMessage("Are you sure you want to delete "+item.userName+" as a friend ?")
+                .setPositiveButton(android.R.string.yes, DialogInterface.OnClickListener { dialog, which ->
+                    val resultCall = rickAndMortyAPI!!.delAfriends(item.userId!!, socialFragment?.user!!.userId!!)
+                    callRetrofit(resultCall, RetrofitCallTypes.DEL_A_FRIEND)
+                    recyclerView.adapter!!.notifyDataSetChanged()
+                })
+                .setNegativeButton(android.R.string.no, DialogInterface.OnClickListener { dialog, which ->
+                    // do nothing
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show()
+
+        return true}
+
+    override fun addFriends(item: Friend) {
+        Log.d(TAG, item.toString())
+        if(item.accepted == null ){
+            val resultCall = rickAndMortyAPI!!.addAfriends(item.userId!!, socialFragment?.user!!.userId!!)
+            callRetrofit(resultCall, RetrofitCallTypes.ADD_A_FRIENDS)
+        }else{
+            val resultCall = rickAndMortyAPI!!.valideAFriends(item.userId!!, socialFragment?.user!!.userId!!)
+            callRetrofit(resultCall, RetrofitCallTypes.ACCEPTE_FRIENDSHIP)
+        }
+        //TODO when it's done, go back to friend's List
+        //TODO refresh
+    }
+
+    fun friendsRequest() {
+        recyclerView.adapter = SocialAdapter(socialFragment?.listOfPotentialFriends!!, this@SocialManager)
+        recyclerView.adapter?.notifyDataSetChanged()
+        socialFragment!!.btn_friendsRequest.text = "voir sa liste d'ami"
+        socialFragment!!.btn_friendsRequest.setOnClickListener { getListOfFriends(userId) }
     }
 
 }
