@@ -12,7 +12,7 @@ import com.example.lpiem.rickandmortyapp.View.TAG
 import kotlinx.android.synthetic.main.social_item.view.*
 
 
-class SocialAdapter(private val dataSet: List<Friend>, private val listener:OnClickListenerInterface) : RecyclerView.Adapter<SocialAdapter.ViewHolder>(){
+class SocialAdapter(private val dataSet: List<Friend>, private val listener: OnClickListenerInterface) : RecyclerView.Adapter<SocialAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val v = LayoutInflater.from(parent.context)
@@ -25,14 +25,19 @@ class SocialAdapter(private val dataSet: List<Friend>, private val listener:OnCl
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        var item = dataSet!![position]
         holder.userName.text = dataSet!![position].userName
-        holder.ivIconFriends.setOnClickListener { listener.addFriends(dataSet!![position]) }
+        if (dataSet!![position].accepted !== null && dataSet!![position].accepted!!) {
+            holder.ivIconFriends.setImageResource(R.drawable.store)
         }
+        holder.ivIconFriends.setOnClickListener { listener.addFriends(item) }
+        holder.userName.setOnLongClickListener { listener.delFriends(item) }
+    }
 
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val userName = view.tv_userName
-        val ivIconFriends = view.iv_iconFriends
+        var ivIconFriends = view.iv_iconFriends
 
     }
 }

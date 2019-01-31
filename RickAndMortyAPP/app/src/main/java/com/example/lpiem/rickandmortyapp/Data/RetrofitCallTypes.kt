@@ -10,8 +10,10 @@ enum class RetrofitCallTypes {
     LOGIN,
     RESULT_FRIENDS_SEARCHING,
     ADD_A_FRIENDS,
+    DEL_A_FRIEND,
     GET_USER_BY_ID,
     PUT_DATE,
     UPDATE_WALLET,
-    GET_WALLET
+    GET_WALLET,
+    ACCEPTE_FRIENDSHIP
 }

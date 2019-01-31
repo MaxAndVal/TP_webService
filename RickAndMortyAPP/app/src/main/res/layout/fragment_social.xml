@@ -22,6 +22,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
 
+        android:layout_marginTop="10dp"
         android:queryHint="Search for friends"
         app:layout_constraintEnd_toStartOf="@+id/btn_searchFriends"
         app:layout_constraintStart_toStartOf="parent"
@@ -31,7 +32,9 @@
         android:id="@+id/rv_social"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/btn_friendsRequest"
         app:layout_constraintTop_toBottomOf="@+id/sv_friends"
         tools:layout_editor_absoluteX="0dp" />
 
@@ -43,5 +46,15 @@
         app:layout_constraintBottom_toTopOf="@+id/rv_social"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_searchFriends" />
+
+    <Button
+        android:id="@+id/btn_friendsRequest"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="30dp"
+        android:text="Vous avez requetes d'ami à valider"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
