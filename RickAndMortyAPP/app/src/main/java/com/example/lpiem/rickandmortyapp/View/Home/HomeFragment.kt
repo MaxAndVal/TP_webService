@@ -1,7 +1,6 @@
 package com.example.lpiem.rickandmortyapp.View.Home
 
 import android.os.Bundle
-import android.os.Handler
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -15,22 +14,21 @@ import com.example.lpiem.rickandmortyapp.Model.User
 import com.example.lpiem.rickandmortyapp.Presenter.HomeManager
 import com.example.lpiem.rickandmortyapp.Presenter.LoginAppManager
 import com.example.lpiem.rickandmortyapp.R
+import com.example.lpiem.rickandmortyapp.View.BottomActivity
 import com.example.lpiem.rickandmortyapp.View.Collection.list.CollectionFragment
 import com.example.lpiem.rickandmortyapp.View.TAG
+import kotlinx.android.synthetic.main.activity_bottom.*
 import kotlinx.android.synthetic.main.fragment_home.*
 
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
-class HomeFragment : androidx.fragment.app.Fragment() {
+class HomeFragment : androidx.fragment.app.Fragment(), HomeDisplayUI {
 
     private var homeManager: HomeManager? = null
     private lateinit var loginAppManager: LoginAppManager
     private var user: User? = null
-    private var score = 0
-    private var turn = 0
-
     private var param1: String? = null
     private var param2: String? = null
 
@@ -56,8 +54,6 @@ class HomeFragment : androidx.fragment.app.Fragment() {
         Log.d(TAG, "user : $user")
 
         homeManager = HomeManager.getInstance(context!!)
-        homeManager?.getFragment(this)
-
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -70,22 +66,22 @@ class HomeFragment : androidx.fragment.app.Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         if (loginAppManager.gameInProgress) {
-            homeManager?.gameAvailable(loginAppManager.connectedUser!!)
+            homeManager?.gameAvailable(loginAppManager.connectedUser!!, this)
         } else {
             gameOver()
         }
     }
 
-    fun displayFragmentContent() {
+    override fun displayFragmentContent() {
         if (loginAppManager.gameInProgress) {
             makeGameDisplayed(false)
-            homeManager!!.getRandomQuote()
+            homeManager!!.getRandomQuote(this)
         } else {
             gameOver()
         }
     }
 
-    internal fun updateUI(listResult: Triple<String, String, List<String>>) {
+    override fun updateUI(listResult: Triple<String, String, List<String>>) {
         val solution = listResult.second
         if (solution != "" && loginAppManager.connectedUser != null) {
             tv_citation.text = listResult.first
@@ -100,6 +96,10 @@ class HomeFragment : androidx.fragment.app.Fragment() {
         } else {
             Log.d(TAG, "listResult from API : $listResult")
         }
+    }
+
+    override fun updatePickleRicksAmount(arg1: Int, arg2: String) {
+        (activity as BottomActivity).tv_wallet.text = String.format(context!!.getString(R.string.wallet_amount), arg1, arg2)
     }
 
     private fun makeGameDisplayed(display: Boolean) {
@@ -123,7 +123,7 @@ class HomeFragment : androidx.fragment.app.Fragment() {
                 Toast.makeText(context, getString(R.string.good_answer), Toast.LENGTH_SHORT).show()
                 tv_actual_score.text = String.format(getString(R.string.actual_score), ++homeManager!!.score)
                 tv_actual_turn.text = String.format(getString(R.string.actual_turn), ++homeManager!!.turn)
-                if (homeManager!!.turn <= 4) homeManager!!.getRandomQuote()
+                if (homeManager!!.turn <= 4) homeManager!!.getRandomQuote(this)
                 if (homeManager!!.turn == 5) {
                     gameOver()
                     homeManager?.putDateToken()
@@ -131,40 +131,34 @@ class HomeFragment : androidx.fragment.app.Fragment() {
             } else {
                 Toast.makeText(context, getString(R.string.wrong_answer), Toast.LENGTH_SHORT).show()
                 tv_actual_turn.text = String.format(getString(R.string.actual_turn), ++homeManager!!.turn)
-                if (homeManager!!.turn <= 4) homeManager!!.getRandomQuote()
+                if (homeManager!!.turn <= 4) homeManager!!.getRandomQuote(this)
                 if (homeManager!!.turn == 5) {
                     gameOver()
                     homeManager?.putDateToken()
                 }
             }
         } else {
-
-            val handler = Handler()
-            handler.postDelayed({
-                gameOver()
-            }, loginAppManager.handlerTime)
+            gameOver()
         }
     }
 
     private fun gameOver() {
-        val handler = Handler()
-        handler.postDelayed({
-            if (loginAppManager.connectedUser != null) {
-                val UIElements = listOf(btn_perso1, btn_perso2, btn_perso3, btn_perso4, tv_citation, tv_actual_turn, tv_actual_score)
-                for (element in UIElements) {
-                    element.visibility = GONE
-                }
-                tv_game_over.visibility = VISIBLE
-                if (loginAppManager.gameInProgress) {
-                    val toast = Toast.makeText(context, String.format(getString(R.string.game_is_over), homeManager!!.score, homeManager!!.score * 10), Toast.LENGTH_LONG)
-                    toast.setGravity(Gravity.CENTER, 0, 150)
-                    toast.show()
-                    homeManager?.updatePickleRick(homeManager!!.score)
-                }
-                loginAppManager.gameInProgress = false
-                loginAppManager.handlerTime = 0L
+        if (loginAppManager.connectedUser != null) {
+            val UIElements = listOf(btn_perso1, btn_perso2, btn_perso3, btn_perso4, tv_citation, tv_actual_turn, tv_actual_score)
+            for (element in UIElements) {
+                element.visibility = GONE
             }
-        }, loginAppManager.handlerTime)
+            tv_game_over.visibility = VISIBLE
+            if (loginAppManager.gameInProgress) {
+                val toast = Toast.makeText(context, String.format(getString(R.string.game_is_over), homeManager!!.score, homeManager!!.score * 10), Toast.LENGTH_LONG)
+                toast.setGravity(Gravity.CENTER, 0, 150)
+                toast.show()
+                homeManager?.updatePickleRick(homeManager!!.score)
+            }
+            loginAppManager.gameInProgress = false
+        }
+        homeManager?.score = 0
+        homeManager?.turn = 0
     }
 
     override fun onDestroyView() {

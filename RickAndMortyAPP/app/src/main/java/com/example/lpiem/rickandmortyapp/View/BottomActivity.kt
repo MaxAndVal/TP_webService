@@ -6,6 +6,7 @@ import android.view.Gravity
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.example.lpiem.rickandmortyapp.Presenter.HomeManager
 import com.example.lpiem.rickandmortyapp.Presenter.LoginAppManager
 import com.example.lpiem.rickandmortyapp.R
 import com.example.lpiem.rickandmortyapp.View.Collection.list.CollectionFragment
@@ -60,7 +61,7 @@ class BottomActivity : AppCompatActivity() {
         super.onBackPressed()
         loginAppManager.connectedUser = null
         loginAppManager.gameInProgress = true
-        finish()
+        clearGame()
     }
 
     internal fun openFragment(fragment: Fragment) {
@@ -75,6 +76,13 @@ class BottomActivity : AppCompatActivity() {
         toast.setGravity(Gravity.TOP, 150, 90)
         toast.show()
         return true
+    }
+
+    private fun clearGame() {
+        val homeManager = HomeManager.getInstance(this)
+        homeManager.turn = 0
+        homeManager.score =0
+        finish()
     }
 
 }

@@ -12,12 +12,9 @@ import com.example.lpiem.rickandmortyapp.Model.KaamlottQuote
 import com.example.lpiem.rickandmortyapp.Model.ResponseFromApi
 import com.example.lpiem.rickandmortyapp.Model.User
 import com.example.lpiem.rickandmortyapp.Model.Wallet
-import com.example.lpiem.rickandmortyapp.R
-import com.example.lpiem.rickandmortyapp.View.BottomActivity
-import com.example.lpiem.rickandmortyapp.View.Home.HomeFragment
+import com.example.lpiem.rickandmortyapp.View.Home.HomeDisplayUI
 import com.example.lpiem.rickandmortyapp.View.TAG
 import com.google.gson.JsonObject
-import kotlinx.android.synthetic.main.activity_bottom.*
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
@@ -32,28 +29,22 @@ class HomeManager private constructor(private var context: Context) {
     private var citation = ""
     private var personnage = ""
     private var personnageNameList = listOf("")
-    private var fragment : HomeFragment?=null
     internal var score = 0
     internal var turn = 0
     private lateinit var currentCall: Call<*>
+    private lateinit var homeDisplayUI: HomeDisplayUI
 
     companion object : SingletonHolder<HomeManager, Context>(::HomeManager)
-
-    init {
-
-    }
 
     fun cancelCall() {
         currentCall.cancel()
         Log.d(TAG, "call canceled !!")
     }
 
-    fun getRandomQuote() /*: Triple<String, String, List<String>>*/ {
+    fun getRandomQuote(link: HomeDisplayUI) {
+        homeDisplayUI = link
         val resultCall = rickAndMortyAPI!!.getRamdomQuote()
         callRetrofit(resultCall, KAAMELOTT_QUOTE)
-        //TODO: migrate like that or not
-        //RickAndMortyRetrofitSingleton.callRetrofit(resultCall, RetrofitCallTypes.KAAMELOTT_QUOTE, context, fragment!!)
-        //return Triple(citation, personnage, personnageNameList)
     }
 
     private fun <T> callRetrofit(call: Call<T>, type: RetrofitCallTypes) {
@@ -71,7 +62,7 @@ class HomeManager private constructor(private var context: Context) {
                                 personnage = kaamlott.personnage!!
                                 personnageNameList = kaamlott.personnageList!!
                                 val list = Triple(citation, personnage, personnageNameList)
-                                fragment?.updateUI(list)
+                                homeDisplayUI.updateUI(list)
                             } else {
                                 Log.d(TAG, "code : $code, message ${kaamlott.message}")
                             }
@@ -81,7 +72,7 @@ class HomeManager private constructor(private var context: Context) {
                             val loginAppManager = LoginAppManager.getInstance(context)
                             if (responseFromApi.code == SUCCESS) {
                                 loginAppManager.gameInProgress = getDate() != responseFromApi.results?.userLastGame
-                                fragment?.displayFragmentContent()
+                                homeDisplayUI.displayFragmentContent()
                             } else {
                                 Toast.makeText(context, "User not found, error : ${responseFromApi.message}", Toast.LENGTH_SHORT).show()
                             }
@@ -109,7 +100,7 @@ class HomeManager private constructor(private var context: Context) {
                             val newWalletResponse = response.body() as Wallet
                             if (newWalletResponse.code == SUCCESS) {
                                 Log.d(TAG,"success code : ${newWalletResponse.code}, message ${newWalletResponse.message}, wallet ${newWalletResponse.wallet}")
-                                (context as BottomActivity).tv_wallet.text = String.format(context.getString(R.string.wallet_amount), newWalletResponse.wallet, " ")
+                                homeDisplayUI.updatePickleRicksAmount(newWalletResponse.wallet!!, " ")
                             } else {
                                 Log.d(TAG,"error code : ${newWalletResponse.code}, message ${newWalletResponse.message}")
                             }
@@ -119,7 +110,6 @@ class HomeManager private constructor(private var context: Context) {
                     val responseError = response.errorBody() as ResponseBody
                     Log.d(TAG, "error: ${responseError.string()}")
                 }
-
             }
 
             override fun onFailure(call: Call<T>, t: Throwable) {
@@ -129,11 +119,8 @@ class HomeManager private constructor(private var context: Context) {
 
     }
 
-    fun getFragment(fragment: HomeFragment){
-        this.fragment = fragment
-    }
-
-    fun gameAvailable(user: User) {
+    fun gameAvailable(user: User, link: HomeDisplayUI) {
+        homeDisplayUI = link
         currentCall = rickAndMortyAPI!!.getUserById(user.userId!!)
         callRetrofit(currentCall, RetrofitCallTypes.GET_USER_BY_ID)
     }
