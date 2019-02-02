@@ -64,8 +64,6 @@ class SocialManager private constructor(private val context: Context):OnClickLis
                             if (code == 200) {
                                 socialFragment?.listOfFriends = response.body() as ListOfFriends
                                 if (socialFragment?.listOfFriends != null) {
-                                    //socialFragment?.listOfActualFriends = response.body() as ListOfFriends
-                                    //socialFragment?.listOfActualFriends= socialFragment?.listOfActualFriends.returnFriends()
                                     socialFragment?.listOfPotentialFriends = socialFragment?.listOfFriends?.friends!!.filter { it.accepted==false!! }
                                     socialFragment?.listOfActualFriends = socialFragment?.listOfFriends?.friends!!.filter { it.accepted!! }
                                     Log.d(TAG, "List : "+socialFragment?.listOfFriends)
@@ -117,7 +115,7 @@ class SocialManager private constructor(private val context: Context):OnClickLis
     }
 
     fun searchForFriends(friends: String?) {
-        val resultCall = rickAndMortyAPI!!.searchForFriends(friends)
+        val resultCall = rickAndMortyAPI!!.searchForFriends(userId, friends)
         callRetrofit(resultCall, RetrofitCallTypes.RESULT_FRIENDS_SEARCHING)
     }
     override fun delFriends(item: Friend): Boolean {
@@ -130,7 +128,7 @@ class SocialManager private constructor(private val context: Context):OnClickLis
         builder.setTitle("Delete a friends")
                 .setMessage("Are you sure you want to delete "+item.userName+" as a friend ?")
                 .setPositiveButton(android.R.string.yes, DialogInterface.OnClickListener { dialog, which ->
-                    val resultCall = rickAndMortyAPI!!.delAfriends(item.userId!!, socialFragment?.user!!.userId!!)
+                    val resultCall = rickAndMortyAPI!!.delAfriends(socialFragment?.user!!.userId!!,item.userId!!)
                     callRetrofit(resultCall, RetrofitCallTypes.DEL_A_FRIEND)
                     recyclerView.adapter!!.notifyDataSetChanged()
                 })
@@ -145,10 +143,10 @@ class SocialManager private constructor(private val context: Context):OnClickLis
     override fun addFriends(item: Friend) {
         Log.d(TAG, item.toString())
         if(item.accepted == null ){
-            val resultCall = rickAndMortyAPI!!.addAfriends(item.userId!!, socialFragment?.user!!.userId!!)
+            val resultCall = rickAndMortyAPI!!.addAfriends(socialFragment?.user!!.userId!!, item.userId!!)
             callRetrofit(resultCall, RetrofitCallTypes.ADD_A_FRIENDS)
         }else{
-            val resultCall = rickAndMortyAPI!!.valideAFriends(item.userId!!, socialFragment?.user!!.userId!!)
+            val resultCall = rickAndMortyAPI!!.valideAFriends( socialFragment?.user!!.userId!!, item.userId!!)
             callRetrofit(resultCall, RetrofitCallTypes.ACCEPTE_FRIENDSHIP)
         }
         //TODO when it's done, go back to friend's List
