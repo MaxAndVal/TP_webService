@@ -1,5 +1,6 @@
 package com.example.lpiem.rickandmortyapp.View
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
@@ -11,6 +12,7 @@ import com.example.lpiem.rickandmortyapp.Presenter.LoginAppManager
 import com.example.lpiem.rickandmortyapp.R
 import com.example.lpiem.rickandmortyapp.View.Collection.list.CollectionFragment
 import com.example.lpiem.rickandmortyapp.View.Home.HomeFragment
+import com.example.lpiem.rickandmortyapp.View.Shop.ShopActivity
 import com.example.lpiem.rickandmortyapp.View.Social.SocialFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_bottom.*
@@ -22,22 +24,22 @@ class BottomActivity : AppCompatActivity() {
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.navigation_home -> {
-                message.setText(R.string.title_home)
+                tv_message.setText(R.string.title_home)
                 openFragment(HomeFragment())
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_collection -> {
-                message.setText(R.string.collection)
+                tv_message.setText(R.string.collection)
                 openFragment(CollectionFragment())
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_social -> {
-                message.text = "Social"
+                tv_message.text = "Social"
                 openFragment(SocialFragment())
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_profil -> {
-                message.text = "Settings"
+                tv_message.text = "Settings"
                 openFragment(SettingsFragment())
                 return@OnNavigationItemSelectedListener true
             }
@@ -53,6 +55,7 @@ class BottomActivity : AppCompatActivity() {
         Log.d(TAG, "game beginned : ${loginAppManager.gameInProgress}")
         tv_wallet.text = String.format(getString(R.string.wallet_amount), loginAppManager.connectedUser?.userWallet, " ")
         tv_wallet.setOnLongClickListener { iAmPickleRick() }
+        tv_wallet.setOnClickListener { openShop() }
         openFragment(HomeFragment())
 
     }
@@ -83,6 +86,11 @@ class BottomActivity : AppCompatActivity() {
         homeManager.turn = 0
         homeManager.score =0
         finish()
+    }
+
+    private fun openShop() {
+        val shopIntent = Intent(this@BottomActivity, ShopActivity::class.java)
+        startActivity(shopIntent)
     }
 
 }

@@ -246,12 +246,16 @@ class LoginAppManager private constructor(private var context: Context){
                         LIST_OF_FRIENDS -> {
 
                         }
-                        else -> Log.d(TAG, "error : ${response.errorBody()}")
+                        else -> {
+                            loginActivity.login_progressBar.visibility = View.GONE
+                            Log.d(TAG, "server error : ${response.errorBody()}")
+                        }
                     }
 
                 } else {
+                    loginActivity.login_progressBar.visibility = View.GONE
                     val responseError = response.errorBody() as ResponseBody
-                    Log.d(TAG, "error: ${responseError.string()}")
+                    Log.d(TAG, "error call unsuccessful: ${responseError.string()}")
                 }
 
             }

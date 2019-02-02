@@ -29,7 +29,7 @@
     <string name="game_is_over">Partie terminée. Votre score final est de %1$d.\nVous avez gagné %2$d PickleRick !!</string>
 
     //Home Fragment
-    <string name="pickle_rick">I\'m piclke Rick !!!</string>
+    <string name="pickle_rick">I\'m piclke Rick !!!\nClick on me to see the Shop !!!</string>
     <string name="wallet_amount"> %1$d $%2$s</string>
     <string name="actual_turn">%1d\/5</string>
     <string name="actual_score">score : %1d\/5</string>

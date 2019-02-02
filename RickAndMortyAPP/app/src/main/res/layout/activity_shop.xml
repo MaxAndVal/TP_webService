@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".View.Shop.ShopActivity">
+
+    <TextView
+        android:id="@+id/tv_title_shop"
+        android:text="Rick and Morty Shop"
+        style="@style/TitleDetailStyle"
+        android:textColor="@android:color/black"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <ImageView
+        android:id="@+id/iv_small_booster"
+        android:layout_width="0dp"
+        android:layout_height="200dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/iv_medium_booster"
+        app:layout_constraintTop_toBottomOf="@id/tv_title_shop"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:src="@drawable/vortex_ram"
+        />
+
+    <TextView
+        android:id="@+id/tv_small_booster"
+        android:text="Booster 2 cartes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        app:layout_constraintStart_toStartOf="@id/iv_small_booster"
+        app:layout_constraintEnd_toEndOf="@id/iv_small_booster"
+        app:layout_constraintTop_toTopOf="@id/iv_small_booster"
+        />
+
+    <TextView
+        android:id="@+id/tv_cost_small_booster"
+        style="@style/tvWallet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="24dp"
+        android:text="20"
+        app:layout_constraintEnd_toEndOf="@id/iv_small_booster"
+        app:layout_constraintBottom_toBottomOf="@id/iv_small_booster"
+        />
+
+    <ImageView
+        android:id="@+id/iv_medium_booster"
+        android:layout_width="0dp"
+        android:layout_height="200dp"
+        app:layout_constraintStart_toEndOf="@id/iv_small_booster"
+        app:layout_constraintEnd_toStartOf="@id/iv_big_booster"
+        app:layout_constraintTop_toTopOf="@id/iv_small_booster"
+        android:src="@drawable/vortex_ram"
+        />
+
+    <TextView
+        android:id="@+id/tv_medium_booster"
+        android:text="Booster 5 cartes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        app:layout_constraintStart_toStartOf="@id/iv_medium_booster"
+        app:layout_constraintEnd_toEndOf="@id/iv_medium_booster"
+        app:layout_constraintTop_toTopOf="@id/iv_medium_booster"
+        />
+
+    <TextView
+        android:id="@+id/tv_cost_medium_booster"
+        style="@style/tvWallet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="24dp"
+        android:text="40"
+        app:layout_constraintEnd_toEndOf="@id/iv_medium_booster"
+        app:layout_constraintBottom_toBottomOf="@id/iv_medium_booster"
+        />
+
+    <ImageView
+        android:id="@+id/iv_big_booster"
+        android:layout_width="0dp"
+        android:layout_height="200dp"
+        app:layout_constraintStart_toEndOf="@id/iv_medium_booster"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/iv_small_booster"
+        android:src="@drawable/vortex_ram"
+        />
+
+    <TextView
+        android:id="@+id/tv_big_booster"
+        android:text="Booster 15 cartes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        app:layout_constraintStart_toStartOf="@id/iv_big_booster"
+        app:layout_constraintEnd_toEndOf="@id/iv_big_booster"
+        app:layout_constraintTop_toTopOf="@id/iv_big_booster"
+        />
+
+    <TextView
+        android:id="@+id/tv_cost_big_booster"
+        style="@style/tvWallet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="24dp"
+        android:text="100"
+        app:layout_constraintEnd_toEndOf="@id/iv_big_booster"
+        app:layout_constraintBottom_toBottomOf="@id/iv_big_booster"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
