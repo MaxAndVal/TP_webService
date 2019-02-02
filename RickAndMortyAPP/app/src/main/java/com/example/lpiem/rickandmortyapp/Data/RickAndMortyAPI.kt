@@ -68,29 +68,30 @@ interface RickAndMortyAPI {
     fun getRamdomQuote(
     ): Call<KaamlottQuote>
 
-    @GET("/friends/{id}")
+    @GET("users/{user}/friends/")
     fun getListOfFriends(
-            @Path("id") userId: Int
+            @Path("user") userId: Int
     ): Call<ListOfFriends>
 
-    @GET("/friends/search/{new_friends}")
+    @GET("users/{user}/friends/search/{new_friends}")
     fun searchForFriends(
+            @Path("user") userId: Int,
             @Path("new_friends") newFriends: String?
     ): Call<ListOfFriends>
 
-    @POST("/friends/{id1}&{id2}")
+    @POST("users/{user}/friends/{id2}")
     fun addAfriends(
-            @Path("id1") userId1: Int,
+            @Path("user") userId1: Int,
             @Path("id2") userId2: Int): Call<ResponseFromApi>
 
-    @DELETE("/friends/{id1}&{id2}")
+    @DELETE("users/{user}/friends/{id2}")
     fun delAfriends(
-            @Path("id1") userId1: Int,
+            @Path("user") userId1: Int,
             @Path("id2") userId2: Int): Call<ResponseFromApi>
 
-    @PUT("/friends/{id1}&{id2}")
+    @PUT("users/{user}/friends/{id2}")
     fun valideAFriends(
-            @Path("id1") userId1: Int,
+            @Path("user") userId1: Int,
             @Path("id2") userId2: Int): Call<ResponseFromApi>
 
     @GET("/cards/{id}")
