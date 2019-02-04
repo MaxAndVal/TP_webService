@@ -98,4 +98,9 @@ interface RickAndMortyAPI {
     fun getCardDetails(
             @Path("id") userId: Int
     ): Call<DetailledCard>
+
+    @POST("/cards/addDecks")
+    fun increaseNumberOfDecks(
+            @Body body: JsonObject
+    ): Call<ResponseFromApi>
 }

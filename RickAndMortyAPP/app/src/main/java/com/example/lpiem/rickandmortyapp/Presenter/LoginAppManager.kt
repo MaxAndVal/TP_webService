@@ -23,7 +23,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.common.SignInButton
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.google.gson.JsonObject
@@ -42,7 +41,7 @@ class LoginAppManager private constructor(private var context: Context){
     private var mGoogleSignInClient: GoogleSignInClient? = null
     private var account: GoogleSignInAccount? = null
     private lateinit var googleBtnTextView: Button
-    private val loginActivity = (context as LoginActivity)
+    //private val loginActivity = (context as LoginActivity)
     var connectedUser: User? = null
     var gameInProgress = true
 
@@ -50,10 +49,7 @@ class LoginAppManager private constructor(private var context: Context){
 
     //REGULAR CONNECTION AND SIGN IN
 
-    fun regularConnection() {
-        loginActivity.login_progressBar.visibility = View.VISIBLE
-        val mail = loginActivity.etEmail.text.toString()
-        val pass = loginActivity.etPassword.text.toString()
+    fun regularConnection(mail: String, pass: String) {
         val jsonBody = JsonObject()
         jsonBody.addProperty(UserEmail.string, mail)
         jsonBody.addProperty(UserPassword.string, pass)
@@ -69,8 +65,8 @@ class LoginAppManager private constructor(private var context: Context){
     // GOOGLE CONNECTION
 
     fun googleSetup() {
-        loginActivity.sign_in_button.setSize(SignInButton.SIZE_STANDARD)
-        loginActivity.sign_in_button.setOnClickListener { googleSignIn() }
+        //loginActivity.sign_in_button.setSize(SignInButton.SIZE_STANDARD)
+        (context as LoginActivity).sign_in_button.setOnClickListener { googleSignIn() }
 
         gso = GoogleSignInOptions
                 .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -78,14 +74,14 @@ class LoginAppManager private constructor(private var context: Context){
                 .requestId()
                 .build()
 
-        mGoogleSignInClient = GoogleSignIn.getClient(loginActivity, gso)
-        googleBtnTextView = (loginActivity.sign_in_button.getChildAt(0) as Button)
+        mGoogleSignInClient = GoogleSignIn.getClient((context as LoginActivity), gso)
+        googleBtnTextView = ((context as LoginActivity).sign_in_button.getChildAt(0) as Button)
     }
 
     private fun googleSignIn() {
-        loginActivity.login_progressBar.visibility = View.VISIBLE
+        (context as LoginActivity).login_progressBar.visibility = View.VISIBLE
         val signInIntent = mGoogleSignInClient?.signInIntent
-        loginActivity.startActivityForResult(signInIntent, RC_SIGN_IN)
+        (context as LoginActivity).startActivityForResult(signInIntent, RC_SIGN_IN)
     }
 
     private fun handleGoogleSignInResult(completedTask: Task<GoogleSignInAccount>) {
@@ -131,7 +127,7 @@ class LoginAppManager private constructor(private var context: Context){
             task.result
             Toast.makeText(context, context.getString(R.string.google_disconnected), Toast.LENGTH_SHORT).show()
             googleBtnTextView.text = context.getString(R.string.btn_connection_google)
-            loginActivity.sign_in_button.setOnClickListener { googleSignIn() }
+            (context as LoginActivity).sign_in_button.setOnClickListener { googleSignIn() }
             connectedToGoogle = false
         }
     }
@@ -139,13 +135,13 @@ class LoginAppManager private constructor(private var context: Context){
     // FACEBOOK CONNECTION
 
     fun facebookSetup() {
-        loginActivity.FacebookCallbackManager = CallbackManager.Factory.create()
-        loginActivity.facebook_login_button.setReadPermissions("email")
+        (context as LoginActivity).FacebookCallbackManager = CallbackManager.Factory.create()
+        (context as LoginActivity).facebook_login_button.setReadPermissions("email")
 
-        loginActivity.facebook_login_button.registerCallback(loginActivity.FacebookCallbackManager, object : FacebookCallback<LoginResult> {
+        (context as LoginActivity).facebook_login_button.registerCallback((context as LoginActivity).FacebookCallbackManager, object : FacebookCallback<LoginResult> {
 
             override fun onSuccess(loginResult: LoginResult) {
-                loginActivity.login_progressBar.visibility = View.VISIBLE
+                (context as LoginActivity).login_progressBar.visibility = View.VISIBLE
                 val accessToken = loginResult.accessToken
                 val isLoggedIn = accessToken != null && !accessToken.isExpired
                 Log.d(TAG, "isLoggedIn on success = $isLoggedIn")
@@ -177,7 +173,7 @@ class LoginAppManager private constructor(private var context: Context){
                             Log.d(TAG, "error : $e")
                             e.printStackTrace()
                             Toast.makeText(context, "Facebook connection error", Toast.LENGTH_SHORT).show()
-                            loginActivity.login_progressBar.visibility = View.GONE
+                            (context as LoginActivity).login_progressBar.visibility = View.GONE
                         }
                     }
                     val parameters = Bundle()
@@ -202,7 +198,7 @@ class LoginAppManager private constructor(private var context: Context){
         Log.d(TAG, "isLoggedIn = $isLoggedIn")
 
         if (isLoggedIn) {
-            LoginManager.getInstance().logInWithReadPermissions(loginActivity, Arrays.asList("public_profile"))
+            LoginManager.getInstance().logInWithReadPermissions((context as LoginActivity), Arrays.asList("public_profile"))
         }
     }
 
@@ -218,10 +214,10 @@ class LoginAppManager private constructor(private var context: Context){
                                 val responseBody = response.body() as ResponseFromApi
                                 val code = responseBody.code
                                 if (code == 200) {
-                                    loginActivity.login_progressBar.visibility = View.GONE
+                                    (context as LoginActivity).login_progressBar.visibility = View.GONE
                                     if (connectedToGoogle) {
                                         googleBtnTextView.text = context.getString(R.string.btn_disconnection_google)
-                                        loginActivity.sign_in_button.setOnClickListener { disconnectGoogleAccount() }
+                                        (context as LoginActivity).sign_in_button.setOnClickListener { disconnectGoogleAccount() }
                                     }
                                     val results = responseBody.results?.userName
                                     Log.d(TAG, "body = ${response.body().toString()}")
@@ -229,17 +225,17 @@ class LoginAppManager private constructor(private var context: Context){
                                     val homeIntent = Intent(context, BottomActivity::class.java)
                                     connectedUser = responseBody.results!!
                                     //homeIntent.putExtra("user", responseBody.results)
-                                    loginActivity.startActivity(homeIntent)
+                                    (context as LoginActivity).startActivity(homeIntent)
                                 } else {
-                                    loginActivity.login_progressBar.visibility = View.GONE
-                                    if (loginActivity.etEmail.text.toString() == "" || loginActivity.etPassword.text.toString() == "") {
+                                    (context as LoginActivity).login_progressBar.visibility = View.GONE
+                                    if ((context as LoginActivity).etEmail.text.toString() == "" || (context as LoginActivity).etPassword.text.toString() == "") {
                                         Toast.makeText(context, context.getString(R.string.thanks_to_fill_all_fields), Toast.LENGTH_SHORT).show()
                                     } else {
                                         Toast.makeText(context, "login error code : $code, message ${responseBody.message}", Toast.LENGTH_LONG).show()
                                     }
                                 }
                             } else {
-                                loginActivity.login_progressBar.visibility = View.GONE
+                                (context as LoginActivity).login_progressBar.visibility = View.GONE
                                 Log.d(TAG, "error : ${response.errorBody()}")
                             }
                         }
@@ -247,13 +243,13 @@ class LoginAppManager private constructor(private var context: Context){
 
                         }
                         else -> {
-                            loginActivity.login_progressBar.visibility = View.GONE
+                            (context as LoginActivity).login_progressBar.visibility = View.GONE
                             Log.d(TAG, "server error : ${response.errorBody()}")
                         }
                     }
 
                 } else {
-                    loginActivity.login_progressBar.visibility = View.GONE
+                    (context as LoginActivity).login_progressBar.visibility = View.GONE
                     val responseError = response.errorBody() as ResponseBody
                     Log.d(TAG, "error call unsuccessful: ${responseError.string()}")
                 }
@@ -262,7 +258,7 @@ class LoginAppManager private constructor(private var context: Context){
 
             override fun onFailure(call: Call<T>, t: Throwable) {
                 Log.d(TAG, "fail : $t")
-                loginActivity.login_progressBar.visibility = View.GONE
+                (context as LoginActivity).login_progressBar.visibility = View.GONE
                 Toast.makeText(context, "Problème de réseau, merci de tenter de vous connecter à nouveau", Toast.LENGTH_LONG).show()
             }
         })

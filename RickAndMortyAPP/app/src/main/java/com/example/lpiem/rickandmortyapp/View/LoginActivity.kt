@@ -2,10 +2,12 @@ package com.example.lpiem.rickandmortyapp.View
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.example.lpiem.rickandmortyapp.Presenter.LoginAppManager
 import com.example.lpiem.rickandmortyapp.R
 import com.facebook.CallbackManager
+import com.google.android.gms.common.SignInButton
 import kotlinx.android.synthetic.main.activity_login.*
 
 const val TAG = "TAG_M"
@@ -24,13 +26,16 @@ class LoginActivity : AppCompatActivity() {
         loginAppManager = LoginAppManager.getInstance(this)
 
         regularConnectionSetup()
-        loginAppManager.googleSetup()
+        setUpGoogle()
         loginAppManager.facebookSetup()
     }
 
 
     private fun regularConnectionSetup() {
-        btnRegularConnection.setOnClickListener { loginAppManager.regularConnection() }
+        login_progressBar.visibility = View.VISIBLE
+        val mail = etEmail.text.toString()
+        val pass = etPassword.text.toString()
+        btnRegularConnection.setOnClickListener { loginAppManager.regularConnection(mail, pass) }
         tv_signIn.setOnClickListener { loginAppManager.regularSignIn() }
     }
 
@@ -45,6 +50,11 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+
+    private fun setUpGoogle() {
+        sign_in_button.setSize(SignInButton.SIZE_STANDARD)
+        loginAppManager.googleSetup()
+    }
 
 
     override fun onResume() {
