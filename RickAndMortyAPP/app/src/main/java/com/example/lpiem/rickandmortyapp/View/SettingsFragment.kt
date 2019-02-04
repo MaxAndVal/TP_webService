@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.lpiem.rickandmortyapp.Presenter.SettingsManager
 import com.example.lpiem.rickandmortyapp.R
+import kotlinx.android.synthetic.main.fragment_settings.*
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
@@ -45,6 +46,7 @@ class SettingsFragment : androidx.fragment.app.Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        btn_faq.setOnClickListener { settingsManager.fragmentFAQ() }
     }
 
 }

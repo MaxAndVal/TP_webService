@@ -1,9 +1,11 @@
 package com.example.lpiem.rickandmortyapp.View
 
 import android.content.Intent
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -16,6 +18,7 @@ import com.example.lpiem.rickandmortyapp.View.Shop.ShopActivity
 import com.example.lpiem.rickandmortyapp.View.Social.SocialFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_bottom.*
+import java.io.IOException
 
 class BottomActivity : AppCompatActivity() {
 
@@ -56,8 +59,29 @@ class BottomActivity : AppCompatActivity() {
         tv_wallet.text = String.format(getString(R.string.wallet_amount), loginAppManager.connectedUser?.userWallet, " ")
         tv_wallet.setOnLongClickListener { iAmPickleRick() }
         tv_wallet.setOnClickListener { openShop() }
+        tv_wallet.setOnLongClickListener { picleRick() }
+        var deckToOpen = loginAppManager.connectedUser!!.deckToOpen;
+            tv_deckToOpen.text = deckToOpen.toString()
+        tv_deckToOpen.setOnClickListener { openDeck(deckToOpen!!) }
+
         openFragment(HomeFragment())
 
+    }
+
+    private fun openDeck(deckToOpen: Int) {
+
+    }
+
+    private fun picleRick(): Boolean {
+        val mp = MediaPlayer ()
+        try {
+            mp.setDataSource ("http://peal.io/download/a9r7j")
+            mp.prepare ()
+            mp.start ()
+        } catch (e: IOException) {
+            Toast.makeText (this, "The file does not exist", Toast.LENGTH_LONG) .show ()
+        }
+        return true
     }
 
     override fun onBackPressed() {
@@ -92,5 +116,7 @@ class BottomActivity : AppCompatActivity() {
         val shopIntent = Intent(this@BottomActivity, ShopActivity::class.java)
         startActivity(shopIntent)
     }
+
+
 
 }
