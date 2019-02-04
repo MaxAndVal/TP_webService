@@ -18,5 +18,6 @@ enum class RetrofitCallTypes {
     ACCEPTE_FRIENDSHIP,
     GET_CARD_DETAILS,
     BUY_BOOSTER,
-    DECKS_INCREASED
+    DECKS_INCREASED,
+    GET_FAQ
 }

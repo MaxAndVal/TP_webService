@@ -1,9 +1,10 @@
-package com.example.lpiem.rickandmortyapp.View
+package com.example.lpiem.rickandmortyapp.View.Settings
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.lpiem.rickandmortyapp.Model.ListOfFAQ
 import com.example.lpiem.rickandmortyapp.Presenter.SettingsManager
 import com.example.lpiem.rickandmortyapp.R
 import kotlinx.android.synthetic.main.fragment_settings.*
@@ -17,6 +18,8 @@ class SettingsFragment : androidx.fragment.app.Fragment() {
     private var param2: String? = null
 
     private lateinit var settingsManager: SettingsManager
+    var listOfFAQ : ListOfFAQ?=null
+
 
     companion object {
         @JvmStatic
@@ -47,6 +50,7 @@ class SettingsFragment : androidx.fragment.app.Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         btn_faq.setOnClickListener { settingsManager.fragmentFAQ() }
+
     }
 
 }

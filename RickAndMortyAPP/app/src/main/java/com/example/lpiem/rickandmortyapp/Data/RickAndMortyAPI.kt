@@ -103,4 +103,9 @@ interface RickAndMortyAPI {
     fun increaseNumberOfDecks(
             @Body body: JsonObject
     ): Call<ResponseFromApi>
+
+    @POST("/faq/")
+    fun getFAQ(
+            @Body body: JsonObject
+    ): Call<ResponseFromApi>
 }
