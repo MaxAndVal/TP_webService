@@ -23,18 +23,21 @@
         android:id="@+id/iv_small_booster"
         android:layout_width="0dp"
         android:layout_height="200dp"
+        android:src="@drawable/vortex_ram"
+        android:background="@drawable/card_back"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/iv_medium_booster"
         app:layout_constraintTop_toBottomOf="@id/tv_title_shop"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:src="@drawable/vortex_ram"
         />
 
     <TextView
         android:id="@+id/tv_small_booster"
-        android:text="Booster 2 cartes"
+        android:text="1 Booster"
+        style="@style/TextViewStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
         android:layout_marginBottom="4dp"
         app:layout_constraintStart_toStartOf="@id/iv_small_booster"
         app:layout_constraintEnd_toEndOf="@id/iv_small_booster"
@@ -43,12 +46,13 @@
 
     <TextView
         android:id="@+id/tv_cost_small_booster"
+        android:text="40"
         style="@style/tvWallet"
+        android:textColor="@android:color/white"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:layout_marginEnd="24dp"
-        android:text="20"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
         app:layout_constraintEnd_toEndOf="@id/iv_small_booster"
         app:layout_constraintBottom_toBottomOf="@id/iv_small_booster"
         />
@@ -57,17 +61,20 @@
         android:id="@+id/iv_medium_booster"
         android:layout_width="0dp"
         android:layout_height="200dp"
+        android:background="@drawable/card_back"
+        android:src="@drawable/vortex_ram"
         app:layout_constraintStart_toEndOf="@id/iv_small_booster"
         app:layout_constraintEnd_toStartOf="@id/iv_big_booster"
         app:layout_constraintTop_toTopOf="@id/iv_small_booster"
-        android:src="@drawable/vortex_ram"
         />
 
     <TextView
         android:id="@+id/tv_medium_booster"
-        android:text="Booster 5 cartes"
+        android:text="3 Boosters"
+        style="@style/TextViewStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
         android:layout_marginBottom="4dp"
         app:layout_constraintStart_toStartOf="@id/iv_medium_booster"
         app:layout_constraintEnd_toEndOf="@id/iv_medium_booster"
@@ -76,12 +83,13 @@
 
     <TextView
         android:id="@+id/tv_cost_medium_booster"
+        android:text="100"
         style="@style/tvWallet"
+        android:textColor="@android:color/white"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:layout_marginEnd="24dp"
-        android:text="40"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
         app:layout_constraintEnd_toEndOf="@id/iv_medium_booster"
         app:layout_constraintBottom_toBottomOf="@id/iv_medium_booster"
         />
@@ -90,17 +98,20 @@
         android:id="@+id/iv_big_booster"
         android:layout_width="0dp"
         android:layout_height="200dp"
+        android:background="@drawable/card_back"
+        android:src="@drawable/vortex_ram"
         app:layout_constraintStart_toEndOf="@id/iv_medium_booster"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/iv_small_booster"
-        android:src="@drawable/vortex_ram"
         />
 
     <TextView
         android:id="@+id/tv_big_booster"
-        android:text="Booster 15 cartes"
+        android:text="10 Boosters"
+        style="@style/TextViewStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
         android:layout_marginBottom="4dp"
         app:layout_constraintStart_toStartOf="@id/iv_big_booster"
         app:layout_constraintEnd_toEndOf="@id/iv_big_booster"
@@ -109,12 +120,13 @@
 
     <TextView
         android:id="@+id/tv_cost_big_booster"
+        android:text="300"
         style="@style/tvWallet"
+        android:textColor="@android:color/white"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:layout_marginEnd="24dp"
-        android:text="100"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
         app:layout_constraintEnd_toEndOf="@id/iv_big_booster"
         app:layout_constraintBottom_toBottomOf="@id/iv_big_booster"
         />

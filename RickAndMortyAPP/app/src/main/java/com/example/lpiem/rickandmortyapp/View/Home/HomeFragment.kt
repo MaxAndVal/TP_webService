@@ -64,7 +64,7 @@ class HomeFragment : androidx.fragment.app.Fragment(), HomeDisplayUI {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        loginAppManager = LoginAppManager.getInstance(context!!)
         if (loginAppManager.gameInProgress) {
             homeManager?.gameAvailable(loginAppManager.connectedUser!!, this)
         } else {

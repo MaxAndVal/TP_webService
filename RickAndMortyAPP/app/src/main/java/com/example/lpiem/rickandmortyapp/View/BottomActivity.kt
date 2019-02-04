@@ -117,6 +117,10 @@ class BottomActivity : AppCompatActivity() {
         startActivity(shopIntent)
     }
 
+    override fun onResume() {
+        super.onResume()
+        tv_wallet.text = String.format(getString(R.string.wallet_amount), loginAppManager.connectedUser?.userWallet, " ")
+    }
 
 
 }
