@@ -67,7 +67,7 @@ class BottomActivity : AppCompatActivity() {
         clearGame()
     }
 
-    internal fun openFragment(fragment: Fragment) {
+    private fun openFragment(fragment: Fragment) {
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
         fragmentTransaction.replace(R.id.fragmentLayout, fragment)
@@ -93,4 +93,8 @@ class BottomActivity : AppCompatActivity() {
         startActivity(shopIntent)
     }
 
+    override fun onResume() {
+        super.onResume()
+        tv_wallet.text = String.format(getString(R.string.wallet_amount), loginAppManager.connectedUser?.userWallet, " ")
+    }
 }

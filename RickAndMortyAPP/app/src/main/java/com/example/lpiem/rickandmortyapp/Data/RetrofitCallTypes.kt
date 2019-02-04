@@ -16,5 +16,7 @@ enum class RetrofitCallTypes {
     UPDATE_WALLET,
     GET_WALLET,
     ACCEPTE_FRIENDSHIP,
-    GET_CARD_DETAILS
+    GET_CARD_DETAILS,
+    BUY_BOOSTER,
+    DECKS_INCREASED
 }
