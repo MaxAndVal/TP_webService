@@ -59,7 +59,6 @@ class BottomActivity : AppCompatActivity() {
         tv_wallet.text = String.format(getString(R.string.wallet_amount), loginAppManager.connectedUser?.userWallet, " ")
         tv_wallet.setOnLongClickListener { iAmPickleRick() }
         tv_wallet.setOnClickListener { openShop() }
-        tv_wallet.setOnLongClickListener { picleRick() }
         var deckToOpen = loginAppManager.connectedUser!!.deckToOpen;
             tv_deckToOpen.text = deckToOpen.toString()
         tv_deckToOpen.setOnClickListener { openDeck(deckToOpen!!) }
@@ -70,18 +69,6 @@ class BottomActivity : AppCompatActivity() {
 
     private fun openDeck(deckToOpen: Int) {
 
-    }
-
-    private fun picleRick(): Boolean {
-        val mp = MediaPlayer ()
-        try {
-            mp.setDataSource ("http://peal.io/download/a9r7j")
-            mp.prepare ()
-            mp.start ()
-        } catch (e: IOException) {
-            Toast.makeText (this, "The file does not exist", Toast.LENGTH_LONG) .show ()
-        }
-        return true
     }
 
     override fun onBackPressed() {
@@ -99,6 +86,14 @@ class BottomActivity : AppCompatActivity() {
     }
 
     private fun iAmPickleRick(): Boolean {
+        val mp = MediaPlayer ()
+        try {
+            mp.setDataSource ("http://peal.io/download/a9r7j")
+            mp.prepare ()
+            mp.start ()
+        } catch (e: IOException) {
+            Toast.makeText (this, "The file does not exist", Toast.LENGTH_LONG) .show ()
+        }
         val toast = Toast.makeText(this, getString(R.string.pickle_rick), Toast.LENGTH_SHORT)
         toast.setGravity(Gravity.TOP, 150, 90)
         toast.show()
