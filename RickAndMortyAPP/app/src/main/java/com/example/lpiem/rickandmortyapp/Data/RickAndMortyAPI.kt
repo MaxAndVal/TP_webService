@@ -104,8 +104,7 @@ interface RickAndMortyAPI {
             @Body body: JsonObject
     ): Call<ResponseFromApi>
 
-    @POST("/faq/")
+    @GET("/faq/")
     fun getFAQ(
-            @Body body: JsonObject
-    ): Call<ResponseFromApi>
+    ): Call<ListOfFAQ>
 }

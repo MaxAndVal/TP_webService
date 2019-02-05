@@ -23,11 +23,11 @@ class FAQ : Parcelable {
         }
     }
 
-    @SerializedName("question")
+    @SerializedName("faq_question")
     @Expose
     var question: String? = null
 
-    @SerializedName("response")
+    @SerializedName("faq_response")
     @Expose
     var response: String? = null
 
@@ -40,8 +40,14 @@ class FAQ : Parcelable {
         return 0
     }
 
+    override fun toString(): String {
+        return "FAQ(question=$question, response=$response)"
+    }
+
     constructor(inside: Parcel) {
         this.question = inside.readValue(String::class.java.classLoader) as String
         this.response = inside.readValue(String::class.java.classLoader) as String
     }
+
+
 }
