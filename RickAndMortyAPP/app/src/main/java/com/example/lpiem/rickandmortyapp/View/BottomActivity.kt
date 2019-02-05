@@ -1,6 +1,7 @@
 package com.example.lpiem.rickandmortyapp.View
 
 import android.content.Intent
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
@@ -12,10 +13,12 @@ import com.example.lpiem.rickandmortyapp.Presenter.LoginAppManager
 import com.example.lpiem.rickandmortyapp.R
 import com.example.lpiem.rickandmortyapp.View.Collection.list.CollectionFragment
 import com.example.lpiem.rickandmortyapp.View.Home.HomeFragment
+import com.example.lpiem.rickandmortyapp.View.Settings.SettingsFragment
 import com.example.lpiem.rickandmortyapp.View.Shop.ShopActivity
 import com.example.lpiem.rickandmortyapp.View.Social.SocialFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_bottom.*
+import java.io.IOException
 
 class BottomActivity : AppCompatActivity() {
 
@@ -56,8 +59,29 @@ class BottomActivity : AppCompatActivity() {
         tv_wallet.text = String.format(getString(R.string.wallet_amount), loginAppManager.connectedUser?.userWallet, " ")
         tv_wallet.setOnLongClickListener { iAmPickleRick() }
         tv_wallet.setOnClickListener { openShop() }
+        tv_wallet.setOnLongClickListener { picleRick() }
+        var deckToOpen = loginAppManager.connectedUser!!.deckToOpen;
+            tv_deckToOpen.text = deckToOpen.toString()
+        tv_deckToOpen.setOnClickListener { openDeck(deckToOpen!!) }
+
         openFragment(HomeFragment())
 
+    }
+
+    private fun openDeck(deckToOpen: Int) {
+
+    }
+
+    private fun picleRick(): Boolean {
+        val mp = MediaPlayer ()
+        try {
+            mp.setDataSource ("http://peal.io/download/a9r7j")
+            mp.prepare ()
+            mp.start ()
+        } catch (e: IOException) {
+            Toast.makeText (this, "The file does not exist", Toast.LENGTH_LONG) .show ()
+        }
+        return true
     }
 
     override fun onBackPressed() {
@@ -67,7 +91,7 @@ class BottomActivity : AppCompatActivity() {
         clearGame()
     }
 
-    private fun openFragment(fragment: Fragment) {
+    internal fun openFragment(fragment: Fragment) {
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
         fragmentTransaction.replace(R.id.fragmentLayout, fragment)
@@ -97,4 +121,6 @@ class BottomActivity : AppCompatActivity() {
         super.onResume()
         tv_wallet.text = String.format(getString(R.string.wallet_amount), loginAppManager.connectedUser?.userWallet, " ")
     }
+
+
 }
