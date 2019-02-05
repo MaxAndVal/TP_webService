@@ -1,6 +1,6 @@
 package com.example.lpiem.rickandmortyapp.Model
 
-interface OnClickListenerInterface {
+interface SocialActionsInterface {
 
     fun addFriends(item:Friend)
 

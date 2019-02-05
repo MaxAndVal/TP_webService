@@ -82,17 +82,20 @@ interface RickAndMortyAPI {
     @POST("users/{user}/friends/{id2}")
     fun addAfriends(
             @Path("user") userId1: Int,
-            @Path("id2") userId2: Int): Call<ResponseFromApi>
+            @Path("id2") userId2: Int
+    ): Call<ResponseFromApi>
 
     @DELETE("users/{user}/friends/{id2}")
     fun delAfriends(
             @Path("user") userId1: Int,
-            @Path("id2") userId2: Int): Call<ResponseFromApi>
+            @Path("id2") userId2: Int
+    ): Call<ResponseFromApi>
 
     @PUT("users/{user}/friends/{id2}")
     fun valideAFriends(
             @Path("user") userId1: Int,
-            @Path("id2") userId2: Int): Call<ResponseFromApi>
+            @Path("id2") userId2: Int
+    ): Call<ResponseFromApi>
 
     @GET("/cards/{id}")
     fun getCardDetails(
