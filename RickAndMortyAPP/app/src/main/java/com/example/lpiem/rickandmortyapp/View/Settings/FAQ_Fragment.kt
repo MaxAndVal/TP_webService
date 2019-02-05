@@ -7,17 +7,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.lpiem.rickandmortyapp.Data.RickAndMortyAPI
 import com.example.lpiem.rickandmortyapp.Model.FAQ
 import com.example.lpiem.rickandmortyapp.Model.User
-import com.example.lpiem.rickandmortyapp.Presenter.LoginAppManager
-import com.example.lpiem.rickandmortyapp.Presenter.SettingsManager
+import com.example.lpiem.rickandmortyapp.Presenter.settings.SettingsManager
 import com.example.lpiem.rickandmortyapp.Presenter.SingletonHolder
-import com.example.lpiem.rickandmortyapp.Presenter.collection.FaqManager
+import com.example.lpiem.rickandmortyapp.Presenter.settings.FaqManager
 
 import com.example.lpiem.rickandmortyapp.R
 import com.example.lpiem.rickandmortyapp.View.TAG
-import kotlinx.android.synthetic.main.faq_item.*
 import kotlinx.android.synthetic.main.fragment_faq.*
 
 class FAQ_Fragment : androidx.fragment.app.Fragment(){

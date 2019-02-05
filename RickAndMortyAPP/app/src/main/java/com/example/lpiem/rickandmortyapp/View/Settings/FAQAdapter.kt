@@ -23,7 +23,7 @@ class FAQAdapter(private val dataSet: List<FAQ>, private val listener: SettingsO
         var item = dataSet!![position]
         holder.faqQuestion.text = item.question
         holder.faqResponse.text = item.response
-        holder.faqQuestion.setOnClickListener { listener.todo() }
+        holder.faqQuestion.setOnClickListener { listener.todo(holder) }
 
     }
 

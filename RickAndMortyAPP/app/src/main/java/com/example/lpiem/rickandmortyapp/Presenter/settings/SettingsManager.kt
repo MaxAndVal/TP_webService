@@ -1,28 +1,33 @@
-package com.example.lpiem.rickandmortyapp.Presenter
+package com.example.lpiem.rickandmortyapp.Presenter.settings
 
 import android.content.Context
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.RecyclerView
 import com.example.lpiem.rickandmortyapp.Data.RetrofitCallTypes
 import com.example.lpiem.rickandmortyapp.Data.RickAndMortyRetrofitSingleton
 import com.example.lpiem.rickandmortyapp.Model.*
-import com.example.lpiem.rickandmortyapp.Presenter.collection.FaqManager
+import com.example.lpiem.rickandmortyapp.Presenter.SingletonHolder
 import com.example.lpiem.rickandmortyapp.R
 import com.example.lpiem.rickandmortyapp.View.BottomActivity
 import com.example.lpiem.rickandmortyapp.View.Settings.FAQAdapter
 import com.example.lpiem.rickandmortyapp.View.Settings.FAQ_Fragment
 import com.example.lpiem.rickandmortyapp.View.Settings.SettingsFragment
 import com.example.lpiem.rickandmortyapp.View.TAG
+import kotlinx.android.synthetic.main.faq_item.view.*
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class SettingsManager internal constructor(private val context: Context) : SettingsOnClickInterface{
-    override fun todo() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+class SettingsManager internal constructor(private val context: Context): SettingsOnClickInterface{
+    override fun todo(item: FAQAdapter.ViewHolder) {
+        if(        item.faqResponse.visibility == View.GONE){
+            item.faqResponse.visibility = View.VISIBLE;
+        } else{
+            item.faqResponse.visibility = View.GONE;
+        }
     }
 
     private val rickAndMortyAPI = RickAndMortyRetrofitSingleton.instance
@@ -52,8 +57,9 @@ class SettingsManager internal constructor(private val context: Context) : Setti
                                 listOfFAQfromSM = settings.FAQs
                                 Log.d(TAG, listOfFAQfromSM.toString()+"SM")
                                 if (listOfFAQfromSM != null) {
-                                    FaqManager.getInstance(context!!).recyclerView.adapter = FAQAdapter(listOfFAQfromSM!!, this@SettingsManager)
-                                    FaqManager.getInstance(context!!).recyclerView.adapter?.notifyDataSetChanged()
+                                    faqManager = FaqManager.getInstance(context!!)
+                                    faqManager!!.recyclerView.adapter = FAQAdapter(listOfFAQfromSM!!, this@SettingsManager )
+                                    faqManager!!.recyclerView.adapter?.notifyDataSetChanged()
                                 }else{
                                     Log.d(TAG, "listOfFAQ is null")
                                 }
