@@ -18,7 +18,6 @@ import com.example.lpiem.rickandmortyapp.View.Shop.ShopActivity
 import com.example.lpiem.rickandmortyapp.View.Social.SocialFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_bottom.*
-import java.io.IOException
 
 class BottomActivity : AppCompatActivity() {
 
@@ -59,7 +58,7 @@ class BottomActivity : AppCompatActivity() {
         tv_wallet.text = String.format(getString(R.string.wallet_amount), loginAppManager.connectedUser?.userWallet, " ")
         tv_wallet.setOnLongClickListener { iAmPickleRick() }
         tv_wallet.setOnClickListener { openShop() }
-        var deckToOpen = loginAppManager.connectedUser!!.deckToOpen;
+        val deckToOpen = loginAppManager.connectedUser!!.deckToOpen;
             tv_deckToOpen.text = deckToOpen.toString()
         tv_deckToOpen.setOnClickListener { openDeck(deckToOpen!!) }
 
@@ -78,7 +77,7 @@ class BottomActivity : AppCompatActivity() {
         clearGame()
     }
 
-    internal fun openFragment(fragment: Fragment) {
+    private fun openFragment(fragment: Fragment) {
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
         fragmentTransaction.replace(R.id.fragmentLayout, fragment)
@@ -86,14 +85,8 @@ class BottomActivity : AppCompatActivity() {
     }
 
     private fun iAmPickleRick(): Boolean {
-        val mp = MediaPlayer ()
-        try {
-            mp.setDataSource ("http://peal.io/download/a9r7j")
-            mp.prepare ()
-            mp.start ()
-        } catch (e: IOException) {
-            Toast.makeText (this, "The file does not exist", Toast.LENGTH_LONG) .show ()
-        }
+        val mediaPlayer: MediaPlayer? = MediaPlayer.create(this, R.raw.piclke_rick_sound)
+        mediaPlayer?.start()
         val toast = Toast.makeText(this, getString(R.string.pickle_rick), Toast.LENGTH_SHORT)
         toast.setGravity(Gravity.TOP, 150, 90)
         toast.show()
