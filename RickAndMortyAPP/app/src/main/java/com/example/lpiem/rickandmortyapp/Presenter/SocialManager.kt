@@ -52,8 +52,8 @@ class SocialManager private constructor(private val context: Context){
                             if (code == 200) {
                                 val list = response.body() as ListOfFriends
                                 socialFragment?.listOfFriends = list
-                                socialFragment?.listOfActualFriends = list.friends?.filter { it.accepted!!}
-                                socialFragment?.listOfPotentialFriends = list.friends?.filter { !it.accepted!!}
+                                socialFragment?.listOfActualFriends = list.friends?.filter { it.accepted == true}
+                                socialFragment?.listOfPotentialFriends = list.friends?.filter { it.accepted == false}
                                 Log.d(TAG, "List : "+socialFragment?.listOfFriends)
                                 Log.d(TAG, "List actual : "+socialFragment?.listOfActualFriends)
                                 Log.d(TAG, "List potential : "+socialFragment?.listOfPotentialFriends)
@@ -81,14 +81,14 @@ class SocialManager private constructor(private val context: Context){
                                 Toast.makeText(context, "code : $code, message $message", Toast.LENGTH_SHORT).show()
                             }
                         }
-                        RetrofitCallTypes.ACCEPTE_FRIENDSHIP ->{
+                        RetrofitCallTypes.ACCEPT_FRIENDSHIP ->{
                             val social = response.body() as ResponseFromApi
                             val code = social.code
                             val message = social.message
                             if(code == 200){
                                 Toast.makeText(context, "code : $code, message $message", Toast.LENGTH_SHORT).show()
                             } else{
-                                Toast.makeText(context, "code : $code, message $message", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(context, "code error : $code, message $message", Toast.LENGTH_SHORT).show()
                             }
                         }
                         RetrofitCallTypes.DEL_A_FRIEND -> {
@@ -146,7 +146,7 @@ class SocialManager private constructor(private val context: Context){
 
     fun callForValidateFriend(item: Friend) {
         val resultCall = rickAndMortyAPI!!.validateAFriend( loginAppManager.connectedUser!!.userId!!, item.userId!!)
-        callRetrofit(resultCall, RetrofitCallTypes.ACCEPTE_FRIENDSHIP)
+        callRetrofit(resultCall, RetrofitCallTypes.ACCEPT_FRIENDSHIP)
     }
 
     fun callToDelFriend(item: Friend) {

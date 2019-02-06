@@ -73,7 +73,7 @@ class BottomActivity : AppCompatActivity() {
     }
 
     private fun openDeck(deckToOpen: Int) {
-
+        //TODO if necessary
     }
 
     override fun onBackPressed() {

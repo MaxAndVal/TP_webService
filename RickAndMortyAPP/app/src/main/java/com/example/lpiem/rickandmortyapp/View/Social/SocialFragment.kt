@@ -113,9 +113,6 @@ class SocialFragment : androidx.fragment.app.Fragment(), SocialActionsInterface 
     }
 
     private fun updateRv() {
-//        if (socialManager.socialFragment != null && socialManager.socialFragment!!.isVisible) {
-//            rv_social.adapter?.notifyDataSetChanged()
-//        }
         rv_social.adapter?.notifyDataSetChanged()
     }
 

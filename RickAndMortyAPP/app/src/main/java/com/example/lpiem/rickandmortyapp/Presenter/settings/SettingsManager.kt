@@ -7,7 +7,9 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.lpiem.rickandmortyapp.Data.RetrofitCallTypes
 import com.example.lpiem.rickandmortyapp.Data.RickAndMortyRetrofitSingleton
-import com.example.lpiem.rickandmortyapp.Model.*
+import com.example.lpiem.rickandmortyapp.Model.FAQ
+import com.example.lpiem.rickandmortyapp.Model.ListOfFAQ
+import com.example.lpiem.rickandmortyapp.Model.SettingsOnClickInterface
 import com.example.lpiem.rickandmortyapp.Presenter.SingletonHolder
 import com.example.lpiem.rickandmortyapp.R
 import com.example.lpiem.rickandmortyapp.View.BottomActivity
@@ -36,7 +38,6 @@ class SettingsManager internal constructor(private val context: Context): Settin
     var faqFragment : FAQ_Fragment? = null
     var faqManager : FaqManager?=null
     var listOfFAQfromSM: List<FAQ>?=null
-//    internal lateinit var recyclerView: RecyclerView
 
     companion object : SingletonHolder<SettingsManager, Context>(::SettingsManager)
 
@@ -88,7 +89,8 @@ class SettingsManager internal constructor(private val context: Context): Settin
 
         val resultCall = rickAndMortyAPI!!.getFAQ()
         callRetrofit(resultCall, RetrofitCallTypes.GET_FAQ)
-        var FAQFragment = (context as BottomActivity).supportFragmentManager
+
+        val FAQFragment = (context as BottomActivity).supportFragmentManager
         val fragmentTransaction = FAQFragment.beginTransaction()
         fragmentTransaction.add(R.id.flMain, fragment).addToBackStack(null)
         fragmentTransaction.commit()
