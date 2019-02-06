@@ -39,7 +39,9 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:menu="@menu/navigation" />
+        app:menu="@menu/navigation" >
+
+    </com.google.android.material.bottomnavigation.BottomNavigationView>
 
     <TextView
         android:id="@+id/tv_wallet"
@@ -62,5 +64,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="12" />
+
+    <FrameLayout
+        android:id="@+id/flMain"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
