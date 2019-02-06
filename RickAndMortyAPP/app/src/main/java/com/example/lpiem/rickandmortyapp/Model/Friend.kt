@@ -43,7 +43,6 @@ class Friend : Parcelable{
             0 -> accepted = false
             1 -> accepted = true
         }
-        //this.accepted = inside.readValue(Boolean::class.java.classLoader) as Boolean
     }
 
     override fun writeToParcel(dest: Parcel, flags: Int) {

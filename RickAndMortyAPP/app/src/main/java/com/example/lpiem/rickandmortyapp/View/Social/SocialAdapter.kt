@@ -23,7 +23,7 @@ class SocialAdapter(private var dataSet: List<Friend>?, private val listener: So
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        var item = dataSet!![position]
+        val item = dataSet!![position]
         holder.userName.text = dataSet!![position].userName
         if (dataSet!![position].accepted !== null && dataSet!![position].accepted!!) {
             holder.ivIconFriends.setImageResource(R.drawable.store)

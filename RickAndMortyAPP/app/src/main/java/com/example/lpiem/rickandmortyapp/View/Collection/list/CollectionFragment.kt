@@ -76,7 +76,6 @@ class CollectionFragment : androidx.fragment.app.Fragment(), CardListDisplay {
         rv_collection.addOnItemTouchListener(RecyclerTouchListener(context!!, rv_collection, object : RecyclerTouchListener.ClickListener {
 
             override fun onClick(view: View, position: Int) {
-                //Toast.makeText(context, "click", Toast.LENGTH_SHORT).show()
                 val detailIntent = Intent(context, CollectionDetailActivity::class.java)
                 detailIntent.putExtra("current_card", (rv_collection.adapter as CollectionAdapter).getDataSet().cards?.get(position))
                 context!!.startActivity(detailIntent)

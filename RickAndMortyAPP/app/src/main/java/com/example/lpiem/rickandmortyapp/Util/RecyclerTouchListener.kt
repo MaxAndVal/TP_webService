@@ -38,12 +38,12 @@ class RecyclerTouchListener : RecyclerView.OnItemTouchListener {
 
 
     override fun onTouchEvent(rv: RecyclerView, e: MotionEvent) {
-
+        // nothing implemented
     }
 
 
     override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {
-
+        // nothing implemented
     }
 
     interface ClickListener {

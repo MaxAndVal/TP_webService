@@ -15,6 +15,7 @@ class SignInActivity : AppCompatActivity() {
         setContentView(R.layout.activity_signin)
 
         signInManager = SignInManager.getInstance(this)
+        //FIXME : refacto for back method into backPressed
         tv_alreadyAccount.setOnClickListener { signInManager.goBack() }
         btn_confSignIn.setOnClickListener { signInManager.signIn() }
 
