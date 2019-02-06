@@ -32,24 +32,35 @@ class Friend : Parcelable{
     var userName: String? = null
     @SerializedName("accepted")
     @Expose
-    var accepted: Boolean? =null
+    var accepted: Boolean? = null
 
     constructor(inside: Parcel) {
         Log.d(TAG, "inside = $inside")
         this.userId = inside.readValue(Int::class.java.classLoader) as Int
         this.userName = inside.readValue(String::class.java.classLoader) as String
-        this.accepted = inside.readValue(Boolean::class.java.classLoader) as Boolean
+        when (inside.readInt()) {
+            -1 -> accepted = null
+            0 -> accepted = false
+            1 -> accepted = true
+        }
+        //this.accepted = inside.readValue(Boolean::class.java.classLoader) as Boolean
     }
 
     override fun writeToParcel(dest: Parcel, flags: Int) {
         dest.writeValue(userId)
         dest.writeValue(userName)
-        dest.writeValue(accepted)
+        if (accepted == null ) {
+            dest.writeInt(-1)
+        } else  {
+            dest.writeInt(if (accepted!!) 1 else 0)
+        }
     }
 
     override fun describeContents(): Int {
         return 0
     }
+
+
 
     override fun toString(): String {
         return "Friend(userId=$userId, userName=$userName, accepted=$accepted)"

@@ -52,8 +52,8 @@ class SocialManager private constructor(private val context: Context){
                             if (code == 200) {
                                 val list = response.body() as ListOfFriends
                                 socialFragment?.listOfFriends = list
-                                socialFragment?.listOfActualFriends = list.friends?.filter { it.accepted!!}
-                                socialFragment?.listOfPotentialFriends = list.friends?.filter { !it.accepted!!}
+                                socialFragment?.listOfActualFriends = list.friends?.filter { it.accepted == true}
+                                socialFragment?.listOfPotentialFriends = list.friends?.filter { it.accepted == false}
                                 Log.d(TAG, "List : "+socialFragment?.listOfFriends)
                                 Log.d(TAG, "List actual : "+socialFragment?.listOfActualFriends)
                                 Log.d(TAG, "List potential : "+socialFragment?.listOfPotentialFriends)
