@@ -15,6 +15,7 @@ import com.example.lpiem.rickandmortyapp.View.Settings.FAQAdapter
 import com.example.lpiem.rickandmortyapp.View.Settings.FAQ_Fragment
 import com.example.lpiem.rickandmortyapp.View.Settings.SettingsFragment
 import com.example.lpiem.rickandmortyapp.View.TAG
+import kotlinx.android.synthetic.main.activity_bottom.*
 import kotlinx.android.synthetic.main.faq_item.view.*
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -87,10 +88,12 @@ class SettingsManager internal constructor(private val context: Context): Settin
 
         val resultCall = rickAndMortyAPI!!.getFAQ()
         callRetrofit(resultCall, RetrofitCallTypes.GET_FAQ)
-
         var FAQFragment = (context as BottomActivity).supportFragmentManager
         val fragmentTransaction = FAQFragment.beginTransaction()
-        fragmentTransaction.replace(R.id.fragmentLayout, fragment)
+        fragmentTransaction.add(R.id.flMain, fragment).addToBackStack(null)
         fragmentTransaction.commit()
+        fragmentTransaction.addToBackStack(null)
+        context.flMain.bringToFront()
+        context.navigation.visibility = View.GONE
     }
 }

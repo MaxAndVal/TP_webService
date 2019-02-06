@@ -47,6 +47,7 @@ class FAQ_Fragment : androidx.fragment.app.Fragment(){
         super.onViewCreated(view, savedInstanceState)
         rv_faq.layoutManager = LinearLayoutManager(context)
         faqManager.captureRecyclerView(rv_faq)
-        Log.d(TAG, "ici: "+listOfFAQ.toString())
+        iv_closeFAQ.setOnClickListener { faqManager.closeFAQ(this) }
     }
+
 }
