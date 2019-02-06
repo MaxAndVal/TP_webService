@@ -49,7 +49,7 @@ class SignInManager private constructor(private var context: Context) {
         jsonBody.addProperty(UserName.string, (context as SignInActivity).ed_username.text.toString())
         jsonBody.addProperty(UserEmail.string, (context as SignInActivity).ed_email.text.toString())
         jsonBody.addProperty(UserPassword.string, (context as SignInActivity).ed_password.text.toString())
-        val subscribe = rickAndMortyAPI!!.signinUser(jsonBody)
+        val subscribe = rickAndMortyAPI!!.signInUser(jsonBody)
         Log.d(TAG, "jsonBody : $jsonBody")
         Log.d(TAG, "$subscribe")
         callRetrofit(subscribe, RetrofitCallTypes.SIGN_IN)

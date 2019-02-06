@@ -1,18 +1,16 @@
 package com.example.lpiem.rickandmortyapp.View.Social;
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lpiem.rickandmortyapp.Model.Friend
-import com.example.lpiem.rickandmortyapp.Model.OnClickListenerInterface
+import com.example.lpiem.rickandmortyapp.Model.SocialActionsInterface
 import com.example.lpiem.rickandmortyapp.R
-import com.example.lpiem.rickandmortyapp.View.TAG
 import kotlinx.android.synthetic.main.social_item.view.*
 
 
-class SocialAdapter(private val dataSet: List<Friend>, private val listener: OnClickListenerInterface) : RecyclerView.Adapter<SocialAdapter.ViewHolder>() {
+class SocialAdapter(private var dataSet: List<Friend>?, private val listener: SocialActionsInterface) : RecyclerView.Adapter<SocialAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val v = LayoutInflater.from(parent.context)
@@ -21,7 +19,7 @@ class SocialAdapter(private val dataSet: List<Friend>, private val listener: OnC
     }
 
     override fun getItemCount(): Int {
-        return dataSet!!.size
+        return if (dataSet != null) dataSet!!.size else 0
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -34,10 +32,12 @@ class SocialAdapter(private val dataSet: List<Friend>, private val listener: OnC
         holder.userName.setOnLongClickListener { listener.delFriends(item) }
     }
 
+    fun updateDataSet(newList: List<Friend>?) {
+        dataSet = newList
+    }
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val userName = view.tv_userName
         var ivIconFriends = view.iv_iconFriends
-
     }
 }

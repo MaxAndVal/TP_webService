@@ -1,5 +1,6 @@
 package com.example.lpiem.rickandmortyapp.View.Social
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -10,32 +11,31 @@ import com.example.lpiem.rickandmortyapp.Data.RickAndMortyAPI
 import com.example.lpiem.rickandmortyapp.Data.RickAndMortyRetrofitSingleton
 import com.example.lpiem.rickandmortyapp.Model.Friend
 import com.example.lpiem.rickandmortyapp.Model.ListOfFriends
-import com.example.lpiem.rickandmortyapp.Model.User
+import com.example.lpiem.rickandmortyapp.Model.SocialActionsInterface
 import com.example.lpiem.rickandmortyapp.Presenter.LoginAppManager
 import com.example.lpiem.rickandmortyapp.Presenter.SocialManager
 import com.example.lpiem.rickandmortyapp.R
 import com.example.lpiem.rickandmortyapp.View.TAG
 import kotlinx.android.synthetic.main.fragment_social.*
-import kotlinx.android.synthetic.main.social_item.*
 
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
-class SocialFragment : androidx.fragment.app.Fragment() {
-    // TODO: Rename and change types of parameters
+class SocialFragment : androidx.fragment.app.Fragment(), SocialActionsInterface {
+
+
     private var param1: String? = null
     private var param2: String? = null
+
     private var rickAndMortyAPI: RickAndMortyAPI?=null
     var listOfFriends: ListOfFriends? = null
     lateinit var socialManager: SocialManager
     private lateinit var loginAppManager: LoginAppManager
-    internal var user: User? = null
     var resultFromSearch : ListOfFriends? = null
-    var listOfActualFriends: List<Friend>?=null
-    var listOfPotentialFriends: List<Friend>?=null
+    var listOfActualFriends: List<Friend>? = ArrayList()
+    var listOfPotentialFriends: List<Friend>? = ArrayList()
+    var socialAdapter: SocialAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,8 +44,6 @@ class SocialFragment : androidx.fragment.app.Fragment() {
             param2 = it.getString(ARG_PARAM2)
         }
         loginAppManager = LoginAppManager.getInstance(context!!)
-        user = loginAppManager.connectedUser
-        Log.d(TAG, "user : $user")
 
         rickAndMortyAPI = RickAndMortyRetrofitSingleton.instance
         socialManager = SocialManager.getInstance(context!!)
@@ -62,18 +60,18 @@ class SocialFragment : androidx.fragment.app.Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        socialManager.captureFragmentInstance(this)
+
         rv_social.layoutManager = LinearLayoutManager(context)
-        socialManager.captureRecyclerView(rv_social)
-        var userId= if(user!=null)user?.userId else -1
-        socialManager.getListOfFriends(userId!!)
+        socialManager.getListOfFriends(loginAppManager.connectedUser!!.userId!!, this)
         btn_searchFriends.setOnClickListener { socialManager.searchForFriends(sv_friends.query.toString()) }
-        btn_friendsRequest.setOnClickListener { socialManager.friendsRequest() }
+        btn_friendsRequest.setOnClickListener { socialManager.friendsRequest(this) }
     }
 
 
 
     companion object {
-        // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
                 SocialFragment().apply {
@@ -85,5 +83,51 @@ class SocialFragment : androidx.fragment.app.Fragment() {
         }
 
 
+
+    override fun addFriends(item: Friend) {
+        Log.d(TAG, item.toString())
+        if(item.accepted == null ){
+            socialManager.callForAddFriend(item)
+        }else{
+            socialManager.callForValidateFriend(item)
+        }
+        //TODO when it's done, go back to friend's List
+        //TODO refresh
+    }
+
+    override fun delFriends(item: Friend): Boolean {
+        val builder: AlertDialog.Builder = AlertDialog.Builder(context, android.R.style.Theme_Material_Dialog_Alert)
+
+        builder.setTitle("Delete a friends")
+                .setMessage("Are you sure you want to delete "+item.userName+" as a friend ?")
+                .setPositiveButton(android.R.string.yes) { dialog, which ->
+                    socialManager.callToDelFriend(item)
+                }
+                .setNegativeButton(android.R.string.no) { dialog, which ->
+                    // do nothing
+                }
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show()
+
+        return true
+    }
+
+    private fun updateRv() {
+//        if (socialManager.socialFragment != null && socialManager.socialFragment!!.isVisible) {
+//            rv_social.adapter?.notifyDataSetChanged()
+//        }
+        rv_social.adapter?.notifyDataSetChanged()
+    }
+
+    fun updateDataSetList(list: List<Friend>?) {
+        if (socialAdapter != null) {
+            socialAdapter!!.updateDataSet(list)
+            updateRv()
+        } else {
+            socialAdapter = SocialAdapter(listOfActualFriends, this)
+            rv_social.adapter = socialAdapter
+            updateRv()
+        }
+    }
 
 }

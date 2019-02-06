@@ -9,28 +9,13 @@ import retrofit2.http.*
 
 interface RickAndMortyAPI {
 
-    @GET("/api/character/{id}")
-    fun getCharacterById(
-            @Path("id") id: Int
-    ): Call<Character>
-
-    @GET("/api/character/")
-    fun getListCharacter(
-            @Query("page") page: Int
-    ): Call<Result>
-
-    @GET("/cards/all/{page}")
-    fun getAllCharacters(
-            @Path("page") page: Int
-    ): Call<Result>
-
     @POST("/auth/login")
     fun connectUser(
             @Body body: JsonObject
     ): Call<ResponseFromApi>
 
     @POST("/users/")
-    fun signinUser(
+    fun signInUser(
             @Body body: JsonObject
     ): Call<ResponseFromApi>
 
@@ -65,7 +50,7 @@ interface RickAndMortyAPI {
     ): Call<ListOfCards>
 
     @GET("/kaamelott/randomQuote")
-    fun getRamdomQuote(
+    fun getRandomQuote(
     ): Call<KaamlottQuote>
 
     @GET("users/{user}/friends/")
@@ -80,19 +65,22 @@ interface RickAndMortyAPI {
     ): Call<ListOfFriends>
 
     @POST("users/{user}/friends/{id2}")
-    fun addAfriends(
+    fun addAFriend(
             @Path("user") userId1: Int,
-            @Path("id2") userId2: Int): Call<ResponseFromApi>
+            @Path("id2") userId2: Int
+    ): Call<ResponseFromApi>
 
     @DELETE("users/{user}/friends/{id2}")
-    fun delAfriends(
+    fun deleteAFriend(
             @Path("user") userId1: Int,
-            @Path("id2") userId2: Int): Call<ResponseFromApi>
+            @Path("id2") userId2: Int
+    ): Call<ResponseFromApi>
 
     @PUT("users/{user}/friends/{id2}")
-    fun valideAFriends(
+    fun validateAFriend(
             @Path("user") userId1: Int,
-            @Path("id2") userId2: Int): Call<ResponseFromApi>
+            @Path("id2") userId2: Int
+    ): Call<ResponseFromApi>
 
     @GET("/cards/{id}")
     fun getCardDetails(
