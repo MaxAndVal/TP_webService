@@ -12,7 +12,6 @@ import com.example.lpiem.rickandmortyapp.Data.RickAndMortyRetrofitSingleton
 import com.example.lpiem.rickandmortyapp.Model.Friend
 import com.example.lpiem.rickandmortyapp.Model.ListOfFriends
 import com.example.lpiem.rickandmortyapp.Model.SocialActionsInterface
-import com.example.lpiem.rickandmortyapp.Model.User
 import com.example.lpiem.rickandmortyapp.Presenter.LoginAppManager
 import com.example.lpiem.rickandmortyapp.Presenter.SocialManager
 import com.example.lpiem.rickandmortyapp.R
@@ -33,10 +32,9 @@ class SocialFragment : androidx.fragment.app.Fragment(), SocialActionsInterface 
     var listOfFriends: ListOfFriends? = null
     lateinit var socialManager: SocialManager
     private lateinit var loginAppManager: LoginAppManager
-    internal var user: User? = null
     var resultFromSearch : ListOfFriends? = null
-    var listOfActualFriends: List<Friend>?=null
-    var listOfPotentialFriends: List<Friend>?=null
+    var listOfActualFriends: List<Friend>? = ArrayList()
+    var listOfPotentialFriends: List<Friend>? = ArrayList()
     var socialAdapter: SocialAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,8 +44,6 @@ class SocialFragment : androidx.fragment.app.Fragment(), SocialActionsInterface 
             param2 = it.getString(ARG_PARAM2)
         }
         loginAppManager = LoginAppManager.getInstance(context!!)
-        user = loginAppManager.connectedUser
-        Log.d(TAG, "user : $user")
 
         rickAndMortyAPI = RickAndMortyRetrofitSingleton.instance
         socialManager = SocialManager.getInstance(context!!)
@@ -68,9 +64,7 @@ class SocialFragment : androidx.fragment.app.Fragment(), SocialActionsInterface 
         socialManager.captureFragmentInstance(this)
 
         rv_social.layoutManager = LinearLayoutManager(context)
-        //socialManager.captureRecyclerView(rv_social)
-        var userId= if(user!=null)user?.userId else -1
-        socialManager.getListOfFriends(userId!!, this)
+        socialManager.getListOfFriends(loginAppManager.connectedUser!!.userId!!, this)
         btn_searchFriends.setOnClickListener { socialManager.searchForFriends(sv_friends.query.toString()) }
         btn_friendsRequest.setOnClickListener { socialManager.friendsRequest(this) }
     }

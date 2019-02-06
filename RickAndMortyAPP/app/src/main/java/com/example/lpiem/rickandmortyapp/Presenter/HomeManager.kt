@@ -43,7 +43,7 @@ class HomeManager private constructor(private var context: Context) {
 
     fun getRandomQuote(link: HomeDisplayUI) {
         homeDisplayUI = link
-        val resultCall = rickAndMortyAPI!!.getRamdomQuote()
+        val resultCall = rickAndMortyAPI!!.getRandomQuote()
         callRetrofit(resultCall, KAAMELOTT_QUOTE)
     }
 
