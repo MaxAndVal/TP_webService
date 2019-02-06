@@ -41,7 +41,6 @@ class LoginAppManager private constructor(private var context: Context){
     private var mGoogleSignInClient: GoogleSignInClient? = null
     private var account: GoogleSignInAccount? = null
     private lateinit var googleBtnTextView: Button
-    //private val loginActivity = (context as LoginActivity)
     var connectedUser: User? = null
     var gameInProgress = true
 
@@ -157,9 +156,11 @@ class LoginAppManager private constructor(private var context: Context){
                             val userNameFB = result.getString("name")
                             val userEmail = result.getString("email")
                             val userId = result.getString("id")
+                            //TODO
                             //val userImage = obj.getString("picture") as JsonObject
                             //val jj = userImage.get("data")
                             val jsonBody = JsonObject()
+                            //TODO
                             //Log.d(TAG, "image : $userImage")
                             //Log.d(TAG, "data : $jj")
                             jsonBody.addProperty(UserEmail.string, userEmail)
@@ -240,7 +241,7 @@ class LoginAppManager private constructor(private var context: Context){
                             }
                         }
                         LIST_OF_FRIENDS -> {
-
+                            //TODO
                         }
                         else -> {
                             (context as LoginActivity).login_progressBar.visibility = View.GONE
