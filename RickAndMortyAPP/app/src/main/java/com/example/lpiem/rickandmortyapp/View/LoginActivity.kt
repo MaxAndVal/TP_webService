@@ -2,6 +2,7 @@ package com.example.lpiem.rickandmortyapp.View
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.example.lpiem.rickandmortyapp.Presenter.LoginAppManager
@@ -22,7 +23,6 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-
         loginAppManager = LoginAppManager.getInstance(this)
 
         regularConnectionSetup()
@@ -32,7 +32,6 @@ class LoginActivity : AppCompatActivity() {
 
 
     private fun regularConnectionSetup() {
-        login_progressBar.visibility = View.VISIBLE
         val mail = etEmail.text.toString()
         val pass = etPassword.text.toString()
         btnRegularConnection.setOnClickListener { loginAppManager.regularConnection(mail, pass) }
