@@ -8,6 +8,9 @@ import com.example.lpiem.rickandmortyapp.Model.ListOfCards
 import com.example.lpiem.rickandmortyapp.R
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.collection_item.view.*
+import androidx.recyclerview.widget.DiffUtil
+import com.example.lpiem.rickandmortyapp.Util.DiffUtilCollection
+
 
 class CollectionAdapter(private var dataSet: ListOfCards): RecyclerView.Adapter<CollectionAdapter.ViewHolder>() {
 
@@ -36,6 +39,12 @@ class CollectionAdapter(private var dataSet: ListOfCards): RecyclerView.Adapter<
 
     fun setDataSet(list: ListOfCards) {
         dataSet = list
+    }
+
+    fun updateList(newList: ListOfCards) {
+        dataSet = dataSet.sortById()
+        val diffResult = DiffUtil.calculateDiff(DiffUtilCollection(dataSet, newList.sortById()))
+        diffResult.dispatchUpdatesTo(this)
     }
 
 

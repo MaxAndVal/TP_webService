@@ -32,9 +32,7 @@ class LoginActivity : AppCompatActivity() {
 
 
     private fun regularConnectionSetup() {
-        val mail = etEmail.text.toString()
-        val pass = etPassword.text.toString()
-        btnRegularConnection.setOnClickListener { loginAppManager.regularConnection(mail, pass) }
+        btnRegularConnection.setOnClickListener { loginAppManager.regularConnection(etEmail.text.toString(), etPassword.text.toString()) }
         tv_signIn.setOnClickListener { loginAppManager.regularSignIn() }
     }
 
