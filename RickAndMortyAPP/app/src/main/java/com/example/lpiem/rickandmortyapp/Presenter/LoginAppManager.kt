@@ -9,7 +9,6 @@ import android.widget.Button
 import android.widget.Toast
 import com.example.lpiem.rickandmortyapp.Data.JsonProperty.*
 import com.example.lpiem.rickandmortyapp.Data.RetrofitCallTypes
-import com.example.lpiem.rickandmortyapp.Data.RetrofitCallTypes.LIST_OF_FRIENDS
 import com.example.lpiem.rickandmortyapp.Data.RetrofitCallTypes.LOGIN
 import com.example.lpiem.rickandmortyapp.Data.RickAndMortyRetrofitSingleton
 import com.example.lpiem.rickandmortyapp.Model.ResponseFromApi
@@ -225,7 +224,6 @@ class LoginAppManager private constructor(private var context: Context){
                                     Toast.makeText(context, "code : $code, bienvenue $results", Toast.LENGTH_SHORT).show()
                                     val homeIntent = Intent(context, BottomActivity::class.java)
                                     connectedUser = responseBody.results!!
-                                    //homeIntent.putExtra("user", responseBody.results)
                                     (context as LoginActivity).startActivity(homeIntent)
                                 } else {
                                     (context as LoginActivity).login_progressBar.visibility = View.GONE
@@ -239,9 +237,6 @@ class LoginAppManager private constructor(private var context: Context){
                                 (context as LoginActivity).login_progressBar.visibility = View.GONE
                                 Log.d(TAG, "error : ${response.errorBody()}")
                             }
-                        }
-                        LIST_OF_FRIENDS -> {
-                            //TODO
                         }
                         else -> {
                             (context as LoginActivity).login_progressBar.visibility = View.GONE
@@ -261,6 +256,7 @@ class LoginAppManager private constructor(private var context: Context){
                 Log.d(TAG, "fail : $t")
                 (context as LoginActivity).login_progressBar.visibility = View.GONE
                 Toast.makeText(context, "Problème de réseau, merci de tenter de vous connecter à nouveau", Toast.LENGTH_LONG).show()
+                LoginManager.getInstance().logOut()
             }
         })
 

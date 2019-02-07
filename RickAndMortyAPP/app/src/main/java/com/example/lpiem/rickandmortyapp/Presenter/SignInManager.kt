@@ -101,8 +101,4 @@ class SignInManager private constructor(private var context: Context) {
 
     }
 
-    fun goBack() {
-        val loginIntent = Intent(context, LoginActivity::class.java)
-        context.startActivity(loginIntent)
-    }
 }
