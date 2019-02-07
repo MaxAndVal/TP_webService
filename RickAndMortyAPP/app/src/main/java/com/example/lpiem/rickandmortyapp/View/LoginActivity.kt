@@ -32,7 +32,10 @@ class LoginActivity : AppCompatActivity() {
 
 
     private fun regularConnectionSetup() {
-        btnRegularConnection.setOnClickListener { loginAppManager.regularConnection(etEmail.text.toString(), etPassword.text.toString()) }
+        btnRegularConnection.setOnClickListener {
+            loginAppManager.regularConnection(etEmail.text.toString(), etPassword.text.toString())
+            login_progressBar.visibility = View.VISIBLE
+        }
         tv_signIn.setOnClickListener { loginAppManager.regularSignIn() }
     }
 
