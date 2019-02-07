@@ -18,7 +18,6 @@ import com.example.lpiem.rickandmortyapp.View.Settings.FAQ_Fragment
 import com.example.lpiem.rickandmortyapp.View.Settings.SettingsFragment
 import com.example.lpiem.rickandmortyapp.View.TAG
 import kotlinx.android.synthetic.main.activity_bottom.*
-import kotlinx.android.synthetic.main.faq_item.view.*
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
@@ -53,31 +52,14 @@ class SettingsManager internal constructor(private val context: Context): Settin
                     Log.d(TAG, response.toString())
                     when (type) {
                         RetrofitCallTypes.GET_FAQ -> {
-                            var settings = response.body() as ListOfFAQ
-                            var code = settings.code
-                            if (code == 200) {
-                                listOfFAQfromSM = settings.FAQs
-                                Log.d(TAG, listOfFAQfromSM.toString()+"SM")
-                                if (listOfFAQfromSM != null) {
-                                    faqManager = FaqManager.getInstance(context!!)
-                                    faqManager!!.recyclerView.adapter = FAQAdapter(listOfFAQfromSM!!, this@SettingsManager )
-                                    faqManager!!.recyclerView.adapter?.notifyDataSetChanged()
-                                }else{
-                                    Log.d(TAG, "listOfFAQ is null")
-                                }
-                            } else {
-                                Toast.makeText(context, "code : $code, message ${settings.message}", Toast.LENGTH_SHORT).show()
-                            }
+                            getFAQTreatment(response)
                         }
-
                     }
                 } else {
                     val responseError = response.errorBody() as ResponseBody
                     Log.d(TAG, "error: ${responseError.string()}")
                 }
-
             }
-
             override fun onFailure(call: Call<T>, t: Throwable) {
                 Log.d(TAG, "fail : $t")
             }
@@ -85,13 +67,29 @@ class SettingsManager internal constructor(private val context: Context): Settin
 
     }
 
-    fun fragmentFAQ(fragment : Fragment) {
+    private fun <T> getFAQTreatment(response: Response<T>) {
+        val settings = response.body() as ListOfFAQ
+        val code = settings.code
+        if (code == 200) {
+            listOfFAQfromSM = settings.FAQs
+            Log.d(TAG, listOfFAQfromSM.toString() + "SM")
+            if (listOfFAQfromSM != null) {
+                faqManager = FaqManager.getInstance(context!!)
+                faqManager!!.recyclerView.adapter = FAQAdapter(listOfFAQfromSM!!, this@SettingsManager)
+                faqManager!!.recyclerView.adapter?.notifyDataSetChanged()
+            } else {
+                Log.d(TAG, "listOfFAQ is null")
+            }
+        } else {
+            Toast.makeText(context, "code : $code, message ${settings.message}", Toast.LENGTH_SHORT).show()
+        }
+    }
 
+    fun fragmentFAQ(fragment : Fragment) {
         val resultCall = rickAndMortyAPI!!.getFAQ()
         callRetrofit(resultCall, RetrofitCallTypes.GET_FAQ)
-
-        val FAQFragment = (context as BottomActivity).supportFragmentManager
-        val fragmentTransaction = FAQFragment.beginTransaction()
+        val fragmentManager = (context as BottomActivity).supportFragmentManager
+        val fragmentTransaction = fragmentManager.beginTransaction()
         fragmentTransaction.add(R.id.flMain, fragment).addToBackStack(null)
         fragmentTransaction.commit()
         fragmentTransaction.addToBackStack(null)

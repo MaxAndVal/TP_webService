@@ -48,13 +48,7 @@ class CollectionManager private constructor(private val context: Context) {
                 if (response.isSuccessful) {
                     when (type) {
                         RetrofitCallTypes.LIST_OF_CARDS -> {
-                            collectionFragment!!.listOfCards = response.body() as ListOfCards
-                            val list = collectionFragment!!.listOfCards
-                            if (list?.code == 200) {
-                                cardListDisplay.displayResult(list)
-                            } else {
-                                Toast.makeText(context, "erreur code ${list?.code} message : ${list?.message}", Toast.LENGTH_SHORT).show()
-                            }
+                            listOfCardTreatment(response)
                         }
                     }
                 } else {
@@ -69,6 +63,16 @@ class CollectionManager private constructor(private val context: Context) {
             }
         })
 
+    }
+
+    private fun <T> listOfCardTreatment(response: Response<T>) {
+        collectionFragment!!.listOfCards = response.body() as ListOfCards
+        val list = collectionFragment!!.listOfCards
+        if (list?.code == 200) {
+            cardListDisplay.displayResult(list)
+        } else {
+            Toast.makeText(context, "erreur code ${list?.code} message : ${list?.message}", Toast.LENGTH_SHORT).show()
+        }
     }
 
     fun getListOfDecks(user: User?, link: CardListDisplay) {

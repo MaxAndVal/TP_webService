@@ -37,13 +37,7 @@ class DetailCollectionManager private constructor(private val context: Context) 
                     Log.d(TAG, response.toString())
                     when (type) {
                         GET_CARD_DETAILS -> {
-                            val details = response.body() as DetailledCard
-                            val code = details.code
-                            if (code == 200) {
-                                cardDetailDisplay.displayResult(details)
-                            } else {
-                                Toast.makeText(context, "code : $code, message ${details.message}", Toast.LENGTH_SHORT).show()
-                            }
+                            getCardDetailTreatment(response)
                         }
                     }
                 } else {
@@ -59,6 +53,16 @@ class DetailCollectionManager private constructor(private val context: Context) 
             }
         })
 
+    }
+
+    private fun <T> getCardDetailTreatment(response: Response<T>) {
+        val details = response.body() as DetailledCard
+        val code = details.code
+        if (code == 200) {
+            cardDetailDisplay.displayResult(details)
+        } else {
+            Toast.makeText(context, "code : $code, message ${details.message}", Toast.LENGTH_SHORT).show()
+        }
     }
 
 
