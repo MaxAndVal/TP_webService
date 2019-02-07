@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginStart="4dp"
+    android:layout_marginEnd="4dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <TextView
@@ -20,7 +22,7 @@
 
     <TextView
         android:id="@+id/tv_response"
-        style="@style/etStyle"
+        style="@style/tv_response_style"
         android:text="TextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
