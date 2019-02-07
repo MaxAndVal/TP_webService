@@ -1,4 +1,4 @@
-package com.example.lpiem.rickandmortyapp.Presenter
+package com.example.lpiem.rickandmortyapp.Util
 
 open class SingletonHolder<out T, in A>(creator: (A) -> T) {
     private var creator: ((A) -> T)? = creator

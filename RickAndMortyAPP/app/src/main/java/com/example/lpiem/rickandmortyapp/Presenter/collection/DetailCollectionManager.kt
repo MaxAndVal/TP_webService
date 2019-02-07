@@ -7,7 +7,7 @@ import com.example.lpiem.rickandmortyapp.Data.RetrofitCallTypes
 import com.example.lpiem.rickandmortyapp.Data.RetrofitCallTypes.GET_CARD_DETAILS
 import com.example.lpiem.rickandmortyapp.Data.RickAndMortyRetrofitSingleton
 import com.example.lpiem.rickandmortyapp.Model.DetailledCard
-import com.example.lpiem.rickandmortyapp.Presenter.SingletonHolder
+import com.example.lpiem.rickandmortyapp.Util.SingletonHolder
 import com.example.lpiem.rickandmortyapp.View.Collection.detail.CardDetailDisplay
 import com.example.lpiem.rickandmortyapp.View.TAG
 import okhttp3.ResponseBody
@@ -37,13 +37,7 @@ class DetailCollectionManager private constructor(private val context: Context) 
                     Log.d(TAG, response.toString())
                     when (type) {
                         GET_CARD_DETAILS -> {
-                            val details = response.body() as DetailledCard
-                            val code = details.code
-                            if (code == 200) {
-                                cardDetailDisplay.displayResult(details)
-                            } else {
-                                Toast.makeText(context, "code : $code, message ${details.message}", Toast.LENGTH_SHORT).show()
-                            }
+                            getCardDetailTreatment(response)
                         }
                     }
                 } else {
@@ -59,6 +53,16 @@ class DetailCollectionManager private constructor(private val context: Context) 
             }
         })
 
+    }
+
+    private fun <T> getCardDetailTreatment(response: Response<T>) {
+        val details = response.body() as DetailledCard
+        val code = details.code
+        if (code == 200) {
+            cardDetailDisplay.displayResult(details)
+        } else {
+            Toast.makeText(context, "code : $code, message ${details.message}", Toast.LENGTH_SHORT).show()
+        }
     }
 
 

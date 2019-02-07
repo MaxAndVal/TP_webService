@@ -8,6 +8,7 @@ import com.example.lpiem.rickandmortyapp.Data.RetrofitCallTypes.*
 import com.example.lpiem.rickandmortyapp.Data.RickAndMortyRetrofitSingleton
 import com.example.lpiem.rickandmortyapp.Model.ResponseFromApi
 import com.example.lpiem.rickandmortyapp.Model.Wallet
+import com.example.lpiem.rickandmortyapp.Util.SingletonHolder
 import com.example.lpiem.rickandmortyapp.View.TAG
 import com.google.gson.JsonObject
 import okhttp3.ResponseBody
@@ -36,62 +37,18 @@ class ShopManager private constructor(private val context: Context) {
                 if (response.isSuccessful) {
                     when (type) {
                         BUY_BOOSTER -> {
-                            val walletResponse = response.body() as Wallet
-                            val code = walletResponse.code
-                            val message = walletResponse.message
-                            val actualValue = walletResponse.wallet!!
-                            if (code == 200) {
-                                if (actualValue - cost > 0) {
-                                    when(cost) {
-                                        40 -> numberOfDeckToAdd = 1
-                                        100 -> numberOfDeckToAdd = 3
-                                        300 -> numberOfDeckToAdd = 10
-                                    }
-                                    val body = JsonObject()
-                                    body.addProperty("newWallet", actualValue - cost)
-                                    currentCall = rickAndMortyAPI!!.updateWallet(loginAppManager.connectedUser!!.userId!!, body)
-                                    callRetrofit(currentCall!!, UPDATE_WALLET)
-                                } else {
-                                    Toast.makeText(context, "Pas assez d'argent pour ce pack", Toast.LENGTH_SHORT).show()
-                                }
-                            } else {
-                                Toast.makeText(context, "code : $code, message : $message", Toast.LENGTH_SHORT).show()
-                            }
+                            buyBoosterTreatment(response)
                         }
                         UPDATE_WALLET -> {
-                            val result = response.body() as ResponseFromApi
-                            val code = result.code
-                            val message = result.message
-                            if (code == 200) {
-                                var deckToOpen = result.results!!.deckToOpen!!
-                                deckToOpen += numberOfDeckToAdd
-                                //Make a call to update the amount of decks to open
-                                val jsonObject = JsonObject()
-                                jsonObject.addProperty("user_id", loginAppManager.connectedUser!!.userId)
-                                jsonObject.addProperty("deckNumber", deckToOpen)
-                                currentCall = rickAndMortyAPI!!.increaseNumberOfDecks(jsonObject)
-                                callRetrofit(currentCall!!, DECKS_INCREASED)
-                            } else {
-                                Toast.makeText(context, "code : $code, message : $message", Toast.LENGTH_SHORT).show()
-                            }
+                            updateWalletTreatment(response)
                         }
                         DECKS_INCREASED -> {
-                            val result = response.body() as ResponseFromApi
-                            val code = result.code
-                            val message = result.message
-                            if (code == 200) {
-                                val user = result.results!!
-                                loginAppManager.connectedUser = user
-                                Toast.makeText(context, "$numberOfDeckToAdd decks ajoutés à votre pool !", Toast.LENGTH_SHORT).show()
-                            } else {
-                                Toast.makeText(context, "code : $code, message : $message", Toast.LENGTH_SHORT).show()
-                            }
+                            decksIncreasedTreatment(response)
                         }
                         else -> Log.d(TAG, "error : type does not exist")
                     }
 
                 } else {
-                    //TODO : handle API error here
                     val responseError = response.errorBody() as ResponseBody
                     Log.d(TAG, "error: " + responseError.string() )
                 }
@@ -99,12 +56,65 @@ class ShopManager private constructor(private val context: Context) {
             }
 
             override fun onFailure(call: Call<T>, t: Throwable) {
-
-                //TODO : handle error for call here
                 Log.d(TAG, "fail : $t")
             }
         })
 
+    }
+
+    private fun <T> decksIncreasedTreatment(response: Response<T>) {
+        val result = response.body() as ResponseFromApi
+        val code = result.code
+        val message = result.message
+        if (code == 200) {
+            val user = result.results!!
+            loginAppManager.connectedUser = user
+            Toast.makeText(context, "$numberOfDeckToAdd decks ajoutés à votre pool !", Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(context, "code : $code, message : $message", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun <T> updateWalletTreatment(response: Response<T>) {
+        val result = response.body() as ResponseFromApi
+        val code = result.code
+        val message = result.message
+        if (code == 200) {
+            var deckToOpen = result.results!!.deckToOpen!!
+            deckToOpen += numberOfDeckToAdd
+            //Make a call to update the amount of decks to open
+            val jsonObject = JsonObject()
+            jsonObject.addProperty("user_id", loginAppManager.connectedUser!!.userId)
+            jsonObject.addProperty("deckNumber", deckToOpen)
+            currentCall = rickAndMortyAPI!!.increaseNumberOfDecks(jsonObject)
+            callRetrofit(currentCall!!, DECKS_INCREASED)
+        } else {
+            Toast.makeText(context, "code : $code, message : $message", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun <T> buyBoosterTreatment(response: Response<T>) {
+        val walletResponse = response.body() as Wallet
+        val code = walletResponse.code
+        val message = walletResponse.message
+        val actualValue = walletResponse.wallet!!
+        if (code == 200) {
+            if (actualValue - cost > 0) {
+                when (cost) {
+                    40 -> numberOfDeckToAdd = 1
+                    100 -> numberOfDeckToAdd = 3
+                    300 -> numberOfDeckToAdd = 10
+                }
+                val body = JsonObject()
+                body.addProperty("newWallet", actualValue - cost)
+                currentCall = rickAndMortyAPI!!.updateWallet(loginAppManager.connectedUser!!.userId!!, body)
+                callRetrofit(currentCall!!, UPDATE_WALLET)
+            } else {
+                Toast.makeText(context, "Pas assez d'argent pour ce pack", Toast.LENGTH_SHORT).show()
+            }
+        } else {
+            Toast.makeText(context, "code : $code, message : $message", Toast.LENGTH_SHORT).show()
+        }
     }
 
     fun buyBoosterIfEnable(cost: Int) {

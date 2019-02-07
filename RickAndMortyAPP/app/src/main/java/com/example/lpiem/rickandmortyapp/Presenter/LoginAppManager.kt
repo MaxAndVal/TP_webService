@@ -14,6 +14,7 @@ import com.example.lpiem.rickandmortyapp.Data.RickAndMortyRetrofitSingleton
 import com.example.lpiem.rickandmortyapp.Model.ResponseFromApi
 import com.example.lpiem.rickandmortyapp.Model.User
 import com.example.lpiem.rickandmortyapp.R
+import com.example.lpiem.rickandmortyapp.Util.SingletonHolder
 import com.example.lpiem.rickandmortyapp.View.*
 import com.facebook.*
 import com.facebook.login.LoginManager
@@ -32,7 +33,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.util.*
 
-class LoginAppManager private constructor(private var context: Context){
+class LoginAppManager private constructor(private var context: Context) {
 
     private val rickAndMortyAPI = RickAndMortyRetrofitSingleton.instance
     private var connectedToGoogle = false
@@ -148,7 +149,7 @@ class LoginAppManager private constructor(private var context: Context){
                     //"/100033490894253/picture"
                     val request = GraphRequest.newMeRequest(
                             accessToken
-                    ) { obj , response ->
+                    ) { obj, response ->
                         val result = response.jsonObject
                         try {
 
@@ -210,32 +211,27 @@ class LoginAppManager private constructor(private var context: Context){
                 if (response.isSuccessful) {
                     when (type) {
                         LOGIN -> {
-                            if (response.isSuccessful) {
-                                val responseBody = response.body() as ResponseFromApi
-                                val code = responseBody.code
-                                if (code == 200) {
-                                    (context as LoginActivity).login_progressBar.visibility = View.GONE
-                                    if (connectedToGoogle) {
-                                        googleBtnTextView.text = context.getString(R.string.btn_disconnection_google)
-                                        (context as LoginActivity).sign_in_button.setOnClickListener { disconnectGoogleAccount() }
-                                    }
-                                    val results = responseBody.results?.userName
-                                    Log.d(TAG, "body = ${response.body().toString()}")
-                                    Toast.makeText(context, "code : $code, bienvenue $results", Toast.LENGTH_SHORT).show()
-                                    val homeIntent = Intent(context, BottomActivity::class.java)
-                                    connectedUser = responseBody.results!!
-                                    (context as LoginActivity).startActivity(homeIntent)
-                                } else {
-                                    (context as LoginActivity).login_progressBar.visibility = View.GONE
-                                    if ((context as LoginActivity).etEmail.text.toString() == "" || (context as LoginActivity).etPassword.text.toString() == "") {
-                                        Toast.makeText(context, context.getString(R.string.thanks_to_fill_all_fields), Toast.LENGTH_SHORT).show()
-                                    } else {
-                                        Toast.makeText(context, "login error code : $code, message ${responseBody.message}", Toast.LENGTH_LONG).show()
-                                    }
+                            val responseBody = response.body() as ResponseFromApi
+                            val code = responseBody.code
+                            if (code == 200) {
+                                (context as LoginActivity).login_progressBar.visibility = View.GONE
+                                if (connectedToGoogle) {
+                                    googleBtnTextView.text = context.getString(R.string.btn_disconnection_google)
+                                    (context as LoginActivity).sign_in_button.setOnClickListener { disconnectGoogleAccount() }
                                 }
+                                val results = responseBody.results?.userName
+                                Log.d(TAG, "body = ${response.body().toString()}")
+                                Toast.makeText(context, "code : $code, bienvenue $results", Toast.LENGTH_SHORT).show()
+                                val homeIntent = Intent(context, BottomActivity::class.java)
+                                connectedUser = responseBody.results!!
+                                (context as LoginActivity).startActivity(homeIntent)
                             } else {
                                 (context as LoginActivity).login_progressBar.visibility = View.GONE
-                                Log.d(TAG, "error : ${response.errorBody()}")
+                                if ((context as LoginActivity).etEmail.text.toString() == "" || (context as LoginActivity).etPassword.text.toString() == "") {
+                                    Toast.makeText(context, context.getString(R.string.thanks_to_fill_all_fields), Toast.LENGTH_SHORT).show()
+                                } else {
+                                    Toast.makeText(context, "login error code : $code, message ${responseBody.message}", Toast.LENGTH_LONG).show()
+                                }
                             }
                         }
                         else -> {

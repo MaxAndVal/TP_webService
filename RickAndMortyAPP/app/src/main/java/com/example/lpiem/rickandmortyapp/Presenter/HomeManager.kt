@@ -12,6 +12,7 @@ import com.example.lpiem.rickandmortyapp.Model.KaamlottQuote
 import com.example.lpiem.rickandmortyapp.Model.ResponseFromApi
 import com.example.lpiem.rickandmortyapp.Model.User
 import com.example.lpiem.rickandmortyapp.Model.Wallet
+import com.example.lpiem.rickandmortyapp.Util.SingletonHolder
 import com.example.lpiem.rickandmortyapp.View.Home.HomeDisplayUI
 import com.example.lpiem.rickandmortyapp.View.TAG
 import com.google.gson.JsonObject
@@ -55,55 +56,19 @@ class HomeManager private constructor(private var context: Context) {
                     Log.d(TAG, response.toString())
                     when (type) {
                         KAAMELOTT_QUOTE -> {
-                            val kaamlott = response.body() as KaamlottQuote
-                            val code = kaamlott.code
-                            if (kaamlott.code == SUCCESS) {
-                                citation = kaamlott.citation!!
-                                personnage = kaamlott.personnage!!
-                                personnageNameList = kaamlott.personnageList!!
-                                val list = Triple(citation, personnage, personnageNameList)
-                                homeDisplayUI.updateUI(list)
-                            } else {
-                                Log.d(TAG, "code : $code, message ${kaamlott.message}")
-                            }
+                            getKaamelottQuoteTreatment(response)
                         }
                         GET_USER_BY_ID -> {
-                            val responseFromApi = response.body() as ResponseFromApi
-                            val loginAppManager = LoginAppManager.getInstance(context)
-                            if (responseFromApi.code == SUCCESS) {
-                                loginAppManager.gameInProgress = getDate() != responseFromApi.results?.userLastGame
-                                homeDisplayUI.displayFragmentContent()
-                            } else {
-                                Toast.makeText(context, "User not found, error : ${responseFromApi.message}", Toast.LENGTH_SHORT).show()
-                            }
+                            getUserByIdTreatment(response)
                         }
                         PUT_DATE -> {
-                            val newDateResponse = response.body() as ResponseFromApi
-                            if (newDateResponse.code == SUCCESS) {
-                                Log.d(TAG,"success code : ${newDateResponse.code}, message ${newDateResponse.message}")
-                            } else {
-                                Log.d(TAG,"error code : ${newDateResponse.code}, message ${newDateResponse.message}")
-                            }
+                            putDateTreatment(response)
                         }
                         UPDATE_WALLET -> {
-                            val walletUpdateResponse = response.body() as ResponseFromApi
-                            if (walletUpdateResponse.code == SUCCESS) {
-                                Log.d(TAG,"success code : ${walletUpdateResponse.code}, message ${walletUpdateResponse.message}")
-                                val id = LoginAppManager.getInstance(context).connectedUser!!.userId
-                                currentCall = rickAndMortyAPI!!.getWallet(id!!)
-                                callRetrofit(currentCall, GET_WALLET)
-                            } else {
-                                Log.d(TAG,"error code : ${walletUpdateResponse.code}, message ${walletUpdateResponse.message}")
-                            }
+                            updateUserWalletTreatment(response)
                         }
                         GET_WALLET -> {
-                            val newWalletResponse = response.body() as Wallet
-                            if (newWalletResponse.code == SUCCESS) {
-                                Log.d(TAG,"success code : ${newWalletResponse.code}, message ${newWalletResponse.message}, wallet ${newWalletResponse.wallet}")
-                                homeDisplayUI.updatePickleRicksAmount(newWalletResponse.wallet!!, " ")
-                            } else {
-                                Log.d(TAG,"error code : ${newWalletResponse.code}, message ${newWalletResponse.message}")
-                            }
+                            getWalletTreatment(response)
                         }
                     }
                 } else {
@@ -119,6 +84,62 @@ class HomeManager private constructor(private var context: Context) {
 
     }
 
+    private fun <T> getWalletTreatment(response: Response<T>) {
+        val newWalletResponse = response.body() as Wallet
+        if (newWalletResponse.code == SUCCESS) {
+            Log.d(TAG, "success code : ${newWalletResponse.code}, message ${newWalletResponse.message}, wallet ${newWalletResponse.wallet}")
+            homeDisplayUI.updatePickleRicksAmount(newWalletResponse.wallet!!, " ")
+        } else {
+            Log.d(TAG, "error code : ${newWalletResponse.code}, message ${newWalletResponse.message}")
+        }
+    }
+
+    private fun <T> updateUserWalletTreatment(response: Response<T>) {
+        val walletUpdateResponse = response.body() as ResponseFromApi
+        if (walletUpdateResponse.code == SUCCESS) {
+            Log.d(TAG, "success code : ${walletUpdateResponse.code}, message ${walletUpdateResponse.message}")
+            val id = LoginAppManager.getInstance(context).connectedUser!!.userId
+            currentCall = rickAndMortyAPI!!.getWallet(id!!)
+            callRetrofit(currentCall, GET_WALLET)
+        } else {
+            Log.d(TAG, "error code : ${walletUpdateResponse.code}, message ${walletUpdateResponse.message}")
+        }
+    }
+
+    private fun <T> putDateTreatment(response: Response<T>) {
+        val newDateResponse = response.body() as ResponseFromApi
+        if (newDateResponse.code == SUCCESS) {
+            Log.d(TAG, "success code : ${newDateResponse.code}, message ${newDateResponse.message}")
+        } else {
+            Log.d(TAG, "error code : ${newDateResponse.code}, message ${newDateResponse.message}")
+        }
+    }
+
+    private fun <T> getUserByIdTreatment(response: Response<T>) {
+        val responseFromApi = response.body() as ResponseFromApi
+        val loginAppManager = LoginAppManager.getInstance(context)
+        if (responseFromApi.code == SUCCESS) {
+            loginAppManager.gameInProgress = getDate() != responseFromApi.results?.userLastGame
+            homeDisplayUI.displayFragmentContent()
+        } else {
+            Toast.makeText(context, "User not found, error : ${responseFromApi.message}", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun <T> getKaamelottQuoteTreatment(response: Response<T>) {
+        val kaamlott = response.body() as KaamlottQuote
+        val code = kaamlott.code
+        if (kaamlott.code == SUCCESS) {
+            citation = kaamlott.citation!!
+            personnage = kaamlott.personnage!!
+            personnageNameList = kaamlott.personnageList!!
+            val list = Triple(citation, personnage, personnageNameList)
+            homeDisplayUI.updateUI(list)
+        } else {
+            Log.d(TAG, "code : $code, message ${kaamlott.message}")
+        }
+    }
+
     fun gameAvailable(user: User, link: HomeDisplayUI) {
         homeDisplayUI = link
         currentCall = rickAndMortyAPI!!.getUserById(user.userId!!)
@@ -132,7 +153,7 @@ class HomeManager private constructor(private var context: Context) {
         callRetrofit(currentCall, PUT_DATE)
     }
 
-    fun getDate(): String {
+    private fun getDate(): String {
         var day = Calendar.getInstance(Locale.FRENCH).get(Calendar.DAY_OF_YEAR).toString()
         var month = (Calendar.getInstance(Locale.FRENCH).get(Calendar.MONTH) + 1).toString()
         val year = Calendar.getInstance(Locale.FRENCH).get(Calendar.YEAR).toString()

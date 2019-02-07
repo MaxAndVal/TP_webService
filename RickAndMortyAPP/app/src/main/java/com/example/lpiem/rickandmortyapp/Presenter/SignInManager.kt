@@ -4,14 +4,12 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import android.widget.Toast
-import com.example.lpiem.rickandmortyapp.Data.JsonProperty.UserEmail
-import com.example.lpiem.rickandmortyapp.Data.JsonProperty.UserName
-import com.example.lpiem.rickandmortyapp.Data.JsonProperty.UserPassword
+import com.example.lpiem.rickandmortyapp.Data.JsonProperty.*
 import com.example.lpiem.rickandmortyapp.Data.RetrofitCallTypes
 import com.example.lpiem.rickandmortyapp.Data.RickAndMortyRetrofitSingleton
 import com.example.lpiem.rickandmortyapp.Model.ResponseFromApi
+import com.example.lpiem.rickandmortyapp.Util.SingletonHolder
 import com.example.lpiem.rickandmortyapp.View.BottomActivity
-import com.example.lpiem.rickandmortyapp.View.LoginActivity
 import com.example.lpiem.rickandmortyapp.View.SignInActivity
 import com.example.lpiem.rickandmortyapp.View.TAG
 import com.google.gson.JsonObject
@@ -62,43 +60,46 @@ class SignInManager private constructor(private var context: Context) {
                 if (response.isSuccessful) {
                     when (type) {
                         RetrofitCallTypes.SIGN_IN -> {
-                            val responseFromApi = response.body() as ResponseFromApi
-                            val code = responseFromApi.code
-                            val message = responseFromApi.message
-                            if (code == 200) {
-                                regularConnection()
-                            } else {
-                                Toast.makeText(context, "code : $code, message : $message", Toast.LENGTH_SHORT).show()
-                            }
+                            signInTreatment(response)
                         }
                         RetrofitCallTypes.CONNECTION -> {
-                            val responseFromApi = response.body() as ResponseFromApi
-                            val code = responseFromApi.code
-                            val results = responseFromApi.results?.userName
-                            val userId = responseFromApi.results?.userId
-                            Log.d(TAG, "body = ${response.body()}")
-                            Toast.makeText(context, "code : $code, bienvenue $results id:$userId", Toast.LENGTH_SHORT).show()
-                            //intent = Intent(context, BottomActivity::class.java)
-                            loginAppManager.connectedUser = responseFromApi.results!!
-                            val intent = Intent(context, BottomActivity::class.java)
-                            //intent.putExtra("user", responseFromApi.results)
-                            context.startActivity(intent)
+                            connectionTreatment(response)
                         }
                         else -> Log.d(TAG, "error : ${response.errorBody()}")
                     }
-
                 } else {
                     val responseError = response.errorBody() as ResponseBody
                     Log.d(TAG, "error: ${responseError.string()}")
                 }
-
             }
-
             override fun onFailure(call: Call<T>, t: Throwable) {
                 Log.d(TAG, "fail : $t")
             }
         })
 
+    }
+
+    private fun <T> connectionTreatment(response: Response<T>) {
+        val responseFromApi = response.body() as ResponseFromApi
+        val code = responseFromApi.code
+        val results = responseFromApi.results?.userName
+        val userId = responseFromApi.results?.userId
+        Log.d(TAG, "body = ${response.body()}")
+        Toast.makeText(context, "code : $code, bienvenue $results id:$userId", Toast.LENGTH_SHORT).show()
+        loginAppManager.connectedUser = responseFromApi.results!!
+        val intent = Intent(context, BottomActivity::class.java)
+        context.startActivity(intent)
+    }
+
+    private fun <T> signInTreatment(response: Response<T>) {
+        val responseFromApi = response.body() as ResponseFromApi
+        val code = responseFromApi.code
+        val message = responseFromApi.message
+        if (code == 200) {
+            regularConnection()
+        } else {
+            Toast.makeText(context, "code : $code, message : $message", Toast.LENGTH_SHORT).show()
+        }
     }
 
 }
