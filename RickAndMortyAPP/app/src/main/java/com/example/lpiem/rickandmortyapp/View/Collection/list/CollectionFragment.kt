@@ -91,10 +91,11 @@ class CollectionFragment : androidx.fragment.app.Fragment(), CardListDisplay {
         if (adapter == null) {
             adapter = CollectionAdapter(list)
             rv_collection.adapter = adapter
-            adapter!!.notifyDataSetChanged()
+            //adapter!!.notifyDataSetChanged()
+            adapter!!.updateList(list)
         } else {
-            adapter!!.setDataSet(list)
-            adapter!!.notifyDataSetChanged()
+            adapter!!.updateList(list)
+            //adapter!!.notifyDataSetChanged()
         }
     }
 

@@ -32,6 +32,11 @@ class ListOfCards : Parcelable {
     @Expose
     var cards: List<Card>? = null
 
+    private constructor(code: Int?, message: String?, cards: List<Card>?) {
+        this.code = code
+        this.message = message
+        this.cards = cards
+    }
 
     constructor(inside: Parcel) {
         this.code = inside.readValue(Int::class.java.classLoader) as Int
@@ -47,6 +52,10 @@ class ListOfCards : Parcelable {
         return 0
     }
 
+    fun sortById(): ListOfCards {
+        val cardsList = this.cards!!.sortedBy { it.cardId }
+        return ListOfCards(this.code, this.message, cardsList)
+    }
 
 
 }
