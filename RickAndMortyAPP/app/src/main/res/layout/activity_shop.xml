@@ -9,8 +9,7 @@
     <TextView
         android:id="@+id/tv_title_shop"
         android:text="Rick and Morty Shop"
-        style="@style/TitleDetailStyle"
-        android:textColor="@android:color/black"
+        style="@style/TitleShopStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
@@ -21,10 +20,8 @@
 
     <ImageView
         android:id="@+id/iv_small_booster"
+        style="@style/shop_card_style"
         android:layout_width="0dp"
-        android:layout_height="200dp"
-        android:src="@drawable/vortex_ram"
-        android:background="@drawable/card_back"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/iv_medium_booster"
         app:layout_constraintTop_toBottomOf="@id/tv_title_shop"
@@ -34,7 +31,7 @@
     <TextView
         android:id="@+id/tv_small_booster"
         android:text="1 Booster"
-        style="@style/TextViewStyle"
+        style="@style/TextViewStyleBlack"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
@@ -47,8 +44,7 @@
     <TextView
         android:id="@+id/tv_cost_small_booster"
         android:text="40"
-        style="@style/tvWallet"
-        android:textColor="@android:color/white"
+        style="@style/tvWalletWhite"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -59,10 +55,8 @@
 
     <ImageView
         android:id="@+id/iv_medium_booster"
+        style="@style/shop_card_style"
         android:layout_width="0dp"
-        android:layout_height="200dp"
-        android:background="@drawable/card_back"
-        android:src="@drawable/vortex_ram"
         app:layout_constraintStart_toEndOf="@id/iv_small_booster"
         app:layout_constraintEnd_toStartOf="@id/iv_big_booster"
         app:layout_constraintTop_toTopOf="@id/iv_small_booster"
@@ -70,8 +64,8 @@
 
     <TextView
         android:id="@+id/tv_medium_booster"
+        style="@style/TextViewStyleBlack"
         android:text="3 Boosters"
-        style="@style/TextViewStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
@@ -83,9 +77,8 @@
 
     <TextView
         android:id="@+id/tv_cost_medium_booster"
+        style="@style/tvWalletWhite"
         android:text="100"
-        style="@style/tvWallet"
-        android:textColor="@android:color/white"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -96,10 +89,8 @@
 
     <ImageView
         android:id="@+id/iv_big_booster"
+        style="@style/shop_card_style"
         android:layout_width="0dp"
-        android:layout_height="200dp"
-        android:background="@drawable/card_back"
-        android:src="@drawable/vortex_ram"
         app:layout_constraintStart_toEndOf="@id/iv_medium_booster"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/iv_small_booster"
@@ -107,8 +98,8 @@
 
     <TextView
         android:id="@+id/tv_big_booster"
+        style="@style/TextViewStyleBlack"
         android:text="10 Boosters"
-        style="@style/TextViewStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
@@ -120,9 +111,8 @@
 
     <TextView
         android:id="@+id/tv_cost_big_booster"
+        style="@style/tvWalletWhite"
         android:text="300"
-        style="@style/tvWallet"
-        android:textColor="@android:color/white"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"

@@ -7,13 +7,12 @@
 
     <TextView
         android:id="@+id/tv_question"
+        style="@style/tv_FAQ_question"
+        android:text="TextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="TextView"
-        android:paddingVertical="10dp"
-        android:textAlignment="center"
-        android:background="@drawable/border_tv"
-        android:textStyle="bold"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -21,12 +20,12 @@
 
     <TextView
         android:id="@+id/tv_response"
+        style="@style/etStyle"
+        android:text="TextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone"
         tools:visibility="visible"
-        android:text="TextView"
-        android:background="@android:color/white"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_question"

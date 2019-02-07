@@ -6,7 +6,7 @@
     android:id="@+id/collectionFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="8dp"
+    android:layout_margin="4dp"
     tools:context=".View.Collection.list.CollectionFragment">
 
     <TextView
@@ -88,26 +88,26 @@
 
     <Button
         android:id="@+id/btn_perso3"
+        style="@style/btn_style"
         android:layout_width="0dp"
         android:layout_height="82dp"
         android:layout_margin="2dp"
         tools:text="Leodagan"
         android:visibility="invisible"
         tools:visibility="visible"
-        android:backgroundTint="@color/colorPrimaryDark"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/btn_perso4"
         app:layout_constraintTop_toBottomOf="@id/btn_perso1"/>
 
     <Button
         android:id="@+id/btn_perso4"
+        style="@style/btn_style"
         android:layout_width="0dp"
         android:layout_height="82dp"
         android:layout_margin="2dp"
         tools:text="Yvain"
         android:visibility="invisible"
         tools:visibility="visible"
-        android:backgroundTint="@color/colorPrimaryDark"
         app:layout_constraintStart_toEndOf="@id/btn_perso3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/btn_perso2"/>
