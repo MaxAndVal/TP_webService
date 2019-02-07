@@ -12,6 +12,7 @@ import com.example.lpiem.rickandmortyapp.Model.KaamlottQuote
 import com.example.lpiem.rickandmortyapp.Model.ResponseFromApi
 import com.example.lpiem.rickandmortyapp.Model.User
 import com.example.lpiem.rickandmortyapp.Model.Wallet
+import com.example.lpiem.rickandmortyapp.Util.SingletonHolder
 import com.example.lpiem.rickandmortyapp.View.Home.HomeDisplayUI
 import com.example.lpiem.rickandmortyapp.View.TAG
 import com.google.gson.JsonObject

@@ -7,7 +7,7 @@ import com.example.lpiem.rickandmortyapp.Data.RetrofitCallTypes
 import com.example.lpiem.rickandmortyapp.Data.RetrofitCallTypes.GET_CARD_DETAILS
 import com.example.lpiem.rickandmortyapp.Data.RickAndMortyRetrofitSingleton
 import com.example.lpiem.rickandmortyapp.Model.DetailledCard
-import com.example.lpiem.rickandmortyapp.Presenter.SingletonHolder
+import com.example.lpiem.rickandmortyapp.Util.SingletonHolder
 import com.example.lpiem.rickandmortyapp.View.Collection.detail.CardDetailDisplay
 import com.example.lpiem.rickandmortyapp.View.TAG
 import okhttp3.ResponseBody

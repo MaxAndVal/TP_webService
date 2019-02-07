@@ -10,7 +10,7 @@ import com.example.lpiem.rickandmortyapp.Data.RickAndMortyRetrofitSingleton
 import com.example.lpiem.rickandmortyapp.Model.FAQ
 import com.example.lpiem.rickandmortyapp.Model.ListOfFAQ
 import com.example.lpiem.rickandmortyapp.Model.SettingsOnClickInterface
-import com.example.lpiem.rickandmortyapp.Presenter.SingletonHolder
+import com.example.lpiem.rickandmortyapp.Util.SingletonHolder
 import com.example.lpiem.rickandmortyapp.R
 import com.example.lpiem.rickandmortyapp.View.BottomActivity
 import com.example.lpiem.rickandmortyapp.View.Settings.FAQAdapter

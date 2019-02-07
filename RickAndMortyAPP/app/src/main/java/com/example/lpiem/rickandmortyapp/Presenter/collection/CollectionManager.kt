@@ -9,7 +9,7 @@ import com.example.lpiem.rickandmortyapp.Data.RetrofitCallTypes.LIST_OF_CARDS
 import com.example.lpiem.rickandmortyapp.Data.RickAndMortyRetrofitSingleton
 import com.example.lpiem.rickandmortyapp.Model.ListOfCards
 import com.example.lpiem.rickandmortyapp.Model.User
-import com.example.lpiem.rickandmortyapp.Presenter.SingletonHolder
+import com.example.lpiem.rickandmortyapp.Util.SingletonHolder
 import com.example.lpiem.rickandmortyapp.View.Collection.list.CardListDisplay
 import com.example.lpiem.rickandmortyapp.View.Collection.list.CollectionFragment
 import com.example.lpiem.rickandmortyapp.View.TAG
