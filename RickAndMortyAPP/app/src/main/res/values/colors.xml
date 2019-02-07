@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#70B347</color>
-    <color name="colorPrimaryDark">#0A9043</color>
-    <color name="colorAccent">#D2E054</color>
+    <color name="colorPrimary">#a9f3fd</color>
+    <color name="colorPrimaryDark">#35c9dd</color>
+    <color name="colorAccent">#f0e14a</color>
     <color name="etHints">#bdc1c9</color>
     <color name="blueRick">#b7e4f9</color>
     <color name="green_vortex">#11FF00</color>

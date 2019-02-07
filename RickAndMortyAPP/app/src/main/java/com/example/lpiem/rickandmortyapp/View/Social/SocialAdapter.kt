@@ -24,9 +24,9 @@ class SocialAdapter(private var dataSet: List<Friend>?, private val listener: So
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = dataSet!![position]
-        holder.userName.text = dataSet!![position].userName
-        if (dataSet!![position].accepted !== null && dataSet!![position].accepted!!) {
-            holder.ivIconFriends.setImageResource(R.drawable.store)
+        holder.userName.text = item.userName
+        if (item.accepted !== null && item.accepted!!) {
+            holder.ivIconFriends.setImageResource(R.drawable.ic_store_24dp)
         }
         holder.ivIconFriends.setOnClickListener { listener.addFriends(item) }
         holder.userName.setOnLongClickListener { listener.delFriends(item) }
