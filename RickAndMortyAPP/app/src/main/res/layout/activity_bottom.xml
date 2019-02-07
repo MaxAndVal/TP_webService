@@ -10,6 +10,7 @@
 
     <TextView
         android:id="@+id/tv_message"
+        style="@style/tv_response_style"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/title_home"
@@ -24,10 +25,8 @@
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/navigation"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_wallet"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toBottomOf="@id/tv_deckToOpen" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/navigation"
@@ -45,7 +44,7 @@
 
     <TextView
         android:id="@+id/tv_wallet"
-        style="@style/tvWallet"
+        style="@style/tvWalletBlack"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
