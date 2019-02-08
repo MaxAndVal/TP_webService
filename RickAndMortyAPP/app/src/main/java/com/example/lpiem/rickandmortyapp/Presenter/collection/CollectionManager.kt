@@ -46,9 +46,10 @@ class CollectionManager private constructor(private val context: Context) {
         call.enqueue(object : Callback<T> {
             override fun onResponse(call: Call<T>, response: Response<T>) {
                 if (response.isSuccessful) {
+                    val result = response.body()
                     when (type) {
                         RetrofitCallTypes.LIST_OF_CARDS -> {
-                            listOfCardTreatment(response)
+                            listOfCardTreatment(result as ListOfCards)
                         }
                     }
                 } else {
@@ -65,8 +66,8 @@ class CollectionManager private constructor(private val context: Context) {
 
     }
 
-    private fun <T> listOfCardTreatment(response: Response<T>) {
-        collectionFragment!!.listOfCards = response.body() as ListOfCards
+    private fun listOfCardTreatment(response: ListOfCards) {
+        collectionFragment!!.listOfCards = response
         val list = collectionFragment!!.listOfCards
         if (list?.code == 200) {
             cardListDisplay.displayResult(list)

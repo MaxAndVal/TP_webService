@@ -35,9 +35,10 @@ class DetailCollectionManager private constructor(private val context: Context) 
             override fun onResponse(call: Call<T>, response: Response<T>) {
                 if (response.isSuccessful) {
                     Log.d(TAG, response.toString())
+                    val result = response.body()
                     when (type) {
                         GET_CARD_DETAILS -> {
-                            getCardDetailTreatment(response)
+                            getCardDetailTreatment(result as DetailledCard)
                         }
                     }
                 } else {
@@ -55,13 +56,12 @@ class DetailCollectionManager private constructor(private val context: Context) 
 
     }
 
-    private fun <T> getCardDetailTreatment(response: Response<T>) {
-        val details = response.body() as DetailledCard
-        val code = details.code
+    private fun getCardDetailTreatment(response: DetailledCard) {
+        val code = response.code
         if (code == 200) {
-            cardDetailDisplay.displayResult(details)
+            cardDetailDisplay.displayResult(response)
         } else {
-            Toast.makeText(context, "code : $code, message ${details.message}", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "code : $code, message ${response.message}", Toast.LENGTH_SHORT).show()
         }
     }
 

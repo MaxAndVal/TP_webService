@@ -28,8 +28,8 @@ class FaqManager internal constructor(internal val context: Context)  {
 
     fun closeFAQ(fragment: Fragment) {
 
-        var FAQFragment = (context as BottomActivity).supportFragmentManager
-        val fragmentTransaction = FAQFragment.beginTransaction()
+        val fragmentManager = (context as BottomActivity).supportFragmentManager
+        val fragmentTransaction = fragmentManager.beginTransaction()
         fragmentTransaction.remove(fragment).commit()
         context.navigation.visibility = View.VISIBLE
 
