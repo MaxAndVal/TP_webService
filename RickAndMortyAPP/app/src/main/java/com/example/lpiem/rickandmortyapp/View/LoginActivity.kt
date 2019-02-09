@@ -1,9 +1,12 @@
 package com.example.lpiem.rickandmortyapp.View
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
+import android.os.Handler
 import android.view.View
+import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.lpiem.rickandmortyapp.Presenter.LoginAppManager
 import com.example.lpiem.rickandmortyapp.R
@@ -18,6 +21,7 @@ class LoginActivity : AppCompatActivity() {
 
     internal var FacebookCallbackManager: CallbackManager? = null
     private lateinit var loginAppManager: LoginAppManager
+    private var doubleBackToExitPressedOnce = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,6 +39,13 @@ class LoginActivity : AppCompatActivity() {
         btnRegularConnection.setOnClickListener {
             loginAppManager.regularConnection(etEmail.text.toString(), etPassword.text.toString())
             login_progressBar.visibility = View.VISIBLE
+            // Check if no view has focus before hiding the keyboard:
+            val view = this.currentFocus
+            view?.let { v ->
+                val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as
+                        InputMethodManager
+                imm.let { it.hideSoftInputFromWindow(v.windowToken, 0) }
+            }
         }
         tv_signIn.setOnClickListener { loginAppManager.regularSignIn() }
     }
@@ -68,7 +79,15 @@ class LoginActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        finish()
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed()
+            return
+        }
+
+        doubleBackToExitPressedOnce = true
+        Toast.makeText(this, "S'il vous plaît, cliquez sur retour une seconde fois pour quitter", Toast.LENGTH_SHORT).show()
+
+        Handler().postDelayed(Runnable { doubleBackToExitPressedOnce = false }, 2000)
     }
 
 }
