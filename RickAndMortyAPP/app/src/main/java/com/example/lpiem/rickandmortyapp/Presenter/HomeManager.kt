@@ -98,6 +98,17 @@ class HomeManager private constructor(private var context: Context) {
         }
     }
 
+    internal fun updateUserInfo(response: ResponseFromApi){
+        val code = response.code
+        val message = response.message
+        if (code == SUCCESS) {
+            Log.d(TAG, "success code : $code, message $message")
+            loginAppManager.connectedUser = response.results!!
+        } else {
+            Log.d(TAG, "error code : $code, message $message")
+        }
+    }
+
     private fun updateUserWalletTreatment(response: ResponseFromApi) {
         val code = response.code
         val message = response.message
