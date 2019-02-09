@@ -60,8 +60,7 @@ class BottomActivity : AppCompatActivity() {
         tv_wallet.text = String.format(getString(R.string.wallet_amount), loginAppManager.connectedUser?.userWallet, " ")
         tv_wallet.setOnLongClickListener { iAmPickleRick() }
         tv_wallet.setOnClickListener { openShop() }
-
-
+        tv_deckToOpen.setOnClickListener { openDeck(loginAppManager.connectedUser!!.deckToOpen) }
         openFragment(HomeFragment())
     }
 
@@ -73,6 +72,8 @@ class BottomActivity : AppCompatActivity() {
             startActivity(openIntent)
         }
     }
+
+
 
     override fun onBackPressed() {
         val count = supportFragmentManager.backStackEntryCount
@@ -122,7 +123,7 @@ class BottomActivity : AppCompatActivity() {
         tv_deckToOpen.text = deckToOpen.toString()
         tv_deckToOpen.setOnClickListener { openDeck(deckToOpen!!) }
         tv_wallet.text = String.format(getString(R.string.wallet_amount), loginAppManager.connectedUser?.userWallet, " ")
-        tv_deckToOpen.text = loginAppManager.connectedUser!!.deckToOpen.toString()
+        tv_deckToOpen.text = loginAppManager.connectedUser?.deckToOpen.toString()
     }
 
 
