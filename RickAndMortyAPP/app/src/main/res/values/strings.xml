@@ -46,5 +46,6 @@
     <string name="btn_pending_friend_requests">voir les requetes en attente</string>
     <string name="btn_list_of_friends">voir sa liste d\'ami</string>
     <string name="network_problem_please_try_again">Problème de réseau, merci de tenter de vous connecter à nouveau</string>
+    <string name="double_back_to_quit_app">S\'il vous plaît, cliquez sur retour une seconde fois pour quitter</string>
 
 </resources>

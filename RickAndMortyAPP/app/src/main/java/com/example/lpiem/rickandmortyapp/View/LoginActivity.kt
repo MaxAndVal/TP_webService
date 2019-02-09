@@ -85,9 +85,9 @@ class LoginActivity : AppCompatActivity() {
         }
 
         doubleBackToExitPressedOnce = true
-        Toast.makeText(this, "S'il vous plaît, cliquez sur retour une seconde fois pour quitter", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, getString(R.string.double_back_to_quit_app), Toast.LENGTH_SHORT).show()
 
-        Handler().postDelayed(Runnable { doubleBackToExitPressedOnce = false }, 2000)
+        Handler().postDelayed({ doubleBackToExitPressedOnce = false }, 2000)
     }
 
 }

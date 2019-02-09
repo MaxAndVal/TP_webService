@@ -97,7 +97,7 @@ class ShopManager private constructor(private val context: Context) {
         val message = walletResponse.message
         if (code == 200) {
             val actualValue = walletResponse.wallet!!
-            if (actualValue - cost > 0) {
+            if (actualValue - cost >= 0) {
                 numberOfDeckToAdd = howManyDecksToAdd(cost)
                 val body = JsonObject()
                 body.addProperty("newWallet", actualValue - cost)
