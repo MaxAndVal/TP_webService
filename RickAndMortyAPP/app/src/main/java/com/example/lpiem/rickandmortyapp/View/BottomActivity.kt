@@ -71,6 +71,8 @@ class BottomActivity : AppCompatActivity() {
         //TODO if necessary
     }
 
+
+
     override fun onBackPressed() {
         val count = supportFragmentManager.backStackEntryCount
         Log.d(TAG, "count : $count")
