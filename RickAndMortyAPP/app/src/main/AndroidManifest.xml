@@ -11,13 +11,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".View.Shop.ShopActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".View.Collection.detail.CollectionDetailActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".View.SignInActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".View.SplashScreen"
+        <activity android:name=".View.OpenDeckActivity"></activity>
+        <activity
+            android:name=".View.Shop.ShopActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".View.Collection.detail.CollectionDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".View.SignInActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".View.SplashScreen"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

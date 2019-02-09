@@ -60,13 +60,16 @@ class BottomActivity : AppCompatActivity() {
         tv_wallet.text = String.format(getString(R.string.wallet_amount), loginAppManager.connectedUser?.userWallet, " ")
         tv_wallet.setOnLongClickListener { iAmPickleRick() }
         tv_wallet.setOnClickListener { openShop() }
-        tv_deckToOpen.setOnClickListener { openDeck(loginAppManager.connectedUser!!.deckToOpen) }
+        tv_deckToOpen.setOnClickListener { openDeck(loginAppManager.connectedUser!!.deckToOpen!!) }
         openFragment(HomeFragment())
     }
 
-    private fun openDeck(deckToOpen: Int?) {
-        if (deckToOpen != null) {
 
+    private fun openDeck(deckToOpen: Int) {
+        if(deckToOpen>0){
+            var openIntent = Intent(this, OpenDeckActivity::class.java)
+            //openIntent.putExtra("userInfo", loginAppManager)
+            startActivity(openIntent)
         }
     }
 
@@ -116,6 +119,9 @@ class BottomActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        val deckToOpen = loginAppManager.connectedUser!!.deckToOpen;
+        tv_deckToOpen.text = deckToOpen.toString()
+        tv_deckToOpen.setOnClickListener { openDeck(deckToOpen!!) }
         tv_wallet.text = String.format(getString(R.string.wallet_amount), loginAppManager.connectedUser?.userWallet, " ")
         tv_deckToOpen.text = loginAppManager.connectedUser?.deckToOpen.toString()
     }

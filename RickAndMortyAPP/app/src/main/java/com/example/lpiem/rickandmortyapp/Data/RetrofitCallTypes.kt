@@ -19,5 +19,7 @@ enum class RetrofitCallTypes {
     GET_CARD_DETAILS,
     BUY_BOOSTER,
     DECKS_INCREASED,
-    GET_FAQ
+    GET_FAQ,
+    OPEN_RANDOM_DECK,
+    UPDATE_USER_INFO
 }
