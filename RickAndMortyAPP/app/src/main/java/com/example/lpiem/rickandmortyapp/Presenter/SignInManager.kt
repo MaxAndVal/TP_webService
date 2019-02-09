@@ -58,12 +58,13 @@ class SignInManager private constructor(private var context: Context) {
         call.enqueue(object : Callback<T> {
             override fun onResponse(call: Call<T>, response: Response<T>) {
                 if (response.isSuccessful) {
+                    val result = response.body()
                     when (type) {
                         RetrofitCallTypes.SIGN_IN -> {
-                            signInTreatment(response)
+                            signInTreatment(result as ResponseFromApi)
                         }
                         RetrofitCallTypes.CONNECTION -> {
-                            connectionTreatment(response)
+                            connectionTreatment(result as ResponseFromApi)
                         }
                         else -> Log.d(TAG, "error : ${response.errorBody()}")
                     }
@@ -79,22 +80,20 @@ class SignInManager private constructor(private var context: Context) {
 
     }
 
-    private fun <T> connectionTreatment(response: Response<T>) {
-        val responseFromApi = response.body() as ResponseFromApi
-        val code = responseFromApi.code
-        val results = responseFromApi.results?.userName
-        val userId = responseFromApi.results?.userId
-        Log.d(TAG, "body = ${response.body()}")
-        Toast.makeText(context, "code : $code, bienvenue $results id:$userId", Toast.LENGTH_SHORT).show()
-        loginAppManager.connectedUser = responseFromApi.results!!
+    private fun connectionTreatment(response: ResponseFromApi) {
+        val code = response.code
+        val name = response.results?.userName
+        val userId = response.results?.userId
+        Log.d(TAG, "body = $response")
+        Toast.makeText(context, "code : $code, bienvenue $name id: $userId", Toast.LENGTH_SHORT).show()
+        loginAppManager.connectedUser = response.results!!
         val intent = Intent(context, BottomActivity::class.java)
         context.startActivity(intent)
     }
 
-    private fun <T> signInTreatment(response: Response<T>) {
-        val responseFromApi = response.body() as ResponseFromApi
-        val code = responseFromApi.code
-        val message = responseFromApi.message
+    private fun signInTreatment(response: ResponseFromApi) {
+        val code = response.code
+        val message = response.message
         if (code == 200) {
             regularConnection()
         } else {
