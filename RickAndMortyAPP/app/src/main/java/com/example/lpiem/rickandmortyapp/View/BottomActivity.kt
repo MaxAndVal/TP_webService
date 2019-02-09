@@ -60,7 +60,7 @@ class BottomActivity : AppCompatActivity() {
         tv_wallet.text = String.format(getString(R.string.wallet_amount), loginAppManager.connectedUser?.userWallet, " ")
         tv_wallet.setOnLongClickListener { iAmPickleRick() }
         tv_wallet.setOnClickListener { openShop() }
-        tv_deckToOpen.setOnClickListener { openDeck(loginAppManager.connectedUser!!.deckToOpen) }
+        tv_deckToOpen.setOnClickListener { openDeck(loginAppManager.connectedUser!!.deckToOpen!!) }
         openFragment(HomeFragment())
     }
 
