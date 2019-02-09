@@ -9,20 +9,16 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import com.example.lpiem.rickandmortyapp.Presenter.HomeManager
 import com.example.lpiem.rickandmortyapp.Presenter.LoginAppManager
-import com.example.lpiem.rickandmortyapp.Presenter.settings.FaqManager
 import com.example.lpiem.rickandmortyapp.R
 import com.example.lpiem.rickandmortyapp.View.Collection.list.CollectionFragment
 import com.example.lpiem.rickandmortyapp.View.Home.HomeFragment
-import com.example.lpiem.rickandmortyapp.View.Settings.FAQ_Fragment
 import com.example.lpiem.rickandmortyapp.View.Settings.SettingsFragment
 import com.example.lpiem.rickandmortyapp.View.Shop.ShopActivity
 import com.example.lpiem.rickandmortyapp.View.Social.SocialFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_bottom.*
-
 
 
 class BottomActivity : AppCompatActivity() {
@@ -65,11 +61,10 @@ class BottomActivity : AppCompatActivity() {
         tv_wallet.setOnLongClickListener { iAmPickleRick() }
         tv_wallet.setOnClickListener { openShop() }
         val deckToOpen = loginAppManager.connectedUser!!.deckToOpen;
-            tv_deckToOpen.text = deckToOpen.toString()
+        tv_deckToOpen.text = deckToOpen.toString()
         tv_deckToOpen.setOnClickListener { openDeck(deckToOpen!!) }
 
         openFragment(HomeFragment())
-
     }
 
     private fun openDeck(deckToOpen: Int) {
@@ -78,13 +73,13 @@ class BottomActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         val count = supportFragmentManager.backStackEntryCount
-        Log.d(TAG, "count : " + count)
-        if(count==0){
+        Log.d(TAG, "count : $count")
+        if (count == 0) {
             super.onBackPressed()
             loginAppManager.connectedUser = null
             loginAppManager.gameInProgress = true
             clearGame()
-        }else{
+        } else {
             supportFragmentManager.popBackStack()
             navigation.visibility = View.VISIBLE
         }
@@ -109,7 +104,7 @@ class BottomActivity : AppCompatActivity() {
     private fun clearGame() {
         val homeManager = HomeManager.getInstance(this)
         homeManager.turn = 0
-        homeManager.score =0
+        homeManager.score = 0
         finish()
     }
 

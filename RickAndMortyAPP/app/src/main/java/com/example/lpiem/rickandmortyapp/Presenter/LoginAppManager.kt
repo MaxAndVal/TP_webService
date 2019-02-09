@@ -209,30 +209,10 @@ class LoginAppManager private constructor(private var context: Context) {
         call.enqueue(object : Callback<T> {
             override fun onResponse(call: Call<T>, response: Response<T>) {
                 if (response.isSuccessful) {
+                    val result = response.body()
                     when (type) {
                         LOGIN -> {
-                            val responseBody = response.body() as ResponseFromApi
-                            val code = responseBody.code
-                            if (code == 200) {
-                                (context as LoginActivity).login_progressBar.visibility = View.GONE
-                                if (connectedToGoogle) {
-                                    googleBtnTextView.text = context.getString(R.string.btn_disconnection_google)
-                                    (context as LoginActivity).sign_in_button.setOnClickListener { disconnectGoogleAccount() }
-                                }
-                                val results = responseBody.results?.userName
-                                Log.d(TAG, "body = ${response.body().toString()}")
-                                Toast.makeText(context, "code : $code, bienvenue $results", Toast.LENGTH_SHORT).show()
-                                val homeIntent = Intent(context, BottomActivity::class.java)
-                                connectedUser = responseBody.results!!
-                                (context as LoginActivity).startActivity(homeIntent)
-                            } else {
-                                (context as LoginActivity).login_progressBar.visibility = View.GONE
-                                if ((context as LoginActivity).etEmail.text.toString() == "" || (context as LoginActivity).etPassword.text.toString() == "") {
-                                    Toast.makeText(context, context.getString(R.string.thanks_to_fill_all_fields), Toast.LENGTH_SHORT).show()
-                                } else {
-                                    Toast.makeText(context, "login error code : $code, message ${responseBody.message}", Toast.LENGTH_LONG).show()
-                                }
-                            }
+                            loginTreatment(result as ResponseFromApi)
                         }
                         else -> {
                             (context as LoginActivity).login_progressBar.visibility = View.GONE
@@ -251,11 +231,37 @@ class LoginAppManager private constructor(private var context: Context) {
             override fun onFailure(call: Call<T>, t: Throwable) {
                 Log.d(TAG, "fail : $t")
                 (context as LoginActivity).login_progressBar.visibility = View.GONE
-                Toast.makeText(context, "Problème de réseau, merci de tenter de vous connecter à nouveau", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, context.getString(R.string.network_problem_please_try_again), Toast.LENGTH_LONG).show()
                 LoginManager.getInstance().logOut()
             }
         })
 
+    }
+
+    private fun loginTreatment(response: ResponseFromApi) {
+        val code = response.code
+        val message = response.message
+        if (code == 200) {
+            val results = response.results
+            (context as LoginActivity).login_progressBar.visibility = View.GONE
+            if (connectedToGoogle) {
+                googleBtnTextView.text = context.getString(R.string.btn_disconnection_google)
+                (context as LoginActivity).sign_in_button.setOnClickListener { disconnectGoogleAccount() }
+            }
+            val name = results?.userName
+            Log.d(TAG, "body = $response")
+            Toast.makeText(context, "code : $code, bienvenue $name", Toast.LENGTH_SHORT).show()
+            val homeIntent = Intent(context, BottomActivity::class.java)
+            connectedUser = response.results!!
+            (context as LoginActivity).startActivity(homeIntent)
+        } else {
+            (context as LoginActivity).login_progressBar.visibility = View.GONE
+            if ((context as LoginActivity).etEmail.text.toString() == "" || (context as LoginActivity).etPassword.text.toString() == "") {
+                Toast.makeText(context, context.getString(R.string.thanks_to_fill_all_fields), Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(context, "login error code : $code, message $message", Toast.LENGTH_LONG).show()
+            }
+        }
     }
 
 }

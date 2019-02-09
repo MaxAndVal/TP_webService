@@ -54,7 +54,7 @@ class SettingsFragment : androidx.fragment.app.Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        btn_faq.setOnClickListener { settingsManager.fragmentFAQ(FAQ_Fragment()) }
+        btn_faq.setOnClickListener { settingsManager.openFragmentFAQ(FAQ_Fragment()) }
 
     }
 
