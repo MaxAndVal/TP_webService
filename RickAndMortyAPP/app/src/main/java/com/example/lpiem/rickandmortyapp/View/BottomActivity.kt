@@ -73,7 +73,11 @@ class BottomActivity : AppCompatActivity() {
     }
 
     private fun openDeck(deckToOpen: Int) {
-        //TODO if necessary
+        if(deckToOpen>0){
+            var openIntent = Intent(this, OpenDeckActivity::class.java)
+            openIntent.putExtra("userInfo", loginAppManager)
+            startActivity(openIntent)
+        }
     }
 
     override fun onBackPressed() {
