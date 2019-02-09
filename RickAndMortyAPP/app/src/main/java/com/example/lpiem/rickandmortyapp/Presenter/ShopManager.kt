@@ -35,15 +35,16 @@ class ShopManager private constructor(private val context: Context) {
         call.enqueue(object : Callback<T> {
             override fun onResponse(call: Call<T>, response: Response<T>) {
                 if (response.isSuccessful) {
+                    val result = response.body()
                     when (type) {
                         BUY_BOOSTER -> {
-                            buyBoosterTreatment(response)
+                            buyBoosterTreatment(result as Wallet)
                         }
                         UPDATE_WALLET -> {
-                            updateWalletTreatment(response)
+                            updateWalletTreatment(result as ResponseFromApi)
                         }
                         DECKS_INCREASED -> {
-                            decksIncreasedTreatment(response)
+                            decksIncreasedTreatment(result as ResponseFromApi)
                         }
                         else -> Log.d(TAG, "error : type does not exist")
                     }
@@ -62,12 +63,11 @@ class ShopManager private constructor(private val context: Context) {
 
     }
 
-    private fun <T> decksIncreasedTreatment(response: Response<T>) {
-        val result = response.body() as ResponseFromApi
-        val code = result.code
-        val message = result.message
+    private fun decksIncreasedTreatment(response: ResponseFromApi) {
+        val code = response.code
+        val message = response.message
         if (code == 200) {
-            val user = result.results!!
+            val user = response.results!!
             loginAppManager.connectedUser = user
             Toast.makeText(context, "$numberOfDeckToAdd decks ajoutés à votre pool !", Toast.LENGTH_SHORT).show()
         } else {
@@ -75,14 +75,13 @@ class ShopManager private constructor(private val context: Context) {
         }
     }
 
-    private fun <T> updateWalletTreatment(response: Response<T>) {
-        val result = response.body() as ResponseFromApi
-        val code = result.code
-        val message = result.message
+    private fun updateWalletTreatment(response: ResponseFromApi) {
+        val code = response.code
+        val message = response.message
         if (code == 200) {
-            var deckToOpen = result.results!!.deckToOpen!!
+            var deckToOpen = response.results!!.deckToOpen!!
             deckToOpen += numberOfDeckToAdd
-            //Make a call to update the amount of decks to open
+            // Make a call to update the amount of decks to open
             val jsonObject = JsonObject()
             jsonObject.addProperty("user_id", loginAppManager.connectedUser!!.userId)
             jsonObject.addProperty("deckNumber", deckToOpen)
@@ -93,18 +92,13 @@ class ShopManager private constructor(private val context: Context) {
         }
     }
 
-    private fun <T> buyBoosterTreatment(response: Response<T>) {
-        val walletResponse = response.body() as Wallet
+    private fun buyBoosterTreatment(walletResponse: Wallet) {
         val code = walletResponse.code
         val message = walletResponse.message
-        val actualValue = walletResponse.wallet!!
         if (code == 200) {
+            val actualValue = walletResponse.wallet!!
             if (actualValue - cost > 0) {
-                when (cost) {
-                    40 -> numberOfDeckToAdd = 1
-                    100 -> numberOfDeckToAdd = 3
-                    300 -> numberOfDeckToAdd = 10
-                }
+                numberOfDeckToAdd = howManyDecksToAdd(cost)
                 val body = JsonObject()
                 body.addProperty("newWallet", actualValue - cost)
                 currentCall = rickAndMortyAPI!!.updateWallet(loginAppManager.connectedUser!!.userId!!, body)
@@ -122,6 +116,15 @@ class ShopManager private constructor(private val context: Context) {
         val user = loginAppManager.connectedUser
         currentCall = rickAndMortyAPI!!.getWallet(user!!.userId!!)
         callRetrofit(currentCall!!, BUY_BOOSTER)
+    }
+
+    private fun howManyDecksToAdd(cost: Int) : Int {
+        return when (cost) {
+            40 ->  1
+            100 -> 3
+            300 -> 10
+            else -> 0
+        }
     }
 
 }

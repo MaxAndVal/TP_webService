@@ -9,6 +9,7 @@ import com.example.lpiem.rickandmortyapp.Model.Friend
 import com.example.lpiem.rickandmortyapp.Model.ListOfFriends
 import com.example.lpiem.rickandmortyapp.Model.ResponseFromApi
 import com.example.lpiem.rickandmortyapp.Model.SocialActionsInterface
+import com.example.lpiem.rickandmortyapp.R
 import com.example.lpiem.rickandmortyapp.Util.SingletonHolder
 import com.example.lpiem.rickandmortyapp.View.Social.SocialFragment
 import com.example.lpiem.rickandmortyapp.View.TAG
@@ -44,22 +45,23 @@ class SocialManager private constructor(private val context: Context){
         call.enqueue(object : Callback<T> {
             override fun onResponse(call: Call<T>, response: Response<T>) {
                 if (response.isSuccessful) {
+                    val result = response.body()
                     Log.d(TAG, response.toString())
                     when (type) {
                         RetrofitCallTypes.LIST_OF_FRIENDS -> {
-                            listOfFriendsTreatment(response)
+                            listOfFriendsTreatment(result as ListOfFriends)
                         }
                         RetrofitCallTypes.RESULT_FRIENDS_SEARCHING -> {
-                            resultFriendsSearchingTreatment(response)
+                            resultFriendsSearchingTreatment(result as ListOfFriends)
                         }
                         RetrofitCallTypes.ACCEPT_FRIENDSHIP ->{
-                            acceptFriendshipTreatment(response)
+                            acceptFriendshipTreatment(result as ResponseFromApi)
                         }
                         RetrofitCallTypes.DEL_A_FRIEND -> {
-                            delFriendTreatment(response)
+                            delFriendTreatment(result as ResponseFromApi)
                         }
                         RetrofitCallTypes.ADD_A_FRIENDS -> {
-                            addFriendTreatment(response)
+                            addFriendTreatment(result as ResponseFromApi)
                         }
                     }
                 } else {
@@ -76,48 +78,46 @@ class SocialManager private constructor(private val context: Context){
 
     }
 
-    private fun <T> addFriendTreatment(response: Response<T>) {
+    private fun addFriendTreatment(response: ResponseFromApi) {
         //TODO: need implementation for rv
-        val result = response.body() as ResponseFromApi
-        val code = result.code
-        val message = result.message
+        val code = response.code
+        val message = response.message
         if (code == 200) {
-            Toast.makeText(context, "added $message", Toast.LENGTH_SHORT).show()
+            val result = response.results
+            Toast.makeText(context, "code $code added $message results : $result", Toast.LENGTH_SHORT).show()
         } else {
             Toast.makeText(context, "code : $code, message $message", Toast.LENGTH_SHORT).show()
         }
     }
 
-    private fun <T> delFriendTreatment(response: Response<T>) {
+    private fun delFriendTreatment(response: ResponseFromApi) {
         //TODO: need implementation for rv
-        val result = response.body() as ResponseFromApi
-        val code = result.code
-        val message = result.message
+        val code = response.code
+        val message = response.message
         if (code == 200) {
-            Toast.makeText(context, "delete : $message", Toast.LENGTH_SHORT).show()
+            val results = response.results
+            Toast.makeText(context, "code : $code - delete : $message results : $results", Toast.LENGTH_SHORT).show()
         } else {
             Toast.makeText(context, "code : $code, message $message", Toast.LENGTH_SHORT).show()
         }
     }
 
-    private fun <T> acceptFriendshipTreatment(response: Response<T>) {
-        val social = response.body() as ResponseFromApi
-        val code = social.code
-        val message = social.message
+    private fun acceptFriendshipTreatment(response: ResponseFromApi) {
+        val code = response.code
+        val message = response.message
         if (code == 200) {
-            Toast.makeText(context, "code : $code, message $message", Toast.LENGTH_SHORT).show()
+            val results = response.results
+            Toast.makeText(context, "code : $code, message $message , results $results", Toast.LENGTH_SHORT).show()
         } else {
             Toast.makeText(context, "code error : $code, message $message", Toast.LENGTH_SHORT).show()
         }
     }
 
-    private fun <T> resultFriendsSearchingTreatment(response: Response<T>) {
-        val social = response.body() as ListOfFriends
-        val code = social.code
-        val message = social.message
-        Log.d(TAG, social.toString())
+    private fun resultFriendsSearchingTreatment(list: ListOfFriends) {
+        val code = list.code
+        val message = list.message
+        Log.d(TAG, "list of friends searching : $list")
         if (code == 200) {
-            val list = response.body() as ListOfFriends
             socialFragment?.resultFromSearch = list
             socialFragment?.updateDataSetList(list.friends)
         } else {
@@ -125,12 +125,10 @@ class SocialManager private constructor(private val context: Context){
         }
     }
 
-    private fun <T> listOfFriendsTreatment(response: Response<T>) {
-        val social = response.body() as ListOfFriends
-        val code = social.code
-        val message = social.message
+    private fun listOfFriendsTreatment(list: ListOfFriends) {
+        val code = list.code
+        val message = list.message
         if (code == 200) {
-            val list = response.body() as ListOfFriends
             socialFragment?.listOfFriends = list
             socialFragment?.listOfActualFriends = list.friends?.filter { it.accepted == true }
             socialFragment?.listOfPotentialFriends = list.friends?.filter { it.accepted == false }
@@ -143,7 +141,7 @@ class SocialManager private constructor(private val context: Context){
             Toast.makeText(context, "code : $code, message $message", Toast.LENGTH_SHORT).show()
         }
         if (socialFragment != null && socialFragment!!.isVisible) {
-            socialFragment?.btn_friendsRequest?.text = "voir les requetes en attente"
+            socialFragment?.btn_friendsRequest?.text = context.getString(R.string.btn_pending_friend_requests)
             socialFragment?.btn_friendsRequest?.setOnClickListener { friendsRequest(link) }
         }
     }
@@ -155,7 +153,7 @@ class SocialManager private constructor(private val context: Context){
 
     fun friendsRequest(link: SocialActionsInterface) {
         socialFragment?.updateDataSetList(socialFragment?.listOfPotentialFriends)
-        socialFragment?.btn_friendsRequest?.text = "voir sa liste d'ami"
+        socialFragment?.btn_friendsRequest?.text = context.getString(R.string.btn_list_of_friends)
         socialFragment?.btn_friendsRequest?.setOnClickListener { getListOfFriends(loginAppManager.connectedUser!!.userId!!, link) }
     }
 

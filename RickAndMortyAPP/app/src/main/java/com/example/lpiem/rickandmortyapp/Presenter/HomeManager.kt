@@ -34,6 +34,7 @@ class HomeManager private constructor(private var context: Context) {
     internal var turn = 0
     private lateinit var currentCall: Call<*>
     private lateinit var homeDisplayUI: HomeDisplayUI
+    private val loginAppManager = LoginAppManager.getInstance(context)
 
     companion object : SingletonHolder<HomeManager, Context>(::HomeManager)
 
@@ -54,21 +55,22 @@ class HomeManager private constructor(private var context: Context) {
             override fun onResponse(call: Call<T>, response: Response<T>) {
                 if (response.isSuccessful) {
                     Log.d(TAG, response.toString())
+                    val result = response.body()
                     when (type) {
                         KAAMELOTT_QUOTE -> {
-                            getKaamelottQuoteTreatment(response)
+                            getKaamelottQuoteTreatment(result as KaamlottQuote)
                         }
                         GET_USER_BY_ID -> {
-                            getUserByIdTreatment(response)
+                            getUserByIdTreatment(result as ResponseFromApi)
                         }
                         PUT_DATE -> {
-                            putDateTreatment(response)
+                            putDateTreatment(result as ResponseFromApi)
                         }
                         UPDATE_WALLET -> {
-                            updateUserWalletTreatment(response)
+                            updateUserWalletTreatment(result as ResponseFromApi)
                         }
                         GET_WALLET -> {
-                            getWalletTreatment(response)
+                            getWalletTreatment(result as Wallet)
                         }
                     }
                 } else {
@@ -84,59 +86,64 @@ class HomeManager private constructor(private var context: Context) {
 
     }
 
-    private fun <T> getWalletTreatment(response: Response<T>) {
-        val newWalletResponse = response.body() as Wallet
-        if (newWalletResponse.code == SUCCESS) {
-            Log.d(TAG, "success code : ${newWalletResponse.code}, message ${newWalletResponse.message}, wallet ${newWalletResponse.wallet}")
-            homeDisplayUI.updatePickleRicksAmount(newWalletResponse.wallet!!, " ")
+    private fun getWalletTreatment(response: Wallet) {
+        val code = response.code
+        val message = response.message
+        if (code == SUCCESS) {
+            val wallet = response.wallet
+            Log.d(TAG, "success code : $code, message $message, wallet $wallet")
+            homeDisplayUI.updatePickleRicksAmount(wallet!!, " ")
         } else {
-            Log.d(TAG, "error code : ${newWalletResponse.code}, message ${newWalletResponse.message}")
+            Log.d(TAG, "error code : $code, message $message")
         }
     }
 
-    private fun <T> updateUserWalletTreatment(response: Response<T>) {
-        val walletUpdateResponse = response.body() as ResponseFromApi
-        if (walletUpdateResponse.code == SUCCESS) {
-            Log.d(TAG, "success code : ${walletUpdateResponse.code}, message ${walletUpdateResponse.message}")
-            val id = LoginAppManager.getInstance(context).connectedUser!!.userId
+    private fun updateUserWalletTreatment(response: ResponseFromApi) {
+        val code = response.code
+        val message = response.message
+        if (code == SUCCESS) {
+            Log.d(TAG, "success code : $code, message $message")
+            val id = loginAppManager.connectedUser!!.userId
             currentCall = rickAndMortyAPI!!.getWallet(id!!)
             callRetrofit(currentCall, GET_WALLET)
         } else {
-            Log.d(TAG, "error code : ${walletUpdateResponse.code}, message ${walletUpdateResponse.message}")
+            Log.d(TAG, "error code : $code, message $message")
         }
     }
 
-    private fun <T> putDateTreatment(response: Response<T>) {
-        val newDateResponse = response.body() as ResponseFromApi
-        if (newDateResponse.code == SUCCESS) {
-            Log.d(TAG, "success code : ${newDateResponse.code}, message ${newDateResponse.message}")
+    private fun putDateTreatment(response: ResponseFromApi) {
+        val code = response.code
+        val message = response.message
+        if (code == SUCCESS) {
+            Log.d(TAG, "success code : $code, message $message")
         } else {
-            Log.d(TAG, "error code : ${newDateResponse.code}, message ${newDateResponse.message}")
+            Log.d(TAG, "error code : $code, message $message")
         }
     }
 
-    private fun <T> getUserByIdTreatment(response: Response<T>) {
-        val responseFromApi = response.body() as ResponseFromApi
-        val loginAppManager = LoginAppManager.getInstance(context)
-        if (responseFromApi.code == SUCCESS) {
-            loginAppManager.gameInProgress = getDate() != responseFromApi.results?.userLastGame
+    private fun getUserByIdTreatment(response: ResponseFromApi) {
+        val code = response.code
+        val message = response.message
+        if (code == SUCCESS) {
+            val results = response.results
+            loginAppManager.gameInProgress = getDate() != results?.userLastGame
             homeDisplayUI.displayFragmentContent()
         } else {
-            Toast.makeText(context, "User not found, error : ${responseFromApi.message}", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "code $code User not found, error : $message", Toast.LENGTH_SHORT).show()
         }
     }
 
-    private fun <T> getKaamelottQuoteTreatment(response: Response<T>) {
-        val kaamlott = response.body() as KaamlottQuote
-        val code = kaamlott.code
-        if (kaamlott.code == SUCCESS) {
-            citation = kaamlott.citation!!
-            personnage = kaamlott.personnage!!
-            personnageNameList = kaamlott.personnageList!!
+    private fun getKaamelottQuoteTreatment(response: KaamlottQuote) {
+        val code = response.code
+        val message = response.message
+        if (response.code == SUCCESS) {
+            citation = response.citation!!
+            personnage = response.personnage!!
+            personnageNameList = response.personnageList!!
             val list = Triple(citation, personnage, personnageNameList)
             homeDisplayUI.updateUI(list)
         } else {
-            Log.d(TAG, "code : $code, message ${kaamlott.message}")
+            Log.d(TAG, "code : $code, message $message")
         }
     }
 
@@ -149,7 +156,7 @@ class HomeManager private constructor(private var context: Context) {
     fun putDateToken() {
         val jsonBody = JsonObject()
         jsonBody.addProperty(NewDate.string, getDate())
-        currentCall = rickAndMortyAPI!!.putNewDate(LoginAppManager.getInstance(context).connectedUser!!.userId!!, jsonBody)
+        currentCall = rickAndMortyAPI!!.putNewDate(loginAppManager.connectedUser!!.userId!!, jsonBody)
         callRetrofit(currentCall, PUT_DATE)
     }
 
@@ -166,7 +173,7 @@ class HomeManager private constructor(private var context: Context) {
     }
 
     fun updatePickleRick(score: Int) {
-        val user = LoginAppManager.getInstance(context).connectedUser
+        val user = loginAppManager.connectedUser
         val jsonBody = JsonObject()
         jsonBody.addProperty(NewWallet.string, (user!!.userWallet!! + (score * 10)))
         currentCall = rickAndMortyAPI!!.updateWallet(user.userId!!, jsonBody)
