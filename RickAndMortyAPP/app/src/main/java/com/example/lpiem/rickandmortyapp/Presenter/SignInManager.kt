@@ -3,11 +3,14 @@ package com.example.lpiem.rickandmortyapp.Presenter
 import android.content.Context
 import android.content.Intent
 import android.util.Log
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.widget.Toast
 import com.example.lpiem.rickandmortyapp.Data.JsonProperty.*
 import com.example.lpiem.rickandmortyapp.Data.RetrofitCallTypes
 import com.example.lpiem.rickandmortyapp.Data.RickAndMortyRetrofitSingleton
 import com.example.lpiem.rickandmortyapp.Model.ResponseFromApi
+import com.example.lpiem.rickandmortyapp.R
 import com.example.lpiem.rickandmortyapp.Util.SingletonHolder
 import com.example.lpiem.rickandmortyapp.View.BottomActivity
 import com.example.lpiem.rickandmortyapp.View.SignInActivity
@@ -29,7 +32,8 @@ class SignInManager private constructor(private var context: Context) {
 
     }
 
-    fun regularConnection() {
+    private fun regularConnection() {
+        (context as SignInActivity).progress_bar_sign_in.visibility = GONE
         Toast.makeText(context, "compte crée", Toast.LENGTH_SHORT).show()
         val rickAndMortyAPI = RickAndMortyRetrofitSingleton.instance
         val jsonBody = JsonObject()
@@ -42,15 +46,21 @@ class SignInManager private constructor(private var context: Context) {
     }
 
     fun signIn() {
+        (context as SignInActivity).progress_bar_sign_in.visibility = VISIBLE
         val rickAndMortyAPI = RickAndMortyRetrofitSingleton.instance
-        val jsonBody = JsonObject()
-        jsonBody.addProperty(UserName.string, (context as SignInActivity).ed_username.text.toString())
-        jsonBody.addProperty(UserEmail.string, (context as SignInActivity).ed_email.text.toString())
-        jsonBody.addProperty(UserPassword.string, (context as SignInActivity).ed_password.text.toString())
-        val subscribe = rickAndMortyAPI!!.signInUser(jsonBody)
-        Log.d(TAG, "jsonBody : $jsonBody")
-        Log.d(TAG, "$subscribe")
-        callRetrofit(subscribe, RetrofitCallTypes.SIGN_IN)
+        if ((context as SignInActivity).ed_email.text.toString() == "" || (context as SignInActivity).ed_password.text.toString() == "" || (context as SignInActivity).ed_username.text.toString() == "") {
+            Toast.makeText(context, context.getString(R.string.thanks_to_fill_all_fields), Toast.LENGTH_SHORT).show()
+            (context as SignInActivity).progress_bar_sign_in.visibility = GONE
+        } else {
+            val jsonBody = JsonObject()
+            jsonBody.addProperty(UserName.string, (context as SignInActivity).ed_username.text.toString())
+            jsonBody.addProperty(UserEmail.string, (context as SignInActivity).ed_email.text.toString())
+            jsonBody.addProperty(UserPassword.string, (context as SignInActivity).ed_password.text.toString())
+            val subscribe = rickAndMortyAPI!!.signInUser(jsonBody)
+            Log.d(TAG, "jsonBody : $jsonBody")
+            Log.d(TAG, "$subscribe")
+            callRetrofit(subscribe, RetrofitCallTypes.SIGN_IN)
+        }
     }
 
     private fun <T> callRetrofit(call: Call<T>, type: RetrofitCallTypes) {
@@ -92,6 +102,7 @@ class SignInManager private constructor(private var context: Context) {
     }
 
     private fun signInTreatment(response: ResponseFromApi) {
+        (context as SignInActivity).progress_bar_sign_in.visibility = GONE
         val code = response.code
         val message = response.message
         if (code == 200) {

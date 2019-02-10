@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
-import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -38,7 +37,6 @@ class LoginActivity : AppCompatActivity() {
     private fun regularConnectionSetup() {
         btnRegularConnection.setOnClickListener {
             loginAppManager.regularConnection(etEmail.text.toString(), etPassword.text.toString())
-            login_progressBar.visibility = View.VISIBLE
             // Check if no view has focus before hiding the keyboard:
             val view = this.currentFocus
             view?.let { v ->

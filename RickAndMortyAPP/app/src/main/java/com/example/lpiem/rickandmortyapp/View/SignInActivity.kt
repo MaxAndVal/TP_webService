@@ -15,14 +15,9 @@ class SignInActivity : AppCompatActivity() {
         setContentView(R.layout.activity_signin)
 
         signInManager = SignInManager.getInstance(this)
-        tv_alreadyAccount.setOnClickListener { onBackPressed() }
+        tv_alreadyAccount.setOnClickListener { finish() }
         btn_confSignIn.setOnClickListener { signInManager.signIn() }
 
-    }
-
-    override fun onBackPressed() {
-        finish()
-        super.onBackPressed()
     }
 
 }

@@ -49,11 +49,16 @@ class LoginAppManager private constructor(private var context: Context) {
     //REGULAR CONNECTION AND SIGN IN
 
     fun regularConnection(mail: String, pass: String) {
-        val jsonBody = JsonObject()
-        jsonBody.addProperty(UserEmail.string, mail)
-        jsonBody.addProperty(UserPassword.string, pass)
-        val connection = rickAndMortyAPI!!.connectUser(jsonBody)
-        callRetrofit(connection, LOGIN)
+        if (mail == "" || pass == "") {
+            Toast.makeText(context, context.getString(R.string.thanks_to_fill_all_fields), Toast.LENGTH_SHORT).show()
+        } else {
+            (context as LoginActivity).login_progressBar.visibility = View.VISIBLE
+            val jsonBody = JsonObject()
+            jsonBody.addProperty(UserEmail.string, mail)
+            jsonBody.addProperty(UserPassword.string, pass)
+            val connection = rickAndMortyAPI!!.connectUser(jsonBody)
+            callRetrofit(connection, LOGIN)
+        }
     }
 
     fun regularSignIn() {
@@ -255,12 +260,8 @@ class LoginAppManager private constructor(private var context: Context) {
             connectedUser = response.results!!
             (context as LoginActivity).startActivity(homeIntent)
         } else {
+            Toast.makeText(context, "Error : $message", Toast.LENGTH_LONG).show()
             (context as LoginActivity).login_progressBar.visibility = View.GONE
-            if ((context as LoginActivity).etEmail.text.toString() == "" || (context as LoginActivity).etPassword.text.toString() == "") {
-                Toast.makeText(context, context.getString(R.string.thanks_to_fill_all_fields), Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(context, "login error code : $code, message $message", Toast.LENGTH_LONG).show()
-            }
         }
     }
 

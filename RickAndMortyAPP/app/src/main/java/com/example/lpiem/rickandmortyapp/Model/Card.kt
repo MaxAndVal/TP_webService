@@ -42,11 +42,11 @@ class Card : Parcelable {
 
     constructor(inside: Parcel) {
         Log.d(TAG, "inside = $inside")
-        this.userId = inside.readValue(Int::class.java.classLoader) as Int
-        this.cardId = inside.readValue(Int::class.java.classLoader) as Int
-        this.cardName = inside.readValue(String::class.java.classLoader) as String
-        this.cardImage = inside.readValue(String::class.java.classLoader) as String
-        this.amount = inside.readValue(Int::class.java.classLoader) as Int
+        this.userId = inside.readValue(Int::class.java.classLoader) as Int?
+        this.cardId = inside.readValue(Int::class.java.classLoader) as Int?
+        this.cardName = inside.readValue(String::class.java.classLoader) as String?
+        this.cardImage = inside.readValue(String::class.java.classLoader) as String?
+        this.amount = inside.readValue(Int::class.java.classLoader) as Int?
     }
 
     override fun writeToParcel(dest: Parcel, flags: Int) {
@@ -61,6 +61,9 @@ class Card : Parcelable {
         return 0
     }
 
+    override fun toString(): String {
+        return "Card(cardName=$cardName)"
+    }
 
 
 }
