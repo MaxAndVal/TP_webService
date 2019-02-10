@@ -11,6 +11,7 @@ import com.example.lpiem.rickandmortyapp.Data.JsonProperty.*
 import com.example.lpiem.rickandmortyapp.Data.RetrofitCallTypes
 import com.example.lpiem.rickandmortyapp.Data.RetrofitCallTypes.LOGIN
 import com.example.lpiem.rickandmortyapp.Data.RickAndMortyRetrofitSingleton
+import com.example.lpiem.rickandmortyapp.Data.SUCCESS
 import com.example.lpiem.rickandmortyapp.Model.ResponseFromApi
 import com.example.lpiem.rickandmortyapp.Model.User
 import com.example.lpiem.rickandmortyapp.R
@@ -139,10 +140,10 @@ class LoginAppManager private constructor(private var context: Context) {
     // FACEBOOK CONNECTION
 
     fun facebookSetup() {
-        (context as LoginActivity).FacebookCallbackManager = CallbackManager.Factory.create()
+        (context as LoginActivity).facebookCallbackManager = CallbackManager.Factory.create()
         (context as LoginActivity).facebook_login_button.setReadPermissions("email")
 
-        (context as LoginActivity).facebook_login_button.registerCallback((context as LoginActivity).FacebookCallbackManager, object : FacebookCallback<LoginResult> {
+        (context as LoginActivity).facebook_login_button.registerCallback((context as LoginActivity).facebookCallbackManager, object : FacebookCallback<LoginResult> {
 
             override fun onSuccess(loginResult: LoginResult) {
                 (context as LoginActivity).login_progressBar.visibility = View.VISIBLE
@@ -246,7 +247,7 @@ class LoginAppManager private constructor(private var context: Context) {
     private fun loginTreatment(response: ResponseFromApi) {
         val code = response.code
         val message = response.message
-        if (code == 200) {
+        if (code == SUCCESS) {
             val results = response.results
             (context as LoginActivity).login_progressBar.visibility = View.GONE
             if (connectedToGoogle) {

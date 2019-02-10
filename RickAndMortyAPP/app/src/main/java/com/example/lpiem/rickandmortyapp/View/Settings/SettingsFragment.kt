@@ -7,11 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.lpiem.rickandmortyapp.Data.RickAndMortyAPI
 import com.example.lpiem.rickandmortyapp.Data.RickAndMortyRetrofitSingleton
-import com.example.lpiem.rickandmortyapp.Model.User
 import com.example.lpiem.rickandmortyapp.Presenter.LoginAppManager
 import com.example.lpiem.rickandmortyapp.Presenter.settings.SettingsManager
-import com.example.lpiem.rickandmortyapp.Util.SingletonHolder
 import com.example.lpiem.rickandmortyapp.R
+import com.example.lpiem.rickandmortyapp.Util.SingletonHolder
 import kotlinx.android.synthetic.main.fragment_settings.*
 
 private const val ARG_PARAM1 = "param1"
@@ -25,7 +24,6 @@ class SettingsFragment : androidx.fragment.app.Fragment() {
     private lateinit var settingsManager: SettingsManager
     private var rickAndMortyAPI: RickAndMortyAPI?=null
     private lateinit var loginAppManager: LoginAppManager
-    internal var user: User? = null
 
     companion object : SingletonHolder<SettingsManager, Context>(::SettingsManager)
 
@@ -35,12 +33,11 @@ class SettingsFragment : androidx.fragment.app.Fragment() {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
+
         settingsManager = SettingsManager.getInstance(context!!)
         loginAppManager = LoginAppManager.getInstance(context!!)
-        user = loginAppManager.connectedUser
-
         rickAndMortyAPI = RickAndMortyRetrofitSingleton.instance
-        settingsManager = SettingsManager.getInstance(context!!)
+
         if (settingsManager.settingsFragment == null) {
             settingsManager.captureFragmentInstance(this)
         }

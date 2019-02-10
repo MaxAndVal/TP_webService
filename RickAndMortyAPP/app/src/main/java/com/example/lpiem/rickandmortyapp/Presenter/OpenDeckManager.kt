@@ -10,8 +10,6 @@ import com.example.lpiem.rickandmortyapp.Model.ListOfCards
 import com.example.lpiem.rickandmortyapp.Model.ResponseFromApi
 import com.example.lpiem.rickandmortyapp.Presenter.collection.DetailCollectionManager
 import com.example.lpiem.rickandmortyapp.Util.SingletonHolder
-import com.example.lpiem.rickandmortyapp.View.BottomActivity
-import com.example.lpiem.rickandmortyapp.View.Collection.detail.CollectionDetailActivity
 import com.example.lpiem.rickandmortyapp.View.OpenDeckActivity
 import com.example.lpiem.rickandmortyapp.View.OpenDecksInterface
 import com.example.lpiem.rickandmortyapp.View.TAG
@@ -27,25 +25,6 @@ class OpenDeckManager  private constructor(private val context: Context) {
     private val rickAndMortyAPI = RickAndMortyRetrofitSingleton.instance
     private lateinit var link: OpenDecksInterface
     var listOfnewCards : List<Card>? = null
-
-
-    fun openRandomDeck(deckToOpen: Int?, link: OpenDecksInterface) {
-        this.link = link
-        link.showAnimation(true)
-        //link.showFrameLayout(true)
-
-        var user = loginAppManager.connectedUser
-        if(deckToOpen!! >0){
-            var openADeck = rickAndMortyAPI!!.getRandomDeck(user!!.userId!!)
-            callRetrofit(openADeck, RetrofitCallTypes.OPEN_RANDOM_DECK)
-        }
-    }
-
-    init {
-
-    }
-
-
 
     companion object : SingletonHolder<OpenDeckManager, Context>(::OpenDeckManager)
 
@@ -84,21 +63,31 @@ class OpenDeckManager  private constructor(private val context: Context) {
 
     fun openRandomDeckTreatment(listOfCards: ListOfCards){
 
-        var user = loginAppManager.connectedUser
+        val user = loginAppManager.connectedUser
         context as OpenDeckActivity
-        DetailCollectionManager.getInstance(context).listOfnewCards = listOfCards.cards as MutableList<Card>
-        var animationLoop = context.av_from_code
+        DetailCollectionManager.getInstance(context).listOfNewCards = listOfCards.cards as MutableList<Card>
+        val animationLoop = context.av_from_code
         animationLoop.setAnimation("portal_loop.json")
         animationLoop.pauseAnimation()
         context.fl_animation.visibility = View.GONE
-        (context as OpenDeckActivity).fl_DeckToOpen.visibility = View.VISIBLE
+        context.fl_DeckToOpen.visibility = View.VISIBLE
         context.tv_openYourDeck.text = "You have ${user!!.deckToOpen} deck to open"
 
-        context.getInfoNewCards(1)
+        context.getInfoNewCards()
 
-        var updateUser = rickAndMortyAPI!!.getUserById(user!!.userId!!)
+        val updateUser = rickAndMortyAPI!!.getUserById(user!!.userId!!)
         callRetrofit(updateUser, RetrofitCallTypes.UPDATE_USER_INFO)
     }
 
+    fun openRandomDeck(deckToOpen: Int?, link: OpenDecksInterface) {
+        this.link = link
+        link.showAnimation(true)
+
+        val user = loginAppManager.connectedUser
+        if(deckToOpen!! >0){
+            val openADeck = rickAndMortyAPI!!.getRandomDeck(user!!.userId!!)
+            callRetrofit(openADeck, RetrofitCallTypes.OPEN_RANDOM_DECK)
+        }
+    }
 
 }

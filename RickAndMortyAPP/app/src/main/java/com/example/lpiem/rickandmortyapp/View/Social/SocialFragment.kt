@@ -29,12 +29,12 @@ class SocialFragment : androidx.fragment.app.Fragment(), SocialActionsInterface 
 
     private var rickAndMortyAPI: RickAndMortyAPI?=null
     var listOfFriends: ListOfFriends? = null
-    lateinit var socialManager: SocialManager
+    private lateinit var socialManager: SocialManager
     private lateinit var loginAppManager: LoginAppManager
     var resultFromSearch : ListOfFriends? = null
     var listOfActualFriends: List<Friend>? = ArrayList()
     var listOfPotentialFriends: List<Friend>? = ArrayList()
-    var socialAdapter: SocialAdapter? = null
+    private var socialAdapter: SocialAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

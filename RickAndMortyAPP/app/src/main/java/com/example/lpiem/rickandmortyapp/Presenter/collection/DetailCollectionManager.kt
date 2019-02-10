@@ -6,6 +6,7 @@ import android.widget.Toast
 import com.example.lpiem.rickandmortyapp.Data.RetrofitCallTypes
 import com.example.lpiem.rickandmortyapp.Data.RetrofitCallTypes.GET_CARD_DETAILS
 import com.example.lpiem.rickandmortyapp.Data.RickAndMortyRetrofitSingleton
+import com.example.lpiem.rickandmortyapp.Data.SUCCESS
 import com.example.lpiem.rickandmortyapp.Model.Card
 import com.example.lpiem.rickandmortyapp.Model.DetailledCard
 import com.example.lpiem.rickandmortyapp.Util.SingletonHolder
@@ -20,7 +21,7 @@ class DetailCollectionManager private constructor(private val context: Context) 
 
     private val rickAndMortyAPI = RickAndMortyRetrofitSingleton.instance
     private lateinit var cardDetailDisplay: CardDetailDisplay
-    var listOfnewCards: MutableList<Card>? = null
+    var listOfNewCards: MutableList<Card>? = null
 
     companion object : SingletonHolder<DetailCollectionManager, Context>(::DetailCollectionManager)
 
@@ -60,7 +61,7 @@ class DetailCollectionManager private constructor(private val context: Context) 
 
     private fun getCardDetailTreatment(response: DetailledCard) {
         val code = response.code
-        if (code == 200) {
+        if (code == SUCCESS) {
             cardDetailDisplay.displayResult(response)
         } else {
             Toast.makeText(context, "code : $code, message ${response.message}", Toast.LENGTH_SHORT).show()

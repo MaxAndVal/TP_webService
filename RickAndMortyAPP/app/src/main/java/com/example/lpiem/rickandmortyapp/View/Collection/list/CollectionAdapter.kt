@@ -3,13 +3,13 @@ package com.example.lpiem.rickandmortyapp.View.Collection.list
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lpiem.rickandmortyapp.Model.ListOfCards
 import com.example.lpiem.rickandmortyapp.R
+import com.example.lpiem.rickandmortyapp.Util.DiffUtilCollection
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.collection_item.view.*
-import androidx.recyclerview.widget.DiffUtil
-import com.example.lpiem.rickandmortyapp.Util.DiffUtilCollection
 
 
 class CollectionAdapter(private var dataSet: ListOfCards): RecyclerView.Adapter<CollectionAdapter.ViewHolder>() {
@@ -35,10 +35,6 @@ class CollectionAdapter(private var dataSet: ListOfCards): RecyclerView.Adapter<
 
     fun getDataSet(): ListOfCards {
         return dataSet
-    }
-
-    fun setDataSet(list: ListOfCards) {
-        dataSet = list
     }
 
     fun updateList(newList: ListOfCards) {
