@@ -74,8 +74,8 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun clearEditTexts() {
-        etEmail.text.clear()
-        etPassword.text.clear()
+        etEmail.text?.clear()
+        etPassword.text?.clear()
     }
 
     override fun onBackPressed() {

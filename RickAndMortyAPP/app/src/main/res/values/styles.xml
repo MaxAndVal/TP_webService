@@ -137,5 +137,8 @@
         <item name="android:textSize">24sp</item>
         <item name="android:textAlignment">center</item>
     </style>
+    <style name="customStyleInput" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+
+    </style>
 
 </resources>
