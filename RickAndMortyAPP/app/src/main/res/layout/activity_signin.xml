@@ -32,7 +32,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ed_password" />
 
-    <EditText
+    <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/ed_email"
         style="@style/etStyle"
         android:hint="E-mail"
@@ -45,7 +45,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
+    <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/ed_username"
         style="@style/etStyle"
         android:hint="Username"
@@ -60,7 +60,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ed_email" />
 
-    <EditText
+    <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/ed_password"
         style="@style/etStyle"
         android:hint="password"
