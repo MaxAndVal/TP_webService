@@ -5,7 +5,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lpiem.rickandmortyapp.Model.Friend
-import com.example.lpiem.rickandmortyapp.Model.SocialActionsInterface
 import com.example.lpiem.rickandmortyapp.R
 import kotlinx.android.synthetic.main.social_item.view.*
 

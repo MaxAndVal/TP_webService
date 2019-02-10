@@ -1,4 +1,4 @@
-package com.example.lpiem.rickandmortyapp.Model
+package com.example.lpiem.rickandmortyapp.View.Settings
 
 import com.example.lpiem.rickandmortyapp.View.Settings.FAQAdapter
 

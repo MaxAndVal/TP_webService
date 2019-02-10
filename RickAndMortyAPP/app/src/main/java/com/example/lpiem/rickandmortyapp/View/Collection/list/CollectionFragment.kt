@@ -11,7 +11,6 @@ import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.lpiem.rickandmortyapp.Data.RickAndMortyAPI
 import com.example.lpiem.rickandmortyapp.Data.RickAndMortyRetrofitSingleton
-import com.example.lpiem.rickandmortyapp.Model.Character
 import com.example.lpiem.rickandmortyapp.Model.ListOfCards
 import com.example.lpiem.rickandmortyapp.Model.User
 import com.example.lpiem.rickandmortyapp.Presenter.LoginAppManager
@@ -22,12 +21,12 @@ import com.example.lpiem.rickandmortyapp.View.Collection.detail.CollectionDetail
 import com.example.lpiem.rickandmortyapp.View.TAG
 import kotlinx.android.synthetic.main.fragment_collection.*
 
-private const val ARG_DATASET = "dataSet"
+private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
 class CollectionFragment : androidx.fragment.app.Fragment(), CardListDisplay {
 
-    private var param1: Parcelable? = null
+    private var param1: String? = null
     private var param2: String? = null
 
     private var rickAndMortyAPI: RickAndMortyAPI? = null
@@ -39,10 +38,10 @@ class CollectionFragment : androidx.fragment.app.Fragment(), CardListDisplay {
 
     companion object {
         @JvmStatic
-        fun newInstance(dataset: Character, param2: String) =
+        fun newInstance(param1: String, param2: String) =
                 CollectionFragment().apply {
                     arguments = Bundle().apply {
-                        putParcelable(ARG_DATASET, dataset)
+                        putString(ARG_PARAM1, param1)
                         putString(ARG_PARAM2, param2)
                     }
                 }
@@ -51,7 +50,7 @@ class CollectionFragment : androidx.fragment.app.Fragment(), CardListDisplay {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            param1 = it.getParcelable<Character>(ARG_DATASET)
+            param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
         loginAppManager = LoginAppManager.getInstance(context!!)
