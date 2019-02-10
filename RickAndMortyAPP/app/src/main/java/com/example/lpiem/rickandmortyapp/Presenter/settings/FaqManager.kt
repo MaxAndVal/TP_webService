@@ -31,8 +31,10 @@ class FaqManager internal constructor(internal val context: Context)  {
         val fragmentManager = (context as BottomActivity).supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
         fragmentTransaction.remove(fragment).commit()
+        context.tv_deckToOpen.visibility = View.VISIBLE
+        context.tv_wallet.visibility = View.VISIBLE
         context.navigation.visibility = View.VISIBLE
-
+        context.fragmentLayout.visibility = View.VISIBLE
 
     }
 

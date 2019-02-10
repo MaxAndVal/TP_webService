@@ -96,6 +96,10 @@ class SettingsManager internal constructor(private val context: Context) : Setti
         fragmentTransaction.commit()
         fragmentTransaction.addToBackStack(null)
         context.flMain.bringToFront()
+        context.tv_deckToOpen.visibility = View.GONE
+        context.tv_wallet.visibility = View.GONE
         context.navigation.visibility = View.GONE
+        context.fragmentLayout.visibility = View.GONE
+
     }
 }
