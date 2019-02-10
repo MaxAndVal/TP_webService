@@ -35,18 +35,18 @@ class CollectionDetailActivity : AppCompatActivity(), CardDetailDisplay {
         detailManager.getCardDetails(currentCard.cardId!!, this)
     }
 
-    override fun displayResult(details: DetailledCard) {
+    override fun displayResult(detailledCard: DetailledCard) {
         card_detail_background.visibility = View.VISIBLE
-        val status = details.status
-        val species = details.species
-        val gender = details.gender
-        val origin = details.origin
-        val location = details.location
+        val status = detailledCard.status
+        val species = detailledCard.species
+        val gender = detailledCard.gender
+        val origin = detailledCard.origin
+        val location = detailledCard.location
         tv_detail_description.text = String.format(getString(R.string.tv_description),status, species, gender, origin, location )
-        tv_detail_card_name.text = details.name
-        tv_detail_card_number.text = details.id.toString()
+        tv_detail_card_name.text = detailledCard.name
+        tv_detail_card_number.text = detailledCard.id.toString()
         Picasso.get()
-                .load(details.image)
+                .load(detailledCard.image)
                 .fit()
                 .centerInside()
                 .placeholder(getDrawable(R.drawable.vortex_ram))
