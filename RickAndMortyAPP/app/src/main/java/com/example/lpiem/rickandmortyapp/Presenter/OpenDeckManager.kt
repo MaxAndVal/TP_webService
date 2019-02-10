@@ -8,7 +8,10 @@ import com.example.lpiem.rickandmortyapp.Data.RickAndMortyRetrofitSingleton
 import com.example.lpiem.rickandmortyapp.Model.Card
 import com.example.lpiem.rickandmortyapp.Model.ListOfCards
 import com.example.lpiem.rickandmortyapp.Model.ResponseFromApi
+import com.example.lpiem.rickandmortyapp.Presenter.collection.DetailCollectionManager
 import com.example.lpiem.rickandmortyapp.Util.SingletonHolder
+import com.example.lpiem.rickandmortyapp.View.BottomActivity
+import com.example.lpiem.rickandmortyapp.View.Collection.detail.CollectionDetailActivity
 import com.example.lpiem.rickandmortyapp.View.OpenDeckActivity
 import com.example.lpiem.rickandmortyapp.View.OpenDecksInterface
 import com.example.lpiem.rickandmortyapp.View.TAG
@@ -23,6 +26,8 @@ class OpenDeckManager  private constructor(private val context: Context) {
     internal val loginAppManager = LoginAppManager.getInstance(context)
     private val rickAndMortyAPI = RickAndMortyRetrofitSingleton.instance
     private lateinit var link: OpenDecksInterface
+    var listOfnewCards : List<Card>? = null
+
 
     fun openRandomDeck(deckToOpen: Int?, link: OpenDecksInterface) {
         this.link = link
@@ -80,7 +85,8 @@ class OpenDeckManager  private constructor(private val context: Context) {
     fun openRandomDeckTreatment(listOfCards: ListOfCards){
 
         var user = loginAppManager.connectedUser
-        (context as OpenDeckActivity).listOfnewCards = listOfCards.cards as List<Card>
+        context as OpenDeckActivity
+        DetailCollectionManager.getInstance(context).listOfnewCards = listOfCards.cards as MutableList<Card>
         var animationLoop = context.av_from_code
         animationLoop.setAnimation("portal_loop.json")
         animationLoop.pauseAnimation()

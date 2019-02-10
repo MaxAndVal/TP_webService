@@ -19,7 +19,7 @@ class OpenDeckActivity : AppCompatActivity(), OpenDecksInterface {
 
 
     var openDeckManager : OpenDeckManager? = null
-    var listOfnewCards : List<Card>? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,7 +30,7 @@ class OpenDeckActivity : AppCompatActivity(), OpenDecksInterface {
 
     override fun onResume() {
         super.onResume()
-        tv_openYourDeck.text = "You have ${openDeckManager!!.loginAppManager.connectedUser!!.deckToOpen} deck to open"
+        tv_openYourDeck.text = "You have ${openDeckManager?.loginAppManager?.connectedUser?.deckToOpen} deck to open"
         iv_peaceAmongWorld.setOnClickListener { openDeckManager!!.openRandomDeck(openDeckManager!!.loginAppManager.connectedUser!!.deckToOpen, this) }
     }
 
@@ -52,8 +52,6 @@ class OpenDeckActivity : AppCompatActivity(), OpenDecksInterface {
 
     fun getInfoNewCards(i : Int) {
         val detailIntent = Intent(this, CollectionDetailActivity::class.java)
-        Log.d(TAG, "ici " + this!!.listOfnewCards!![i].cardId)
-        detailIntent.putExtra("current_card", this!!.listOfnewCards!![i])
         startActivity(detailIntent)
     }
     override fun updateDecksCount(newCount: Int) {
