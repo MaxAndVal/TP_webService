@@ -36,7 +36,7 @@
         app:layout_constraintBottom_toTopOf="@+id/btn_friendsRequest"
         app:layout_constraintTop_toBottomOf="@+id/sv_friends" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_searchFriends"
         style="@style/btn_style"
         android:text="Search"
@@ -46,7 +46,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_searchFriends" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_friendsRequest"
         style="@style/btn_style"
         android:text="Vous avez requetes d'ami à valider"
