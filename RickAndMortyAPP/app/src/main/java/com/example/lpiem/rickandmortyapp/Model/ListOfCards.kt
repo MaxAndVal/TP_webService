@@ -57,5 +57,9 @@ class ListOfCards : Parcelable {
         return ListOfCards(this.code, this.message, cardsList)
     }
 
+    override fun toString(): String {
+        return "ListOfCards(code=$code, message=$message, cards=$cards)"
+    }
+
 
 }
