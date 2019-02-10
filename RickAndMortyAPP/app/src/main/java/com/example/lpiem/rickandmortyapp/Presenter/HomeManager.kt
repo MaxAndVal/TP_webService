@@ -8,6 +8,7 @@ import com.example.lpiem.rickandmortyapp.Data.JsonProperty.NewWallet
 import com.example.lpiem.rickandmortyapp.Data.RetrofitCallTypes
 import com.example.lpiem.rickandmortyapp.Data.RetrofitCallTypes.*
 import com.example.lpiem.rickandmortyapp.Data.RickAndMortyRetrofitSingleton
+import com.example.lpiem.rickandmortyapp.Data.SUCCESS
 import com.example.lpiem.rickandmortyapp.Model.KaamlottQuote
 import com.example.lpiem.rickandmortyapp.Model.ResponseFromApi
 import com.example.lpiem.rickandmortyapp.Model.User
@@ -22,7 +23,6 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.util.*
 
-const val SUCCESS = 200
 
 class HomeManager private constructor(private var context: Context) {
 

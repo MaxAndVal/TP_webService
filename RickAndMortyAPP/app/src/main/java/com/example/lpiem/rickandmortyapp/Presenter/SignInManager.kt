@@ -9,6 +9,7 @@ import android.widget.Toast
 import com.example.lpiem.rickandmortyapp.Data.JsonProperty.*
 import com.example.lpiem.rickandmortyapp.Data.RetrofitCallTypes
 import com.example.lpiem.rickandmortyapp.Data.RickAndMortyRetrofitSingleton
+import com.example.lpiem.rickandmortyapp.Data.SUCCESS
 import com.example.lpiem.rickandmortyapp.Model.ResponseFromApi
 import com.example.lpiem.rickandmortyapp.R
 import com.example.lpiem.rickandmortyapp.Util.SingletonHolder
@@ -105,7 +106,7 @@ class SignInManager private constructor(private var context: Context) {
         (context as SignInActivity).progress_bar_sign_in.visibility = GONE
         val code = response.code
         val message = response.message
-        if (code == 200) {
+        if (code == SUCCESS) {
             regularConnection()
         } else {
             Toast.makeText(context, "code : $code, message : $message", Toast.LENGTH_SHORT).show()

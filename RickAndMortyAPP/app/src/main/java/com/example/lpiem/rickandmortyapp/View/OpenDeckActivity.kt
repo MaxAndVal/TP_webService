@@ -1,24 +1,18 @@
 package com.example.lpiem.rickandmortyapp.View
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import com.example.lpiem.rickandmortyapp.Model.Card
+import androidx.appcompat.app.AppCompatActivity
 import com.example.lpiem.rickandmortyapp.Presenter.OpenDeckManager
 import com.example.lpiem.rickandmortyapp.R
 import com.example.lpiem.rickandmortyapp.View.Collection.detail.CollectionDetailActivity
-import com.example.lpiem.rickandmortyapp.View.Collection.list.CollectionAdapter
-
 import kotlinx.android.synthetic.main.activity_open_deck.*
-import kotlinx.android.synthetic.main.fragment_collection.*
 
 class OpenDeckActivity : AppCompatActivity(), OpenDecksInterface {
 
 
-
-    var openDeckManager : OpenDeckManager? = null
+    private var openDeckManager : OpenDeckManager? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,7 +44,7 @@ class OpenDeckActivity : AppCompatActivity(), OpenDecksInterface {
     }
 
 
-    fun getInfoNewCards(i : Int) {
+    fun getInfoNewCards() {
         val detailIntent = Intent(this, CollectionDetailActivity::class.java)
         startActivity(detailIntent)
     }

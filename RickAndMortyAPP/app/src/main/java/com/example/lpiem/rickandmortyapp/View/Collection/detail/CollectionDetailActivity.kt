@@ -8,16 +8,13 @@ import com.example.lpiem.rickandmortyapp.Model.DetailledCard
 import com.example.lpiem.rickandmortyapp.Presenter.OpenDeckManager
 import com.example.lpiem.rickandmortyapp.Presenter.collection.DetailCollectionManager
 import com.example.lpiem.rickandmortyapp.R
-import com.example.lpiem.rickandmortyapp.View.OpenDeckActivity
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_collection_detail.*
 
 class CollectionDetailActivity : AppCompatActivity(), CardDetailDisplay {
 
 
-
     private lateinit var currentCard: Card
-    private var cardInDeck: Int? = null
     private val detailManager = DetailCollectionManager.getInstance(this)
     private val deckOpenDeckManager = OpenDeckManager.getInstance(this)
 
@@ -35,22 +32,22 @@ class CollectionDetailActivity : AppCompatActivity(), CardDetailDisplay {
             displayCard()
         }
 
-        if (detailManager.listOfnewCards != null && detailManager.listOfnewCards?.isNotEmpty()!!) {
+        if (detailManager.listOfNewCards != null && detailManager.listOfNewCards?.isNotEmpty()!!) {
             updateCard()
             card_detail_background.setOnClickListener { updateCard() }
         }
     }
 
     override fun onBackPressed() {
-        detailManager.listOfnewCards = null
+        detailManager.listOfNewCards = null
         super.onBackPressed()
     }
 
     private fun updateCard() {
-        currentCard = detailManager.listOfnewCards!!.first()
-        detailManager.listOfnewCards!!.removeAt(0)
+        currentCard = detailManager.listOfNewCards!!.first()
+        detailManager.listOfNewCards!!.removeAt(0)
 
-        if(detailManager.listOfnewCards.isNullOrEmpty()){
+        if (detailManager.listOfNewCards.isNullOrEmpty()) {
             card_detail_background.setOnClickListener { finish() }
         }
         displayCard()
@@ -67,7 +64,7 @@ class CollectionDetailActivity : AppCompatActivity(), CardDetailDisplay {
         val gender = detailledCard.gender
         val origin = detailledCard.origin
         val location = detailledCard.location
-        tv_detail_description.text = String.format(getString(R.string.tv_description),status, species, gender, origin, location )
+        tv_detail_description.text = String.format(getString(R.string.tv_description), status, species, gender, origin, location)
         tv_detail_card_name.text = detailledCard.name
         tv_detail_card_number.text = detailledCard.id.toString()
         Picasso.get()

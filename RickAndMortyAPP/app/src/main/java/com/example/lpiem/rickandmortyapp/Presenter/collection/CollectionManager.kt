@@ -3,10 +3,10 @@ package com.example.lpiem.rickandmortyapp.Presenter.collection
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
-import androidx.recyclerview.widget.RecyclerView
 import com.example.lpiem.rickandmortyapp.Data.RetrofitCallTypes
 import com.example.lpiem.rickandmortyapp.Data.RetrofitCallTypes.LIST_OF_CARDS
 import com.example.lpiem.rickandmortyapp.Data.RickAndMortyRetrofitSingleton
+import com.example.lpiem.rickandmortyapp.Data.SUCCESS
 import com.example.lpiem.rickandmortyapp.Model.ListOfCards
 import com.example.lpiem.rickandmortyapp.Model.User
 import com.example.lpiem.rickandmortyapp.Util.SingletonHolder
@@ -22,7 +22,6 @@ class CollectionManager private constructor(private val context: Context) {
 
     private var rickAndMortyAPI = RickAndMortyRetrofitSingleton.instance
     var collectionFragment: CollectionFragment? = null
-    private lateinit var recyclerView: RecyclerView
     lateinit var currentCall : Call<*>
     lateinit var cardListDisplay : CardListDisplay
 
@@ -30,10 +29,6 @@ class CollectionManager private constructor(private val context: Context) {
 
     fun captureFragmentInstance(fragment: CollectionFragment) {
         collectionFragment = fragment
-    }
-
-    fun captureRecyclerView(rv: RecyclerView) {
-        recyclerView = rv
     }
 
     fun cancelCall() {
@@ -69,7 +64,7 @@ class CollectionManager private constructor(private val context: Context) {
     private fun listOfCardTreatment(response: ListOfCards) {
         collectionFragment!!.listOfCards = response
         val list = collectionFragment!!.listOfCards
-        if (list?.code == 200) {
+        if (list?.code == SUCCESS) {
             cardListDisplay.displayResult(list)
         } else {
             Toast.makeText(context, "erreur code ${list?.code} message : ${list?.message}", Toast.LENGTH_SHORT).show()

@@ -6,6 +6,7 @@ import android.widget.Toast
 import com.example.lpiem.rickandmortyapp.Data.RetrofitCallTypes
 import com.example.lpiem.rickandmortyapp.Data.RetrofitCallTypes.*
 import com.example.lpiem.rickandmortyapp.Data.RickAndMortyRetrofitSingleton
+import com.example.lpiem.rickandmortyapp.Data.SUCCESS
 import com.example.lpiem.rickandmortyapp.Model.ResponseFromApi
 import com.example.lpiem.rickandmortyapp.Model.Wallet
 import com.example.lpiem.rickandmortyapp.Util.SingletonHolder
@@ -66,7 +67,7 @@ class ShopManager private constructor(private val context: Context) {
     private fun decksIncreasedTreatment(response: ResponseFromApi) {
         val code = response.code
         val message = response.message
-        if (code == 200) {
+        if (code == SUCCESS) {
             val user = response.results!!
             loginAppManager.connectedUser = user
             Toast.makeText(context, "$numberOfDeckToAdd decks ajoutés à votre pool !", Toast.LENGTH_SHORT).show()
@@ -78,7 +79,7 @@ class ShopManager private constructor(private val context: Context) {
     private fun updateWalletTreatment(response: ResponseFromApi) {
         val code = response.code
         val message = response.message
-        if (code == 200) {
+        if (code == SUCCESS) {
             var deckToOpen = response.results!!.deckToOpen!!
             deckToOpen += numberOfDeckToAdd
             // Make a call to update the amount of decks to open
@@ -95,7 +96,7 @@ class ShopManager private constructor(private val context: Context) {
     private fun buyBoosterTreatment(walletResponse: Wallet) {
         val code = walletResponse.code
         val message = walletResponse.message
-        if (code == 200) {
+        if (code == SUCCESS) {
             val actualValue = walletResponse.wallet!!
             if (actualValue - cost >= 0) {
                 numberOfDeckToAdd = howManyDecksToAdd(cost)

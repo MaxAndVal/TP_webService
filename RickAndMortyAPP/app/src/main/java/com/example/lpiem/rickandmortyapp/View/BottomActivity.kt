@@ -38,12 +38,12 @@ class BottomActivity : AppCompatActivity() {
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_social -> {
-                tv_message.text = "Social"
+                tv_message.text = getString(R.string.titleSocial)
                 openFragment(SocialFragment())
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_profil -> {
-                tv_message.text = "Settings"
+                tv_message.text = getString(R.string.titleSettings)
                 openFragment(SettingsFragment())
                 return@OnNavigationItemSelectedListener true
             }
@@ -67,8 +67,7 @@ class BottomActivity : AppCompatActivity() {
 
     private fun openDeck(deckToOpen: Int) {
         if(deckToOpen>0){
-            var openIntent = Intent(this, OpenDeckActivity::class.java)
-            //openIntent.putExtra("userInfo", loginAppManager)
+            val openIntent = Intent(this, OpenDeckActivity::class.java)
             startActivity(openIntent)
         }
     }

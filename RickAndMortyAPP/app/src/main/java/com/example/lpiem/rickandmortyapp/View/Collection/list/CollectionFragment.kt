@@ -2,7 +2,6 @@ package com.example.lpiem.rickandmortyapp.View.Collection.list
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.Parcelable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -70,7 +69,6 @@ class CollectionFragment : androidx.fragment.app.Fragment(), CardListDisplay {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         rv_collection.layoutManager = GridLayoutManager(context, 3)
-        collectionManager.captureRecyclerView(rv_collection)
         collectionManager.getListOfDecks(user, this)
         rv_collection.addOnItemTouchListener(RecyclerTouchListener(context!!, rv_collection, object : RecyclerTouchListener.ClickListener {
 
@@ -90,11 +88,9 @@ class CollectionFragment : androidx.fragment.app.Fragment(), CardListDisplay {
         if (adapter == null) {
             adapter = CollectionAdapter(list)
             rv_collection.adapter = adapter
-            //adapter!!.notifyDataSetChanged()
             adapter!!.updateList(list)
         } else {
             adapter!!.updateList(list)
-            //adapter!!.notifyDataSetChanged()
         }
     }
 
