@@ -49,5 +49,7 @@
     <string name="double_back_to_quit_app">S\'il vous plaît, cliquez sur retour une seconde fois pour quitter</string>
     <string name="titleSocial">Social</string>
     <string name="titleSettings">Settings</string>
+    <string name="no_access_to_DB">Impossible de se connecter à la base de donnée. Réessayez plus tard.</string>
+
 
 </resources>
