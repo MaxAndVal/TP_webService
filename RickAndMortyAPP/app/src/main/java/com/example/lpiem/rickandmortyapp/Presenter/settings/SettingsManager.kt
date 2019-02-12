@@ -7,15 +7,16 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.lpiem.rickandmortyapp.Data.RetrofitCallTypes
 import com.example.lpiem.rickandmortyapp.Data.RickAndMortyRetrofitSingleton
+import com.example.lpiem.rickandmortyapp.Data.SUCCESS
 import com.example.lpiem.rickandmortyapp.Model.FAQ
 import com.example.lpiem.rickandmortyapp.Model.ListOfFAQ
-import com.example.lpiem.rickandmortyapp.View.Settings.SettingsOnClickInterface
 import com.example.lpiem.rickandmortyapp.R
 import com.example.lpiem.rickandmortyapp.Util.SingletonHolder
 import com.example.lpiem.rickandmortyapp.View.BottomActivity
 import com.example.lpiem.rickandmortyapp.View.Settings.FAQAdapter
 import com.example.lpiem.rickandmortyapp.View.Settings.FAQ_Fragment
 import com.example.lpiem.rickandmortyapp.View.Settings.SettingsFragment
+import com.example.lpiem.rickandmortyapp.View.Settings.SettingsOnClickInterface
 import com.example.lpiem.rickandmortyapp.View.TAG
 import kotlinx.android.synthetic.main.activity_bottom.*
 import okhttp3.ResponseBody
@@ -72,7 +73,7 @@ class SettingsManager internal constructor(private val context: Context) : Setti
     private fun getFAQTreatment(response: ListOfFAQ) {
         val code = response.code
         val message = response.message
-        if (code == 200) {
+        if (code == SUCCESS) {
             listOfFAQfromSM = response.FAQs
             Log.d(TAG, listOfFAQfromSM.toString() + "SM")
             if (listOfFAQfromSM != null) {

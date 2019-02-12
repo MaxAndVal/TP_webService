@@ -15,11 +15,11 @@ class FAQAdapter(private val dataSet: List<FAQ>, private val listener: SettingsO
     }
 
     override fun getItemCount(): Int {
-        return dataSet!!.size
+        return dataSet.size
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        var item = dataSet!![position]
+        val item = dataSet[position]
         holder.faqQuestion.text = item.question
         holder.faqResponse.text = item.response
         holder.faqQuestion.setOnClickListener { listener.todo(holder) }

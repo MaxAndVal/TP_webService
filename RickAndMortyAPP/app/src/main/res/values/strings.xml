@@ -47,6 +47,9 @@
     <string name="btn_list_of_friends">voir sa liste d\'ami</string>
     <string name="network_problem_please_try_again">Problème de réseau, merci de tenter de vous connecter à nouveau</string>
     <string name="double_back_to_quit_app">S\'il vous plaît, cliquez sur retour une seconde fois pour quitter</string>
+    <string name="titleSocial">Social</string>
+    <string name="titleSettings">Settings</string>
     <string name="no_access_to_DB">Impossible de se connecter à la base de donnée. Réessayez plus tard.</string>
+
 
 </resources>

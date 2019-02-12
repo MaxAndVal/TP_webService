@@ -5,12 +5,13 @@ import android.util.Log
 import android.widget.Toast
 import com.example.lpiem.rickandmortyapp.Data.RetrofitCallTypes
 import com.example.lpiem.rickandmortyapp.Data.RickAndMortyRetrofitSingleton
+import com.example.lpiem.rickandmortyapp.Data.SUCCESS
 import com.example.lpiem.rickandmortyapp.Model.Friend
 import com.example.lpiem.rickandmortyapp.Model.ListOfFriends
 import com.example.lpiem.rickandmortyapp.Model.ResponseFromApi
-import com.example.lpiem.rickandmortyapp.View.Social.SocialActionsInterface
 import com.example.lpiem.rickandmortyapp.R
 import com.example.lpiem.rickandmortyapp.Util.SingletonHolder
+import com.example.lpiem.rickandmortyapp.View.Social.SocialActionsInterface
 import com.example.lpiem.rickandmortyapp.View.Social.SocialFragment
 import com.example.lpiem.rickandmortyapp.View.TAG
 import kotlinx.android.synthetic.main.fragment_social.*
@@ -82,7 +83,7 @@ class SocialManager private constructor(private val context: Context){
         //TODO: need implementation for rv
         val code = response.code
         val message = response.message
-        if (code == 200) {
+        if (code == SUCCESS) {
             val result = response.results
             Toast.makeText(context, "code $code added $message results : $result", Toast.LENGTH_SHORT).show()
         } else {
@@ -94,7 +95,7 @@ class SocialManager private constructor(private val context: Context){
         //TODO: need implementation for rv
         val code = response.code
         val message = response.message
-        if (code == 200) {
+        if (code == SUCCESS) {
             val results = response.results
             Toast.makeText(context, "code : $code - delete : $message results : $results", Toast.LENGTH_SHORT).show()
         } else {
@@ -105,7 +106,7 @@ class SocialManager private constructor(private val context: Context){
     private fun acceptFriendshipTreatment(response: ResponseFromApi) {
         val code = response.code
         val message = response.message
-        if (code == 200) {
+        if (code == SUCCESS) {
             val results = response.results
             Toast.makeText(context, "code : $code, message $message , results $results", Toast.LENGTH_SHORT).show()
         } else {
@@ -117,7 +118,7 @@ class SocialManager private constructor(private val context: Context){
         val code = list.code
         val message = list.message
         Log.d(TAG, "list of friends searching : $list")
-        if (code == 200) {
+        if (code == SUCCESS) {
             socialFragment?.resultFromSearch = list
             socialFragment?.updateDataSetList(list.friends)
         } else {
@@ -128,7 +129,7 @@ class SocialManager private constructor(private val context: Context){
     private fun listOfFriendsTreatment(list: ListOfFriends) {
         val code = list.code
         val message = list.message
-        if (code == 200) {
+        if (code == SUCCESS) {
             socialFragment?.listOfFriends = list
             socialFragment?.listOfActualFriends = list.friends?.filter { it.accepted == true }
             socialFragment?.listOfPotentialFriends = list.friends?.filter { it.accepted == false }

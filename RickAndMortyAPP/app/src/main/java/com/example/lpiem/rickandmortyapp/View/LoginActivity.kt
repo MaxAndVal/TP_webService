@@ -18,7 +18,7 @@ const val RC_SIGN_IN = 1
 
 class LoginActivity : AppCompatActivity() {
 
-    internal var FacebookCallbackManager: CallbackManager? = null
+    internal var facebookCallbackManager: CallbackManager? = null
     private lateinit var loginAppManager: LoginAppManager
     private var doubleBackToExitPressedOnce = false
 
@@ -50,7 +50,7 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         //Facebook
-        FacebookCallbackManager?.onActivityResult(requestCode, resultCode, data)
+        facebookCallbackManager?.onActivityResult(requestCode, resultCode, data)
         super.onActivityResult(requestCode, resultCode, data)
 
         //Google
