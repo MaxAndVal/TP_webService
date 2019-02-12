@@ -126,10 +126,10 @@ class LoginAppManager private constructor(private var context: Context) {
         }
     }
 
-    fun disconnectGoogleAccount() {
+    fun disconnectGoogleAccount(verbose: Boolean) {
         mGoogleSignInClient?.signOut()?.addOnCompleteListener { task ->
             task.result
-            Toast.makeText(context, context.getString(R.string.google_disconnected), Toast.LENGTH_SHORT).show()
+            if (verbose) Toast.makeText(context, context.getString(R.string.google_disconnected), Toast.LENGTH_SHORT).show()
             googleBtnTextView.text = context.getString(R.string.btn_connection_google)
             (context as LoginActivity).sign_in_button.setOnClickListener { googleSignIn() }
             connectedToGoogle = false
@@ -152,38 +152,40 @@ class LoginAppManager private constructor(private var context: Context) {
 
                 if (isLoggedIn) {
                     //"/100033490894253/picture"
+                    //https://scontent-cdt1-1.xx.fbcdn.net/v/t1.0-9/13445495_1708145726112833_8043077153582312365_n.jpg?_nc_cat=108&_nc_ht=scontent-cdt1-1.xx&oh=69527935ea27df244add54f16977e133&oe=5CDC1FD1
                     val request = GraphRequest.newMeRequest(
                             accessToken
                     ) { obj, response ->
                         val result = response.jsonObject
+                        Log.d(TAG, "request Body: $result")
                         try {
-
                             val userNameFB = result.getString("name")
                             val userEmail = result.getString("email")
                             val userId = result.getString("id")
-                            //TODO
-                            //val userImage = obj.getString("picture") as JsonObject
-                            //val jj = userImage.get("data")
+                            val profilePicUrl = result.getJSONObject("picture").getJSONObject("data").getString("url")
+                            Log.d(TAG,"profilePictURL : $profilePicUrl")
+
                             val jsonBody = JsonObject()
-                            //TODO
-                            //Log.d(TAG, "image : $userImage")
-                            //Log.d(TAG, "data : $jj")
+
                             jsonBody.addProperty(UserEmail.string, userEmail)
                             jsonBody.addProperty(UserName.string, userNameFB)
                             jsonBody.addProperty(UserPassword.string, userId)
-                            //jsonBody.addProperty(UserImage.string, userImage)
+                            jsonBody.addProperty(UserImage.string, profilePicUrl)
                             jsonBody.addProperty(ExternalID.string, userId)
+
+
                             val connection = rickAndMortyAPI!!.connectUser(jsonBody)
                             callRetrofit(connection, LOGIN)
                         } catch (e: Throwable) {
                             Log.d(TAG, "error : $e")
                             e.printStackTrace()
-                            Toast.makeText(context, "Facebook connection error", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, context.getString(R.string.no_access_to_DB), Toast.LENGTH_SHORT).show()
+                            LoginManager.getInstance().logOut()
                             (context as LoginActivity).login_progressBar.visibility = View.GONE
                         }
                     }
                     val parameters = Bundle()
-                    parameters.putString("fields", "id,name,link,email,picture")
+                    parameters.putString("fields", "id,name,email,picture")
                     request.parameters = parameters
                     request.executeAsync()
                 }
@@ -204,7 +206,7 @@ class LoginAppManager private constructor(private var context: Context) {
         Log.d(TAG, "isLoggedIn = $isLoggedIn")
 
         if (isLoggedIn) {
-            LoginManager.getInstance().logInWithReadPermissions((context as LoginActivity), Arrays.asList("public_profile"))
+            LoginManager.getInstance().logInWithReadPermissions((context as LoginActivity), Arrays.asList("public_profile, email, user_birthday, user_friends"))
         }
     }
 
@@ -229,6 +231,9 @@ class LoginAppManager private constructor(private var context: Context) {
                     (context as LoginActivity).login_progressBar.visibility = View.GONE
                     val responseError = response.errorBody() as ResponseBody
                     Log.d(TAG, "error call unsuccessful: ${responseError.string()}")
+                    disconnectGoogleAccount(false)
+                    LoginManager.getInstance().logOut()
+                    Toast.makeText(context, context.getString(R.string.no_access_to_DB), Toast.LENGTH_LONG).show()
                 }
 
             }
@@ -246,12 +251,12 @@ class LoginAppManager private constructor(private var context: Context) {
     private fun loginTreatment(response: ResponseFromApi) {
         val code = response.code
         val message = response.message
-        if (code == 200) {
+        if (code == SUCCESS) {
             val results = response.results
             (context as LoginActivity).login_progressBar.visibility = View.GONE
             if (connectedToGoogle) {
                 googleBtnTextView.text = context.getString(R.string.btn_disconnection_google)
-                (context as LoginActivity).sign_in_button.setOnClickListener { disconnectGoogleAccount() }
+                (context as LoginActivity).sign_in_button.setOnClickListener { disconnectGoogleAccount(true) }
             }
             val name = results?.userName
             Log.d(TAG, "body = $response")
@@ -260,7 +265,7 @@ class LoginAppManager private constructor(private var context: Context) {
             connectedUser = response.results!!
             (context as LoginActivity).startActivity(homeIntent)
         } else {
-            Toast.makeText(context, "Error : $message", Toast.LENGTH_LONG).show()
+            Toast.makeText(context, "Error Wubba : $message", Toast.LENGTH_LONG).show()
             (context as LoginActivity).login_progressBar.visibility = View.GONE
         }
     }
