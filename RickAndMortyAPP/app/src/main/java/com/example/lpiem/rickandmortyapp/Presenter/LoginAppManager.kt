@@ -160,15 +160,13 @@ class LoginAppManager private constructor(private var context: Context) {
                             val userNameFB = result.getString("name")
                             val userEmail = result.getString("email")
                             val userId = result.getString("id")
-                            val profilePicUrl = result.getJSONObject("picture").getJSONObject("data").getString("url")
-                            Log.d(TAG,"profilePictURL : $profilePicUrl")
-
+                            val image = "https://graph.facebook.com/$userId/picture?type=large"
                             val jsonBody = JsonObject()
 
                             jsonBody.addProperty(UserEmail.string, userEmail)
                             jsonBody.addProperty(UserName.string, userNameFB)
                             jsonBody.addProperty(UserPassword.string, userId)
-                            jsonBody.addProperty(UserImage.string, profilePicUrl)
+                            jsonBody.addProperty(UserImage.string, image)
                             jsonBody.addProperty(ExternalID.string, userId)
 
 
@@ -205,7 +203,7 @@ class LoginAppManager private constructor(private var context: Context) {
         Log.d(TAG, "isLoggedIn = $isLoggedIn")
 
         if (isLoggedIn) {
-            LoginManager.getInstance().logInWithReadPermissions((context as LoginActivity), Arrays.asList("public_profile"))
+            LoginManager.getInstance().logInWithReadPermissions((context as LoginActivity), Arrays.asList("public_profile, email, user_birthday, user_friends"))
         }
     }
 
@@ -238,9 +236,9 @@ class LoginAppManager private constructor(private var context: Context) {
             }
 
             override fun onFailure(call: Call<T>, t: Throwable) {
-                Log.d(TAG, "fail : $t")
+                Log.d(TAG, "failCall : ${t.message}")
                 (context as LoginActivity).login_progressBar.visibility = View.GONE
-                Toast.makeText(context, context.getString(R.string.network_problem_please_try_again), Toast.LENGTH_LONG).show()
+                Toast.makeText(context, "erreur lors de la récupérartion des données : $t", Toast.LENGTH_LONG).show()
                 LoginManager.getInstance().logOut()
             }
         })
