@@ -10,13 +10,15 @@
     android:layout_marginEnd="4dp"
     android:layout_marginTop="4dp"
     android:layout_marginBottom="16dp"
+    android:background="@color/colorPrimary"
     tools:context=".View.Collection.list.CollectionFragment">
 
     <TextView
         android:id="@+id/tv_actual_score"
+        style="@style/TextViewStyleWhite"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="24dp"
         android:text="@string/actual_score"
         android:visibility="invisible"
         tools:visibility="visible"
@@ -26,6 +28,7 @@
 
     <TextView
         android:id="@+id/tv_actual_turn"
+        style="@style/TextViewStyleWhite"
         android:text="@string/actual_turn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -47,15 +50,18 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
             android:orientation="vertical" >
 
             <TextView
                 android:id="@+id/tv_citation"
+                style="@style/quote_style"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
                 android:visibility="invisible"
                 tools:visibility="visible"
+                tools:text="dvjsdhcjshvisdhviGTGHsdfvidfsijvnfdijndjsinvjfds"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -121,11 +127,16 @@
 
     <TextView
         android:id="@+id/tv_game_over"
+        style="@style/tv_game_over"
+        android:background="@drawable/back_game_over"
+        android:padding="8dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/try_an_other_game_later"
+        tools:text="@string/try_an_other_game_later"
         android:textAlignment="center"
         android:visibility="gone"
+        tools:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

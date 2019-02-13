@@ -22,7 +22,7 @@ class CollectionManager private constructor(private val context: Context) {
 
     private var rickAndMortyAPI = RickAndMortyRetrofitSingleton.instance
     var collectionFragment: CollectionFragment? = null
-    lateinit var currentCall : Call<*>
+    private var currentCall : Call<*>? = null
     lateinit var cardListDisplay : CardListDisplay
 
     companion object : SingletonHolder<CollectionManager, Context>(::CollectionManager)
@@ -32,7 +32,7 @@ class CollectionManager private constructor(private val context: Context) {
     }
 
     fun cancelCall() {
-        currentCall.cancel()
+        currentCall?.cancel()
         Log.d(TAG, "call canceled")
     }
 
@@ -75,6 +75,6 @@ class CollectionManager private constructor(private val context: Context) {
         cardListDisplay = link
         val userId = user?.userId?:-1
         currentCall = rickAndMortyAPI!!.getListOfCardsById(userId)
-        callRetrofit(currentCall, LIST_OF_CARDS)
+        callRetrofit(currentCall!!, LIST_OF_CARDS)
     }
 }
