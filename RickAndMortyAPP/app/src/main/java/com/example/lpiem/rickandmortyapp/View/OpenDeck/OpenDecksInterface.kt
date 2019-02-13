@@ -1,4 +1,4 @@
-package com.example.lpiem.rickandmortyapp.View
+package com.example.lpiem.rickandmortyapp.View.OpenDeck
 
 interface OpenDecksInterface {
 

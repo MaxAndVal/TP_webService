@@ -39,6 +39,9 @@ class Card : Parcelable {
     @SerializedName("amount")
     @Expose
     var amount: Int? = null
+    @SerializedName("price")
+    @Expose
+    var price: Int? = null
 
     constructor(inside: Parcel) {
         Log.d(TAG, "inside = $inside")
@@ -47,6 +50,8 @@ class Card : Parcelable {
         this.cardName = inside.readValue(String::class.java.classLoader) as String?
         this.cardImage = inside.readValue(String::class.java.classLoader) as String?
         this.amount = inside.readValue(Int::class.java.classLoader) as Int?
+        this.price = inside.readValue(Int::class.java.classLoader) as Int?
+
     }
 
     override fun writeToParcel(dest: Parcel, flags: Int) {
@@ -55,6 +60,7 @@ class Card : Parcelable {
         dest.writeValue(cardName)
         dest.writeValue(cardImage)
         dest.writeValue(amount)
+        dest.writeValue(price)
     }
 
     override fun describeContents(): Int {

@@ -7,4 +7,6 @@ interface SocialActionsInterface {
     fun addFriends(item: Friend)
 
     fun delFriends(item: Friend): Boolean
+
+    fun openFriendsMArket(item: Friend)
 }
