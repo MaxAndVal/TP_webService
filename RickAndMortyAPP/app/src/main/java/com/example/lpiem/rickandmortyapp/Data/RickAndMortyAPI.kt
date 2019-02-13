@@ -9,6 +9,8 @@ import retrofit2.http.*
 
 interface RickAndMortyAPI {
 
+    ///CONNEXION - INSCRIPTION
+
     @POST("/auth/login")
     fun connectUser(
             @Body body: JsonObject
@@ -19,15 +21,27 @@ interface RickAndMortyAPI {
             @Body body: JsonObject
     ): Call<ResponseFromApi>
 
+    ///USER
+
+
     @GET("/users/{id}")
     fun getUserById(
             @Path("id") userId: Int
     ): Call<ResponseFromApi>
 
+    ///GAME
+
     @PUT("/users/playGame/{id}")
     fun putNewDate(
             @Path("id") userId: Int, @Body body: JsonObject
     ): Call<ResponseFromApi>
+
+    @GET("/kaamelott/randomQuote")
+    fun getRandomQuote(
+    ): Call<KaamlottQuote>
+
+
+    ///WALLET
 
     @PUT("/users/wallet/{id}")
     fun updateWallet(
@@ -39,6 +53,9 @@ interface RickAndMortyAPI {
             @Path("id") userId: Int
     ): Call<Wallet>
 
+
+    ///CARD
+
     @GET("/cards/randomDeckGenerator/{id}")
     fun getRandomDeck(
             @Path("id") userId: Int
@@ -49,9 +66,18 @@ interface RickAndMortyAPI {
             @Path("id") userId: Int
     ): Call<ListOfCards>
 
-    @GET("/kaamelott/randomQuote")
-    fun getRandomQuote(
-    ): Call<KaamlottQuote>
+    @GET("/cards/{id}")
+    fun getCardDetails(
+            @Path("id") userId: Int
+    ): Call<DetailledCard>
+
+    @POST("/cards/addDecks")
+    fun increaseNumberOfDecks(
+            @Body body: JsonObject
+    ): Call<ResponseFromApi>
+
+
+    ///FRIEND
 
     @GET("users/{user}/friends/")
     fun getListOfFriends(
@@ -82,17 +108,29 @@ interface RickAndMortyAPI {
             @Path("id2") userId2: Int
     ): Call<ResponseFromApi>
 
-    @GET("/cards/{id}")
-    fun getCardDetails(
-            @Path("id") userId: Int
-    ): Call<DetailledCard>
 
-    @POST("/cards/addDecks")
-    fun increaseNumberOfDecks(
-            @Body body: JsonObject
-    ): Call<ResponseFromApi>
+    ///SETTINGS
 
     @GET("/faq/")
     fun getFAQ(
     ): Call<ListOfFAQ>
+
+
+    ///MARKET
+
+    @GET("/users/{id}/market")
+    fun getUserMarket(
+            @Path("id") userId: Int
+    ): Call<ListOfCards>
+
+    @GET("/users/{id}/market/{friend}")
+    fun getFriendMarket(
+            @Path("id") userId: Int,
+            @Path("friend") friend: Int
+    ): Call<ListOfCards>
+
+    @POST("/users/{id}/market")
+    fun addCardToMarket(
+            @Path("id") userId: Int, @Body body: JsonObject
+    ): Call<ListOfCards>
 }
