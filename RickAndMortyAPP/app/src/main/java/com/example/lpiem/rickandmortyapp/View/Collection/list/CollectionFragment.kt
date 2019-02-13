@@ -52,6 +52,7 @@ class CollectionFragment : androidx.fragment.app.Fragment(), CardListDisplay {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
+
         loginAppManager = LoginAppManager.getInstance(context!!)
         user = loginAppManager.connectedUser
         Log.d(TAG, "user : $user")

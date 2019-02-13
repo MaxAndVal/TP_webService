@@ -11,6 +11,7 @@ import com.example.lpiem.rickandmortyapp.Presenter.LoginAppManager
 import com.example.lpiem.rickandmortyapp.Presenter.settings.SettingsManager
 import com.example.lpiem.rickandmortyapp.R
 import com.example.lpiem.rickandmortyapp.Util.SingletonHolder
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_settings.*
 
 private const val ARG_PARAM1 = "param1"
@@ -22,7 +23,7 @@ class SettingsFragment : androidx.fragment.app.Fragment() {
     private var param2: String? = null
 
     private lateinit var settingsManager: SettingsManager
-    private var rickAndMortyAPI: RickAndMortyAPI?=null
+    private var rickAndMortyAPI: RickAndMortyAPI? = null
     private lateinit var loginAppManager: LoginAppManager
 
     companion object : SingletonHolder<SettingsManager, Context>(::SettingsManager)
@@ -41,7 +42,10 @@ class SettingsFragment : androidx.fragment.app.Fragment() {
         if (settingsManager.settingsFragment == null) {
             settingsManager.captureFragmentInstance(this)
         }
+
+        loginAppManager = LoginAppManager.getInstance(context!!)
     }
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -51,8 +55,16 @@ class SettingsFragment : androidx.fragment.app.Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        btn_faq.setOnClickListener { settingsManager.openFragmentFAQ(FAQ_Fragment()) }
+        tv_faq.setOnClickListener { settingsManager.openFragmentFAQ(FAQ_Fragment()) }
 
+        displayUserInformation()
+    }
+
+    private fun displayUserInformation() {
+        val user = loginAppManager.connectedUser!!
+        tv_email.text = user.userEmail
+        tv_name.text = user.userName
+        Picasso.get().load(user.userImage).placeholder(R.drawable.ic_person_black_24dp).into(iv_profile_picture)
     }
 
 }
