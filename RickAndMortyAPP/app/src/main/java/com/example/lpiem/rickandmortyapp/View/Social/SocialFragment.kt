@@ -1,6 +1,7 @@
 package com.example.lpiem.rickandmortyapp.View.Social
 
 import android.app.AlertDialog
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -14,6 +15,7 @@ import com.example.lpiem.rickandmortyapp.Model.ListOfFriends
 import com.example.lpiem.rickandmortyapp.Presenter.LoginAppManager
 import com.example.lpiem.rickandmortyapp.Presenter.SocialManager
 import com.example.lpiem.rickandmortyapp.R
+import com.example.lpiem.rickandmortyapp.View.MarketActivity
 import com.example.lpiem.rickandmortyapp.View.TAG
 import kotlinx.android.synthetic.main.fragment_social.*
 
@@ -22,6 +24,11 @@ private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
 class SocialFragment : androidx.fragment.app.Fragment(), SocialActionsInterface {
+    override fun openFriendsMArket(item: Friend) {
+        val intent = Intent(context, MarketActivity::class.java)
+        intent.putExtra("friend_id", item.userId)
+        startActivity(intent)
+    }
 
 
     private var param1: String? = null

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/blueRick"
-    tools:context=".View.OpenDeckActivity">
+    tools:context=".View.OpenDeck.OpenDeckActivity">
 
     <FrameLayout
         android:id="@+id/fl_DeckToOpen"

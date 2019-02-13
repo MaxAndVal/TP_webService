@@ -10,8 +10,8 @@ import com.example.lpiem.rickandmortyapp.Model.ListOfCards
 import com.example.lpiem.rickandmortyapp.Model.ResponseFromApi
 import com.example.lpiem.rickandmortyapp.Presenter.collection.DetailCollectionManager
 import com.example.lpiem.rickandmortyapp.Util.SingletonHolder
-import com.example.lpiem.rickandmortyapp.View.OpenDeckActivity
-import com.example.lpiem.rickandmortyapp.View.OpenDecksInterface
+import com.example.lpiem.rickandmortyapp.View.OpenDeck.OpenDeckActivity
+import com.example.lpiem.rickandmortyapp.View.OpenDeck.OpenDecksInterface
 import com.example.lpiem.rickandmortyapp.View.TAG
 import kotlinx.android.synthetic.main.activity_open_deck.*
 import okhttp3.ResponseBody

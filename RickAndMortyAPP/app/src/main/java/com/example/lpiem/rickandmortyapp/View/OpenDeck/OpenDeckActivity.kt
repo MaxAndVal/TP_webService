@@ -1,4 +1,4 @@
-package com.example.lpiem.rickandmortyapp.View
+package com.example.lpiem.rickandmortyapp.View.OpenDeck
 
 import android.content.Intent
 import android.os.Bundle
