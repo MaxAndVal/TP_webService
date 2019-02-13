@@ -6,7 +6,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.lpiem.rickandmortyapp.Data.RickAndMortyAPI
 import com.example.lpiem.rickandmortyapp.Data.RickAndMortyRetrofitSingleton
@@ -19,6 +18,7 @@ import com.example.lpiem.rickandmortyapp.Util.RecyclerTouchListener
 import com.example.lpiem.rickandmortyapp.View.Collection.detail.CollectionDetailActivity
 import com.example.lpiem.rickandmortyapp.View.TAG
 import kotlinx.android.synthetic.main.fragment_collection.*
+import kotlinx.android.synthetic.main.price_input.view.*
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
@@ -79,7 +79,30 @@ class CollectionFragment : androidx.fragment.app.Fragment(), CardListDisplay {
             }
 
             override fun onLongClick(view: View, position: Int) {
-                Toast.makeText(context, "long click", Toast.LENGTH_SHORT).show()
+                val builder: android.app.AlertDialog.Builder = android.app.AlertDialog.Builder(context, android.R.style.Theme_Material_Dialog_Alert)
+                val card = (rv_collection.adapter as CollectionAdapter).getDataSet().cards?.get(position)
+                val customview = layoutInflater.inflate(R.layout.price_input, null, false)
+                builder.setView(customview)
+                builder.setTitle("Sell this card ?")
+                        .setMessage("How much do you wanna sell this card ?")
+                        .setPositiveButton(android.R.string.yes) { dialog, which ->
+                            val price = customview.et_price.text
+                            var isValid = true
+                            if(price.isBlank()){
+                                isValid = false
+                            }
+                            if(isValid){
+                                collectionManager.sellACard(user!!.userId!!, card!!, price.toString().toInt())
+                            }
+                            if(isValid){
+                                dialog.dismiss()
+                            }
+                        }
+                        .setNegativeButton(android.R.string.no) { dialog, which ->
+                            // do nothing
+                        }
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show()
             }
         }))
     }

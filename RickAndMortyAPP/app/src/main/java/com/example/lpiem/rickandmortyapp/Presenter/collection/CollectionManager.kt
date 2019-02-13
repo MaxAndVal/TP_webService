@@ -4,15 +4,18 @@ import android.content.Context
 import android.util.Log
 import android.widget.Toast
 import com.example.lpiem.rickandmortyapp.Data.RetrofitCallTypes
-import com.example.lpiem.rickandmortyapp.Data.RetrofitCallTypes.LIST_OF_CARDS
+import com.example.lpiem.rickandmortyapp.Data.RetrofitCallTypes.*
 import com.example.lpiem.rickandmortyapp.Data.RickAndMortyRetrofitSingleton
 import com.example.lpiem.rickandmortyapp.Data.SUCCESS
+import com.example.lpiem.rickandmortyapp.Model.Card
 import com.example.lpiem.rickandmortyapp.Model.ListOfCards
+import com.example.lpiem.rickandmortyapp.Model.ResponseFromApi
 import com.example.lpiem.rickandmortyapp.Model.User
 import com.example.lpiem.rickandmortyapp.Util.SingletonHolder
 import com.example.lpiem.rickandmortyapp.View.Collection.list.CardListDisplay
 import com.example.lpiem.rickandmortyapp.View.Collection.list.CollectionFragment
 import com.example.lpiem.rickandmortyapp.View.TAG
+import com.google.gson.JsonObject
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
@@ -46,6 +49,9 @@ class CollectionManager private constructor(private val context: Context) {
                         RetrofitCallTypes.LIST_OF_CARDS -> {
                             listOfCardTreatment(result as ListOfCards)
                         }
+                        ADD_CARD_TO_MARKET -> {
+                            addCardtoMarket()
+                        }
                     }
                 } else {
                     val responseError = response.errorBody() as ResponseBody
@@ -59,6 +65,10 @@ class CollectionManager private constructor(private val context: Context) {
             }
         })
 
+    }
+
+    private fun addCardtoMarket() {
+        Toast.makeText(context, "Card is now on the market !", Toast.LENGTH_LONG).show()
     }
 
     private fun listOfCardTreatment(response: ListOfCards) {
@@ -76,5 +86,13 @@ class CollectionManager private constructor(private val context: Context) {
         val userId = user?.userId?:-1
         currentCall = rickAndMortyAPI!!.getListOfCardsById(userId)
         callRetrofit(currentCall, LIST_OF_CARDS)
+    }
+
+    fun sellACard(userId: Int, card:Card, price: Int) {
+        val jsonBody = JsonObject()
+        jsonBody.addProperty("card_name", card.cardName)
+        jsonBody.addProperty("price", price)
+        currentCall = rickAndMortyAPI!!.addCardToMarket(userId, card.cardId!!, jsonBody)
+        callRetrofit(currentCall, ADD_CARD_TO_MARKET)
     }
 }

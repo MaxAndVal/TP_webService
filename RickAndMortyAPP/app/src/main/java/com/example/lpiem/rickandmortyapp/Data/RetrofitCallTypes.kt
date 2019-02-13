@@ -21,5 +21,6 @@ enum class RetrofitCallTypes {
     DECKS_INCREASED,
     GET_FAQ,
     OPEN_RANDOM_DECK,
-    UPDATE_USER_INFO
+    UPDATE_USER_INFO,
+    ADD_CARD_TO_MARKET
 }

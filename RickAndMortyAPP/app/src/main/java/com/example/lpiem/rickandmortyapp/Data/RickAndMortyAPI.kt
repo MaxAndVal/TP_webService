@@ -129,8 +129,8 @@ interface RickAndMortyAPI {
             @Path("friend") friend: Int
     ): Call<ListOfCards>
 
-    @POST("/users/{id}/market")
+    @POST("/users/{id}/market/{cardId}")
     fun addCardToMarket(
-            @Path("id") userId: Int, @Body body: JsonObject
+            @Path("id") userId: Int, @Path("cardId") cardId: Int, @Body body: JsonObject
     ): Call<ListOfCards>
 }
