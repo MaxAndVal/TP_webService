@@ -14,6 +14,7 @@
 
     <TextView
         android:id="@+id/tv_actual_score"
+        style="@style/TextViewStyleBlack"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
@@ -26,6 +27,7 @@
 
     <TextView
         android:id="@+id/tv_actual_turn"
+        style="@style/TextViewStyleBlack"
         android:text="@string/actual_turn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -47,15 +49,18 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
             android:orientation="vertical" >
 
             <TextView
                 android:id="@+id/tv_citation"
+                style="@style/quote_style"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
                 android:visibility="invisible"
                 tools:visibility="visible"
+                tools:text="dvjsdhcjshvisdhviGTGHsdfvidfsijvnfdijndjsinvjfds"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -121,11 +126,16 @@
 
     <TextView
         android:id="@+id/tv_game_over"
+        style="@style/tv_response_style"
+        android:background="@drawable/back_game_over"
+        android:padding="8dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/try_an_other_game_later"
+        tools:text="@string/try_an_other_game_later"
         android:textAlignment="center"
         android:visibility="gone"
+        tools:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
