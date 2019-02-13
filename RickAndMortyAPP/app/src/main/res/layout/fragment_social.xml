@@ -5,10 +5,12 @@
     android:id="@+id/socialFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
     tools:context=".View.Social.SocialFragment">
 
     <TextView
         android:id="@+id/tv_searchFriends"
+        style="@style/TextViewStyleWhite"
         android:text="Search a friend by id, username or email"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -23,6 +25,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:queryHint="Search for friends"
+        android:queryBackground="@android:color/white"
+        android:searchIcon="@drawable/ic_search_white_24dp"
         app:layout_constraintEnd_toStartOf="@+id/btn_searchFriends"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_searchFriends" />

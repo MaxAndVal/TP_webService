@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
-import com.bumptech.glide.Glide
 import com.example.lpiem.rickandmortyapp.Data.RickAndMortyAPI
 import com.example.lpiem.rickandmortyapp.Data.RickAndMortyRetrofitSingleton
 import com.example.lpiem.rickandmortyapp.Model.ListOfCards
@@ -13,9 +12,7 @@ import com.example.lpiem.rickandmortyapp.Presenter.LoginAppManager
 import com.example.lpiem.rickandmortyapp.Presenter.Market.MarketManager
 import com.example.lpiem.rickandmortyapp.R
 import com.example.lpiem.rickandmortyapp.View.Collection.list.CardListDisplay
-import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_market.*
-import kotlinx.android.synthetic.main.activity_splash_screen.*
 
 class MarketActivity : AppCompatActivity(), CardListDisplay {
 

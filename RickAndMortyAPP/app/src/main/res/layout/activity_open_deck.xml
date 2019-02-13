@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/blueRick"
-    tools:context=".View.OpenDeck.OpenDeckActivity">
+    android:background="@color/colorPrimary"
+    tools:context=".View.OpenDeckActivity">
 
     <FrameLayout
         android:id="@+id/fl_DeckToOpen"
@@ -21,17 +21,19 @@
             android:layout_height="42dp"
             android:layout_marginStart="12dp"
             android:layout_marginTop="12dp"
-            android:src="@drawable/ic_arrow_back_black_24dp"
+            android:src="@drawable/ic_arrow_back_white_24dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/tv_openYourDeck"
+            style="@style/TextViewStyleWhite"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
             android:layout_marginBottom="32dp"
             android:gravity="center"
-            android:text="TextView"
+            tools:text="TextView"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

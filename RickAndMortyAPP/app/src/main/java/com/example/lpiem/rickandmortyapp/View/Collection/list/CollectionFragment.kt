@@ -69,7 +69,6 @@ class CollectionFragment : androidx.fragment.app.Fragment(), CardListDisplay {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         rv_collection.layoutManager = GridLayoutManager(context, 3)
-        collectionManager.getListOfDecks(user, this)
         rv_collection.addOnItemTouchListener(RecyclerTouchListener(context!!, rv_collection, object : RecyclerTouchListener.ClickListener {
 
             override fun onClick(view: View, position: Int) {
@@ -126,4 +125,8 @@ class CollectionFragment : androidx.fragment.app.Fragment(), CardListDisplay {
         super.onDestroyView()
     }
 
+    override fun onResume() {
+        collectionManager.getListOfDecks(user, this)
+        super.onResume()
+    }
 }

@@ -70,7 +70,6 @@ class LoginAppManager private constructor(private var context: Context) {
     // GOOGLE CONNECTION
 
     fun googleSetup() {
-        //loginActivity.sign_in_button.setSize(SignInButton.SIZE_STANDARD)
         (context as LoginActivity).sign_in_button.setOnClickListener { googleSignIn() }
 
         gso = GoogleSignInOptions
@@ -152,8 +151,6 @@ class LoginAppManager private constructor(private var context: Context) {
                 Log.d(TAG, "isLoggedIn on success = $isLoggedIn")
 
                 if (isLoggedIn) {
-                    //"/100033490894253/picture"
-                    //https://scontent-cdt1-1.xx.fbcdn.net/v/t1.0-9/13445495_1708145726112833_8043077153582312365_n.jpg?_nc_cat=108&_nc_ht=scontent-cdt1-1.xx&oh=69527935ea27df244add54f16977e133&oe=5CDC1FD1
                     val request = GraphRequest.newMeRequest(
                             accessToken
                     ) { obj, response ->
@@ -194,6 +191,7 @@ class LoginAppManager private constructor(private var context: Context) {
 
             override fun onCancel() {
                 Log.d(TAG, "onCancel: ")
+                LoginManager.getInstance().logOut()
             }
 
             override fun onError(exception: FacebookException) {
@@ -207,7 +205,7 @@ class LoginAppManager private constructor(private var context: Context) {
         Log.d(TAG, "isLoggedIn = $isLoggedIn")
 
         if (isLoggedIn) {
-            LoginManager.getInstance().logInWithReadPermissions((context as LoginActivity), Arrays.asList("public_profile, email, user_birthday, user_friends"))
+            LoginManager.getInstance().logInWithReadPermissions((context as LoginActivity), Arrays.asList("public_profile"))
         }
     }
 
