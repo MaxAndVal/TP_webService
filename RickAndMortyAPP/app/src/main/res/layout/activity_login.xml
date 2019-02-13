@@ -48,6 +48,7 @@
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInputEmail"
         style="@style/customStyleInput"
+        android:textColorHint="@color/etHints"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="99dp"
@@ -60,6 +61,7 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etEmail"
+            android:textColor="@android:color/white"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textEmailAddress" />
@@ -68,6 +70,7 @@
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInputPassword"
         style="@style/customStyleInput"
+        android:textColorHint="@color/etHints"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="99dp"
@@ -80,6 +83,7 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etPassword"
+            android:textColor="@android:color/white"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPassword" />
@@ -88,7 +92,7 @@
 
     <TextView
         android:id="@+id/tv_login"
-        style="@style/TextViewStyleBlack"
+        style="@style/TextViewStyleWhite"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -100,7 +104,7 @@
 
     <TextView
         android:id="@+id/tv_signInTitle"
-        style="@style/TextViewStyleBlack"
+        style="@style/TextViewStyleWhite"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="75dp"
