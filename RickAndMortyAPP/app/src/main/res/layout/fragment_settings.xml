@@ -12,8 +12,18 @@
     <ImageView
         android:id="@+id/iv_profile_back"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:src="@drawable/back_game_over"
+        android:layout_height="250dp"
+        android:src="@drawable/workshop"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <ImageView
+        android:id="@+id/iv_blur"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:src="@color/grayBlur"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -23,19 +33,20 @@
         android:id="@+id/iv_profile_picture"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="4dp"
-        android:src="@drawable/ic_person_black_24dp"
+        android:layout_marginStart="6dp"
+        android:layout_marginTop="6dp"
+        android:src="@drawable/ic_person_white_24dp"
         app:layout_constraintStart_toStartOf="@id/iv_profile_back"
         app:layout_constraintTop_toTopOf="@id/iv_profile_back"
         />
 
     <TextView
         android:id="@+id/tv_name"
+        style="@style/TextViewStyleWhite"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="name"
-        android:layout_marginTop="12dp"
+        tools:text="name"
+        android:layout_marginTop="42dp"
         android:padding="4dp"
         app:layout_constraintTop_toBottomOf="@id/iv_profile_picture"
         app:layout_constraintStart_toStartOf="@id/iv_profile_back"
@@ -43,9 +54,11 @@
 
     <TextView
         android:id="@+id/tv_email"
+        style="@style/quote_style"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="mail@mail.com"
+        tools:text="mail@mail.com"
+        android:textColor="@android:color/white"
         android:layout_marginTop="12dp"
         android:padding="4dp"
         android:layout_marginBottom="12dp"
@@ -62,41 +75,43 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/iv_profile_back"
-        android:background="@drawable/back_game_over"
         >
 
         <TextView
             android:id="@+id/tv_change_name"
+            style="@style/TextViewStyleWhite"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:padding="4dp"
             android:text="Change Name"
-            android:drawableStart="@drawable/ic_person_black_24dp"
+            android:drawableStart="@drawable/ic_person_white_24dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             />
 
         <TextView
             android:id="@+id/tv_change_email"
+            style="@style/TextViewStyleWhite"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:padding="4dp"
             android:text="Change Email"
-            android:drawableStart="@drawable/ic_email_black_24dp"
+            android:drawableStart="@drawable/ic_email_white_24dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_change_name"
             />
 
         <TextView
             android:id="@+id/tv_faq"
+            style="@style/TextViewStyleWhite"
             android:text="FAQ"
             android:layout_marginTop="12dp"
             android:padding="4dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawableStart="@drawable/ic_forum_black_24dp"
+            android:drawableStart="@drawable/ic_forum_white_24dp"
             app:layout_constraintTop_toBottomOf="@id/tv_change_email"
             app:layout_constraintStart_toStartOf="parent" />
 

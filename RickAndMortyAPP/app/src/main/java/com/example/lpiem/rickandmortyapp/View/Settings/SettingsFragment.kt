@@ -64,6 +64,7 @@ class SettingsFragment : androidx.fragment.app.Fragment() {
         val user = loginAppManager.connectedUser!!
         tv_email.text = user.userEmail
         tv_name.text = user.userName
+        //Picasso.get().load(R.drawable.workshop).fit().centerCrop().into(iv_profile_back)
         Picasso.get().load(user.userImage).placeholder(R.drawable.ic_person_black_24dp).into(iv_profile_picture)
     }
 
