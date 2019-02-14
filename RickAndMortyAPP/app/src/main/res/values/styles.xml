@@ -82,12 +82,6 @@
         <item name="android:textColor">@android:color/white</item>
     </style>
 
-    <style name="alreadyAccountStyle">
-        <item name="android:textSize">16sp</item>
-        <item name="android:fontFamily">@font/get_schwifty</item>
-        <item name="android:textColor">@android:color/black</item>
-    </style>
-
     <style name="tvWalletBlack">
         <item name="android:textAlignment">center</item>
         <item name="android:textColor">@android:color/black</item>
@@ -154,6 +148,19 @@
         <item name="android:fontFamily">@font/rick_and_morty_by_shi</item>
         <item name="android:textSize">24sp</item>
         <item name="android:textAlignment">center</item>
+    </style>
+
+    <style name="BigTextViewStyleWhite">
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:fontFamily">@font/rick_and_morty_by_shi</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textSize">24sp</item>
+    </style>
+
+    <style name="BigTextViewStyleWhiteSwifty">
+        <item name="android:textSize">24sp</item>
+        <item name="android:fontFamily">@font/get_schwifty</item>
+        <item name="android:textColor">@android:color/white</item>
     </style>
 
 </resources>

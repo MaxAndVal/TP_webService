@@ -8,7 +8,6 @@
     tools:context=".View.Settings.SettingsFragment">
 
 
-
     <ImageView
         android:id="@+id/iv_profile_back"
         android:layout_width="match_parent"
@@ -42,12 +41,19 @@
 
     <TextView
         android:id="@+id/tv_name"
-        style="@style/TextViewStyleWhite"
+        style="@style/BigTextViewStyleWhiteSwifty"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:text="name"
+        android:shadowColor="@android:color/black"
+        android:shadowDx="2"
+        android:shadowDy="2"
+        android:shadowRadius="4"
         android:layout_marginTop="42dp"
-        android:padding="4dp"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
         app:layout_constraintTop_toBottomOf="@id/iv_profile_picture"
         app:layout_constraintStart_toStartOf="@id/iv_profile_back"
         />
@@ -60,7 +66,10 @@
         tools:text="mail@mail.com"
         android:textColor="@android:color/white"
         android:layout_marginTop="12dp"
-        android:padding="4dp"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
         android:layout_marginBottom="12dp"
         app:layout_constraintTop_toBottomOf="@id/tv_name"
         app:layout_constraintStart_toStartOf="@id/iv_profile_back"
@@ -71,6 +80,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -79,12 +90,13 @@
 
         <TextView
             android:id="@+id/tv_change_name"
-            style="@style/TextViewStyleWhite"
+            style="@style/BigTextViewStyleWhite"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-            android:padding="4dp"
-            android:text="Change Name"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            android:text=" Change Name"
             android:drawableStart="@drawable/ic_person_white_24dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -92,12 +104,13 @@
 
         <TextView
             android:id="@+id/tv_change_email"
-            style="@style/TextViewStyleWhite"
+            style="@style/BigTextViewStyleWhite"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-            android:padding="4dp"
-            android:text="Change Email"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            android:text=" Change Email"
             android:drawableStart="@drawable/ic_email_white_24dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_change_name"
@@ -105,10 +118,11 @@
 
         <TextView
             android:id="@+id/tv_faq"
-            style="@style/TextViewStyleWhite"
-            android:text="FAQ"
+            style="@style/BigTextViewStyleWhite"
+            android:text=" FAQ"
             android:layout_marginTop="12dp"
-            android:padding="4dp"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:drawableStart="@drawable/ic_forum_white_24dp"
