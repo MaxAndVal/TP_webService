@@ -24,7 +24,8 @@ class OpenDeckActivity : AppCompatActivity(), OpenDecksInterface {
 
     override fun onResume() {
         super.onResume()
-        tv_openYourDeck.text = "You have ${openDeckManager?.loginAppManager?.connectedUser?.deckToOpen} deck to open"
+        openDeckManager?.showDetails = true
+        tv_openYourDeck.text = String.format(getString(R.string.number_of_deck_to_open), openDeckManager?.loginAppManager?.connectedUser?.deckToOpen)
         iv_peaceAmongWorld.setOnClickListener { openDeckManager!!.openRandomDeck(openDeckManager!!.loginAppManager.connectedUser!!.deckToOpen, this) }
     }
 
@@ -48,9 +49,16 @@ class OpenDeckActivity : AppCompatActivity(), OpenDecksInterface {
         val detailIntent = Intent(this, CollectionDetailActivity::class.java)
         startActivity(detailIntent)
     }
+
     override fun updateDecksCount(newCount: Int) {
-        tv_openYourDeck.text = "You have $newCount deck to open"
+        tv_openYourDeck.text = String.format(getString(R.string.number_of_deck_to_open), newCount)
+
     }
 
+    override fun onBackPressed() {
+        openDeckManager?.showDetails = false
+        av_from_code.cancelAnimation()
+        super.onBackPressed()
+    }
 
 }

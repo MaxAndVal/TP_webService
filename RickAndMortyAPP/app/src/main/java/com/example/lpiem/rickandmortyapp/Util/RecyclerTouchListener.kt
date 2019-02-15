@@ -20,19 +20,25 @@ class RecyclerTouchListener : RecyclerView.OnItemTouchListener {
 
             override fun onLongPress(e: MotionEvent) {
                 val child = recyclerView.findChildViewUnder(e.x, e.y)
-                if (child != null && clickListener != null) {
-                    clickListener.onLongClick(child, recyclerView.getChildPosition(child))
+                if (child != null) {
+                    clickListener.onLongClick(child, recyclerView.getChildAdapterPosition(child))
                 }
             }
         })
     }
 
     override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
-
         val child = rv.findChildViewUnder(e.x, e.y)
-        if (child != null && clickListener != null && gestureDetector.onTouchEvent(e)) {
-            clickListener.onClick(child, rv.getChildPosition(child))
+        if (child != null && gestureDetector.onTouchEvent(e)) {
+            clickListener.onClick(child, rv.getChildAdapterPosition(child))
         }
+
+//        if (child != null && e.action == MotionEvent.ACTION_DOWN) {
+//            Log.d(TAG, "Update")
+//            val data = (rv.adapter as CollectionAdapter).getDataSet()
+//            Log.d(TAG, "$data")
+//            (rv.adapter as CollectionAdapter).updateList(data)
+//        }
         return false
     }
 

@@ -8,11 +8,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.lpiem.rickandmortyapp.Model.FAQ
 import com.example.lpiem.rickandmortyapp.Model.User
-import com.example.lpiem.rickandmortyapp.Presenter.settings.SettingsManager
-import com.example.lpiem.rickandmortyapp.Util.SingletonHolder
 import com.example.lpiem.rickandmortyapp.Presenter.settings.FaqManager
-
+import com.example.lpiem.rickandmortyapp.Presenter.settings.SettingsManager
 import com.example.lpiem.rickandmortyapp.R
+import com.example.lpiem.rickandmortyapp.Util.SingletonHolder
 import kotlinx.android.synthetic.main.fragment_faq.*
 
 class FAQ_Fragment : androidx.fragment.app.Fragment(){
@@ -46,6 +45,11 @@ class FAQ_Fragment : androidx.fragment.app.Fragment(){
         rv_faq.layoutManager = LinearLayoutManager(context)
         faqManager.captureRecyclerView(rv_faq)
         iv_closeFAQ.setOnClickListener { faqManager.closeFAQ(this) }
+    }
+
+    override fun onDestroyView() {
+        faqManager.closeFAQ(this)
+        super.onDestroyView()
     }
 
 }

@@ -71,7 +71,7 @@ class CollectionDetailActivity : AppCompatActivity(), CardDetailDisplay {
                 .load(detailledCard.image)
                 .fit()
                 .centerInside()
-                .placeholder(getDrawable(R.drawable.vortex_ram))
+                .placeholder(getDrawable(R.drawable.vortex_ram)!!)
                 .into(iv_detail_card_image)
     }
 
