@@ -58,4 +58,9 @@ class MarketActivity : AppCompatActivity(), CardListDisplay {
     override fun displayResult(list: ListOfCards) {
         updateAdapter(list)
     }
+
+    override fun onBackPressed() {
+        marketManager.cancelCall()
+        super.onBackPressed()
+    }
 }

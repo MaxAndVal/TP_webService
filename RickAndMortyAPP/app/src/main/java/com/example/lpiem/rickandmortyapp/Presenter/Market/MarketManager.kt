@@ -58,7 +58,7 @@ class MarketManager private constructor(private val context: Context) {
 
     private fun listOfCardTreatment(response: ListOfCards) {
         (context as MarketActivity).listOfCards = response
-        val list = (context as MarketActivity)!!.listOfCards
+        val list = context.listOfCards
         if (list?.code == SUCCESS) {
             cardListDisplay.displayResult(list)
         } else {

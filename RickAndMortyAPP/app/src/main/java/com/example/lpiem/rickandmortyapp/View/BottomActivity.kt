@@ -119,7 +119,7 @@ class BottomActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        val deckToOpen = loginAppManager.connectedUser!!.deckToOpen;
+        val deckToOpen = loginAppManager.connectedUser!!.deckToOpen
         tv_deckToOpen.text = deckToOpen.toString()
         tv_deckToOpen.setOnClickListener { openDeck(deckToOpen!!) }
         tv_wallet.text = String.format(getString(R.string.wallet_amount), loginAppManager.connectedUser?.userWallet, " ")

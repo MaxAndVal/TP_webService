@@ -9,6 +9,7 @@ import com.example.lpiem.rickandmortyapp.Model.Card
 import com.example.lpiem.rickandmortyapp.Model.ListOfCards
 import com.example.lpiem.rickandmortyapp.Model.ResponseFromApi
 import com.example.lpiem.rickandmortyapp.Presenter.collection.DetailCollectionManager
+import com.example.lpiem.rickandmortyapp.R
 import com.example.lpiem.rickandmortyapp.Util.SingletonHolder
 import com.example.lpiem.rickandmortyapp.View.OpenDeck.OpenDeckActivity
 import com.example.lpiem.rickandmortyapp.View.OpenDeck.OpenDecksInterface
@@ -25,6 +26,7 @@ class OpenDeckManager  private constructor(private val context: Context) {
     private val rickAndMortyAPI = RickAndMortyRetrofitSingleton.instance
     private lateinit var link: OpenDecksInterface
     var listOfnewCards : List<Card>? = null
+    var showDetails = true
 
     companion object : SingletonHolder<OpenDeckManager, Context>(::OpenDeckManager)
 
@@ -39,7 +41,7 @@ class OpenDeckManager  private constructor(private val context: Context) {
                             openRandomDeckTreatment(result as ListOfCards)
                         }
                         RetrofitCallTypes.UPDATE_USER_INFO ->{
-                            var homeManager = HomeManager.getInstance(context)
+                            val homeManager = HomeManager.getInstance(context)
                             homeManager.updateUserInfo(result as ResponseFromApi)
                             link.showAnimation(false)
                             val user = loginAppManager.connectedUser
@@ -71,11 +73,11 @@ class OpenDeckManager  private constructor(private val context: Context) {
         animationLoop.pauseAnimation()
         context.fl_animation.visibility = View.GONE
         context.fl_DeckToOpen.visibility = View.VISIBLE
-        context.tv_openYourDeck.text = "You have ${user!!.deckToOpen} deck to open"
+        context.tv_openYourDeck.text = String.format(context.getString(R.string.number_of_deck_to_open), user!!.deckToOpen)
 
-        context.getInfoNewCards()
+        if (showDetails) context.getInfoNewCards()
 
-        val updateUser = rickAndMortyAPI!!.getUserById(user!!.userId!!)
+        val updateUser = rickAndMortyAPI!!.getUserById(user.userId!!)
         callRetrofit(updateUser, RetrofitCallTypes.UPDATE_USER_INFO)
     }
 
@@ -84,7 +86,7 @@ class OpenDeckManager  private constructor(private val context: Context) {
         link.showAnimation(true)
 
         val user = loginAppManager.connectedUser
-        if(deckToOpen!! >0){
+        if(deckToOpen!! > 0){
             val openADeck = rickAndMortyAPI!!.getRandomDeck(user!!.userId!!)
             callRetrofit(openADeck, RetrofitCallTypes.OPEN_RANDOM_DECK)
         }
