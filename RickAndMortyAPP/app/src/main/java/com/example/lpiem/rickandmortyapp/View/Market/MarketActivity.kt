@@ -6,8 +6,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.lpiem.rickandmortyapp.Model.ListOfCards
 import com.example.lpiem.rickandmortyapp.Model.User
-import com.example.lpiem.rickandmortyapp.Presenter.LoginAppManager
-import com.example.lpiem.rickandmortyapp.Presenter.Market.MarketManager
+import com.example.lpiem.rickandmortyapp.Manager.LoginAppManager
+import com.example.lpiem.rickandmortyapp.Manager.Market.MarketManager
 import com.example.lpiem.rickandmortyapp.R
 import com.example.lpiem.rickandmortyapp.View.Collection.list.CardListDisplay
 import kotlinx.android.synthetic.main.activity_market.*

@@ -5,8 +5,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.lpiem.rickandmortyapp.Presenter.LoginAppManager
-import com.example.lpiem.rickandmortyapp.Presenter.settings.SettingsManager
+import com.example.lpiem.rickandmortyapp.Manager.LoginAppManager
+import com.example.lpiem.rickandmortyapp.Manager.settings.SettingsManager
 import com.example.lpiem.rickandmortyapp.R
 import com.example.lpiem.rickandmortyapp.Util.SingletonHolder
 import com.squareup.picasso.Picasso

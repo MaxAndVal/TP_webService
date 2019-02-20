@@ -1,4 +1,4 @@
-package com.example.lpiem.rickandmortyapp.Presenter.Market
+package com.example.lpiem.rickandmortyapp.Manager.Market
 
 import android.content.Context
 import android.util.Log

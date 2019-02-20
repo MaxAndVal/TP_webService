@@ -24,3 +24,7 @@ enum class RetrofitCallTypes {
     UPDATE_USER_INFO,
     ADD_CARD_TO_MARKET
 }
+
+//enum class RetrofitCallTest(types: RetrofitCallTypes) {
+//    UPDATE_WALLET(RetrofitCallTypes.RESPONSE_FROM_API)
+//}

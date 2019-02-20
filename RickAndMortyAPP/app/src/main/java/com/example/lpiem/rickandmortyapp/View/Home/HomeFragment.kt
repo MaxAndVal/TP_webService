@@ -10,9 +10,9 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
+import com.example.lpiem.rickandmortyapp.Manager.HomeManager
+import com.example.lpiem.rickandmortyapp.Manager.LoginAppManager
 import com.example.lpiem.rickandmortyapp.Model.User
-import com.example.lpiem.rickandmortyapp.Presenter.HomeManager
-import com.example.lpiem.rickandmortyapp.Presenter.LoginAppManager
 import com.example.lpiem.rickandmortyapp.R
 import com.example.lpiem.rickandmortyapp.View.BottomActivity
 import com.example.lpiem.rickandmortyapp.View.Collection.list.CollectionFragment

@@ -7,7 +7,7 @@ import android.os.Handler
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.lpiem.rickandmortyapp.Presenter.LoginAppManager
+import com.example.lpiem.rickandmortyapp.Manager.LoginAppManager
 import com.example.lpiem.rickandmortyapp.R
 import com.facebook.CallbackManager
 import com.google.android.gms.common.SignInButton

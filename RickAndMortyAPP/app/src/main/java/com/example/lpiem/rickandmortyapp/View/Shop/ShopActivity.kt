@@ -2,7 +2,7 @@ package com.example.lpiem.rickandmortyapp.View.Shop
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.example.lpiem.rickandmortyapp.Presenter.ShopManager
+import com.example.lpiem.rickandmortyapp.Manager.ShopManager
 import com.example.lpiem.rickandmortyapp.R
 import kotlinx.android.synthetic.main.activity_shop.*
 
