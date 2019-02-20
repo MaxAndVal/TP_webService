@@ -107,7 +107,9 @@ class RickAndMortyRetrofitSingleton private constructor(private val context: Con
                         ACCEPT_FRIENDSHIP -> TODO()
                         BUY_BOOSTER -> TODO()
                         DECKS_INCREASED -> TODO()
-                        GET_FAQ -> TODO()
+                        GET_FAQ -> {
+                            liveData.postValue(result as ListOfFAQ)
+                        }
                         OPEN_RANDOM_DECK -> TODO()
                         UPDATE_USER_INFO -> TODO()
                     }
@@ -172,6 +174,11 @@ class RickAndMortyRetrofitSingleton private constructor(private val context: Con
     fun getWallet(id: Int?): MutableLiveData<Wallet> {
         currentCall = instance!!.getWallet(id!!)
         return callRetrofit(currentCall!!, GET_WALLET) as MutableLiveData<Wallet>
+    }
+
+    fun getFAQ(): MutableLiveData<ListOfFAQ> {
+        currentCall = instance!!.getFAQ()
+        return callRetrofit(currentCall!!, RetrofitCallTypes.GET_FAQ) as MutableLiveData<ListOfFAQ>
     }
 
 }
