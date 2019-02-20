@@ -7,15 +7,17 @@ import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.Toast
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
+import com.example.lpiem.rickandmortyapp.Data.JsonProperty
 import com.example.lpiem.rickandmortyapp.Data.JsonProperty.*
-import com.example.lpiem.rickandmortyapp.Data.RetrofitCallTypes
-import com.example.lpiem.rickandmortyapp.Data.RetrofitCallTypes.LOGIN
 import com.example.lpiem.rickandmortyapp.Data.RickAndMortyRetrofitSingleton
 import com.example.lpiem.rickandmortyapp.Data.SUCCESS
 import com.example.lpiem.rickandmortyapp.Model.ResponseFromApi
 import com.example.lpiem.rickandmortyapp.Model.User
 import com.example.lpiem.rickandmortyapp.R
 import com.example.lpiem.rickandmortyapp.Util.SingletonHolder
+import com.example.lpiem.rickandmortyapp.Util.observeOnce
 import com.example.lpiem.rickandmortyapp.View.*
 import com.facebook.*
 import com.facebook.login.LoginManager
@@ -28,15 +30,11 @@ import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.google.gson.JsonObject
 import kotlinx.android.synthetic.main.activity_login.*
-import okhttp3.ResponseBody
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import java.util.*
 
 class LoginAppManager private constructor(private var context: Context) {
 
-    private val rickAndMortyAPI = RickAndMortyRetrofitSingleton.getInstance(context).instance
+    private val rickAndMortyAPI = RickAndMortyRetrofitSingleton.getInstance(context)
     private var connectedToGoogle = false
     private lateinit var gso: GoogleSignInOptions
     private var mGoogleSignInClient: GoogleSignInClient? = null
@@ -44,6 +42,7 @@ class LoginAppManager private constructor(private var context: Context) {
     private lateinit var googleBtnTextView: Button
     var connectedUser: User? = null
     var gameInProgress = true
+    private var loginLiveData = MutableLiveData<ResponseFromApi>()
 
     companion object : SingletonHolder<LoginAppManager, Context>(::LoginAppManager)
 
@@ -54,11 +53,16 @@ class LoginAppManager private constructor(private var context: Context) {
             Toast.makeText(context, context.getString(R.string.thanks_to_fill_all_fields), Toast.LENGTH_SHORT).show()
         } else {
             (context as LoginActivity).login_progressBar.visibility = View.VISIBLE
+
             val jsonBody = JsonObject()
-            jsonBody.addProperty(UserEmail.string, mail)
-            jsonBody.addProperty(UserPassword.string, pass)
-            val connection = rickAndMortyAPI!!.connectUser(jsonBody)
-            callRetrofit(connection, LOGIN)
+            jsonBody.addProperty(JsonProperty.UserEmail.string, mail)
+            jsonBody.addProperty(JsonProperty.UserPassword.string, pass)
+            loginLiveData = rickAndMortyAPI.login(jsonBody)
+            loginLiveData.observeOnce(Observer {
+                loginTreatment(it)
+            })
+
+
         }
     }
 
@@ -119,8 +123,12 @@ class LoginAppManager private constructor(private var context: Context) {
             jsonBody.addProperty(UserPassword.string, userId)
             jsonBody.addProperty(UserImage.string, userImage.toString())
             jsonBody.addProperty(ExternalID.string, userId)
-            val connection = rickAndMortyAPI!!.connectUser(jsonBody)
-            callRetrofit(connection, LOGIN)
+
+            loginLiveData = rickAndMortyAPI.login(jsonBody)
+            loginLiveData.observeOnce(Observer {
+                loginTreatment(it)
+            })
+
         } else {
             Toast.makeText(context, "erreur", Toast.LENGTH_LONG).show()
         }
@@ -169,9 +177,11 @@ class LoginAppManager private constructor(private var context: Context) {
                             jsonBody.addProperty(UserImage.string, image)
                             jsonBody.addProperty(ExternalID.string, userId)
 
+                            loginLiveData = rickAndMortyAPI.login(jsonBody)
+                            loginLiveData.observeOnce(Observer {
+                                loginTreatment(it)
+                            })
 
-                            val connection = rickAndMortyAPI!!.connectUser(jsonBody)
-                            callRetrofit(connection, LOGIN)
                         } catch (e: Throwable) {
                             Log.d(TAG, "error : $e")
                             e.printStackTrace()
@@ -205,44 +215,6 @@ class LoginAppManager private constructor(private var context: Context) {
         if (isLoggedIn) {
             LoginManager.getInstance().logInWithReadPermissions((context as LoginActivity), Arrays.asList("public_profile, email, user_birthday, user_friends"))
         }
-    }
-
-
-    private fun <T> callRetrofit(call: Call<T>, type: RetrofitCallTypes) {
-
-        call.enqueue(object : Callback<T> {
-            override fun onResponse(call: Call<T>, response: Response<T>) {
-                if (response.isSuccessful) {
-                    val result = response.body()
-                    when (type) {
-                        LOGIN -> {
-                            loginTreatment(result as ResponseFromApi)
-                        }
-                        else -> {
-                            (context as LoginActivity).login_progressBar.visibility = View.GONE
-                            Log.d(TAG, "server error : ${response.errorBody()}")
-                        }
-                    }
-
-                } else {
-                    (context as LoginActivity).login_progressBar.visibility = View.GONE
-                    val responseError = response.errorBody() as ResponseBody
-                    Log.d(TAG, "error call unsuccessful: ${responseError.string()}")
-                    disconnectGoogleAccount(false)
-                    LoginManager.getInstance().logOut()
-                    Toast.makeText(context, context.getString(R.string.no_access_to_DB), Toast.LENGTH_LONG).show()
-                }
-
-            }
-
-            override fun onFailure(call: Call<T>, t: Throwable) {
-                Log.d(TAG, "failCall : ${t.message}")
-                (context as LoginActivity).login_progressBar.visibility = View.GONE
-                Toast.makeText(context, "erreur lors de la récupérartion des données : $t", Toast.LENGTH_LONG).show()
-                LoginManager.getInstance().logOut()
-            }
-        })
-
     }
 
     private fun loginTreatment(response: ResponseFromApi) {
