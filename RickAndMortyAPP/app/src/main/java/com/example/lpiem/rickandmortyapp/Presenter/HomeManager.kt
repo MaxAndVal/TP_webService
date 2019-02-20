@@ -27,7 +27,7 @@ import java.util.*
 
 class HomeManager private constructor(private var context: Context) {
 
-    private val rickAndMortyAPI = RickAndMortyRetrofitSingleton.instance
+    private val rickAndMortyAPI = RickAndMortyRetrofitSingleton.getInstance(context).instance
     private var citation = ""
     private var personnage = ""
     private var personnageNameList = listOf("")

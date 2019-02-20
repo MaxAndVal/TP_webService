@@ -8,6 +8,7 @@ import android.view.View.VISIBLE
 import android.widget.Toast
 import com.example.lpiem.rickandmortyapp.Data.JsonProperty.*
 import com.example.lpiem.rickandmortyapp.Data.RetrofitCallTypes
+import com.example.lpiem.rickandmortyapp.Data.RickAndMortyAPI
 import com.example.lpiem.rickandmortyapp.Data.RickAndMortyRetrofitSingleton
 import com.example.lpiem.rickandmortyapp.Data.SUCCESS
 import com.example.lpiem.rickandmortyapp.Model.ResponseFromApi
@@ -25,18 +26,19 @@ import retrofit2.Response
 
 class SignInManager private constructor(private var context: Context) {
 
-    private var loginAppManager = LoginAppManager.getInstance(context)
+    private var loginAppManager: LoginAppManager
+    private val rickAndMortyAPI: RickAndMortyAPI
 
     companion object : SingletonHolder<SignInManager, Context>(::SignInManager)
 
     init {
-
+        loginAppManager = LoginAppManager.getInstance(context)
+        rickAndMortyAPI = RickAndMortyRetrofitSingleton.getInstance(context).instance!!
     }
 
     private fun regularConnection() {
         (context as SignInActivity).progress_bar_sign_in.visibility = GONE
         Toast.makeText(context, "compte crée", Toast.LENGTH_SHORT).show()
-        val rickAndMortyAPI = RickAndMortyRetrofitSingleton.instance
         val jsonBody = JsonObject()
         jsonBody.addProperty(UserEmail.string, (context as SignInActivity).ed_email.text.toString())
         jsonBody.addProperty(UserPassword.string, (context as SignInActivity).ed_password.text.toString())
@@ -48,7 +50,6 @@ class SignInManager private constructor(private var context: Context) {
 
     fun signIn() {
         (context as SignInActivity).progress_bar_sign_in.visibility = VISIBLE
-        val rickAndMortyAPI = RickAndMortyRetrofitSingleton.instance
         if ((context as SignInActivity).ed_email.text.toString() == "" || (context as SignInActivity).ed_password.text.toString() == "" || (context as SignInActivity).ed_username.text.toString() == "") {
             Toast.makeText(context, context.getString(R.string.thanks_to_fill_all_fields), Toast.LENGTH_SHORT).show()
             (context as SignInActivity).progress_bar_sign_in.visibility = GONE

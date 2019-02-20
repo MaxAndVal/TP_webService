@@ -19,7 +19,7 @@ import retrofit2.Response
 
 class MarketManager private constructor(private val context: Context) {
 
-    private var rickAndMortyAPI = RickAndMortyRetrofitSingleton.instance
+    private var rickAndMortyAPI = RickAndMortyRetrofitSingleton.getInstance(context).instance
     private var currentCall: Call<*>? = null
     lateinit var cardListDisplay: CardListDisplay
 

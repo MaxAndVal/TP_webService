@@ -5,6 +5,7 @@ import android.util.Log
 import android.widget.Toast
 import com.example.lpiem.rickandmortyapp.Data.RetrofitCallTypes
 import com.example.lpiem.rickandmortyapp.Data.RetrofitCallTypes.GET_CARD_DETAILS
+import com.example.lpiem.rickandmortyapp.Data.RickAndMortyAPI
 import com.example.lpiem.rickandmortyapp.Data.RickAndMortyRetrofitSingleton
 import com.example.lpiem.rickandmortyapp.Data.SUCCESS
 import com.example.lpiem.rickandmortyapp.Model.Card
@@ -19,12 +20,15 @@ import retrofit2.Response
 
 class DetailCollectionManager private constructor(private val context: Context) {
 
-    private val rickAndMortyAPI = RickAndMortyRetrofitSingleton.instance
+    private val rickAndMortyAPI: RickAndMortyAPI
     private lateinit var cardDetailDisplay: CardDetailDisplay
     var listOfNewCards: MutableList<Card>? = null
 
     companion object : SingletonHolder<DetailCollectionManager, Context>(::DetailCollectionManager)
 
+    init {
+        rickAndMortyAPI = RickAndMortyRetrofitSingleton.getInstance(context).instance!!
+    }
 
     fun getCardDetails(id: Int, link: CardDetailDisplay) {
         cardDetailDisplay = link

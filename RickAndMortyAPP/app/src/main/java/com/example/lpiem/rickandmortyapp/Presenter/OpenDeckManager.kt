@@ -23,7 +23,7 @@ import retrofit2.Response
 class OpenDeckManager  private constructor(private val context: Context) {
 
     internal val loginAppManager = LoginAppManager.getInstance(context)
-    private val rickAndMortyAPI = RickAndMortyRetrofitSingleton.instance
+    private val rickAndMortyAPI = RickAndMortyRetrofitSingleton.getInstance(context).instance
     private lateinit var link: OpenDecksInterface
     var listOfnewCards : List<Card>? = null
     var showDetails = true

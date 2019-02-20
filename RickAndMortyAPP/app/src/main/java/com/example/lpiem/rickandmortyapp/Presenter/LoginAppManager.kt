@@ -36,7 +36,7 @@ import java.util.*
 
 class LoginAppManager private constructor(private var context: Context) {
 
-    private val rickAndMortyAPI = RickAndMortyRetrofitSingleton.instance
+    private val rickAndMortyAPI = RickAndMortyRetrofitSingleton.getInstance(context).instance
     private var connectedToGoogle = false
     private lateinit var gso: GoogleSignInOptions
     private var mGoogleSignInClient: GoogleSignInClient? = null

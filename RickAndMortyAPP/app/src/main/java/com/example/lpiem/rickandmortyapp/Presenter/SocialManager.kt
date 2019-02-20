@@ -23,7 +23,7 @@ import retrofit2.Response
 
 class SocialManager private constructor(private val context: Context){
 
-    private val rickAndMortyAPI = RickAndMortyRetrofitSingleton.instance
+    private val rickAndMortyAPI = RickAndMortyRetrofitSingleton.getInstance(context).instance
     var socialFragment: SocialFragment? = null
     private val loginAppManager = LoginAppManager.getInstance(context)
     private lateinit var link : SocialActionsInterface
