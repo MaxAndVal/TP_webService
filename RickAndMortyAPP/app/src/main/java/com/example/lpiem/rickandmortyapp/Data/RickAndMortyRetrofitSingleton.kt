@@ -3,9 +3,11 @@ package com.example.lpiem.rickandmortyapp.Data
 
 import android.content.Context
 import android.util.Log
-import com.example.lpiem.rickandmortyapp.Model.Card
-import com.example.lpiem.rickandmortyapp.Model.ListOfCards
-import com.example.lpiem.rickandmortyapp.Presenter.collection.CollectionManager
+import androidx.lifecycle.MutableLiveData
+import com.example.lpiem.rickandmortyapp.Data.RetrofitCallTypes.*
+import com.example.lpiem.rickandmortyapp.Manager.collection.CollectionManager
+import com.example.lpiem.rickandmortyapp.Manager.collection.DetailCollectionManager
+import com.example.lpiem.rickandmortyapp.Model.*
 import com.example.lpiem.rickandmortyapp.Util.SingletonHolder
 import com.example.lpiem.rickandmortyapp.View.TAG
 import com.google.gson.GsonBuilder
@@ -28,6 +30,7 @@ class RickAndMortyRetrofitSingleton private constructor(private val context: Con
     private var rickAndMortyAPIInstance: RickAndMortyAPI? = null
     private var currentCall: Call<*>? = null
     private lateinit var collectionManager: CollectionManager
+    private lateinit var detailCollectionManager: DetailCollectionManager
 
     val instance: RickAndMortyAPI?
         get() {
@@ -55,21 +58,58 @@ class RickAndMortyRetrofitSingleton private constructor(private val context: Con
         Log.d(TAG, "call canceled")
     }
 
-    fun <T> callRetrofit(call: Call<T>, type: RetrofitCallTypes) {
+    fun <T> callRetrofit(call: Call<T>, type: RetrofitCallTypes): MutableLiveData<Any> {
 
+        val liveData =  MutableLiveData<Any>()
         call.enqueue(object : Callback<T> {
             override fun onResponse(call: Call<T>, response: Response<T>) {
                 if (response.isSuccessful) {
                     val result = response.body()
                     when (type) {
-                        RetrofitCallTypes.LIST_OF_CARDS -> {
-                            collectionManager = CollectionManager.getInstance(context)
-                            collectionManager.listOfCardTreatment(result as ListOfCards)
+                        LIST_OF_CARDS -> {
+                            liveData.postValue(result as ListOfCards)
                         }
-                        RetrofitCallTypes.ADD_CARD_TO_MARKET -> {
+                        ADD_CARD_TO_MARKET -> {
+                            //TODO : reste à faire décrémenter plus vérif code 200
                             collectionManager = CollectionManager.getInstance(context)
-                            collectionManager.addCardtoMarket()
+                            collectionManager.addCardToMarket()
+                            //liveData.postValue(result as ListOfCards)
                         }
+                        GET_CARD_DETAILS -> {
+                            //detailCollectionManager.getCardDetailTreatment(result as DetailledCard)
+                            liveData.postValue(result as DetailledCard)
+                        }
+                        RESPONSE_FROM_API -> {
+
+                        }
+                        KAAMELOTT_QUOTE -> {
+                            liveData.postValue(result as KaamlottQuote)
+                        }
+                        SIGN_IN -> TODO()
+                        CONNECTION -> TODO()
+                        LIST_OF_FRIENDS -> TODO()
+                        LOGIN -> TODO()
+                        RESULT_FRIENDS_SEARCHING -> TODO()
+                        ADD_A_FRIENDS -> TODO()
+                        DEL_A_FRIEND -> TODO()
+                        GET_USER_BY_ID -> {
+                            liveData.postValue(result as ResponseFromApi)
+                        }
+                        PUT_DATE -> {
+                            liveData.postValue(result as ResponseFromApi)
+                        }
+                        UPDATE_WALLET -> {
+                            liveData.postValue(result as ResponseFromApi)
+                        }
+                        GET_WALLET -> {
+                            liveData.postValue(result as Wallet)
+                        }
+                        ACCEPT_FRIENDSHIP -> TODO()
+                        BUY_BOOSTER -> TODO()
+                        DECKS_INCREASED -> TODO()
+                        GET_FAQ -> TODO()
+                        OPEN_RANDOM_DECK -> TODO()
+                        UPDATE_USER_INFO -> TODO()
                     }
                 } else {
                     val responseError = response.errorBody() as ResponseBody
@@ -82,12 +122,13 @@ class RickAndMortyRetrofitSingleton private constructor(private val context: Con
                 Log.d(TAG, "fail : $t")
             }
         })
+        return liveData
 
     }
 
-    fun listOfCardsForCollectionList(userId: Int)  {
+    fun listOfCardsForCollectionList(userId: Int): MutableLiveData<ListOfCards> {
         currentCall = instance!!.getListOfCardsById(userId)
-        callRetrofit(currentCall!!, RetrofitCallTypes.LIST_OF_CARDS)
+        return callRetrofit(currentCall!!, LIST_OF_CARDS) as MutableLiveData<ListOfCards>
     }
 
 
@@ -96,7 +137,41 @@ class RickAndMortyRetrofitSingleton private constructor(private val context: Con
         jsonBody.addProperty("card_name", card.cardName)
         jsonBody.addProperty("price", price)
         currentCall = instance!!.addCardToMarket(userId, card.cardId!!, jsonBody)
-        callRetrofit(currentCall!!, RetrofitCallTypes.ADD_CARD_TO_MARKET)
+        callRetrofit(currentCall!!, ADD_CARD_TO_MARKET)
+    }
+
+    fun getDetail(id: Int): MutableLiveData<DetailledCard> {
+        currentCall = instance!!.getCardDetails(id)
+        return callRetrofit(currentCall!!, GET_CARD_DETAILS) as MutableLiveData<DetailledCard>
+    }
+
+    fun getRandomQuote(): MutableLiveData<KaamlottQuote> {
+        currentCall = instance!!.getRandomQuote()
+        return callRetrofit(currentCall!!, KAAMELOTT_QUOTE) as MutableLiveData<KaamlottQuote>
+    }
+
+    fun getUserById(userId: Int?): MutableLiveData<ResponseFromApi> {
+        currentCall = instance!!.getUserById(userId!!)
+       return callRetrofit(currentCall!!, GET_USER_BY_ID) as MutableLiveData<ResponseFromApi>
+    }
+
+    fun putDateToken(date: String, id: Int?): MutableLiveData<ResponseFromApi> {
+        val jsonBody = JsonObject()
+        jsonBody.addProperty(JsonProperty.NewDate.string, date)
+        currentCall = instance!!.putNewDate(id!!, jsonBody)
+        return callRetrofit(currentCall!!, PUT_DATE) as MutableLiveData<ResponseFromApi>
+    }
+
+    fun updateWallet(score: Int, user: User?): MutableLiveData<ResponseFromApi> {
+        val jsonBody = JsonObject()
+        jsonBody.addProperty(JsonProperty.NewWallet.string, (user!!.userWallet!! + (score * 10)))
+        currentCall = instance!!.updateWallet(user.userId!!, jsonBody)
+        return callRetrofit(currentCall!!, UPDATE_WALLET) as MutableLiveData<ResponseFromApi>
+    }
+
+    fun getWallet(id: Int?): MutableLiveData<Wallet> {
+        currentCall = instance!!.getWallet(id!!)
+        return callRetrofit(currentCall!!, GET_WALLET) as MutableLiveData<Wallet>
     }
 
 }

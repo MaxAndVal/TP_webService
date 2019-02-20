@@ -1,4 +1,4 @@
-package com.example.lpiem.rickandmortyapp.Presenter.settings
+package com.example.lpiem.rickandmortyapp.Manager.settings
 
 import android.content.Context
 import android.util.Log

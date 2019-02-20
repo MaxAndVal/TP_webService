@@ -1,4 +1,4 @@
-package com.example.lpiem.rickandmortyapp.Presenter
+package com.example.lpiem.rickandmortyapp.Manager
 
 import android.content.Context
 import android.util.Log
@@ -8,7 +8,7 @@ import com.example.lpiem.rickandmortyapp.Data.RickAndMortyRetrofitSingleton
 import com.example.lpiem.rickandmortyapp.Model.Card
 import com.example.lpiem.rickandmortyapp.Model.ListOfCards
 import com.example.lpiem.rickandmortyapp.Model.ResponseFromApi
-import com.example.lpiem.rickandmortyapp.Presenter.collection.DetailCollectionManager
+import com.example.lpiem.rickandmortyapp.Manager.collection.DetailCollectionManager
 import com.example.lpiem.rickandmortyapp.R
 import com.example.lpiem.rickandmortyapp.Util.SingletonHolder
 import com.example.lpiem.rickandmortyapp.View.OpenDeck.OpenDeckActivity

@@ -10,8 +10,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.lpiem.rickandmortyapp.Model.Friend
 import com.example.lpiem.rickandmortyapp.Model.ListOfFriends
-import com.example.lpiem.rickandmortyapp.Presenter.LoginAppManager
-import com.example.lpiem.rickandmortyapp.Presenter.SocialManager
+import com.example.lpiem.rickandmortyapp.Manager.LoginAppManager
+import com.example.lpiem.rickandmortyapp.Manager.SocialManager
 import com.example.lpiem.rickandmortyapp.R
 import com.example.lpiem.rickandmortyapp.View.Market.MarketActivity
 import com.example.lpiem.rickandmortyapp.View.TAG
