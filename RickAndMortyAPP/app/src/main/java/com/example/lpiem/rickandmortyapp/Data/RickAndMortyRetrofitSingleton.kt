@@ -56,7 +56,7 @@ class RickAndMortyRetrofitSingleton private constructor(private val context: Con
         Log.d(TAG, "call canceled")
     }
 
-    fun <T> callRetrofit(call: Call<T>, type: RetrofitCallTypes): MutableLiveData<Any> {
+    private fun <T> callRetrofit(call: Call<T>, type: RetrofitCallTypes): MutableLiveData<Any> {
 
         val liveData =  MutableLiveData<Any>()
         call.enqueue(object : Callback<T> {
