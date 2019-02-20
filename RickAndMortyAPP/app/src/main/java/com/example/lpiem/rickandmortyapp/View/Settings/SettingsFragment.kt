@@ -34,12 +34,6 @@ class SettingsFragment : androidx.fragment.app.Fragment() {
 
         settingsManager = SettingsManager.getInstance(context!!)
         loginAppManager = LoginAppManager.getInstance(context!!)
-
-        if (settingsManager.settingsFragment == null) {
-            settingsManager.captureFragmentInstance(this)
-        }
-
-        loginAppManager = LoginAppManager.getInstance(context!!)
     }
 
 
