@@ -30,7 +30,6 @@ class RickAndMortyRetrofitSingleton private constructor(private val context: Con
     private var rickAndMortyAPIInstance: RickAndMortyAPI? = null
     private var currentCall: Call<*>? = null
     private lateinit var collectionManager: CollectionManager
-    private lateinit var detailCollectionManager: DetailCollectionManager
 
     val instance: RickAndMortyAPI?
         get() {
@@ -88,7 +87,9 @@ class RickAndMortyRetrofitSingleton private constructor(private val context: Con
                         SIGN_IN -> TODO()
                         CONNECTION -> TODO()
                         LIST_OF_FRIENDS -> TODO()
-                        LOGIN -> TODO()
+                        LOGIN -> {
+                            liveData.postValue(result as ResponseFromApi)
+                        }
                         RESULT_FRIENDS_SEARCHING -> TODO()
                         ADD_A_FRIENDS -> TODO()
                         DEL_A_FRIEND -> TODO()
@@ -179,6 +180,11 @@ class RickAndMortyRetrofitSingleton private constructor(private val context: Con
     fun getFAQ(): MutableLiveData<ListOfFAQ> {
         currentCall = instance!!.getFAQ()
         return callRetrofit(currentCall!!, RetrofitCallTypes.GET_FAQ) as MutableLiveData<ListOfFAQ>
+    }
+
+    fun login(jsonBody: JsonObject): MutableLiveData<ResponseFromApi> {
+        currentCall = instance!!.connectUser(jsonBody)
+        return callRetrofit(currentCall!!, LOGIN) as MutableLiveData<ResponseFromApi>
     }
 
 }
