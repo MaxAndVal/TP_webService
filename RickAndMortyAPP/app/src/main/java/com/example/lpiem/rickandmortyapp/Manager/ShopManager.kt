@@ -1,24 +1,17 @@
 package com.example.lpiem.rickandmortyapp.Manager
 
 import android.content.Context
-import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
-import com.example.lpiem.rickandmortyapp.Data.RetrofitCallTypes
-import com.example.lpiem.rickandmortyapp.Data.RetrofitCallTypes.*
 import com.example.lpiem.rickandmortyapp.Data.RickAndMortyRetrofitSingleton
 import com.example.lpiem.rickandmortyapp.Data.SUCCESS
 import com.example.lpiem.rickandmortyapp.Model.ResponseFromApi
 import com.example.lpiem.rickandmortyapp.Model.Wallet
 import com.example.lpiem.rickandmortyapp.Util.SingletonHolder
 import com.example.lpiem.rickandmortyapp.Util.observeOnce
-import com.example.lpiem.rickandmortyapp.View.TAG
 import com.google.gson.JsonObject
-import okhttp3.ResponseBody
 import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class ShopManager private constructor(private val context: Context) {
 
@@ -34,39 +27,6 @@ class ShopManager private constructor(private val context: Context) {
 
     fun cancelCall() {
         currentCall?.cancel()
-    }
-
-    private fun <T> callRetrofit(call: Call<T>, type: RetrofitCallTypes) {
-
-        call.enqueue(object : Callback<T> {
-            override fun onResponse(call: Call<T>, response: Response<T>) {
-                if (response.isSuccessful) {
-                    val result = response.body()
-                    when (type) {
-                        BUY_BOOSTER -> {
-                            //buyBoosterTreatment(result as Wallet)
-                        }
-                        UPDATE_WALLET -> {
-                            //updateWalletTreatment(result as ResponseFromApi)
-                        }
-                        DECKS_INCREASED -> {
-                            //decksIncreasedTreatment(result as ResponseFromApi)
-                        }
-                        else -> Log.d(TAG, "error : type does not exist")
-                    }
-
-                } else {
-                    val responseError = response.errorBody() as ResponseBody
-                    Log.d(TAG, "error: " + responseError.string() )
-                }
-
-            }
-
-            override fun onFailure(call: Call<T>, t: Throwable) {
-                Log.d(TAG, "fail : $t")
-            }
-        })
-
     }
 
     private fun decksIncreasedTreatment(response: ResponseFromApi) {
