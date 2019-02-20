@@ -8,8 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.lpiem.rickandmortyapp.Data.RickAndMortyAPI
-import com.example.lpiem.rickandmortyapp.Data.RickAndMortyRetrofitSingleton
 import com.example.lpiem.rickandmortyapp.Model.Friend
 import com.example.lpiem.rickandmortyapp.Model.ListOfFriends
 import com.example.lpiem.rickandmortyapp.Presenter.LoginAppManager
@@ -34,7 +32,6 @@ class SocialFragment : androidx.fragment.app.Fragment(), SocialActionsInterface 
     private var param1: String? = null
     private var param2: String? = null
 
-    private var rickAndMortyAPI: RickAndMortyAPI? = null
     var listOfFriends: ListOfFriends? = null
     private lateinit var socialManager: SocialManager
     private lateinit var loginAppManager: LoginAppManager
@@ -51,7 +48,6 @@ class SocialFragment : androidx.fragment.app.Fragment(), SocialActionsInterface 
         }
         loginAppManager = LoginAppManager.getInstance(context!!)
 
-        rickAndMortyAPI = RickAndMortyRetrofitSingleton.instance
         socialManager = SocialManager.getInstance(context!!)
         if (socialManager.socialFragment == null) {
             socialManager.captureFragmentInstance(this)

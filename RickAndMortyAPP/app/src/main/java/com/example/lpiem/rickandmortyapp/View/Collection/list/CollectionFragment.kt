@@ -7,8 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
-import com.example.lpiem.rickandmortyapp.Data.RickAndMortyAPI
-import com.example.lpiem.rickandmortyapp.Data.RickAndMortyRetrofitSingleton
 import com.example.lpiem.rickandmortyapp.Model.ListOfCards
 import com.example.lpiem.rickandmortyapp.Model.User
 import com.example.lpiem.rickandmortyapp.Presenter.LoginAppManager
@@ -28,7 +26,6 @@ class CollectionFragment : androidx.fragment.app.Fragment(), CardListDisplay {
     private var param1: String? = null
     private var param2: String? = null
 
-    private var rickAndMortyAPI: RickAndMortyAPI? = null
     var listOfCards: ListOfCards? = null
     private lateinit var collectionManager: CollectionManager
     private lateinit var loginAppManager: LoginAppManager
@@ -57,7 +54,6 @@ class CollectionFragment : androidx.fragment.app.Fragment(), CardListDisplay {
         user = loginAppManager.connectedUser
         Log.d(TAG, "user : $user")
 
-        rickAndMortyAPI = RickAndMortyRetrofitSingleton.instance
         collectionManager = CollectionManager.getInstance(context!!)
         collectionManager.captureFragmentInstance(this)
     }
