@@ -67,51 +67,42 @@ class RickAndMortyRetrofitSingleton private constructor(private val context: Con
                         LIST_OF_CARDS -> {
                             liveData.postValue(result as ListOfCards)
                         }
+                        GET_CARD_DETAILS -> {
+                            liveData.postValue(result as DetailledCard)
+                        }
+                        KAAMELOTT_QUOTE -> {
+                            liveData.postValue(result as KaamlottQuote)
+                        }
+                        LOGIN,
+                        GET_USER_BY_ID,
+                        PUT_DATE,
+                        UPDATE_WALLET,
+                        DECKS_INCREASED -> {
+                            liveData.postValue(result as ResponseFromApi)
+                        }
+                        GET_WALLET,
+                        BUY_BOOSTER -> {
+                            liveData.postValue(result as Wallet)
+                        }
+                        GET_FAQ -> {
+                            liveData.postValue(result as ListOfFAQ)
+                        }
                         ADD_CARD_TO_MARKET -> {
                             //TODO : reste à faire décrémenter plus vérif code 200
                             collectionManager = CollectionManager.getInstance(context)
                             collectionManager.addCardToMarket()
                             //liveData.postValue(result as ListOfCards)
                         }
-                        GET_CARD_DETAILS -> {
-                            //detailCollectionManager.getCardDetailTreatment(result as DetailledCard)
-                            liveData.postValue(result as DetailledCard)
-                        }
-                        RESPONSE_FROM_API -> {
-
-                        }
-                        KAAMELOTT_QUOTE -> {
-                            liveData.postValue(result as KaamlottQuote)
-                        }
                         SIGN_IN -> TODO()
                         CONNECTION -> TODO()
                         LIST_OF_FRIENDS -> TODO()
-                        LOGIN -> {
-                            liveData.postValue(result as ResponseFromApi)
-                        }
                         RESULT_FRIENDS_SEARCHING -> TODO()
                         ADD_A_FRIENDS -> TODO()
                         DEL_A_FRIEND -> TODO()
-                        GET_USER_BY_ID -> {
-                            liveData.postValue(result as ResponseFromApi)
-                        }
-                        PUT_DATE -> {
-                            liveData.postValue(result as ResponseFromApi)
-                        }
-                        UPDATE_WALLET -> {
-                            liveData.postValue(result as ResponseFromApi)
-                        }
-                        GET_WALLET -> {
-                            liveData.postValue(result as Wallet)
-                        }
                         ACCEPT_FRIENDSHIP -> TODO()
-                        BUY_BOOSTER -> TODO()
-                        DECKS_INCREASED -> TODO()
-                        GET_FAQ -> {
-                            liveData.postValue(result as ListOfFAQ)
-                        }
                         OPEN_RANDOM_DECK -> TODO()
                         UPDATE_USER_INFO -> TODO()
+                        RESPONSE_FROM_API -> TODO()
                     }
                 } else {
                     val responseError = response.errorBody() as ResponseBody
@@ -184,6 +175,21 @@ class RickAndMortyRetrofitSingleton private constructor(private val context: Con
     fun login(jsonBody: JsonObject): MutableLiveData<ResponseFromApi> {
         currentCall = instance!!.connectUser(jsonBody)
         return callRetrofit(currentCall!!, LOGIN) as MutableLiveData<ResponseFromApi>
+    }
+
+    fun buyBooster(userId: Int): MutableLiveData<Wallet> {
+        currentCall = instance!!.getWallet(userId)
+        return callRetrofit(currentCall!!, BUY_BOOSTER) as MutableLiveData<Wallet>
+    }
+
+    fun updateWalletValue(jsonObject: JsonObject, userId: Int): MutableLiveData<ResponseFromApi> {
+        currentCall = instance!!.updateWallet(userId, jsonObject)
+        return callRetrofit(currentCall!!, UPDATE_WALLET) as MutableLiveData<ResponseFromApi>
+    }
+
+    fun increaseDeckNumber(jsonObject: JsonObject): MutableLiveData<ResponseFromApi> {
+        currentCall = instance!!.increaseNumberOfDecks(jsonObject)
+        return callRetrofit(currentCall!!, DECKS_INCREASED) as MutableLiveData<ResponseFromApi>
     }
 
 }
