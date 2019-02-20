@@ -5,8 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.lpiem.rickandmortyapp.Data.RickAndMortyAPI
-import com.example.lpiem.rickandmortyapp.Data.RickAndMortyRetrofitSingleton
 import com.example.lpiem.rickandmortyapp.Presenter.LoginAppManager
 import com.example.lpiem.rickandmortyapp.Presenter.settings.SettingsManager
 import com.example.lpiem.rickandmortyapp.R
@@ -23,7 +21,6 @@ class SettingsFragment : androidx.fragment.app.Fragment() {
     private var param2: String? = null
 
     private lateinit var settingsManager: SettingsManager
-    private var rickAndMortyAPI: RickAndMortyAPI? = null
     private lateinit var loginAppManager: LoginAppManager
 
     companion object : SingletonHolder<SettingsManager, Context>(::SettingsManager)
@@ -37,7 +34,6 @@ class SettingsFragment : androidx.fragment.app.Fragment() {
 
         settingsManager = SettingsManager.getInstance(context!!)
         loginAppManager = LoginAppManager.getInstance(context!!)
-        rickAndMortyAPI = RickAndMortyRetrofitSingleton.instance
 
         if (settingsManager.settingsFragment == null) {
             settingsManager.captureFragmentInstance(this)

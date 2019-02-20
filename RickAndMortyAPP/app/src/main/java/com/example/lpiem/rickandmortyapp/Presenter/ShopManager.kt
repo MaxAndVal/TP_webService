@@ -20,7 +20,7 @@ import retrofit2.Response
 class ShopManager private constructor(private val context: Context) {
 
     private val loginAppManager = LoginAppManager.getInstance(context)
-    private val rickAndMortyAPI = RickAndMortyRetrofitSingleton.instance
+    private val rickAndMortyAPI = RickAndMortyRetrofitSingleton.getInstance(context).instance
     private var currentCall : Call<*>? = null
     private var cost = 0
     private var numberOfDeckToAdd = 0

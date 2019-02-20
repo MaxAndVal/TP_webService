@@ -33,7 +33,7 @@ class SettingsManager internal constructor(private val context: Context) : Setti
         }
     }
 
-    private val rickAndMortyAPI = RickAndMortyRetrofitSingleton.instance
+    private val rickAndMortyAPI = RickAndMortyRetrofitSingleton.getInstance(context).instance
     var settingsFragment: SettingsFragment? = null
     var faqFragment: FAQ_Fragment? = null
     var faqManager: FaqManager? = null

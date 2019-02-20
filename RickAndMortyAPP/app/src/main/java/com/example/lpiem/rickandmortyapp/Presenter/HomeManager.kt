@@ -21,12 +21,13 @@ import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.text.SimpleDateFormat
 import java.util.*
 
 
 class HomeManager private constructor(private var context: Context) {
 
-    private val rickAndMortyAPI = RickAndMortyRetrofitSingleton.instance
+    private val rickAndMortyAPI = RickAndMortyRetrofitSingleton.getInstance(context).instance
     private var citation = ""
     private var personnage = ""
     private var personnageNameList = listOf("")
@@ -172,15 +173,20 @@ class HomeManager private constructor(private var context: Context) {
     }
 
     private fun getDate(): String {
-        var day = Calendar.getInstance(Locale.FRENCH).get(Calendar.DAY_OF_YEAR).toString()
-        var month = (Calendar.getInstance(Locale.FRENCH).get(Calendar.MONTH) + 1).toString()
-        val year = Calendar.getInstance(Locale.FRENCH).get(Calendar.YEAR).toString()
-        if (day.length == 1) day = "0$day"
-        if (month.length == 1) month = "0$month"
-        val dateToReturn = day + month + year
-        Log.d(TAG, "date = $dateToReturn")
+        //TODO : test
+        val formatter = SimpleDateFormat("yyyy-MM-dd")
+        val date = Date(System.currentTimeMillis())
+
+//        var day = Calendar.getInstance(Locale.US).get(Calendar.DAY_OF_YEAR).toString()
+//        var month = (Calendar.getInstance(Locale.US).get(Calendar.MONTH) + 1).toString()
+//        val year = Calendar.getInstance(Locale.US).get(Calendar.YEAR).toString()
+//        if (day.length == 1) day = "0$day"
+//        if (month.length == 1) month = "0$month"
+//        val dateToReturn = day + month + year
+        Log.d(TAG, "date = $date")
+        Log.d(TAG,"date formatted : ${formatter.format(date)}")
         //Tue Jan 29 14:05:09 GMT+01:00 2019 //-> 29012019
-        return dateToReturn
+        return formatter.format(date)//dateToReturn
     }
 
     fun updatePickleRick(score: Int) {

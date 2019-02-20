@@ -4,8 +4,6 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
-import com.example.lpiem.rickandmortyapp.Data.RickAndMortyAPI
-import com.example.lpiem.rickandmortyapp.Data.RickAndMortyRetrofitSingleton
 import com.example.lpiem.rickandmortyapp.Model.ListOfCards
 import com.example.lpiem.rickandmortyapp.Model.User
 import com.example.lpiem.rickandmortyapp.Presenter.LoginAppManager
@@ -16,7 +14,6 @@ import kotlinx.android.synthetic.main.activity_market.*
 
 class MarketActivity : AppCompatActivity(), CardListDisplay {
 
-    private var rickAndMortyAPI: RickAndMortyAPI? = null
     var listOfCards: ListOfCards? = null
     private lateinit var marketManager: MarketManager
     private lateinit var loginAppManager: LoginAppManager
@@ -35,7 +32,6 @@ class MarketActivity : AppCompatActivity(), CardListDisplay {
         user = loginAppManager.connectedUser
         Log.d(com.example.lpiem.rickandmortyapp.View.TAG, "user : $user")
 
-        rickAndMortyAPI = RickAndMortyRetrofitSingleton.instance
         marketManager = MarketManager.getInstance(this)
     }
 
