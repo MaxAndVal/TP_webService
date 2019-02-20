@@ -6,7 +6,6 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.example.lpiem.rickandmortyapp.Data.RetrofitCallTypes.*
 import com.example.lpiem.rickandmortyapp.Manager.collection.CollectionManager
-import com.example.lpiem.rickandmortyapp.Manager.collection.DetailCollectionManager
 import com.example.lpiem.rickandmortyapp.Model.*
 import com.example.lpiem.rickandmortyapp.Util.SingletonHolder
 import com.example.lpiem.rickandmortyapp.View.TAG
@@ -57,7 +56,7 @@ class RickAndMortyRetrofitSingleton private constructor(private val context: Con
         Log.d(TAG, "call canceled")
     }
 
-    fun <T> callRetrofit(call: Call<T>, type: RetrofitCallTypes): MutableLiveData<Any> {
+    private fun <T> callRetrofit(call: Call<T>, type: RetrofitCallTypes): MutableLiveData<Any> {
 
         val liveData =  MutableLiveData<Any>()
         call.enqueue(object : Callback<T> {
