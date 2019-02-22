@@ -16,17 +16,12 @@ import kotlinx.android.synthetic.main.activity_open_deck.*
 class OpenDeckActivity : AppCompatActivity() {
 
     private var openDeckManager = OpenDeckManager.getInstance(this)
-    private var animationLiveData = MutableLiveData<Boolean>()
     private var updateDeckCountLiveData = MutableLiveData<Int>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_open_deck)
         iv_closeOpenDeck.setOnClickListener { finish() }
-
-        animationLiveData.observeOnce(Observer {
-            showAnimation(it)
-        })
 
         updateDeckCountLiveData.observeOnce(Observer {
             updateDecksCount(it)
@@ -69,10 +64,11 @@ class OpenDeckActivity : AppCompatActivity() {
         }
     }
 
-    fun getInfoNewCards() {
+    fun getInfoNewCards(deckLeft: Int) {
         showAnimation(false)
         val detailIntent = Intent(this, CollectionDetailActivity::class.java)
         startActivity(detailIntent)
+        if (deckLeft == 1) finish()
     }
 
     private fun updateDecksCount(newCount: Int) {

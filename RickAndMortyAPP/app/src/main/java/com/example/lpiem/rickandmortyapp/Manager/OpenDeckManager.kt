@@ -30,9 +30,9 @@ class OpenDeckManager  private constructor(private val context: Context) {
         context as OpenDeckActivity
         DetailCollectionManager.getInstance(context).listOfNewCards = listOfCards.cards as MutableList<Card>
 
-        updateDeckCountLiveData.postValue(user.deckToOpen)
+        updateDeckCountLiveData.postValue(user.deckToOpen!!)
 
-        if (showDetails) context.getInfoNewCards()
+        if (showDetails) context.getInfoNewCards(user.deckToOpen!!)
 
         responseFromApiLiveData = rickAndMortyAPI.updateUserInfo(userId)
         responseFromApiLiveData.observeOnce(Observer {
