@@ -61,8 +61,6 @@ class LoginAppManager private constructor(private var context: Context) {
             loginLiveData.observeOnce(Observer {
                 loginTreatment(it)
             })
-
-
         }
     }
 
