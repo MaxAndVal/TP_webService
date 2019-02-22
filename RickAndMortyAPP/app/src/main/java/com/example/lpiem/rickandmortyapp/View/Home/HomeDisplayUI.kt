@@ -2,7 +2,7 @@ package com.example.lpiem.rickandmortyapp.View.Home
 
 interface HomeDisplayUI {
 
-    fun updateUI(listResult: Triple<String, String, List<String>>)
+    fun updateUI(citation: String, solution: String, list: List<String>)
 
     fun displayFragmentContent()
 
