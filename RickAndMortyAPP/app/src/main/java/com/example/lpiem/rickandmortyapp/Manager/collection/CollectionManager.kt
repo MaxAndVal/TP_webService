@@ -59,6 +59,9 @@ class CollectionManager private constructor(private val context: Context) {
     }
 
     fun sellACard(userId: Int, card: Card, price: Int) {
-        rickAndMortyAPI.addCardToMarket(userId, card, price)
+        collectionLiveData = rickAndMortyAPI.addCardToMarket(userId, card, price)
+        collectionLiveData.observeOnce(Observer {
+            addCardToMarket()
+        })
     }
 }
