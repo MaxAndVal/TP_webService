@@ -4,92 +4,45 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import android.view.View.GONE
-import android.view.View.VISIBLE
 import android.widget.Toast
-import com.example.lpiem.rickandmortyapp.Data.JsonProperty.*
-import com.example.lpiem.rickandmortyapp.Data.RetrofitCallTypes
-import com.example.lpiem.rickandmortyapp.Data.RickAndMortyAPI
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import com.example.lpiem.rickandmortyapp.Data.RickAndMortyRetrofitSingleton
 import com.example.lpiem.rickandmortyapp.Data.SUCCESS
 import com.example.lpiem.rickandmortyapp.Model.ResponseFromApi
-import com.example.lpiem.rickandmortyapp.R
 import com.example.lpiem.rickandmortyapp.Util.SingletonHolder
+import com.example.lpiem.rickandmortyapp.Util.observeOnce
 import com.example.lpiem.rickandmortyapp.View.BottomActivity
-import com.example.lpiem.rickandmortyapp.View.SignInActivity
 import com.example.lpiem.rickandmortyapp.View.TAG
-import com.google.gson.JsonObject
-import kotlinx.android.synthetic.main.activity_signin.*
-import okhttp3.ResponseBody
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class SignInManager private constructor(private var context: Context) {
 
-    private var loginAppManager: LoginAppManager
-    private val rickAndMortyAPI: RickAndMortyAPI
+    private var loginAppManager: LoginAppManager = LoginAppManager.getInstance(context)
+    private val rickAndMortyAPI = RickAndMortyRetrofitSingleton.getInstance(context)
+    private var responseFromApiLiveData = MutableLiveData<ResponseFromApi>()
+    private var loaderLiveData = MutableLiveData<Int>()
 
     companion object : SingletonHolder<SignInManager, Context>(::SignInManager)
 
-    init {
-        loginAppManager = LoginAppManager.getInstance(context)
-        rickAndMortyAPI = RickAndMortyRetrofitSingleton.getInstance(context).instance!!
+    fun cancelCall() {
+        rickAndMortyAPI.cancelCall()
     }
 
-    private fun regularConnection() {
-        (context as SignInActivity).progress_bar_sign_in.visibility = GONE
+    private fun regularConnection(email: String, password: String) {
+        loaderLiveData.postValue(GONE)
         Toast.makeText(context, "compte crée", Toast.LENGTH_SHORT).show()
-        val jsonBody = JsonObject()
-        jsonBody.addProperty(UserEmail.string, (context as SignInActivity).ed_email.text.toString())
-        jsonBody.addProperty(UserPassword.string, (context as SignInActivity).ed_password.text.toString())
-        val connection = rickAndMortyAPI!!.connectUser(jsonBody)
-        Log.d(TAG, "jsonBody : $jsonBody")
-        Log.d(TAG, "$connection")
-        callRetrofit(connection, RetrofitCallTypes.CONNECTION)
-    }
-
-    fun signIn() {
-        (context as SignInActivity).progress_bar_sign_in.visibility = VISIBLE
-        if ((context as SignInActivity).ed_email.text.toString() == "" || (context as SignInActivity).ed_password.text.toString() == "" || (context as SignInActivity).ed_username.text.toString() == "") {
-            Toast.makeText(context, context.getString(R.string.thanks_to_fill_all_fields), Toast.LENGTH_SHORT).show()
-            (context as SignInActivity).progress_bar_sign_in.visibility = GONE
-        } else {
-            val jsonBody = JsonObject()
-            jsonBody.addProperty(UserName.string, (context as SignInActivity).ed_username.text.toString())
-            jsonBody.addProperty(UserEmail.string, (context as SignInActivity).ed_email.text.toString())
-            jsonBody.addProperty(UserPassword.string, (context as SignInActivity).ed_password.text.toString())
-            val subscribe = rickAndMortyAPI!!.signInUser(jsonBody)
-            Log.d(TAG, "jsonBody : $jsonBody")
-            Log.d(TAG, "$subscribe")
-            callRetrofit(subscribe, RetrofitCallTypes.SIGN_IN)
-        }
-    }
-
-    private fun <T> callRetrofit(call: Call<T>, type: RetrofitCallTypes) {
-
-        call.enqueue(object : Callback<T> {
-            override fun onResponse(call: Call<T>, response: Response<T>) {
-                if (response.isSuccessful) {
-                    val result = response.body()
-                    when (type) {
-                        RetrofitCallTypes.SIGN_IN -> {
-                            signInTreatment(result as ResponseFromApi)
-                        }
-                        RetrofitCallTypes.CONNECTION -> {
-                            connectionTreatment(result as ResponseFromApi)
-                        }
-                        else -> Log.d(TAG, "error : ${response.errorBody()}")
-                    }
-                } else {
-                    val responseError = response.errorBody() as ResponseBody
-                    Log.d(TAG, "error: ${responseError.string()}")
-                }
-            }
-            override fun onFailure(call: Call<T>, t: Throwable) {
-                Log.d(TAG, "fail : $t")
-            }
+        responseFromApiLiveData = rickAndMortyAPI.regularConnection(email, password)
+        responseFromApiLiveData.observeOnce(Observer {
+            connectionTreatment(it)
         })
+    }
 
+    fun signIn(userName: String, email: String, password: String, loader: MutableLiveData<Int>) {
+        loaderLiveData = loader
+        responseFromApiLiveData = rickAndMortyAPI.signIn(userName, email, password)
+        responseFromApiLiveData.observeOnce(Observer {
+            signInTreatment(it, email, password)
+        })
     }
 
     private fun connectionTreatment(response: ResponseFromApi) {
@@ -103,12 +56,12 @@ class SignInManager private constructor(private var context: Context) {
         context.startActivity(intent)
     }
 
-    private fun signInTreatment(response: ResponseFromApi) {
-        (context as SignInActivity).progress_bar_sign_in.visibility = GONE
+    private fun signInTreatment(response: ResponseFromApi, email: String, password: String) {
+        loaderLiveData.postValue(GONE)
         val code = response.code
         val message = response.message
         if (code == SUCCESS) {
-            regularConnection()
+            regularConnection(email, password)
         } else {
             Toast.makeText(context, "code : $code, message : $message", Toast.LENGTH_SHORT).show()
         }
