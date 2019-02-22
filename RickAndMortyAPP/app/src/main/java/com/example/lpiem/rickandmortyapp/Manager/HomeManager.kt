@@ -22,10 +22,6 @@ import java.util.*
 class HomeManager private constructor(private var context: Context) {
 
     private val rickAndMortyAPI = RickAndMortyRetrofitSingleton.getInstance(context)
-
-    private var citation = ""
-    private var personnage = ""
-    private var personnageNameList = listOf("")
     internal var score = 0
     internal var turn = 0
     private lateinit var homeDisplayUI: HomeDisplayUI
@@ -53,13 +49,11 @@ class HomeManager private constructor(private var context: Context) {
         val code = response.code
         val message = response.message
         if (response.code == SUCCESS) {
-            citation = response.citation!!
-            personnage = response.personnage!!
-            personnageNameList = response.personnageList!!
-            //TODO: shuffle here
-            val shuffleList = listOf(personnage, personnageNameList[0], personnageNameList[1], personnageNameList[2]).shuffled()
-            //val list = Triple(citation, personnage, personnageNameList)
-            homeDisplayUI.updateUI(citation, personnage, shuffleList)
+            val citation = response.citation!!
+            val personage = response.personnage!!
+            val personageNameList = response.personnageList!!
+            val shuffleList = listOf(personage, personageNameList[0], personageNameList[1], personageNameList[2]).shuffled()
+            homeDisplayUI.updateUI(citation, personage, shuffleList)
         } else {
             Log.d(TAG, "code : $code, message $message")
         }
@@ -104,20 +98,11 @@ class HomeManager private constructor(private var context: Context) {
     }
 
     private fun getDate(): String {
-        //TODO : test
         val formatter = SimpleDateFormat("yyyy-MM-dd")
         val date = Date(System.currentTimeMillis())
-
-//        var day = Calendar.getInstance(Locale.US).get(Calendar.DAY_OF_YEAR).toString()
-//        var month = (Calendar.getInstance(Locale.US).get(Calendar.MONTH) + 1).toString()
-//        val year = Calendar.getInstance(Locale.US).get(Calendar.YEAR).toString()
-//        if (day.length == 1) day = "0$day"
-//        if (month.length == 1) month = "0$month"
-//        val dateToReturn = day + month + year
         Log.d(TAG, "date = $date")
         Log.d(TAG,"date formatted : ${formatter.format(date)}")
-        //Tue Jan 29 14:05:09 GMT+01:00 2019 //-> 29012019
-        return formatter.format(date)//dateToReturn
+        return formatter.format(date)
     }
 
     internal fun updateUserInfo(response: ResponseFromApi){
