@@ -5,7 +5,6 @@ import android.content.Context
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.example.lpiem.rickandmortyapp.Data.RetrofitCallTypes.*
-import com.example.lpiem.rickandmortyapp.Manager.collection.CollectionManager
 import com.example.lpiem.rickandmortyapp.Model.*
 import com.example.lpiem.rickandmortyapp.Util.SingletonHolder
 import com.example.lpiem.rickandmortyapp.View.TAG
@@ -20,7 +19,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 const val SUCCESS = 200
 private const val BASE_URL = "https://api-rickandmorty-tcg.herokuapp.com"
-//private const val BASE_URL = "https://rickandmortyapi.com/"
 
 class RickAndMortyRetrofitSingleton private constructor(private val context: Context) {
 
@@ -28,7 +26,6 @@ class RickAndMortyRetrofitSingleton private constructor(private val context: Con
 
     private var rickAndMortyAPIInstance: RickAndMortyAPI? = null
     private var currentCall: Call<*>? = null
-    private lateinit var collectionManager: CollectionManager
 
     val instance: RickAndMortyAPI?
         get() {
@@ -64,7 +61,8 @@ class RickAndMortyRetrofitSingleton private constructor(private val context: Con
                 if (response.isSuccessful) {
                     val result = response.body()
                     when (type) {
-                        LIST_OF_CARDS -> {
+                        LIST_OF_CARDS,
+                        ADD_CARD_TO_MARKET -> {
                             liveData.postValue(result as ListOfCards)
                         }
                         GET_CARD_DETAILS -> {
@@ -86,12 +84,6 @@ class RickAndMortyRetrofitSingleton private constructor(private val context: Con
                         }
                         GET_FAQ -> {
                             liveData.postValue(result as ListOfFAQ)
-                        }
-                        ADD_CARD_TO_MARKET -> {
-                            //TODO : reste à faire décrémenter plus vérif code 200
-                            collectionManager = CollectionManager.getInstance(context)
-                            collectionManager.addCardToMarket()
-                            //liveData.postValue(result as ListOfCards)
                         }
                         SIGN_IN -> TODO()
                         CONNECTION -> TODO()
@@ -124,13 +116,12 @@ class RickAndMortyRetrofitSingleton private constructor(private val context: Con
         return callRetrofit(currentCall!!, LIST_OF_CARDS) as MutableLiveData<ListOfCards>
     }
 
-
-    fun addCardToMarket(userId: Int, card: Card, price: Int) {
+    fun addCardToMarket(userId: Int, card: Card, price: Int): MutableLiveData<ListOfCards> {
         val jsonBody = JsonObject()
         jsonBody.addProperty("card_name", card.cardName)
         jsonBody.addProperty("price", price)
         currentCall = instance!!.addCardToMarket(userId, card.cardId!!, jsonBody)
-        callRetrofit(currentCall!!, ADD_CARD_TO_MARKET)
+        return callRetrofit(currentCall!!, ADD_CARD_TO_MARKET) as MutableLiveData<ListOfCards>
     }
 
     fun getDetail(id: Int): MutableLiveData<DetailledCard> {

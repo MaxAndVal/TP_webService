@@ -28,7 +28,7 @@ private const val ARG_PARAM2 = "param2"
 class HomeFragment : androidx.fragment.app.Fragment(), HomeDisplayUI {
 
     private var homeManager: HomeManager? = null
-    private lateinit var loginAppManager: LoginAppManager
+    private var loginAppManager: LoginAppManager? = null
     private var user: User? = null
     private var param1: String? = null
     private var param2: String? = null
@@ -51,7 +51,7 @@ class HomeFragment : androidx.fragment.app.Fragment(), HomeDisplayUI {
             param2 = it.getString(ARG_PARAM2)
         }
         loginAppManager = LoginAppManager.getInstance(context!!)
-        user = loginAppManager.connectedUser
+        user = loginAppManager?.connectedUser
         Log.d(TAG, "user : $user")
 
         homeManager = HomeManager.getInstance(context!!)
@@ -67,15 +67,15 @@ class HomeFragment : androidx.fragment.app.Fragment(), HomeDisplayUI {
         super.onViewCreated(view, savedInstanceState)
         loginAppManager = LoginAppManager.getInstance(context!!)
         homeManager = HomeManager.getInstance(context!!)
-        if (loginAppManager.gameInProgress) {
-            homeManager?.gameAvailable(loginAppManager.connectedUser!!, this)
+        if (loginAppManager?.gameInProgress!!) {
+            homeManager?.gameAvailable(loginAppManager?.connectedUser!!, this)
         } else {
             gameOver(false)
         }
     }
 
     override fun displayFragmentContent() {
-        if (loginAppManager.gameInProgress) {
+        if (loginAppManager?.gameInProgress!!) {
             makeGameDisplayed(false)
             homeManager!!.getRandomQuote(this)
         } else {
@@ -84,7 +84,7 @@ class HomeFragment : androidx.fragment.app.Fragment(), HomeDisplayUI {
     }
 
     override fun updateUI(citation: String, solution: String, list: List<String>) {
-        if (solution != "" && loginAppManager.connectedUser != null) {
+        if (solution != "" && loginAppManager?.connectedUser != null) {
             tv_citation.text = citation
             val buttons = listOf(btn_perso1, btn_perso2, btn_perso3, btn_perso4)
             var i = 0
@@ -118,7 +118,7 @@ class HomeFragment : androidx.fragment.app.Fragment(), HomeDisplayUI {
     }
 
     private fun checkForWinner(button: Button, solution: String) {
-        if (homeManager!!.turn <= 5 && loginAppManager.gameInProgress) {
+        if (homeManager!!.turn <= 5 && loginAppManager?.gameInProgress!!) {
             if (button.text == solution) {
                 displayForAnswer(true)
                 checkForTurn()
@@ -136,19 +136,19 @@ class HomeFragment : androidx.fragment.app.Fragment(), HomeDisplayUI {
         if (withHandler) handlerTime = 1000L
         val handler = Handler()
         handler.postDelayed({
-            if (loginAppManager.connectedUser != null) {
+            if (loginAppManager?.connectedUser != null) {
                 val views = listOf(btn_perso1, btn_perso2, btn_perso3, btn_perso4, tv_citation, tv_actual_turn, tv_actual_score)
                 for (view in views) {
                     view.visibility = GONE
                 }
                 tv_game_over.visibility = VISIBLE
-                if (loginAppManager.gameInProgress) {
+                if (loginAppManager?.gameInProgress!!) {
                     val toast = Toast.makeText(context, String.format(getString(R.string.game_is_over), homeManager!!.score, homeManager!!.score * 10), Toast.LENGTH_LONG)
                     toast.setGravity(Gravity.CENTER, 0, 250)
                     toast.show()
                     homeManager?.updatePickleRick(homeManager!!.score)
                 }
-                loginAppManager.gameInProgress = false
+                loginAppManager?.gameInProgress = false
             }
             resetScore()
         }, handlerTime)
