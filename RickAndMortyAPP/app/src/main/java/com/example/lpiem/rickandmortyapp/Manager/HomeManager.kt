@@ -56,8 +56,10 @@ class HomeManager private constructor(private var context: Context) {
             citation = response.citation!!
             personnage = response.personnage!!
             personnageNameList = response.personnageList!!
-            val list = Triple(citation, personnage, personnageNameList)
-            homeDisplayUI.updateUI(list)
+            //TODO: shuffle here
+            val shuffleList = listOf(personnage, personnageNameList[0], personnageNameList[1], personnageNameList[2]).shuffled()
+            //val list = Triple(citation, personnage, personnageNameList)
+            homeDisplayUI.updateUI(citation, personnage, shuffleList)
         } else {
             Log.d(TAG, "code : $code, message $message")
         }
