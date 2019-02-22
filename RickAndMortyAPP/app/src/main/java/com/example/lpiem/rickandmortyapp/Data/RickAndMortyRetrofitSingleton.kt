@@ -75,7 +75,9 @@ class RickAndMortyRetrofitSingleton private constructor(private val context: Con
                         GET_USER_BY_ID,
                         PUT_DATE,
                         UPDATE_WALLET,
-                        DECKS_INCREASED -> {
+                        DECKS_INCREASED,
+                        SIGN_IN,
+                        CONNECTION -> {
                             liveData.postValue(result as ResponseFromApi)
                         }
                         GET_WALLET,
@@ -85,8 +87,6 @@ class RickAndMortyRetrofitSingleton private constructor(private val context: Con
                         GET_FAQ -> {
                             liveData.postValue(result as ListOfFAQ)
                         }
-                        SIGN_IN -> TODO()
-                        CONNECTION -> TODO()
                         LIST_OF_FRIENDS -> TODO()
                         RESULT_FRIENDS_SEARCHING -> TODO()
                         ADD_A_FRIENDS -> TODO()
@@ -181,6 +181,25 @@ class RickAndMortyRetrofitSingleton private constructor(private val context: Con
     fun increaseDeckNumber(jsonObject: JsonObject): MutableLiveData<ResponseFromApi> {
         currentCall = instance!!.increaseNumberOfDecks(jsonObject)
         return callRetrofit(currentCall!!, DECKS_INCREASED) as MutableLiveData<ResponseFromApi>
+    }
+
+    fun signIn(userName: String, email: String, password: String): MutableLiveData<ResponseFromApi> {
+        val jsonBody = JsonObject()
+        jsonBody.addProperty(JsonProperty.UserName.string, userName)
+        jsonBody.addProperty(JsonProperty.UserEmail.string, email)
+        jsonBody.addProperty(JsonProperty.UserPassword.string, password)
+        currentCall = instance!!.signInUser(jsonBody)
+        return callRetrofit(currentCall!!, SIGN_IN) as MutableLiveData<ResponseFromApi>
+    }
+
+    fun regularConnection(email: String, password: String): MutableLiveData<ResponseFromApi> {
+        val jsonBody = JsonObject()
+        jsonBody.addProperty(JsonProperty.UserEmail.string, email)
+        jsonBody.addProperty(JsonProperty.UserPassword.string, password)
+        currentCall = instance!!.connectUser(jsonBody)
+        Log.d(TAG, "jsonBody : $jsonBody")
+        Log.d(TAG, "$currentCall")
+        return callRetrofit(currentCall!!, RetrofitCallTypes.CONNECTION) as MutableLiveData<ResponseFromApi>
     }
 
 }

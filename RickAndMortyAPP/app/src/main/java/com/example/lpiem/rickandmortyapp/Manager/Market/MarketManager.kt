@@ -66,13 +66,13 @@ class MarketManager private constructor(private val context: Context) {
         }
     }
 
-    fun getMarket(user: User?, link: CardListDisplay, friend_id: Int?) {
+    fun getMarket(user: User?, link: CardListDisplay, friendId: Int?) {
         cardListDisplay = link
         val userId = user?.userId ?: -1
-        if (friend_id != null) {
-            currentCall = rickAndMortyAPI!!.getFriendMarket(userId, friend_id)
+        currentCall = if (friendId != null) {
+            rickAndMortyAPI!!.getFriendMarket(userId, friendId)
         } else {
-            currentCall = rickAndMortyAPI!!.getUserMarket(userId)
+            rickAndMortyAPI!!.getUserMarket(userId)
         }
         callRetrofit(currentCall!!, RetrofitCallTypes.LIST_OF_CARDS)
     }
