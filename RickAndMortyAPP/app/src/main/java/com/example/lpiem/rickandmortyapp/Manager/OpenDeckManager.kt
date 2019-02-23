@@ -33,7 +33,7 @@ class OpenDeckManager  private constructor(private val context: Context) {
 
         updateDeckCountLiveData.postValue(user.deckToOpen!!)
 
-        if (showDetails) infoNewCardLiveData.postValue(user.deckToOpen!!)//context.getInfoNewCards(user.deckToOpen!!)
+        if (showDetails) infoNewCardLiveData.postValue(user.deckToOpen!!)
 
         responseFromApiLiveData = rickAndMortyAPI.updateUserInfo(userId)
         responseFromApiLiveData.observeOnce(Observer {
