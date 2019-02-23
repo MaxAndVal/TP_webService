@@ -79,8 +79,8 @@ class CollectionFragment : androidx.fragment.app.Fragment(), CardListDisplay {
                 val card = (rv_collection.adapter as CollectionAdapter).getDataSet().cards?.get(position)
                 val customview = layoutInflater.inflate(R.layout.price_input, null, false)
                 builder.setView(customview)
-                builder.setTitle("Sell this card ?")
-                        .setMessage("How much do you wanna sell this card ?")
+                builder.setTitle(getString(R.string.sellThisCard))
+                        .setMessage(getString(R.string.which_price_for_this_card))
                         .setPositiveButton(android.R.string.yes) { dialog, which ->
                             val price = customview.et_price.text
                             var isValid = true

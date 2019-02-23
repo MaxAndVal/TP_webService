@@ -11,6 +11,7 @@ import com.example.lpiem.rickandmortyapp.Model.KaamlottQuote
 import com.example.lpiem.rickandmortyapp.Model.ResponseFromApi
 import com.example.lpiem.rickandmortyapp.Model.User
 import com.example.lpiem.rickandmortyapp.Model.Wallet
+import com.example.lpiem.rickandmortyapp.R
 import com.example.lpiem.rickandmortyapp.Util.SingletonHolder
 import com.example.lpiem.rickandmortyapp.Util.observeOnce
 import com.example.lpiem.rickandmortyapp.View.Home.HomeDisplayUI
@@ -75,7 +76,7 @@ class HomeManager private constructor(private var context: Context) {
             loginAppManager.gameInProgress = getDate() != results?.userLastGame
             homeDisplayUI.displayFragmentContent()
         } else {
-            Toast.makeText(context, "code $code User not found, error : $message", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, String.format(context.getString(R.string.code_message_userNotFound), code, message), Toast.LENGTH_SHORT).show()
         }
     }
 

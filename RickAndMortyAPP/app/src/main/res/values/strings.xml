@@ -4,11 +4,15 @@
     <string name="app_name">RickAndMortyAPP</string>
     <string name="facebook_app_id">715136128867008</string>
     <string name="fb_login_protocol_scheme">fb715136128867008</string>
+    <string name="code_message">code : %s message : %s</string>
+
 
     //Main Activity
     <string name="title_activity_bottom">BottomActivity</string>
     <string name="title_home">Home</string>
     <string name="collection">collection</string>
+    <string name="titleSocial">Social</string>
+    <string name="titleSettings">Settings</string>
     <string name="social">social</string>
     <string name="profilSettings">profil</string>
 
@@ -17,7 +21,7 @@
     <string name="google_disconnected">Déconnecté de votre compte Google</string>
     <string name="btn_connection_google">Se connecter</string>
     <string name="btn_disconnection_google">Se déconnecter</string>
-    <string name="no_account">No account? <b><u>click here</u></b> to get schwifty !</string>
+    <string name="no_account">Pas de compte ? <b><u>Cliquez ici</u></b> pour être Schwifty !</string>
     <string name="tv_password">Mot de passe</string>
     <string name="e_mail_hint">E-Mail</string>
     <string name="et_password">Mot de passe</string>
@@ -25,33 +29,40 @@
     <string name="tv_login_title">Login</string>
     <string name="tv_sign_in_title">Sign In</string>
     <string name="tv_e_mail">E-mail</string>
-    <string name="already_an_account">Already an account? <b><u>click here</u></b> to get schwifty !</string>
-    <string name="game_is_over">Partie terminée. Votre score final est de %1$d.\nVous avez gagné %2$d PickleRick !!</string>
+    <string name="already_an_account">Déjà un compte ? <b><u>Cliquez ici</u></b> pour être Schwifty !</string>
+    <string name="network_problem_please_try_again">Problème de réseau, merci de tenter de vous connecter à nouveau</string>
+    <string name="no_access_to_DB">Impossible de se connecter à la base de donnée. Réessayez plus tard.</string>
+    <string name="double_back_to_quit_app">S\'il vous plaît, cliquez sur retour une seconde fois pour quitter</string>
+    <string name="welcome">Bienvenue %s</string>
 
     //Home Fragment
-    <string name="pickle_rick">I\'m piclke Rick !!!\nClick on me to see the Shop !!!</string>
+    <string name="pickle_rick">I\'m piclke Rick !!!\nCliquez pour accéder au Shop !!!</string>
     <string name="wallet_amount"> %1$d $%2$s</string>
     <string name="actual_turn">Question %1d\/5</string>
-    <string name="actual_score">score : %1d\/5</string>
+    <string name="actual_score">Score : %1d\/5</string>
     <string name="final_score">Votre score final est de :\n%1d\/5</string>
     <string name="good_answer">Bonne réponse !!!</string>
-    <string name="wrong_answer">Mauvaise réponse ...</string>
-    <string name="try_an_other_game_later">Game over Retentez votre chance demain !!!</string>
+    <string name="wrong_answer">Mauvaise réponse …</string>
+    <string name="game_is_over">Partie terminée. Votre score final est de %1$d.\nVous avez gagné %2$d PickleRick !!</string>
+    <string name="try_an_other_game_later">Game over\nRetentez votre chance demain !!!</string>
+    <string name="code_message_userNotFound">code : %s user not found : %s</string>
 
     //Collection Fragment
     <string name="tv_description"><b>Status</b> : %s \n<b>Espece</b> : %s \n<b>Genre</b> : %s \n<b>Origine</b> : %s \n<b>Localisation actuelle</b> : %s</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="btn_pending_friend_requests">voir les requetes en attente</string>
-    <string name="btn_list_of_friends">voir sa liste d\'ami</string>
-    <string name="network_problem_please_try_again">Problème de réseau, merci de tenter de vous connecter à nouveau</string>
-    <string name="double_back_to_quit_app">S\'il vous plaît, cliquez sur retour une seconde fois pour quitter</string>
-    <string name="titleSocial">Social</string>
-    <string name="titleSettings">Settings</string>
-    <string name="no_access_to_DB">Impossible de se connecter à la base de donnée. Réessayez plus tard.</string>
+    //Social Fragment
+    <string name="btn_pending_friend_requests">Voir les requetes en attente</string>
+    <string name="btn_list_of_friends">Voir sa liste d\'ami</string>
+    <string name="friend_added">Ami ajouté à votre liste !</string>
 
+    //OpenDeck Activity
+    <string name="number_of_deck_to_open">Vous avez %s decks à ouvrir</string>
 
-    <string name="number_of_deck_to_open">You have %s deck to open</string>
+    //Shop Activity
+    <string name="not_enought_money">Pas assez d\'argent pour ce pack</string>
+    <string name="account_created">Compte créé</string>
+    <string name="sellThisCard">Vendre cette carte ?</string>
+    <string name="which_price_for_this_card">À quel prix la vendez-vous ?</string>
+    <string name="X_decks_added">%d decks ajoutés à votre pool !</string>
 
 </resources>

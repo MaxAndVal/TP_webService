@@ -1,6 +1,5 @@
 package com.example.lpiem.rickandmortyapp.View.Settings
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,7 +7,6 @@ import android.view.ViewGroup
 import com.example.lpiem.rickandmortyapp.Manager.LoginAppManager
 import com.example.lpiem.rickandmortyapp.Manager.settings.SettingsManager
 import com.example.lpiem.rickandmortyapp.R
-import com.example.lpiem.rickandmortyapp.Util.SingletonHolder
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_settings.*
 
@@ -22,8 +20,6 @@ class SettingsFragment : androidx.fragment.app.Fragment() {
 
     private lateinit var settingsManager: SettingsManager
     private lateinit var loginAppManager: LoginAppManager
-
-    companion object : SingletonHolder<SettingsManager, Context>(::SettingsManager)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,7 +50,6 @@ class SettingsFragment : androidx.fragment.app.Fragment() {
         val user = loginAppManager.connectedUser!!
         tv_email.text = user.userEmail
         tv_name.text = user.userName
-        //Picasso.get().load(R.drawable.workshop).fit().centerCrop().into(iv_profile_back)
         Picasso.get().load(user.userImage).placeholder(R.drawable.ic_person_black_24dp).into(iv_profile_picture)
     }
 

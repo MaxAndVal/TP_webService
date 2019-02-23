@@ -1,4 +1,4 @@
-package com.example.lpiem.rickandmortyapp.Util
+package com.example.lpiem.rickandmortyapp.View.Collection.list
 
 import androidx.annotation.Nullable
 import androidx.recyclerview.widget.DiffUtil
