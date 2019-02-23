@@ -62,7 +62,8 @@ class RickAndMortyRetrofitSingleton private constructor(private val context: Con
                     val result = response.body()
                     when (type) {
                         LIST_OF_CARDS,
-                        ADD_CARD_TO_MARKET -> {
+                        ADD_CARD_TO_MARKET,
+                        OPEN_RANDOM_DECK -> {
                             liveData.postValue(result as ListOfCards)
                         }
                         GET_CARD_DETAILS -> {
@@ -77,7 +78,8 @@ class RickAndMortyRetrofitSingleton private constructor(private val context: Con
                         UPDATE_WALLET,
                         DECKS_INCREASED,
                         SIGN_IN,
-                        CONNECTION -> {
+                        CONNECTION,
+                        UPDATE_USER_INFO -> {
                             liveData.postValue(result as ResponseFromApi)
                         }
                         GET_WALLET,
@@ -92,8 +94,6 @@ class RickAndMortyRetrofitSingleton private constructor(private val context: Con
                         ADD_A_FRIENDS -> TODO()
                         DEL_A_FRIEND -> TODO()
                         ACCEPT_FRIENDSHIP -> TODO()
-                        OPEN_RANDOM_DECK -> TODO()
-                        UPDATE_USER_INFO -> TODO()
                         RESPONSE_FROM_API -> TODO()
                     }
                 } else {
@@ -200,6 +200,16 @@ class RickAndMortyRetrofitSingleton private constructor(private val context: Con
         Log.d(TAG, "jsonBody : $jsonBody")
         Log.d(TAG, "$currentCall")
         return callRetrofit(currentCall!!, RetrofitCallTypes.CONNECTION) as MutableLiveData<ResponseFromApi>
+    }
+
+    fun openRandomDeck(userId: Int?): MutableLiveData<ListOfCards> {
+        currentCall = instance!!.getRandomDeck(userId!!)
+        return callRetrofit(currentCall!!, RetrofitCallTypes.OPEN_RANDOM_DECK) as MutableLiveData<ListOfCards>
+    }
+
+    fun updateUserInfo(userId: Int?): MutableLiveData<ResponseFromApi> {
+        val updateUser = instance!!.getUserById(userId!!)
+        return callRetrofit(updateUser, RetrofitCallTypes.UPDATE_USER_INFO) as MutableLiveData<ResponseFromApi>
     }
 
 }

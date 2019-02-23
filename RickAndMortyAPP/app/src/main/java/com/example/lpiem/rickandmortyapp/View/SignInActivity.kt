@@ -20,10 +20,6 @@ class SignInActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_signin)
 
-        loaderLiveData.observeOnce(Observer {
-            progress_bar_sign_in.visibility = it
-        })
-
         signInManager = SignInManager.getInstance(this)
 
         tv_alreadyAccount.setOnClickListener { finish() }
@@ -40,6 +36,14 @@ class SignInActivity : AppCompatActivity() {
                 signInManager.signIn(name, email, password, loaderLiveData)
             }
         }
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        loaderLiveData.observeOnce(Observer {
+            progress_bar_sign_in.visibility = it
+        })
 
     }
 
