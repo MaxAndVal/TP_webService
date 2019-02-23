@@ -32,13 +32,6 @@ class RecyclerTouchListener : RecyclerView.OnItemTouchListener {
         if (child != null && gestureDetector.onTouchEvent(e)) {
             clickListener.onClick(child, rv.getChildAdapterPosition(child))
         }
-
-//        if (child != null && e.action == MotionEvent.ACTION_DOWN) {
-//            Log.d(TAG, "Update")
-//            val data = (rv.adapter as CollectionAdapter).getDataSet()
-//            Log.d(TAG, "$data")
-//            (rv.adapter as CollectionAdapter).updateList(data)
-//        }
         return false
     }
 

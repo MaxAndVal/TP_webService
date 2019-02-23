@@ -4,10 +4,10 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
-import com.example.lpiem.rickandmortyapp.Model.ListOfCards
-import com.example.lpiem.rickandmortyapp.Model.User
 import com.example.lpiem.rickandmortyapp.Manager.LoginAppManager
 import com.example.lpiem.rickandmortyapp.Manager.Market.MarketManager
+import com.example.lpiem.rickandmortyapp.Model.ListOfCards
+import com.example.lpiem.rickandmortyapp.Model.User
 import com.example.lpiem.rickandmortyapp.R
 import com.example.lpiem.rickandmortyapp.View.Collection.list.CardListDisplay
 import kotlinx.android.synthetic.main.activity_market.*
@@ -19,13 +19,13 @@ class MarketActivity : AppCompatActivity(), CardListDisplay {
     private lateinit var loginAppManager: LoginAppManager
     private var user: User? = null
     private var adapter: MarketAdapter? = null
-    private var friend_id: Int? = null
+    private var friendId: Int? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_market)
         if (intent.hasExtra("friend_id")) {
-            friend_id = intent.extras["friend_id"] as Int
+            friendId = intent.extras["friend_id"] as Int
         }
 
         loginAppManager = LoginAppManager.getInstance(this)
@@ -38,7 +38,7 @@ class MarketActivity : AppCompatActivity(), CardListDisplay {
     override fun onResume() {
         super.onResume()
         rv_market.layoutManager = GridLayoutManager(this, 2)
-        marketManager.getMarket(user, this, friend_id)
+        marketManager.getMarket(user, this, friendId)
     }
 
     private fun updateAdapter(list: ListOfCards) {

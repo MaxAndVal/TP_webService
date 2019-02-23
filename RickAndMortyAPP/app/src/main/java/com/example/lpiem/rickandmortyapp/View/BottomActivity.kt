@@ -65,15 +65,12 @@ class BottomActivity : AppCompatActivity() {
         openFragment(HomeFragment())
     }
 
-
     private fun openDeck(deckToOpen: Int) {
         if(deckToOpen>0){
             val openIntent = Intent(this, OpenDeckActivity::class.java)
             startActivity(openIntent)
         }
     }
-
-
 
     override fun onBackPressed() {
         val count = supportFragmentManager.backStackEntryCount

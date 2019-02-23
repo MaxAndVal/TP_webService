@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lpiem.rickandmortyapp.Model.ListOfCards
 import com.example.lpiem.rickandmortyapp.R
-import com.example.lpiem.rickandmortyapp.Util.DiffUtilCollection
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.collection_item.view.*
 

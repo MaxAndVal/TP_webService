@@ -128,7 +128,7 @@ class LoginAppManager private constructor(private var context: Context) {
             })
 
         } else {
-            Toast.makeText(context, "erreur", Toast.LENGTH_LONG).show()
+            Toast.makeText(context, "erreur : ${data.toString()}", Toast.LENGTH_LONG).show()
         }
     }
 
@@ -226,13 +226,13 @@ class LoginAppManager private constructor(private var context: Context) {
                 (context as LoginActivity).sign_in_button.setOnClickListener { disconnectGoogleAccount(true) }
             }
             val name = results?.userName
-            Log.d(TAG, "body = $response")
-            Toast.makeText(context, "code : $code, bienvenue $name", Toast.LENGTH_SHORT).show()
+            Log.d(TAG, "code = $code body = $response")
+            Toast.makeText(context, String.format(context.getString(R.string.welcome, name)), Toast.LENGTH_SHORT).show()
             val homeIntent = Intent(context, BottomActivity::class.java)
             connectedUser = response.results!!
             (context as LoginActivity).startActivity(homeIntent)
         } else {
-            Toast.makeText(context, "Error Wubba : $message", Toast.LENGTH_LONG).show()
+            Toast.makeText(context, String.format(context.getString(R.string.code_message), code, message), Toast.LENGTH_SHORT).show()
             (context as LoginActivity).login_progressBar.visibility = View.GONE
         }
     }

@@ -8,6 +8,7 @@ import com.example.lpiem.rickandmortyapp.Data.RickAndMortyRetrofitSingleton
 import com.example.lpiem.rickandmortyapp.Data.SUCCESS
 import com.example.lpiem.rickandmortyapp.Model.ResponseFromApi
 import com.example.lpiem.rickandmortyapp.Model.Wallet
+import com.example.lpiem.rickandmortyapp.R
 import com.example.lpiem.rickandmortyapp.Util.SingletonHolder
 import com.example.lpiem.rickandmortyapp.Util.observeOnce
 import com.google.gson.JsonObject
@@ -35,9 +36,9 @@ class ShopManager private constructor(private val context: Context) {
         if (code == SUCCESS) {
             val user = response.results!!
             loginAppManager.connectedUser = user
-            Toast.makeText(context, "$numberOfDeckToAdd decks ajoutés à votre pool !", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, String.format(context.getString(R.string.X_decks_added), numberOfDeckToAdd), Toast.LENGTH_SHORT).show()
         } else {
-            Toast.makeText(context, "code : $code, message : $message", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, String.format(context.getString(R.string.code_message), code, message), Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -76,10 +77,10 @@ class ShopManager private constructor(private val context: Context) {
                     updateWalletTreatment(it)
                 })
             } else {
-                Toast.makeText(context, "Pas assez d'argent pour ce pack", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, context.getString(R.string.not_enought_money), Toast.LENGTH_SHORT).show()
             }
         } else {
-            Toast.makeText(context, "code : $code, message : $message", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, String.format(context.getString(R.string.code_message), code, message), Toast.LENGTH_SHORT).show()
         }
     }
 

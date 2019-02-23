@@ -2,7 +2,8 @@ package com.example.lpiem.rickandmortyapp.Manager.settings
 
 import android.content.Context
 import android.util.Log
-import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
@@ -22,11 +23,12 @@ import kotlinx.android.synthetic.main.activity_bottom.*
 
 class SettingsManager internal constructor(private val context: Context) : SettingsOnClickInterface {
 
+    //TODO: change that and move it to Fragment
     override fun todo(item: FAQAdapter.ViewHolder) {
-        if (item.faqResponse.visibility == View.GONE) {
-            item.faqResponse.visibility = View.VISIBLE
+        if (item.faqResponse.visibility == GONE) {
+            item.faqResponse.visibility = VISIBLE
         } else {
-            item.faqResponse.visibility = View.GONE
+            item.faqResponse.visibility = GONE
         }
     }
 
@@ -52,7 +54,7 @@ class SettingsManager internal constructor(private val context: Context) : Setti
                 Log.d(TAG, "listOfFAQ is null")
             }
         } else {
-            Toast.makeText(context, "code : $code, message $message", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, String.format(context.getString(R.string.code_message), code, message), Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -67,11 +69,12 @@ class SettingsManager internal constructor(private val context: Context) : Setti
         fragmentTransaction.add(R.id.flMain, fragment).addToBackStack(null)
         fragmentTransaction.commit()
         fragmentTransaction.addToBackStack(null)
+        //TODO : pass to Fragment method
         context.flMain.bringToFront()
-        context.tv_deckToOpen.visibility = View.GONE
-        context.tv_wallet.visibility = View.GONE
-        context.navigation.visibility = View.GONE
-        context.fragmentLayout.visibility = View.GONE
+        context.tv_deckToOpen.visibility = GONE
+        context.tv_wallet.visibility = GONE
+        context.navigation.visibility = GONE
+        context.fragmentLayout.visibility = GONE
 
     }
 }

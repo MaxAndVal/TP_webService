@@ -10,6 +10,7 @@ import androidx.lifecycle.Observer
 import com.example.lpiem.rickandmortyapp.Data.RickAndMortyRetrofitSingleton
 import com.example.lpiem.rickandmortyapp.Data.SUCCESS
 import com.example.lpiem.rickandmortyapp.Model.ResponseFromApi
+import com.example.lpiem.rickandmortyapp.R
 import com.example.lpiem.rickandmortyapp.Util.SingletonHolder
 import com.example.lpiem.rickandmortyapp.Util.observeOnce
 import com.example.lpiem.rickandmortyapp.View.BottomActivity
@@ -30,7 +31,7 @@ class SignInManager private constructor(private var context: Context) {
 
     private fun regularConnection(email: String, password: String) {
         loaderLiveData.postValue(GONE)
-        Toast.makeText(context, "compte crée", Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, context.getString(R.string.account_created), Toast.LENGTH_SHORT).show()
         responseFromApiLiveData = rickAndMortyAPI.regularConnection(email, password)
         responseFromApiLiveData.observeOnce(Observer {
             connectionTreatment(it)
@@ -49,8 +50,8 @@ class SignInManager private constructor(private var context: Context) {
         val code = response.code
         val name = response.results?.userName
         val userId = response.results?.userId
-        Log.d(TAG, "body = $response")
-        Toast.makeText(context, "code : $code, bienvenue $name id: $userId", Toast.LENGTH_SHORT).show()
+        Log.d(TAG, "code = $code body = $response userId = $userId")
+        Toast.makeText(context, String.format(context.getString(R.string.welcome), name), Toast.LENGTH_SHORT).show()
         loginAppManager.connectedUser = response.results!!
         val intent = Intent(context, BottomActivity::class.java)
         context.startActivity(intent)
@@ -63,7 +64,7 @@ class SignInManager private constructor(private var context: Context) {
         if (code == SUCCESS) {
             regularConnection(email, password)
         } else {
-            Toast.makeText(context, "code : $code, message : $message", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, String.format(context.getString(R.string.code_message), code, message), Toast.LENGTH_SHORT).show()
         }
     }
 

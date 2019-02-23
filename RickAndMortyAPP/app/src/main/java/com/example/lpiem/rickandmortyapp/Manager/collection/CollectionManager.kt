@@ -9,6 +9,7 @@ import com.example.lpiem.rickandmortyapp.Data.SUCCESS
 import com.example.lpiem.rickandmortyapp.Model.Card
 import com.example.lpiem.rickandmortyapp.Model.ListOfCards
 import com.example.lpiem.rickandmortyapp.Model.User
+import com.example.lpiem.rickandmortyapp.R
 import com.example.lpiem.rickandmortyapp.Util.SingletonHolder
 import com.example.lpiem.rickandmortyapp.Util.observeOnce
 import com.example.lpiem.rickandmortyapp.View.Collection.list.CardListDisplay
@@ -35,7 +36,7 @@ class CollectionManager private constructor(private val context: Context) {
     }
 
 
-    fun addCardToMarket() {
+    private fun addCardToMarket() {
         Toast.makeText(context, "Card is now on the market !", Toast.LENGTH_LONG).show()
     }
 
@@ -45,7 +46,7 @@ class CollectionManager private constructor(private val context: Context) {
         if (list?.code == SUCCESS) {
             cardListDisplay.displayResult(list)
         } else {
-            Toast.makeText(context, "erreur code ${list?.code} message : ${list?.message}", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, String.format(context.getString(R.string.code_message), list?.code, list?.message), Toast.LENGTH_SHORT).show()
         }
     }
 

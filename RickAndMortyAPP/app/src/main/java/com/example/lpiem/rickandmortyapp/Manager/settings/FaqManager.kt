@@ -12,7 +12,7 @@ import kotlinx.android.synthetic.main.activity_bottom.*
 
 class FaqManager internal constructor(internal val context: Context)  {
 
-        private val rickAndMortyAPI = RickAndMortyRetrofitSingleton.getInstance(context).instance
+        private val rickAndMortyAPI = RickAndMortyRetrofitSingleton.getInstance(context)
         var faqFragment: FAQ_Fragment? = null
         internal lateinit var recyclerView: RecyclerView
 

@@ -85,9 +85,10 @@ class SocialManager private constructor(private val context: Context){
         val message = response.message
         if (code == SUCCESS) {
             val result = response.results
-            Toast.makeText(context, "code $code added $message results : $result", Toast.LENGTH_SHORT).show()
+            Log.d(TAG, "code = $code message = $message result = $result")
+            Toast.makeText(context, String.format(context.getString(R.string.friend_added)), Toast.LENGTH_SHORT).show()
         } else {
-            Toast.makeText(context, "code : $code, message $message", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, String.format(context.getString(R.string.code_message), code, message), Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -99,7 +100,7 @@ class SocialManager private constructor(private val context: Context){
             val results = response.results
             Toast.makeText(context, "code : $code - delete : $message results : $results", Toast.LENGTH_SHORT).show()
         } else {
-            Toast.makeText(context, "code : $code, message $message", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, String.format(context.getString(R.string.code_message), code, message), Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -110,7 +111,7 @@ class SocialManager private constructor(private val context: Context){
             val results = response.results
             Toast.makeText(context, "code : $code, message $message , results $results", Toast.LENGTH_SHORT).show()
         } else {
-            Toast.makeText(context, "code error : $code, message $message", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, String.format(context.getString(R.string.code_message), code, message), Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -122,7 +123,7 @@ class SocialManager private constructor(private val context: Context){
             socialFragment?.resultFromSearch = list
             socialFragment?.updateDataSetList(list.friends)
         } else {
-            Toast.makeText(context, "code : $code, message $message", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, String.format(context.getString(R.string.code_message), code, message), Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -139,7 +140,7 @@ class SocialManager private constructor(private val context: Context){
 
             socialFragment?.updateDataSetList(socialFragment?.listOfActualFriends)
         } else {
-            Toast.makeText(context, "code : $code, message $message", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, String.format(context.getString(R.string.code_message), code, message), Toast.LENGTH_SHORT).show()
         }
         if (socialFragment != null && socialFragment!!.isVisible) {
             socialFragment?.btn_friendsRequest?.text = context.getString(R.string.btn_pending_friend_requests)
