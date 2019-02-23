@@ -5,11 +5,9 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import com.airbnb.lottie.LottieDrawable
 import com.example.lpiem.rickandmortyapp.Manager.OpenDeckManager
 import com.example.lpiem.rickandmortyapp.R
-import com.example.lpiem.rickandmortyapp.Util.observeOnce
 import com.example.lpiem.rickandmortyapp.View.Collection.detail.CollectionDetailActivity
 import kotlinx.android.synthetic.main.activity_open_deck.*
 
@@ -17,15 +15,21 @@ class OpenDeckActivity : AppCompatActivity() {
 
     private var openDeckManager = OpenDeckManager.getInstance(this)
     private var updateDeckCountLiveData = MutableLiveData<Int>()
+    private var infoNewCardLiveData = MutableLiveData<Int>()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_open_deck)
         iv_closeOpenDeck.setOnClickListener { finish() }
 
-        updateDeckCountLiveData.observeOnce(Observer {
+
+        updateDeckCountLiveData.observeForever {
             updateDecksCount(it)
-        })
+        }
+        infoNewCardLiveData.observeForever {
+            getInfoNewCards(it)
+        }
     }
 
     override fun onResume() {
@@ -40,7 +44,8 @@ class OpenDeckActivity : AppCompatActivity() {
                 showAnimation(true)
                 openDeckManager.openRandomDeck(
                         openDeckManager.loginAppManager.connectedUser!!.deckToOpen,
-                        updateDeckCountLiveData
+                        updateDeckCountLiveData,
+                        infoNewCardLiveData
                 )
             }
         }
@@ -64,7 +69,7 @@ class OpenDeckActivity : AppCompatActivity() {
         }
     }
 
-    fun getInfoNewCards(deckLeft: Int) {
+    private fun getInfoNewCards(deckLeft: Int) {
         showAnimation(false)
         val detailIntent = Intent(this, CollectionDetailActivity::class.java)
         startActivity(detailIntent)
