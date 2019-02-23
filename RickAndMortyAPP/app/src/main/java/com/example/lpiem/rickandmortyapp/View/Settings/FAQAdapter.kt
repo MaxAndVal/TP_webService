@@ -8,7 +8,7 @@ import com.example.lpiem.rickandmortyapp.Model.FAQ
 import com.example.lpiem.rickandmortyapp.R
 import kotlinx.android.synthetic.main.faq_item.view.*
 
-class FAQAdapter(private val dataSet: List<FAQ>, private val listener: SettingsOnClickInterface) : RecyclerView.Adapter<FAQAdapter.ViewHolder>() {
+class FAQAdapter(private val dataSet: List<FAQ>) : RecyclerView.Adapter<FAQAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val v = LayoutInflater.from(parent.context).inflate(R.layout.faq_item, parent, false)
         return FAQAdapter.ViewHolder(v)
@@ -22,13 +22,21 @@ class FAQAdapter(private val dataSet: List<FAQ>, private val listener: SettingsO
         val item = dataSet[position]
         holder.faqQuestion.text = item.question
         holder.faqResponse.text = item.response
-        holder.faqQuestion.setOnClickListener { listener.todo(holder) }
+        holder.faqQuestion.setOnClickListener { showTopicDetail(holder) }
 
     }
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val faqQuestion = view.tv_question
         val faqResponse = view.tv_response
+    }
+
+    private fun showTopicDetail(item: FAQAdapter.ViewHolder) {
+        if (item.faqResponse.visibility == View.GONE) {
+            item.faqResponse.visibility = View.VISIBLE
+        } else {
+            item.faqResponse.visibility = View.GONE
+        }
     }
 
 }
