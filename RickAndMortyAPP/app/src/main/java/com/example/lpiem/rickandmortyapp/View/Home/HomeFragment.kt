@@ -16,40 +16,20 @@ import com.example.lpiem.rickandmortyapp.Manager.LoginAppManager
 import com.example.lpiem.rickandmortyapp.Model.User
 import com.example.lpiem.rickandmortyapp.R
 import com.example.lpiem.rickandmortyapp.View.BottomActivity
-import com.example.lpiem.rickandmortyapp.View.Collection.list.CollectionFragment
 import com.example.lpiem.rickandmortyapp.View.TAG
 import kotlinx.android.synthetic.main.activity_bottom.*
 import kotlinx.android.synthetic.main.fragment_home.*
-
-
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
 class HomeFragment : androidx.fragment.app.Fragment(), HomeDisplayUI {
 
     private var homeManager: HomeManager? = null
     private var loginAppManager: LoginAppManager? = null
     private var user: User? = null
-    private var param1: String? = null
-    private var param2: String? = null
 
-    companion object {
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-                CollectionFragment().apply {
-                    arguments = Bundle().apply {
-                        putString(ARG_PARAM1, param1)
-                        putString(ARG_PARAM2, param2)
-                    }
-                }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+
         loginAppManager = LoginAppManager.getInstance(context!!)
         user = loginAppManager?.connectedUser
         Log.d(TAG, "user : $user")

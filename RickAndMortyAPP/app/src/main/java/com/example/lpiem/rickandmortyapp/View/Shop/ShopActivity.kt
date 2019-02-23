@@ -8,7 +8,7 @@ import kotlinx.android.synthetic.main.activity_shop.*
 
 class ShopActivity : AppCompatActivity() {
 
-    private val shopManager = ShopManager.getInstance(this)
+    private var shopManager = ShopManager.getInstance(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

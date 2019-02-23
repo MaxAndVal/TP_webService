@@ -6,8 +6,9 @@
     android:layout_height="match_parent"
     tools:context=".View.SplashScreen">
 
+
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/iv_splashScreen"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
@@ -15,5 +16,33 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/splash_screen2" />
+        tools:src="@drawable/splash_screen2"
+         />
+
+    <TextView
+        android:id="@+id/app_title1"
+        style="@style/TextViewStyleWhite"
+        android:text="Rick and Morty"
+        android:textSize="60sp"
+        android:layout_marginTop="80dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <TextView
+        android:id="@+id/app_title2"
+        style="@style/TextViewStyleWhite"
+        android:text="Card game"
+        android:textSize="60sp"
+        android:layout_marginBottom="80dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
