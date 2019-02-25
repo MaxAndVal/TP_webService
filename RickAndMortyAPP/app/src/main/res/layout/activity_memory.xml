@@ -7,13 +7,124 @@
     tools:context=".View.Memory.MemoryActivity">
 
     <ImageView
-        android:id="@+id/first_iv"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
+        android:id="@+id/iv_1"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/iv_2"
+        app:layout_constraintBottom_toTopOf="@id/iv_4"
         android:src="@drawable/card_back"/>
+
+    <ImageView
+        android:id="@+id/iv_2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/iv_1"
+        app:layout_constraintEnd_toStartOf="@id/iv_3"
+        app:layout_constraintBottom_toTopOf="@id/iv_4"
+        android:src="@drawable/card_back"/>
+
+    <ImageView
+        android:id="@+id/iv_3"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/iv_2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/iv_4"
+        android:src="@drawable/card_back"/>
+
+    <ImageView
+        android:id="@+id/iv_4"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/iv_1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/iv_5"
+        app:layout_constraintBottom_toTopOf="@id/iv_7"
+        android:src="@drawable/card_back"/>
+
+    <ImageView
+        android:id="@+id/iv_5"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/iv_1"
+        app:layout_constraintStart_toEndOf="@id/iv_4"
+        app:layout_constraintEnd_toStartOf="@id/iv_6"
+        app:layout_constraintBottom_toTopOf="@id/iv_7"
+        android:src="@drawable/card_back"/>
+
+    <ImageView
+        android:id="@+id/iv_6"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/iv_1"
+        app:layout_constraintStart_toEndOf="@id/iv_5"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/iv_7"
+        android:src="@drawable/card_back"/>
+
+    <ImageView
+        android:id="@+id/iv_7"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/iv_4"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/iv_8"
+        app:layout_constraintBottom_toTopOf="@id/iv_10"
+        android:src="@drawable/card_back"/>
+
+    <ImageView
+        android:id="@+id/iv_8"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/iv_4"
+        app:layout_constraintStart_toEndOf="@id/iv_7"
+        app:layout_constraintEnd_toStartOf="@id/iv_9"
+        app:layout_constraintBottom_toTopOf="@id/iv_10"
+        android:src="@drawable/card_back"/>
+
+    <ImageView
+        android:id="@+id/iv_9"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/iv_4"
+        app:layout_constraintStart_toEndOf="@id/iv_8"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/iv_10"
+        android:src="@drawable/card_back"/>
+
+    <ImageView
+        android:id="@+id/iv_10"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/iv_7"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/iv_11"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:src="@drawable/card_back"/>
+
+    <ImageView
+        android:id="@+id/iv_11"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/iv_7"
+        app:layout_constraintStart_toEndOf="@id/iv_10"
+        app:layout_constraintEnd_toStartOf="@id/iv_12"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:src="@drawable/card_back"/>
+
+    <ImageView
+        android:id="@+id/iv_12"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/iv_7"
+        app:layout_constraintStart_toEndOf="@id/iv_11"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:src="@drawable/card_back"/>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
