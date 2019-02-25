@@ -1,5 +1,6 @@
 package com.example.lpiem.rickandmortyapp.View.Home
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
@@ -16,6 +17,7 @@ import com.example.lpiem.rickandmortyapp.Manager.LoginAppManager
 import com.example.lpiem.rickandmortyapp.Model.User
 import com.example.lpiem.rickandmortyapp.R
 import com.example.lpiem.rickandmortyapp.View.BottomActivity
+import com.example.lpiem.rickandmortyapp.View.Memory.MemoryActivity
 import com.example.lpiem.rickandmortyapp.View.TAG
 import kotlinx.android.synthetic.main.activity_bottom.*
 import kotlinx.android.synthetic.main.fragment_home.*
@@ -35,6 +37,8 @@ class HomeFragment : androidx.fragment.app.Fragment(), HomeDisplayUI {
         Log.d(TAG, "user : $user")
 
         homeManager = HomeManager.getInstance(context!!)
+
+
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -51,6 +55,11 @@ class HomeFragment : androidx.fragment.app.Fragment(), HomeDisplayUI {
             homeManager?.gameAvailable(loginAppManager?.connectedUser!!, this)
         } else {
             gameOver(false)
+        }
+
+        btn_memory.setOnClickListener {
+            val memoryIntent = Intent(context, MemoryActivity::class.java)
+            context?.startActivity(memoryIntent)
         }
     }
 
