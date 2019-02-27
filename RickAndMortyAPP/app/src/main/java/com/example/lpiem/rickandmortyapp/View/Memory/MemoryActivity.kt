@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.lpiem.rickandmortyapp.Model.Tile
 import com.example.lpiem.rickandmortyapp.R
@@ -29,8 +30,15 @@ class MemoryActivity : AppCompatActivity() {
                 Pair(R.drawable.test5, 5), Pair(R.drawable.test6, 6)
         )
 
+        var rand = Math.abs(Random().nextInt()%10) * 2
         listOfPictures.addAll(listOfPictures)
-        val finalListOfPictures = listOfPictures.shuffled()
+        var finalListOfPictures = listOfPictures.toList()
+
+        while (rand > 0) {
+            finalListOfPictures = finalListOfPictures.shuffled()
+            rand--
+        }
+
 
         val lisOfImageView = listOf(iv_1, iv_2, iv_3, iv_4, iv_5, iv_6, iv_7, iv_8, iv_9, iv_10,
                 iv_11, iv_12)
@@ -39,7 +47,7 @@ class MemoryActivity : AppCompatActivity() {
 
         for (i in 0 until lisOfImageView.size) {
             lisOfImageView[i].tag = finalListOfPictures[i]
-            val image = listOfPictures[i].first
+            val image = finalListOfPictures[i].first
             val ref = finalListOfPictures[i].second
             val imageView = lisOfImageView[i]
             listOfTiles.add(Tile(image = image,
@@ -126,16 +134,17 @@ class MemoryActivity : AppCompatActivity() {
                     setPlaceHolder(secondTile.tileView, secondTile.placeHolder, handler, secondTile.image, secondTile, false)
                     this.clear()
                 }, animationTime)
-            }
-            else if (firstTile.image == secondTile.image) {
+            } else if (firstTile.image == secondTile.image) {
 
                 Log.d(TAG, "firstTile tapped : ${firstTile.tapped}")
                 Log.d(TAG, "secondTile tapped : ${secondTile.tapped}")
-                firstTile.tapped = false
-                secondTile.tapped = false
 
-                firstTile.tileView.setOnClickListener { }
-                secondTile.tileView.setOnClickListener { }
+                firstTile.tileView.setOnClickListener {
+                    Toast.makeText(this@MemoryActivity, "Vous avez déjà gagné cette tuille !", Toast.LENGTH_SHORT).show()
+                }
+                secondTile.tileView.setOnClickListener {
+                    Toast.makeText(this@MemoryActivity, "Vous avez déjà gagné cette tuille !", Toast.LENGTH_SHORT).show()
+                }
                 this.clear()
 
             }
