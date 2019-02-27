@@ -2,27 +2,29 @@ package com.example.lpiem.rickandmortyapp.View.Memory
 
 import android.os.Bundle
 import android.os.Handler
-import android.util.Log
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.lpiem.rickandmortyapp.Model.Tile
 import com.example.lpiem.rickandmortyapp.R
-import com.example.lpiem.rickandmortyapp.View.TAG
 import kotlinx.android.synthetic.main.activity_memory.*
 import java.util.*
 
-const val animationTime = 500L
 
 class MemoryActivity : AppCompatActivity() {
 
     private val animationTime = 500L
     private var listOfTiles: MutableList<Tile> = ArrayList()
     private var clickedElements: MutableList<Tile> = Stack()
+    private var score = 0
+    private var turn = 8
+    private var halfTurn = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_memory)
+
+        tv_turn.text = "Coups restant : $turn"
 
         val listOfPictures: MutableList<Pair<Int, Int>> = mutableListOf(
                 Pair(R.drawable.test1, 1), Pair(R.drawable.test2, 2),
@@ -84,7 +86,7 @@ class MemoryActivity : AppCompatActivity() {
         }
     }
 
-    fun setRealImage(view: ImageView, placeHolder: Int, handler: Handler, image: Int, tile: Tile, onChange: Boolean) {
+    private fun setRealImage(view: ImageView, placeHolder: Int, handler: Handler, image: Int, tile: Tile, onChange: Boolean) {
         var drawable: Int
         view.animate().scaleX(0f).setDuration(animationTime).start()
         drawable = placeHolder
@@ -100,7 +102,7 @@ class MemoryActivity : AppCompatActivity() {
         tile.tapped = !tile.tapped
     }
 
-    fun setPlaceHolder(view: ImageView, placeHolder: Int, handler: Handler, image: Int, tile: Tile, onChange: Boolean) {
+    private fun setPlaceHolder(view: ImageView, placeHolder: Int, handler: Handler, image: Int, tile: Tile, onChange: Boolean) {
         var drawable: Int
         view.animate().scaleX(0f).setDuration(animationTime).start()
         drawable = image
@@ -116,8 +118,17 @@ class MemoryActivity : AppCompatActivity() {
 
     }
 
-    fun MutableList<Tile>.onChange(tile: Tile) {
+    // extension
+    private fun MutableList<Tile>.onChange(tile: Tile) {
         // add only if different tile or list empty
+        if (halfTurn) {
+            turn--
+            halfTurn = !halfTurn
+        } else {
+            halfTurn = true
+        }
+
+        tv_turn.text = "Coups restants : $turn"
         val handler = Handler()
         if (this.isEmpty()) {
             this.add(tile)
@@ -135,23 +146,36 @@ class MemoryActivity : AppCompatActivity() {
                     this.clear()
                 }, animationTime)
             } else if (firstTile.image == secondTile.image) {
-
-                Log.d(TAG, "firstTile tapped : ${firstTile.tapped}")
-                Log.d(TAG, "secondTile tapped : ${secondTile.tapped}")
+                score++
+                tv_memory_score.text = "Score : $score"
+                val toast = Toast.makeText(this@MemoryActivity, "Vous avez déjà gagné cette tuille !", Toast.LENGTH_SHORT)
 
                 firstTile.tileView.setOnClickListener {
-                    Toast.makeText(this@MemoryActivity, "Vous avez déjà gagné cette tuille !", Toast.LENGTH_SHORT).show()
+                    toast.show()
                 }
                 secondTile.tileView.setOnClickListener {
-                    Toast.makeText(this@MemoryActivity, "Vous avez déjà gagné cette tuille !", Toast.LENGTH_SHORT).show()
+                    toast.show()
                 }
+
+
+
                 this.clear()
 
             }
         }
 
+        if (isGameFinished(turn)) {
+            for (item in listOfTiles) {
+                item.tileView.setOnClickListener {  }
+            }
+            Toast.makeText(this@MemoryActivity, "Game Over", Toast.LENGTH_SHORT).show()
+        }
+
     }
 
+    private fun isGameFinished(turn: Int): Boolean {
+        return turn == 0
+    }
 
 }
 
