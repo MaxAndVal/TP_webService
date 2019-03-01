@@ -68,7 +68,8 @@
 
     //Memory Game
     <string name="current_score">Score : %d</string>
-    <string name="memory_game_over">Partie terminée. Votre score final est de %d.</string>
+    <string name="memory_game_over">Partie terminée. Votre score final est de %d.%s</string>
     <string name="turn_lefts">Coups restants : %d</string>
+    <string name="cards_won">\nVous avez gagné les cartes :\n</string>
 
 </resources>

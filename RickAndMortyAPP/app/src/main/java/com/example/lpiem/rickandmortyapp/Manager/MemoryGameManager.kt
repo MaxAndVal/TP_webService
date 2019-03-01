@@ -9,12 +9,13 @@ import com.example.lpiem.rickandmortyapp.Model.Tile
 import com.example.lpiem.rickandmortyapp.R
 import com.example.lpiem.rickandmortyapp.Util.SingletonHolder
 import java.util.*
+import kotlin.collections.ArrayList
 
 class MemoryGameManager private constructor(private val context: Context){
 
     companion object : SingletonHolder<MemoryGameManager, Context>(::MemoryGameManager)
 
-    private val animationTime = 500L
+    private val animationTime = 350L
     private var halfTurn = false
     private var listOfTiles: MutableList<Tile> = ArrayList()
     private var clickedElements: MutableList<Tile> = ArrayList()
@@ -22,6 +23,7 @@ class MemoryGameManager private constructor(private val context: Context){
     var displayNewScore = MutableLiveData<Int>()
     var score = 0
     var turn = 8
+    private val rewards : MutableList<Int> = ArrayList()
 
     //TODO: manage web call to grab list of unique images
     fun initList(lisOfImageView: List<ImageView>, imageViewsListeners: MutableLiveData<MutableList<Tile>>) {
@@ -31,6 +33,7 @@ class MemoryGameManager private constructor(private val context: Context){
                 Pair(R.drawable.test3, 3), Pair(R.drawable.test4, 4),
                 Pair(R.drawable.test5, 5), Pair(R.drawable.test6, 6)
         )
+
 
         var rand = Math.abs(Random().nextInt() % 10) * 2
         listOfPictures.addAll(listOfPictures)
@@ -72,7 +75,7 @@ class MemoryGameManager private constructor(private val context: Context){
             view.setImageResource(drawable)
             view.animate().scaleX(1f).setDuration(animationTime).start()
             view.isClickable = true
-            if (onChange) clickedElements.onChange(tile)
+            if (onChange) clickedElements.onTwoTilesTapped(newTile = tile)
         }, animationTime)
         tile.tapped = !tile.tapped
     }
@@ -88,7 +91,7 @@ class MemoryGameManager private constructor(private val context: Context){
             view.setImageResource(drawable)
             view.animate().scaleX(1f).setDuration(animationTime).start()
             view.isClickable = true
-            if (onChange) clickedElements.onChange(tile)
+            if (onChange) clickedElements.onTwoTilesTapped(newTile = tile)
         }, animationTime)
 
     }
@@ -103,18 +106,18 @@ class MemoryGameManager private constructor(private val context: Context){
         return turn
     }
 
-    // extension
-    private fun MutableList<Tile>.onChange(tile: Tile) {
+    // MutableList<Tile> extension
+    private fun MutableList<Tile>.onTwoTilesTapped(newTile: Tile) {
 
         turn = isNewTurn()
         displayNewTurn.postValue(turn)
 
-        // add only if different tile or list empty
+        // add only if different newTile or list empty
         val handler = Handler()
         if (this.isEmpty()) {
-            this.add(tile)
-        } else if (tile != this.first()) {
-            this.add(tile)
+            this.add(newTile)
+        } else if (newTile != this.first()) {
+            this.add(newTile)
         }
 
         if (this.size % 2 == 0 && this.size != 0) {
@@ -137,7 +140,7 @@ class MemoryGameManager private constructor(private val context: Context){
                 secondTile.tileView.setOnClickListener {
                     toast.show()
                 }
-
+                rewards.add(newTile.refId)
                 this.clear()
             }
         }
@@ -146,8 +149,18 @@ class MemoryGameManager private constructor(private val context: Context){
             for (item in listOfTiles) {
                 item.tileView.setOnClickListener { }
             }
-            Toast.makeText(context, String.format(context.getString(R.string.memory_game_over), score, " "), Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, String.format(context.getString(R.string.memory_game_over), score, rewards.toFormattedString()) , Toast.LENGTH_SHORT).show()
         }
     }
 
+    // MutableList<Int> extension
+    private fun MutableList<Int>.toFormattedString(): String {
+        val result = StringBuilder()
+        result.append(context.getString(R.string.cards_won))
+        for (item in this) {
+            result.append(item)
+            result.append("\n")
+        }
+        return result.toString()
+    }
 }
