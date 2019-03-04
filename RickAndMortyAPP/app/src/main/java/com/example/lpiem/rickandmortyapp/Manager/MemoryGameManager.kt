@@ -1,15 +1,28 @@
 package com.example.lpiem.rickandmortyapp.Manager
 
 import android.content.Context
+import android.graphics.drawable.Drawable
 import android.os.Handler
+import android.util.Log
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
+import com.example.lpiem.rickandmortyapp.Data.RickAndMortyRetrofitSingleton
+import com.example.lpiem.rickandmortyapp.Model.ListOfCards
 import com.example.lpiem.rickandmortyapp.Model.Tile
 import com.example.lpiem.rickandmortyapp.R
 import com.example.lpiem.rickandmortyapp.Util.SingletonHolder
+import com.example.lpiem.rickandmortyapp.Util.observeOnce
+import com.example.lpiem.rickandmortyapp.View.Memory.MemoryActivity
+import com.example.lpiem.rickandmortyapp.View.TAG
+import java.io.IOException
+import java.io.InputStream
+import java.net.MalformedURLException
+import java.net.URL
 import java.util.*
 import kotlin.collections.ArrayList
+
 
 class MemoryGameManager private constructor(private val context: Context){
 
@@ -23,22 +36,59 @@ class MemoryGameManager private constructor(private val context: Context){
     var displayNewScore = MutableLiveData<Int>()
     var score = 0
     var turn = 8
-    private val rewards : MutableList<Int> = ArrayList()
+    private val rewards : MutableList<String> = ArrayList()
+    private val rickAndMortyAPI = RickAndMortyRetrofitSingleton.getInstance(context)
+    private var listOfCardsLiveData = MutableLiveData<ListOfCards>()
+    private var list: MutableList<Pair<Drawable, String>> = ArrayList()
+    var activity: MemoryActivity? = null
+    private var listOfImgView: List<ImageView> = ArrayList()
+    private var viewListeners = MutableLiveData<MutableList<Tile>>()
 
-    //TODO: manage web call to grab list of unique images
-    fun initList(lisOfImageView: List<ImageView>, imageViewsListeners: MutableLiveData<MutableList<Tile>>) {
+    fun initCardList(amount: Int, lisOfImageView: List<ImageView>, imageViewsListeners: MutableLiveData<MutableList<Tile>>) {
+        listOfImgView = lisOfImageView
+        viewListeners = imageViewsListeners
+        listOfCardsLiveData = rickAndMortyAPI.getCardList(amount)
+        listOfCardsLiveData.observeOnce(Observer {listOfCards ->
+            getPicturesFromList(listOfCards)
+        })
 
-        val listOfPictures: MutableList<Pair<Int, Int>> = mutableListOf(
-                Pair(R.drawable.test1, 1), Pair(R.drawable.test2, 2),
-                Pair(R.drawable.test3, 3), Pair(R.drawable.test4, 4),
-                Pair(R.drawable.test5, 5), Pair(R.drawable.test6, 6)
-        )
+    }
 
+    private fun getPicturesFromList(listOfCards: ListOfCards) {
+        //Create a Drawable for each url
+        for (card in listOfCards.cards!!) {
+            Thread(Runnable {
+                val result = try {
+                    Drawable.createFromStream(
+                            URL(card.cardImage).content as InputStream, card.cardName)
+                } catch (e: MalformedURLException) {
+                    e.printStackTrace()
+                    null
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                    null
+                }
 
-        var rand = Math.abs(Random().nextInt() % 10) * 2
+                activity?.runOnUiThread {
+                    list.add(Pair(result!!, card.cardName!!))
+                    if (list.size == 6) {
+                        initGame(listOfImgView, viewListeners, list)
+                        //destroying reference
+                        activity = null
+                        Log.d(TAG, "___done")
+                        return@runOnUiThread
+                    }
+                }
+            }).start()
+        }
+    }
+
+    private fun initGame(lisOfImageView: List<ImageView>, imageViewsListeners: MutableLiveData<MutableList<Tile>>, listOfPictures: MutableList<Pair<Drawable, String>>) {
+
         listOfPictures.addAll(listOfPictures)
         var finalListOfPictures = listOfPictures.toList()
 
+        var rand = Math.abs(Random().nextInt() % 10) * 2
         while (rand > 0) {
             finalListOfPictures = finalListOfPictures.shuffled()
             rand--
@@ -50,7 +100,7 @@ class MemoryGameManager private constructor(private val context: Context){
             val ref = finalListOfPictures[position].second
             val imageView = lisOfImageView[position]
             listOfTiles.add(Tile(image = image,
-                    refId = ref,
+                    refName = ref,
                     placeHolder = R.drawable.card_back,
                     tapped = false,
                     tileView = imageView)
@@ -64,15 +114,15 @@ class MemoryGameManager private constructor(private val context: Context){
         return turn == 0
     }
 
-    fun setRealImage(view: ImageView, placeHolder: Int, handler: Handler, image: Int, tile: Tile, onChange: Boolean) {
-        var drawable: Int
+    fun setRealImage(view: ImageView, placeHolder: Int, handler: Handler, image: Drawable, tile: Tile, onChange: Boolean) {
+        var drawable: Drawable
         view.animate().scaleX(0f).setDuration(animationTime).start()
-        drawable = placeHolder
-        view.setImageResource(drawable)
+        drawable = context.getDrawable(placeHolder)!!//placeHolder
+        view.setImageDrawable(drawable)
         view.isClickable = false
         handler.postDelayed({
             drawable = image
-            view.setImageResource(drawable)
+            view.setImageDrawable(drawable)
             view.animate().scaleX(1f).setDuration(animationTime).start()
             view.isClickable = true
             if (onChange) clickedElements.onTwoTilesTapped(newTile = tile)
@@ -80,15 +130,16 @@ class MemoryGameManager private constructor(private val context: Context){
         tile.tapped = !tile.tapped
     }
 
-    fun setPlaceHolder(view: ImageView, placeHolder: Int, handler: Handler, image: Int, tile: Tile, onChange: Boolean) {
-        var drawable: Int
+    //TODO : modify like the other
+    fun setPlaceHolder(view: ImageView, placeHolder: Int, handler: Handler, image: Drawable, tile: Tile, onChange: Boolean) {
+        var drawable: Drawable
         view.animate().scaleX(0f).setDuration(animationTime).start()
         drawable = image
-        view.setImageResource(drawable)
+        view.setImageDrawable(drawable)
         view.isClickable = false
         handler.postDelayed({
-            drawable = placeHolder
-            view.setImageResource(drawable)
+            drawable = context.getDrawable(placeHolder)!!//placeHolder
+            view.setImageDrawable(drawable)
             view.animate().scaleX(1f).setDuration(animationTime).start()
             view.isClickable = true
             if (onChange) clickedElements.onTwoTilesTapped(newTile = tile)
@@ -140,7 +191,7 @@ class MemoryGameManager private constructor(private val context: Context){
                 secondTile.tileView.setOnClickListener {
                     toast.show()
                 }
-                rewards.add(newTile.refId)
+                rewards.add(newTile.refName)
                 this.clear()
             }
         }
@@ -149,12 +200,12 @@ class MemoryGameManager private constructor(private val context: Context){
             for (item in listOfTiles) {
                 item.tileView.setOnClickListener { }
             }
-            Toast.makeText(context, String.format(context.getString(R.string.memory_game_over), score, rewards.toFormattedString()) , Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, String.format(context.getString(R.string.memory_game_over), score, rewards.toFormattedString()) , Toast.LENGTH_LONG).show()
         }
     }
 
     // MutableList<Int> extension
-    private fun MutableList<Int>.toFormattedString(): String {
+    private fun MutableList<String>.toFormattedString(): String {
         val result = StringBuilder()
         result.append(context.getString(R.string.cards_won))
         for (item in this) {

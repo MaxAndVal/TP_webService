@@ -135,3 +135,7 @@ P
  app/src/main/AndroidManifest.xml,8/c/8c55c3ccc257e5907959013f99656e4c8ec3903e
 @
 app/build.gradle,f/4/f4a01d6a4fcb971362ec00a83903fd3902f52164
+Å
+Qapp/src/main/java/com/example/lpiem/rickandmortyapp/View/Memory/MemoryActivity.kt,6/2/62131d402166e04d56332e45be4260e0c2352085
+Ä
+Papp/src/main/java/com/example/lpiem/rickandmortyapp/Manager/MemoryGameManager.kt,e/5/e53069893d32fab2b8c3b0187d76037ebf1c13aa

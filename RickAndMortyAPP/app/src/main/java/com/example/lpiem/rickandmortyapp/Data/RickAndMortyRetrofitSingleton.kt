@@ -208,8 +208,13 @@ class RickAndMortyRetrofitSingleton private constructor(private val context: Con
     }
 
     fun updateUserInfo(userId: Int?): MutableLiveData<ResponseFromApi> {
-        val updateUser = instance!!.getUserById(userId!!)
-        return callRetrofit(updateUser, RetrofitCallTypes.UPDATE_USER_INFO) as MutableLiveData<ResponseFromApi>
+        currentCall = instance!!.getUserById(userId!!)
+        return callRetrofit(currentCall!!, RetrofitCallTypes.UPDATE_USER_INFO) as MutableLiveData<ResponseFromApi>
+    }
+
+    fun getCardList(amount: Int): MutableLiveData<ListOfCards> {
+        currentCall = instance!!.getCardSelection(amount)
+        return callRetrofit(currentCall!!, LIST_OF_CARDS) as MutableLiveData<ListOfCards>
     }
 
 }

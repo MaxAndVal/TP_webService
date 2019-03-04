@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.os.Handler
 import androidx.appcompat.app.AppCompatActivity
 import com.example.lpiem.rickandmortyapp.R
-import com.example.lpiem.rickandmortyapp.View.Memory.MemoryActivity
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_splash_screen.*
 
@@ -21,10 +20,10 @@ class SplashScreen : AppCompatActivity() {
         val handler = Handler()
         handler.postDelayed({
             //FIXME: just for testing more quickly
-            val intent = Intent(this@SplashScreen, MemoryActivity::class.java)
-            startActivity(intent)
-            //val mainActivityIntent = Intent(this@SplashScreen, LoginActivity::class.java)
-            //startActivity(mainActivityIntent)
+            //val intent = Intent(this@SplashScreen, MemoryActivity::class.java)
+            //startActivity(intent)
+            val mainActivityIntent = Intent(this@SplashScreen, LoginActivity::class.java)
+            startActivity(mainActivityIntent)
             finish()
         }, 2500L)
 

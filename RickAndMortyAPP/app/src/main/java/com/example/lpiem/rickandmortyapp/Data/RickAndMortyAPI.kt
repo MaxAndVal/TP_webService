@@ -29,7 +29,7 @@ interface RickAndMortyAPI {
             @Path("id") userId: Int
     ): Call<ResponseFromApi>
 
-    ///GAME
+    ///KAAMELOTT GAME
 
     @PUT("/users/playGame/{id}")
     fun putNewDate(
@@ -132,5 +132,12 @@ interface RickAndMortyAPI {
     @POST("/users/{id}/market/{cardId}")
     fun addCardToMarket(
             @Path("id") userId: Int, @Path("cardId") cardId: Int, @Body body: JsonObject
+    ): Call<ListOfCards>
+
+    ///MEMORY GAME
+
+    @GET("cards/randomSelectionFor/{amount}")
+    fun getCardSelection(
+            @Path("amount") amount: Int
     ): Call<ListOfCards>
 }

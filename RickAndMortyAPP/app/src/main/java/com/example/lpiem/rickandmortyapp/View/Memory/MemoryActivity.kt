@@ -24,6 +24,7 @@ class MemoryActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_memory)
+        memoryGameManager.activity = this
 
         turnObserver = Observer { currentTurn ->
             tv_turn.text = String.format(getString(R.string.turn_lefts), currentTurn)
@@ -50,7 +51,7 @@ class MemoryActivity : AppCompatActivity() {
         val lisOfImageView = listOf(iv_1, iv_2, iv_3, iv_4, iv_5, iv_6, iv_7, iv_8, iv_9, iv_10,
                 iv_11, iv_12)
 
-        memoryGameManager.initList(lisOfImageView, imageViewsToListen)
+        memoryGameManager.initCardList(6, lisOfImageView, imageViewsToListen)
 
     }
 
