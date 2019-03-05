@@ -42,12 +42,13 @@ class MemoryGameManager private constructor(private val context: Context){
     private val rickAndMortyAPI = RickAndMortyRetrofitSingleton.getInstance(context)
     private var listOfCardsLiveData = MutableLiveData<ListOfCards>()
     private var list: MutableList<Pair<Drawable, String>> = ArrayList()
-    var activity: MemoryActivity? = null
     private var listOfImgView: List<ImageView> = ArrayList()
     private var viewListeners = MutableLiveData<MutableList<Tile>>()
+    private var rewardsLiveData = MutableLiveData<MutableList<String>>()
 
 
-    fun initCardList(amount: Int, lisOfImageView: List<ImageView>, imageViewsListeners: MutableLiveData<MutableList<Tile>>) {
+    fun initCardList(amount: Int, lisOfImageView: List<ImageView>, imageViewsListeners: MutableLiveData<MutableList<Tile>>, rewardsListener: MutableLiveData<MutableList<String>>) {
+        rewardsLiveData = rewardsListener
         listOfImgView = lisOfImageView
         viewListeners = imageViewsListeners
         listOfCardsLiveData = rickAndMortyAPI.getCardList(amount)
@@ -59,7 +60,6 @@ class MemoryGameManager private constructor(private val context: Context){
 
     private fun getPicturesFromList(listOfCards: ListOfCards) {
 
-        //TODO: find a better way to do this ...
         //Create a Drawable for each url
         for (card in listOfCards.cards!!) {
             Thread(Runnable {
@@ -74,21 +74,27 @@ class MemoryGameManager private constructor(private val context: Context){
                     null
                 }
 
-                activity?.runOnUiThread {
-                    list.add(Pair(result!!, card.cardName!!))
-                    if (list.size == 6) {
-                        initGame(listOfImgView, viewListeners, list)
-                        //destroying reference
-                        activity = null
-                        Log.d(TAG, "___done")
+                (context as MemoryActivity).runOnUiThread {
+                    if (result == null) {
+                        Toast.makeText(context, "Une erreur est survenue lors de la récupération des images ...", Toast.LENGTH_LONG).show()
                         return@runOnUiThread
+                    } else {
+                        list.add(Pair(result, card.cardName!!))
+                        if (list.size == 6) {
+                            initGame(listOfImgView, viewListeners, list)
+                            Log.d(TAG, "___done")
+                            return@runOnUiThread
+                        }
                     }
+
                 }
             }).start()
         }
     }
 
-    private fun initGame(lisOfImageView: List<ImageView>, imageViewsListeners: MutableLiveData<MutableList<Tile>>, listOfPictures: MutableList<Pair<Drawable, String>>) {
+    private fun initGame(lisOfImageView: List<ImageView>,
+                         imageViewsListeners: MutableLiveData<MutableList<Tile>>,
+                         listOfPictures: MutableList<Pair<Drawable, String>>) {
 
         listOfPictures.addAll(listOfPictures)
         var finalListOfPictures = listOfPictures.toList()
@@ -106,7 +112,7 @@ class MemoryGameManager private constructor(private val context: Context){
             val imageView = lisOfImageView[position]
             listOfTiles.add(Tile(image = image,
                     refName = ref,
-                    placeHolder = R.drawable.card_back,
+                    placeHolder = R.drawable.memory_card_back,
                     tapped = false,
                     tileView = imageView)
             )
@@ -123,10 +129,10 @@ class MemoryGameManager private constructor(private val context: Context){
         return turn == 0
     }
 
-    fun setRealImage(view: ImageView, placeHolder: Int, handler: Handler, image: Drawable, tile: Tile, onChange: Boolean) {
+    fun setRealImage(view: ImageView, placeHolder: Int, handler: Handler, image: Drawable, tile: Tile, onTwoTilesTapped: Boolean) {
         var drawable: Drawable
         view.animate().scaleX(0f).setDuration(animationTime).start()
-        drawable = context.getDrawable(placeHolder)!!//placeHolder
+        drawable = context.getDrawable(placeHolder)!!
         view.setImageDrawable(drawable)
         view.isClickable = false
         handler.postDelayed({
@@ -134,23 +140,23 @@ class MemoryGameManager private constructor(private val context: Context){
             view.setImageDrawable(drawable)
             view.animate().scaleX(1f).setDuration(animationTime).start()
             view.isClickable = true
-            if (onChange) clickedElements.onTwoTilesTapped(newTile = tile)
+            if (onTwoTilesTapped) clickedElements.onTwoTilesTapped(newTile = tile)
         }, animationTime)
         tile.tapped = !tile.tapped
     }
 
-    fun setPlaceHolder(view: ImageView, placeHolder: Int, handler: Handler, image: Drawable, tile: Tile, onChange: Boolean) {
+    fun setPlaceHolder(view: ImageView, placeHolder: Int, handler: Handler, image: Drawable, tile: Tile, onTwoTilesTapped: Boolean) {
         var drawable: Drawable
         view.animate().scaleX(0f).setDuration(animationTime).start()
         drawable = image
         view.setImageDrawable(drawable)
         view.isClickable = false
         handler.postDelayed({
-            drawable = context.getDrawable(placeHolder)!!//placeHolder
+            drawable = context.getDrawable(placeHolder)!!
             view.setImageDrawable(drawable)
             view.animate().scaleX(1f).setDuration(animationTime).start()
             view.isClickable = true
-            if (onChange) clickedElements.onTwoTilesTapped(newTile = tile)
+            if (onTwoTilesTapped) clickedElements.onTwoTilesTapped(newTile = tile)
         }, animationTime)
 
     }
@@ -208,18 +214,8 @@ class MemoryGameManager private constructor(private val context: Context){
             for (item in listOfTiles) {
                 item.tileView.setOnClickListener { }
             }
-            Toast.makeText(context, String.format(context.getString(R.string.memory_game_over), score, rewards.toFormattedString()) , Toast.LENGTH_LONG).show()
+            rewardsLiveData.postValue(rewards)
         }
     }
 
-    // MutableList<Int> extension
-    private fun MutableList<String>.toFormattedString(): String {
-        val result = StringBuilder()
-        result.append(context.getString(R.string.cards_won))
-        for (item in this) {
-            result.append(item)
-            result.append("\n")
-        }
-        return result.toString()
-    }
 }

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.view.View.GONE
 import android.view.View.VISIBLE
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
@@ -11,6 +12,7 @@ import com.example.lpiem.rickandmortyapp.Manager.LoginAppManager
 import com.example.lpiem.rickandmortyapp.Manager.MemoryGameManager
 import com.example.lpiem.rickandmortyapp.Model.Tile
 import com.example.lpiem.rickandmortyapp.R
+import com.example.lpiem.rickandmortyapp.Util.observeOnce
 import kotlinx.android.synthetic.main.activity_memory.*
 
 
@@ -24,6 +26,7 @@ class MemoryActivity : AppCompatActivity() {
     private var displayTurn = MutableLiveData<Int>()
     private var displayScore = MutableLiveData<Int>()
     private var imageViewsToListen = MutableLiveData<MutableList<Tile>>()
+    private var rewardsLiveData = MutableLiveData<MutableList<String>>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,7 +37,13 @@ class MemoryActivity : AppCompatActivity() {
         here for it before doing anything or changing text for tv_loading in
         "Vous avez déjà joué aujourd'hui !!" */
 
-        memoryGameManager.activity = this
+        rewardsLiveData.observeOnce( Observer { rewards ->
+            Toast.makeText(this,
+                    String.format(getString(R.string.memory_game_over),
+                            memoryGameManager.score,
+                            rewards.toFormattedString()),
+                    Toast.LENGTH_LONG).show()
+        })
 
         turnObserver = Observer { currentTurn ->
             tv_turn.text = String.format(getString(R.string.turn_lefts), currentTurn)
@@ -61,9 +70,7 @@ class MemoryActivity : AppCompatActivity() {
         val lisOfImageView = listOf(iv_1, iv_2, iv_3, iv_4, iv_5, iv_6, iv_7, iv_8, iv_9, iv_10,
                 iv_11, iv_12)
 
-
-        memoryGameManager.initCardList(6, lisOfImageView, imageViewsToListen)
-
+        memoryGameManager.initCardList(6, lisOfImageView, imageViewsToListen, rewardsLiveData)
     }
 
     private fun setAnimationListener(listOfTiles: MutableList<Tile>) {
@@ -89,6 +96,17 @@ class MemoryActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    // MutableList<String> extension
+    private fun MutableList<String>.toFormattedString(): String {
+        val result = StringBuilder()
+        result.append(getString(R.string.cards_won))
+        for (item in this) {
+            result.append(item)
+            result.append("\n")
+        }
+        return result.toString()
     }
 
     override fun onBackPressed() {
