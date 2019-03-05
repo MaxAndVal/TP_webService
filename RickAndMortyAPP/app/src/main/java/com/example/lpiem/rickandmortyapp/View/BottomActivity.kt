@@ -9,7 +9,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import com.example.lpiem.rickandmortyapp.Manager.HomeManager
+import com.example.lpiem.rickandmortyapp.Manager.KaamelottManager
 import com.example.lpiem.rickandmortyapp.Manager.LoginAppManager
 import com.example.lpiem.rickandmortyapp.R
 import com.example.lpiem.rickandmortyapp.View.Collection.list.CollectionFragment
@@ -66,7 +66,7 @@ class BottomActivity : AppCompatActivity() {
     }
 
     private fun openDeck(deckToOpen: Int) {
-        if(deckToOpen>0){
+        if (deckToOpen > 0) {
             val openIntent = Intent(this, OpenDeckActivity::class.java)
             startActivity(openIntent)
         }
@@ -103,9 +103,9 @@ class BottomActivity : AppCompatActivity() {
     }
 
     private fun clearGame() {
-        val homeManager = HomeManager.getInstance(this)
-        homeManager.turn = 0
-        homeManager.score = 0
+        val kaamelottManager = KaamelottManager.getInstance(this)
+        kaamelottManager.turn = 0
+        kaamelottManager.score = 0
         finish()
     }
 
@@ -116,9 +116,13 @@ class BottomActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        val deckToOpen = loginAppManager.connectedUser!!.deckToOpen
-        tv_deckToOpen.text = deckToOpen.toString()
-        tv_deckToOpen.setOnClickListener { openDeck(deckToOpen!!) }
+        tv_deckToOpen.setOnClickListener {
+            val deckToOpen = loginAppManager.connectedUser?.deckToOpen
+            if (deckToOpen != null) {
+                tv_deckToOpen.text = deckToOpen.toString()
+                openDeck(deckToOpen)
+            }
+        }
         tv_wallet.text = String.format(getString(R.string.wallet_amount), loginAppManager.connectedUser?.userWallet, " ")
         tv_deckToOpen.text = loginAppManager.connectedUser?.deckToOpen.toString()
     }

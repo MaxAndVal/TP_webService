@@ -4,7 +4,7 @@ interface HomeDisplayUI {
 
     fun updateUI(citation: String, solution: String, list: List<String>)
 
-    fun displayFragmentContent()
+    fun displayActivityContent()
 
-    fun updatePickleRicksAmount(arg1: Int, arg2: String)
+    //fun updatePickleRicksAmount(arg1: Int, arg2: String)
 }

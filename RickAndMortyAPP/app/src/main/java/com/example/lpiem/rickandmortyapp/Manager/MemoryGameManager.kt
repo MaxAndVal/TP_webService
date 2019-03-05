@@ -75,10 +75,13 @@ class MemoryGameManager private constructor(private val context: Context){
                 }
 
                 (context as MemoryActivity).runOnUiThread {
+                    Log.d(TAG, "in Progress...")
                     if (result == null) {
+                        Log.d(TAG, "result null ...")
                         Toast.makeText(context, "Une erreur est survenue lors de la récupération des images ...", Toast.LENGTH_LONG).show()
                         return@runOnUiThread
                     } else {
+                        Log.d(TAG, "next step ...")
                         list.add(Pair(result, card.cardName!!))
                         if (list.size == 6) {
                             initGame(listOfImgView, viewListeners, list)
@@ -214,6 +217,7 @@ class MemoryGameManager private constructor(private val context: Context){
             for (item in listOfTiles) {
                 item.tileView.setOnClickListener { }
             }
+            list.clear()
             rewardsLiveData.postValue(rewards)
         }
     }

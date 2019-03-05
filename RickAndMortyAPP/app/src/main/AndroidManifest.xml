@@ -11,7 +11,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".View.Memory.MemoryActivity"></activity>
+        <activity android:name=".View.Kaamelott.KaamelottActivity"></activity>
+        <activity android:name=".View.Memory.MemoryActivity" />
         <activity android:name=".View.Market.MarketActivity" />
         <activity android:name=".View.OpenDeck.OpenDeckActivity" />
         <activity
