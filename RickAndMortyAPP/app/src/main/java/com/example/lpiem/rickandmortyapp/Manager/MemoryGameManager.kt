@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.drawable.Drawable
 import android.os.Handler
 import android.util.Log
+import android.view.View.VISIBLE
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
@@ -28,6 +29,7 @@ class MemoryGameManager private constructor(private val context: Context){
 
     companion object : SingletonHolder<MemoryGameManager, Context>(::MemoryGameManager)
 
+    //TODO : variable renaming
     private val animationTime = 350L
     private var halfTurn = false
     private var listOfTiles: MutableList<Tile> = ArrayList()
@@ -44,6 +46,7 @@ class MemoryGameManager private constructor(private val context: Context){
     private var listOfImgView: List<ImageView> = ArrayList()
     private var viewListeners = MutableLiveData<MutableList<Tile>>()
 
+
     fun initCardList(amount: Int, lisOfImageView: List<ImageView>, imageViewsListeners: MutableLiveData<MutableList<Tile>>) {
         listOfImgView = lisOfImageView
         viewListeners = imageViewsListeners
@@ -55,6 +58,8 @@ class MemoryGameManager private constructor(private val context: Context){
     }
 
     private fun getPicturesFromList(listOfCards: ListOfCards) {
+
+        //TODO: find a better way to do this ...
         //Create a Drawable for each url
         for (card in listOfCards.cards!!) {
             Thread(Runnable {
@@ -107,7 +112,11 @@ class MemoryGameManager private constructor(private val context: Context){
             )
         }
 
+        for (view in lisOfImageView) {
+            view.visibility = VISIBLE
+        }
         imageViewsListeners.postValue(listOfTiles)
+
     }
 
     private fun isGameFinished(turn: Int): Boolean {
@@ -130,7 +139,6 @@ class MemoryGameManager private constructor(private val context: Context){
         tile.tapped = !tile.tapped
     }
 
-    //TODO : modify like the other
     fun setPlaceHolder(view: ImageView, placeHolder: Int, handler: Handler, image: Drawable, tile: Tile, onChange: Boolean) {
         var drawable: Drawable
         view.animate().scaleX(0f).setDuration(animationTime).start()
