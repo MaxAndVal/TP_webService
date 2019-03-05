@@ -72,8 +72,8 @@ class HomeManager private constructor(private var context: Context) {
         val code = response.code
         val message = response.message
         if (code == SUCCESS) {
-            val results = response.results
-            loginAppManager.gameInProgress = getDate() != results?.userLastGame
+            val user = response.results
+            loginAppManager.gameInProgress = getDate() != user?.userLastGame
             homeDisplayUI.displayFragmentContent()
         } else {
             Toast.makeText(context, String.format(context.getString(R.string.code_message_userNotFound), code, message), Toast.LENGTH_SHORT).show()

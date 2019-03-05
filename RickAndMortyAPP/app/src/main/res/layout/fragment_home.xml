@@ -41,11 +41,12 @@
     <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="0dp"
         android:layout_marginBottom="16dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_actual_turn">
+        app:layout_constraintTop_toBottomOf="@id/tv_actual_turn"
+        app:layout_constraintBottom_toTopOf="@id/btn_memory">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -61,7 +62,7 @@
                 android:textAlignment="center"
                 android:visibility="invisible"
                 tools:visibility="visible"
-                tools:text="dvjsdhcjshvisdhviGTGHsdfvidfsijvnfdijndjsinvjfds"
+                tools:text="@tools:sample/lorem/random"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -141,6 +142,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btn_memory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:text="memory"
+        app:layout_constraintBottom_toTopOf="@+id/btn_perso1"
+        app:layout_constraintStart_toStartOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
