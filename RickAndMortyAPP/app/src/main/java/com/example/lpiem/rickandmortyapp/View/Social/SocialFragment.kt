@@ -23,9 +23,6 @@ private const val ARG_PARAM2 = "param2"
 
 class SocialFragment : androidx.fragment.app.Fragment(), SocialActionsInterface {
 
-    private var param1: String? = null
-    private var param2: String? = null
-
     var listOfFriends: ListOfFriends? = null
     private lateinit var socialManager: SocialManager
     private lateinit var loginAppManager: LoginAppManager
@@ -34,24 +31,10 @@ class SocialFragment : androidx.fragment.app.Fragment(), SocialActionsInterface 
     var listOfPotentialFriends: List<Friend>? = ArrayList()
     private var socialAdapter: SocialAdapter? = null
 
-    companion object {
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-                SocialFragment().apply {
-                    arguments = Bundle().apply {
-                        putString(ARG_PARAM1, param1)
-                        putString(ARG_PARAM2, param2)
-                    }
-                }
-    }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+
         loginAppManager = LoginAppManager.getInstance(context!!)
 
         socialManager = SocialManager.getInstance(context!!)
@@ -59,7 +42,6 @@ class SocialFragment : androidx.fragment.app.Fragment(), SocialActionsInterface 
             socialManager.captureFragmentInstance(this)
         }
     }
-
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -76,9 +58,6 @@ class SocialFragment : androidx.fragment.app.Fragment(), SocialActionsInterface 
         btn_searchFriends.setOnClickListener { socialManager.searchForFriends(sv_friends.query.toString()) }
         btn_friendsRequest.setOnClickListener { socialManager.friendsRequest(this) }
     }
-
-
-
 
     override fun addFriends(item: Friend) {
         Log.d(TAG, item.toString())
