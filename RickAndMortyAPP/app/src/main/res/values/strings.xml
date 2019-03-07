@@ -71,5 +71,6 @@
     <string name="memory_game_over">Partie terminée. Votre score final est de %d.%s</string>
     <string name="turn_lefts">Coups restants : %d</string>
     <string name="cards_won">\nVous avez gagné les cartes :\n</string>
+    <string name="error_fetching_pictures">Une erreur est survenue lors de la récupération des images ...</string>
 
 </resources>
