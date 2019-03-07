@@ -15,17 +15,12 @@ import com.example.lpiem.rickandmortyapp.Model.Tile
 import com.example.lpiem.rickandmortyapp.R
 import com.example.lpiem.rickandmortyapp.Util.SingletonHolder
 import com.example.lpiem.rickandmortyapp.Util.observeOnce
-import com.example.lpiem.rickandmortyapp.View.Memory.MemoryActivity
 import com.example.lpiem.rickandmortyapp.View.TAG
-import java.io.IOException
-import java.io.InputStream
-import java.net.MalformedURLException
-import java.net.URL
 import java.util.*
 import kotlin.collections.ArrayList
 
 
-class MemoryGameManager private constructor(private val context: Context){
+class MemoryGameManager private constructor(private val context: Context) {
 
     companion object : SingletonHolder<MemoryGameManager, Context>(::MemoryGameManager)
 
@@ -38,66 +33,64 @@ class MemoryGameManager private constructor(private val context: Context){
     var displayNewScore = MutableLiveData<Int>()
     var score = 0
     var turn = 8
-    private val rewards : MutableList<String> = ArrayList()
+    private val rewards: MutableList<String> = ArrayList()
     private val rickAndMortyAPI = RickAndMortyRetrofitSingleton.getInstance(context)
     private var listOfCardsLiveData = MutableLiveData<ListOfCards>()
-    private var list: MutableList<Pair<Drawable, String>> = ArrayList()
+    var list: MutableList<Pair<Drawable, String>> = ArrayList()
     private var listOfImgView: List<ImageView> = ArrayList()
     private var viewListeners = MutableLiveData<MutableList<Tile>>()
     private var rewardsLiveData = MutableLiveData<MutableList<String>>()
+    @Volatile
+    private lateinit var thread: Thread
+    private lateinit var drawableListLiveData: MutableLiveData<Pair<MutableList<Drawable?>, ListOfCards>>
 
 
-    fun initCardList(amount: Int, lisOfImageView: List<ImageView>, imageViewsListeners: MutableLiveData<MutableList<Tile>>, rewardsListener: MutableLiveData<MutableList<String>>) {
+    fun initCardList(amount: Int, lisOfImageView: List<ImageView>, imageViewsListeners: MutableLiveData<MutableList<Tile>>, rewardsListener: MutableLiveData<MutableList<String>>, drawLiveData: MutableLiveData<Pair<MutableList<Drawable?>, ListOfCards>>) {
+        drawableListLiveData = drawLiveData
         rewardsLiveData = rewardsListener
         listOfImgView = lisOfImageView
         viewListeners = imageViewsListeners
         listOfCardsLiveData = rickAndMortyAPI.getCardList(amount)
-        listOfCardsLiveData.observeOnce(Observer {listOfCards ->
+        listOfCardsLiveData.observeOnce(Observer { listOfCards ->
             getPicturesFromList(listOfCards)
         })
 
     }
 
-    private fun getPicturesFromList(listOfCards: ListOfCards) {
-
-        //Create a Drawable for each url
-        for (card in listOfCards.cards!!) {
-            Thread(Runnable {
-                val result = try {
-                    Drawable.createFromStream(
-                            URL(card.cardImage).content as InputStream, card.cardName)
-                } catch (e: MalformedURLException) {
-                    e.printStackTrace()
-                    null
-                } catch (e: IOException) {
-                    e.printStackTrace()
-                    null
-                }
-
-                (context as MemoryActivity).runOnUiThread {
-                    Log.d(TAG, "in Progress...")
-                    if (result == null) {
-                        Log.d(TAG, "result null ...")
-                        Toast.makeText(context, "Une erreur est survenue lors de la récupération des images ...", Toast.LENGTH_LONG).show()
-                        return@runOnUiThread
-                    } else {
-                        Log.d(TAG, "next step ...")
-                        list.add(Pair(result, card.cardName!!))
-                        if (list.size == 6) {
-                            initGame(listOfImgView, viewListeners, list)
-                            Log.d(TAG, "___done")
-                            return@runOnUiThread
-                        }
-                    }
-
-                }
-            }).start()
-        }
+    fun interruptThread() {
+        thread.interrupt()
     }
 
-    private fun initGame(lisOfImageView: List<ImageView>,
-                         imageViewsListeners: MutableLiveData<MutableList<Tile>>,
-                         listOfPictures: MutableList<Pair<Drawable, String>>) {
+    private fun getPicturesFromList(listOfCards: ListOfCards) {
+
+        val runnable = Runnable {
+            val resultList: kotlin.collections.MutableList<android.graphics.drawable.Drawable?> = ArrayList()
+            for (card in listOfCards.cards!!) {
+
+                val result = try {
+                    android.graphics.drawable.Drawable.createFromStream(
+                            java.net.URL(card.cardImage).content as java.io.InputStream, card.cardName)
+                } catch (e: java.net.MalformedURLException) {
+                    e.printStackTrace()
+                    null
+                } catch (e: java.io.IOException) {
+                    e.printStackTrace()
+                    null
+                }
+                resultList.add(result)
+            }
+            Log.d(TAG, resultList.toString())
+            drawableListLiveData.postValue(kotlin.Pair(resultList, listOfCards))
+        }
+
+        thread = Thread(runnable)
+        thread.start()
+
+    }
+
+    fun initGame(lisOfImageView: List<ImageView>,
+                 imageViewsListeners: MutableLiveData<MutableList<Tile>>,
+                 listOfPictures: MutableList<Pair<Drawable, String>>) {
 
         listOfPictures.addAll(listOfPictures)
         var finalListOfPictures = listOfPictures.toList()
