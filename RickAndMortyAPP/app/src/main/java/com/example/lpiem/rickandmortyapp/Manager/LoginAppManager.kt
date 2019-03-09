@@ -42,6 +42,7 @@ class LoginAppManager private constructor(private var context: Context) {
     private lateinit var googleBtnTextView: Button
     var connectedUser: User? = null
     var gameInProgress = true
+    var memoryInProgress = true
     private var loginLiveData = MutableLiveData<ResponseFromApi>()
 
     companion object : SingletonHolder<LoginAppManager, Context>(::LoginAppManager)
