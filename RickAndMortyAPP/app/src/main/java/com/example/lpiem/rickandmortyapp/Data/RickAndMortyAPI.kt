@@ -140,4 +140,9 @@ interface RickAndMortyAPI {
     fun getCardSelection(
             @Path("amount") amount: Int
     ): Call<ListOfCards>
+
+    @PUT("/users/playMemory/{id}")
+    fun putNewMemoryDate(
+            @Path("id") userId: Int, @Body body: JsonObject
+    ): Call<ResponseFromApi>
 }

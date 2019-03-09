@@ -14,6 +14,7 @@ import com.example.lpiem.rickandmortyapp.Manager.LoginAppManager
 import com.example.lpiem.rickandmortyapp.Manager.MemoryGameManager
 import com.example.lpiem.rickandmortyapp.Model.ListOfCards
 import com.example.lpiem.rickandmortyapp.Model.Tile
+import com.example.lpiem.rickandmortyapp.Model.User
 import com.example.lpiem.rickandmortyapp.R
 import com.example.lpiem.rickandmortyapp.Util.observeOnce
 import kotlinx.android.synthetic.main.activity_memory.*
@@ -23,6 +24,7 @@ class MemoryActivity : AppCompatActivity() {
 
     private val memoryGameManager = MemoryGameManager.getInstance(this)
     private val loginAppManager = LoginAppManager.getInstance(this)
+    private var startTheGame = MutableLiveData<Unit>()
     private lateinit var turnObserver: Observer<Int>
     private lateinit var scoreObserver: Observer<Int>
     private lateinit var initListeners: Observer<MutableList<Tile>>
@@ -32,6 +34,7 @@ class MemoryActivity : AppCompatActivity() {
     private var rewardsLiveData = MutableLiveData<MutableList<String>>()
     private var drawLiveData = MutableLiveData<Pair<MutableList<Drawable?>, ListOfCards>>()
     private lateinit var lisOfImageView: List<ImageView>
+    private var user: User? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,6 +45,8 @@ class MemoryActivity : AppCompatActivity() {
         here for it before doing anything or changing text for tv_loading in
         "Vous avez déjà joué aujourd'hui !!" */
 
+        user = loginAppManager.connectedUser
+
         rewardsLiveData.observeOnce(Observer { rewards ->
             Toast.makeText(this,
                     String.format(getString(R.string.memory_game_over),
@@ -50,15 +55,15 @@ class MemoryActivity : AppCompatActivity() {
                     Toast.LENGTH_LONG).show()
         })
 
-        drawLiveData.observeOnce(Observer {
-                for ((i, draw) in it.first.withIndex()) {
+        drawLiveData.observeOnce(Observer {drawAndCardList ->
+                for ((i, draw) in drawAndCardList.first.withIndex()) {
                     if (draw == null) {
                         Toast.makeText(this, getString(R.string.error_fetching_pictures),
                                 Toast.LENGTH_LONG).show()
                         memoryGameManager.interruptThread()
                         break
                     } else {
-                        memoryGameManager.list.add(Pair(draw, it.second.cards!![i].cardName!!))
+                        memoryGameManager.list.add(Pair(draw, drawAndCardList.second.cards!![i].cardName!!))
                         if (memoryGameManager.list.size == 6) {
                             memoryGameManager.initGame(lisOfImageView, imageViewsToListen, memoryGameManager.list)
                             memoryGameManager.interruptThread()
@@ -93,7 +98,16 @@ class MemoryActivity : AppCompatActivity() {
         lisOfImageView = listOf(iv_1, iv_2, iv_3, iv_4, iv_5, iv_6, iv_7, iv_8, iv_9, iv_10,
                 iv_11, iv_12)
 
-        memoryGameManager.initCardList(6, lisOfImageView, imageViewsToListen, rewardsLiveData, drawLiveData)
+        memoryGameManager.gameAvailable(user!!, startTheGame)
+        startTheGame.observeForever(Observer {
+
+            if (loginAppManager.memoryInProgress) {
+                memoryGameManager.initCardList(6, lisOfImageView, imageViewsToListen, rewardsLiveData, drawLiveData)
+            } else {
+                tv_loading.text = getString(R.string.try_an_other_game_later)
+            }
+
+        })
     }
 
     private fun setAnimationListener(listOfTiles: MutableList<Tile>) {

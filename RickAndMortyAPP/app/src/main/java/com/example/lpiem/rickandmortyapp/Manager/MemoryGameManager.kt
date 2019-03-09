@@ -10,12 +10,16 @@ import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.example.lpiem.rickandmortyapp.Data.RickAndMortyRetrofitSingleton
+import com.example.lpiem.rickandmortyapp.Data.SUCCESS
 import com.example.lpiem.rickandmortyapp.Model.ListOfCards
+import com.example.lpiem.rickandmortyapp.Model.ResponseFromApi
 import com.example.lpiem.rickandmortyapp.Model.Tile
+import com.example.lpiem.rickandmortyapp.Model.User
 import com.example.lpiem.rickandmortyapp.R
 import com.example.lpiem.rickandmortyapp.Util.SingletonHolder
 import com.example.lpiem.rickandmortyapp.Util.observeOnce
 import com.example.lpiem.rickandmortyapp.View.TAG
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -25,6 +29,9 @@ class MemoryGameManager private constructor(private val context: Context) {
     companion object : SingletonHolder<MemoryGameManager, Context>(::MemoryGameManager)
 
     //TODO : variable renaming
+    private var loginAppManager = LoginAppManager.getInstance(context)
+    private var responseFromApiLiveData = MutableLiveData<ResponseFromApi>()
+    private lateinit var startTheGame: MutableLiveData<Unit>
     private val animationTime = 350L
     private var halfTurn = false
     private var listOfTiles: MutableList<Tile> = ArrayList()
@@ -37,9 +44,9 @@ class MemoryGameManager private constructor(private val context: Context) {
     private val rickAndMortyAPI = RickAndMortyRetrofitSingleton.getInstance(context)
     private var listOfCardsLiveData = MutableLiveData<ListOfCards>()
     var list: MutableList<Pair<Drawable, String>> = ArrayList()
-    private var listOfImgView: List<ImageView> = ArrayList()
-    private var viewListeners = MutableLiveData<MutableList<Tile>>()
-    private var rewardsLiveData = MutableLiveData<MutableList<String>>()
+    private lateinit var listOfImgView: List<ImageView>
+    private lateinit var viewListeners: MutableLiveData<MutableList<Tile>>
+    private lateinit var rewardsLiveData: MutableLiveData<MutableList<String>>
     @Volatile
     private lateinit var thread: Thread
     private lateinit var drawableListLiveData: MutableLiveData<Pair<MutableList<Drawable?>, ListOfCards>>
@@ -212,7 +219,58 @@ class MemoryGameManager private constructor(private val context: Context) {
             }
             list.clear()
             rewardsLiveData.postValue(rewards)
+            loginAppManager.memoryInProgress = false
+            putDateToken()
         }
+    }
+
+    // Date and game available
+
+    fun gameAvailable(user: User, link: MutableLiveData<Unit>) {
+        startTheGame = link
+        responseFromApiLiveData = rickAndMortyAPI.getUserById(user.userId)
+        responseFromApiLiveData.observeOnce(Observer {
+            getUserByIdTreatment(it)
+        })
+    }
+
+    private fun getUserByIdTreatment(response: ResponseFromApi) {
+        val code = response.code
+        val message = response.message
+        if (code == SUCCESS) {
+            val user = response.results
+            loginAppManager.memoryInProgress = getDate() != user?.userLastMemory
+            Log.d(TAG, "user Date : ${user?.userLastMemory} , date : ${getDate()}")
+            startTheGame.postValue(Unit)
+        } else {
+            Toast.makeText(context, String.format(context.getString(R.string.code_message_userNotFound), code, message), Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun putDateToken() {
+        val id = loginAppManager.connectedUser!!.userId
+        responseFromApiLiveData = rickAndMortyAPI.putMemoryDateToken(getDate(),id)
+        responseFromApiLiveData.observeOnce(Observer {
+            putDateTreatment(it)
+        })
+    }
+
+    private fun putDateTreatment(response: ResponseFromApi) {
+        val code = response.code
+        val message = response.message
+        if (code == SUCCESS) {
+            Log.d(TAG, "success code : $code, message $message")
+        } else {
+            Log.d(TAG, "error code : $code, message $message")
+        }
+    }
+
+    private fun getDate(): String {
+        val formatter = SimpleDateFormat("yyyy-MM-dd")
+        val date = Date(System.currentTimeMillis())
+        Log.d(TAG, "date = $date")
+        Log.d(TAG,"date formatted : ${formatter.format(date)}")
+        return formatter.format(date)
     }
 
 }

@@ -145,6 +145,12 @@ class RickAndMortyRetrofitSingleton private constructor(private val context: Con
         currentCall = instance!!.putNewDate(id!!, jsonBody)
         return callRetrofit(currentCall!!, PUT_DATE) as MutableLiveData<ResponseFromApi>
     }
+    fun putMemoryDateToken(date: String, id: Int?): MutableLiveData<ResponseFromApi> {
+        val jsonBody = JsonObject()
+        jsonBody.addProperty(JsonProperty.NewDate.string, date)
+        currentCall = instance!!.putNewMemoryDate(id!!, jsonBody)
+        return callRetrofit(currentCall!!, PUT_DATE) as MutableLiveData<ResponseFromApi>
+    }
 
     fun updateWallet(score: Int, user: User?): MutableLiveData<ResponseFromApi> {
         val jsonBody = JsonObject()

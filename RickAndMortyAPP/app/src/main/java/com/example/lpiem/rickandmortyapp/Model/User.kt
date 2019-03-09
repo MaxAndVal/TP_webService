@@ -12,7 +12,6 @@ class User : Parcelable {
     companion object {
         @JvmField val CREATOR: Parcelable.Creator<User> = object : Parcelable.Creator<User> {
 
-
             override fun createFromParcel(inside: Parcel): User {
                 return User(inside)
             }
@@ -20,7 +19,6 @@ class User : Parcelable {
             override fun newArray(size: Int): Array<User?> {
                 return arrayOfNulls(size)
             }
-
         }
     }
 
@@ -42,6 +40,9 @@ class User : Parcelable {
     @SerializedName("user_last_game")
     @Expose
     var userLastGame: String? = null
+    @SerializedName("user_last_memory")
+    @Expose
+    var userLastMemory: String? = null
     @SerializedName("user_image")
     @Expose
     var userImage: String? = null
@@ -54,6 +55,7 @@ class User : Parcelable {
         this.deckToOpen = inside.readValue(Int::class.java.classLoader) as Int
         this.userWallet = inside.readValue(Int::class.java.classLoader) as Int
         this.userLastGame = inside.readValue(String::class.java.classLoader) as String
+        this.userLastMemory = inside.readValue(String::class.java.classLoader) as String
         this.userImage = inside.readValue(String::class.java.classLoader) as String
     }
 
@@ -64,6 +66,7 @@ class User : Parcelable {
         dest.writeValue(deckToOpen)
         dest.writeValue(userWallet)
         dest.writeValue(userLastGame)
+        dest.writeValue(userLastMemory)
         dest.writeValue(userImage)
     }
 
@@ -72,8 +75,13 @@ class User : Parcelable {
     }
 
     override fun toString(): String {
-        return "User(userId=$userId, userName=$userName, userEmail=$userEmail, deckToOpen=$deckToOpen, userWallet=$userWallet, userLastGameDate=$userLastGame), userImage=$userImage"
+        return "User(userId=$userId," +
+                " userName=$userName," +
+                " userEmail=$userEmail," +
+                " deckToOpen=$deckToOpen," +
+                " userWallet=$userWallet," +
+                " userLastGameDate=$userLastGame)," +
+                " userLastMemoryDate=$userLastMemory)," +
+                " userImage=$userImage"
     }
-
-
 }
