@@ -43,14 +43,14 @@ class Card : Parcelable {
     @Expose
     var price: Int? = null
 
-    constructor(inside: Parcel) {
+    constructor(inside: Parcel?) {
         Log.d(TAG, "inside = $inside")
-        this.userId = inside.readValue(Int::class.java.classLoader) as Int?
-        this.cardId = inside.readValue(Int::class.java.classLoader) as Int?
-        this.cardName = inside.readValue(String::class.java.classLoader) as String?
-        this.cardImage = inside.readValue(String::class.java.classLoader) as String?
-        this.amount = inside.readValue(Int::class.java.classLoader) as Int?
-        this.price = inside.readValue(Int::class.java.classLoader) as Int?
+        this.userId = inside?.readValue(Int::class.java.classLoader) as Int?
+        this.cardId = inside?.readValue(Int::class.java.classLoader) as Int?
+        this.cardName = inside?.readValue(String::class.java.classLoader) as String?
+        this.cardImage = inside?.readValue(String::class.java.classLoader) as String?
+        this.amount = inside?.readValue(Int::class.java.classLoader) as Int?
+        this.price = inside?.readValue(Int::class.java.classLoader) as Int?
 
     }
 
