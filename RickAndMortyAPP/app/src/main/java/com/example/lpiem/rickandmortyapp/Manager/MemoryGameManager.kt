@@ -11,14 +11,15 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.example.lpiem.rickandmortyapp.Data.RickAndMortyRetrofitSingleton
 import com.example.lpiem.rickandmortyapp.Data.SUCCESS
-import com.example.lpiem.rickandmortyapp.Model.ListOfCards
-import com.example.lpiem.rickandmortyapp.Model.ResponseFromApi
-import com.example.lpiem.rickandmortyapp.Model.Tile
-import com.example.lpiem.rickandmortyapp.Model.User
+import com.example.lpiem.rickandmortyapp.Model.*
 import com.example.lpiem.rickandmortyapp.R
 import com.example.lpiem.rickandmortyapp.Util.SingletonHolder
 import com.example.lpiem.rickandmortyapp.Util.observeOnce
 import com.example.lpiem.rickandmortyapp.View.TAG
+import java.io.IOException
+import java.io.InputStream
+import java.net.MalformedURLException
+import java.net.URL
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -28,80 +29,69 @@ class MemoryGameManager private constructor(private val context: Context) {
 
     companion object : SingletonHolder<MemoryGameManager, Context>(::MemoryGameManager)
 
-    //TODO : variable renaming
     private var loginAppManager = LoginAppManager.getInstance(context)
-    private var responseFromApiLiveData = MutableLiveData<ResponseFromApi>()
-    private lateinit var startTheGame: MutableLiveData<Unit>
+    private val rickAndMortyAPI = RickAndMortyRetrofitSingleton.getInstance(context)
     private val animationTime = 350L
-    private var halfTurn = false
-    private var listOfTiles: MutableList<Tile> = ArrayList()
-    private var clickedElements: MutableList<Tile> = ArrayList()
-    var displayNewTurn = MutableLiveData<Int>()
-    var displayNewScore = MutableLiveData<Int>()
     var score = 0
     var turn = 8
-    private val rewards: MutableList<String> = ArrayList()
-    private val rickAndMortyAPI = RickAndMortyRetrofitSingleton.getInstance(context)
-    private var listOfCardsLiveData = MutableLiveData<ListOfCards>()
+    private var halfTurn = false
     var list: MutableList<Pair<Drawable, String>> = ArrayList()
-    private lateinit var listOfImgView: List<ImageView>
+    var startTheGame = MutableLiveData<Unit>()
+    var displayNewTurn = MutableLiveData<Int>()
+    var displayNewScore = MutableLiveData<Int>()
+    var rewardsReceiver = MutableLiveData<MutableList<String>>()
+    var drawableListReceiver = MutableLiveData<Pair<MutableList<Drawable?>, ListOfCards>>()
+    private var userResponseReceiver = MutableLiveData<ResponseFromApi>()
+    private var listOfTiles: MutableList<Tile> = ArrayList()
+    private var clickedElements: MutableList<Tile> = ArrayList()
+    private val rewards: MutableList<String> = ArrayList()
+    private var listOfCardsReceiver = MutableLiveData<ListOfCards>()
     private lateinit var viewListeners: MutableLiveData<MutableList<Tile>>
-    private lateinit var rewardsLiveData: MutableLiveData<MutableList<String>>
-    @Volatile
-    private lateinit var thread: Thread
-    private lateinit var drawableListLiveData: MutableLiveData<Pair<MutableList<Drawable?>, ListOfCards>>
 
 
-    fun initCardList(amount: Int, lisOfImageView: List<ImageView>, imageViewsListeners: MutableLiveData<MutableList<Tile>>, rewardsListener: MutableLiveData<MutableList<String>>, drawLiveData: MutableLiveData<Pair<MutableList<Drawable?>, ListOfCards>>) {
-        drawableListLiveData = drawLiveData
-        rewardsLiveData = rewardsListener
-        listOfImgView = lisOfImageView
+    fun cancelCall() {
+        rickAndMortyAPI.cancelCall()
+    }
+
+    fun initCardList(amount: Int, imageViewsListeners: MutableLiveData<MutableList<Tile>>) {
         viewListeners = imageViewsListeners
-        listOfCardsLiveData = rickAndMortyAPI.getCardList(amount)
-        listOfCardsLiveData.observeOnce(Observer { listOfCards ->
+        listOfCardsReceiver = rickAndMortyAPI.getCardList(amount)
+        listOfCardsReceiver.observeOnce(Observer { listOfCards ->
             getPicturesFromList(listOfCards)
         })
 
     }
 
-    fun interruptThread() {
-        thread.interrupt()
-    }
-
     private fun getPicturesFromList(listOfCards: ListOfCards) {
+        Thread {
+            val resultList: MutableList<Drawable?> = ArrayList()
 
-        val runnable = Runnable {
-            val resultList: kotlin.collections.MutableList<android.graphics.drawable.Drawable?> = ArrayList()
-            for (card in listOfCards.cards!!) {
+            for (card in listOfCards.cards ?: listOf(Card(null))) {
 
                 val result = try {
-                    android.graphics.drawable.Drawable.createFromStream(
-                            java.net.URL(card.cardImage).content as java.io.InputStream, card.cardName)
-                } catch (e: java.net.MalformedURLException) {
+                    Drawable.createFromStream(
+                            URL(card.cardImage).content as InputStream, card.cardName)
+                } catch (e: MalformedURLException) {
                     e.printStackTrace()
                     null
-                } catch (e: java.io.IOException) {
+                } catch (e: IOException) {
                     e.printStackTrace()
                     null
                 }
                 resultList.add(result)
             }
-            Log.d(TAG, resultList.toString())
-            drawableListLiveData.postValue(kotlin.Pair(resultList, listOfCards))
-        }
 
-        thread = Thread(runnable)
-        thread.start()
-
+            drawableListReceiver.postValue(Pair(resultList, listOfCards))
+        }.start()
     }
 
     fun initGame(lisOfImageView: List<ImageView>,
-                 imageViewsListeners: MutableLiveData<MutableList<Tile>>,
                  listOfPictures: MutableList<Pair<Drawable, String>>) {
 
         listOfPictures.addAll(listOfPictures)
         var finalListOfPictures = listOfPictures.toList()
 
+        // Real random shuffle
         var rand = Math.abs(Random().nextInt() % 10) * 2
         while (rand > 0) {
             finalListOfPictures = finalListOfPictures.shuffled()
@@ -124,7 +114,7 @@ class MemoryGameManager private constructor(private val context: Context) {
         for (view in lisOfImageView) {
             view.visibility = VISIBLE
         }
-        imageViewsListeners.postValue(listOfTiles)
+        viewListeners.postValue(listOfTiles)
 
     }
 
@@ -133,14 +123,11 @@ class MemoryGameManager private constructor(private val context: Context) {
     }
 
     fun setRealImage(view: ImageView, placeHolder: Int, handler: Handler, image: Drawable, tile: Tile, onTwoTilesTapped: Boolean) {
-        var drawable: Drawable
         view.animate().scaleX(0f).setDuration(animationTime).start()
-        drawable = context.getDrawable(placeHolder)!!
-        view.setImageDrawable(drawable)
+        view.setImageDrawable(context.getDrawable(placeHolder)!!)
         view.isClickable = false
         handler.postDelayed({
-            drawable = image
-            view.setImageDrawable(drawable)
+            view.setImageDrawable(image)
             view.animate().scaleX(1f).setDuration(animationTime).start()
             view.isClickable = true
             if (onTwoTilesTapped) clickedElements.onTwoTilesTapped(newTile = tile)
@@ -149,14 +136,11 @@ class MemoryGameManager private constructor(private val context: Context) {
     }
 
     fun setPlaceHolder(view: ImageView, placeHolder: Int, handler: Handler, image: Drawable, tile: Tile, onTwoTilesTapped: Boolean) {
-        var drawable: Drawable
         view.animate().scaleX(0f).setDuration(animationTime).start()
-        drawable = image
-        view.setImageDrawable(drawable)
+        view.setImageDrawable(image)
         view.isClickable = false
         handler.postDelayed({
-            drawable = context.getDrawable(placeHolder)!!
-            view.setImageDrawable(drawable)
+            view.setImageDrawable(context.getDrawable(placeHolder)!!)
             view.animate().scaleX(1f).setDuration(animationTime).start()
             view.isClickable = true
             if (onTwoTilesTapped) clickedElements.onTwoTilesTapped(newTile = tile)
@@ -218,18 +202,16 @@ class MemoryGameManager private constructor(private val context: Context) {
                 item.tileView.setOnClickListener { }
             }
             list.clear()
-            rewardsLiveData.postValue(rewards)
-            loginAppManager.memoryInProgress = false
+            rewardsReceiver.postValue(rewards)
             putDateToken()
         }
     }
 
     // Date and game available
 
-    fun gameAvailable(user: User, link: MutableLiveData<Unit>) {
-        startTheGame = link
-        responseFromApiLiveData = rickAndMortyAPI.getUserById(user.userId)
-        responseFromApiLiveData.observeOnce(Observer {
+    fun gameAvailable(user: User) {
+        userResponseReceiver = rickAndMortyAPI.getUserById(user.userId)
+        userResponseReceiver.observeOnce(Observer {
             getUserByIdTreatment(it)
         })
     }
@@ -240,7 +222,7 @@ class MemoryGameManager private constructor(private val context: Context) {
         if (code == SUCCESS) {
             val user = response.results
             loginAppManager.memoryInProgress = getDate() != user?.userLastMemory
-            Log.d(TAG, "user Date : ${user?.userLastMemory} , date : ${getDate()}")
+            Log.d(TAG, "user Date : ${user?.userLastMemory} <==> Date : ${getDate()}")
             startTheGame.postValue(Unit)
         } else {
             Toast.makeText(context, String.format(context.getString(R.string.code_message_userNotFound), code, message), Toast.LENGTH_SHORT).show()
@@ -249,8 +231,8 @@ class MemoryGameManager private constructor(private val context: Context) {
 
     private fun putDateToken() {
         val id = loginAppManager.connectedUser!!.userId
-        responseFromApiLiveData = rickAndMortyAPI.putMemoryDateToken(getDate(),id)
-        responseFromApiLiveData.observeOnce(Observer {
+        userResponseReceiver = rickAndMortyAPI.putMemoryDateToken(getDate(), id)
+        userResponseReceiver.observeOnce(Observer {
             putDateTreatment(it)
         })
     }
@@ -268,8 +250,7 @@ class MemoryGameManager private constructor(private val context: Context) {
     private fun getDate(): String {
         val formatter = SimpleDateFormat("yyyy-MM-dd")
         val date = Date(System.currentTimeMillis())
-        Log.d(TAG, "date = $date")
-        Log.d(TAG,"date formatted : ${formatter.format(date)}")
+        Log.d(TAG, "date formatted : ${formatter.format(date)}")
         return formatter.format(date)
     }
 

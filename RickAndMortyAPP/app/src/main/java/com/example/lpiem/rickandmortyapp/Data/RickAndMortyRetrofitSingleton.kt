@@ -72,6 +72,7 @@ class RickAndMortyRetrofitSingleton private constructor(private val context: Con
                         KAAMELOTT_QUOTE -> {
                             liveData.postValue(result as KaamlottQuote)
                         }
+                        RESPONSE_FROM_API,
                         LOGIN,
                         GET_USER_BY_ID,
                         PUT_DATE,
@@ -94,7 +95,6 @@ class RickAndMortyRetrofitSingleton private constructor(private val context: Con
                         ADD_A_FRIENDS -> TODO()
                         DEL_A_FRIEND -> TODO()
                         ACCEPT_FRIENDSHIP -> TODO()
-                        RESPONSE_FROM_API -> TODO()
                     }
                 } else {
                     val responseError = response.errorBody() as ResponseBody
