@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.lpiem.rickandmortyapp.Manager.LoginAppManager
@@ -100,6 +102,7 @@ class CollectionFragment : androidx.fragment.app.Fragment(), CardListDisplay {
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .show()
             }
+
         }))
     }
 
@@ -114,6 +117,10 @@ class CollectionFragment : androidx.fragment.app.Fragment(), CardListDisplay {
     }
 
     override fun displayResult(list: ListOfCards) {
+        if (adapter == null) {
+            collection_loader.visibility = GONE
+            rv_collection.visibility = VISIBLE
+        }
         updateAdapter(list)
     }
 
@@ -123,6 +130,10 @@ class CollectionFragment : androidx.fragment.app.Fragment(), CardListDisplay {
     }
 
     override fun onResume() {
+        if (adapter == null) {
+            rv_collection.visibility = GONE
+            collection_loader.visibility = VISIBLE
+        }
         collectionManager.getListOfDecks(user, this)
         super.onResume()
     }

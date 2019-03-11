@@ -24,6 +24,7 @@ class RecyclerTouchListener : RecyclerView.OnItemTouchListener {
                     clickListener.onLongClick(child, recyclerView.getChildAdapterPosition(child))
                 }
             }
+
         })
     }
 
