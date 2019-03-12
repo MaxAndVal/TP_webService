@@ -12,7 +12,6 @@ import com.example.lpiem.rickandmortyapp.Model.User
 import com.example.lpiem.rickandmortyapp.R
 import com.example.lpiem.rickandmortyapp.Util.SingletonHolder
 import com.example.lpiem.rickandmortyapp.Util.observeOnce
-import com.example.lpiem.rickandmortyapp.View.Collection.list.CardListDisplay
 import com.example.lpiem.rickandmortyapp.View.Collection.list.CollectionFragment
 
 class CollectionManager private constructor(private val context: Context) {
@@ -22,7 +21,7 @@ class CollectionManager private constructor(private val context: Context) {
 
 
     var collectionFragment: CollectionFragment? = null
-    lateinit var cardListDisplay: CardListDisplay
+    lateinit var cardListDisplay: MutableLiveData<ListOfCards>
 
     companion object : SingletonHolder<CollectionManager, Context>(::CollectionManager)
 
@@ -44,14 +43,14 @@ class CollectionManager private constructor(private val context: Context) {
         collectionFragment!!.listOfCards = response
         val list = collectionFragment!!.listOfCards
         if (list?.code == SUCCESS) {
-            cardListDisplay.displayResult(list)
+            cardListDisplay.postValue(list)
         } else {
             Toast.makeText(context, String.format(context.getString(R.string.code_message), list?.code, list?.message), Toast.LENGTH_SHORT).show()
         }
     }
 
-    fun getListOfDecks(user: User?, link: CardListDisplay) {
-        cardListDisplay = link
+    fun getListOfDecks(user: User?, UILink: MutableLiveData<ListOfCards>) {
+        cardListDisplay = UILink
         val userId = user?.userId ?: -1
         collectionLiveData = rickAndMortyAPI.listOfCardsForCollectionList(userId)
         collectionLiveData.observeOnce(Observer {
