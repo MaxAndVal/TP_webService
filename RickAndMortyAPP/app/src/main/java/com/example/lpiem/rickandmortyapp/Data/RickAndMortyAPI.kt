@@ -134,6 +134,15 @@ interface RickAndMortyAPI {
             @Path("id") userId: Int, @Path("cardId") cardId: Int, @Body body: JsonObject
     ): Call<ListOfCards>
 
+    @POST("/users/{id}/market/{friend}/buycard/{card_id}")
+    fun buyCardFromFriend(
+            @Path("id") userId: Int,
+            @Path("friend") friend: Int,
+            @Path("card_id") card_id: Int,
+            @Body body: JsonObject
+    ): Call<ResponseFromApi>
+
+
     ///MEMORY GAME
 
     @GET("cards/randomSelectionFor/{amount}")

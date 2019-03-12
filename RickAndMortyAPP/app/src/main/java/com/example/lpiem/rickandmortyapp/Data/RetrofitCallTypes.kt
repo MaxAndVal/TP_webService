@@ -22,7 +22,8 @@ enum class RetrofitCallTypes {
     GET_FAQ,
     OPEN_RANDOM_DECK,
     UPDATE_USER_INFO,
-    ADD_CARD_TO_MARKET
+    ADD_CARD_TO_MARKET,
+    BUY_CAR_FROM_FRIEND
 }
 
 //enum class RetrofitCallTest(types: RetrofitCallTypes) {
