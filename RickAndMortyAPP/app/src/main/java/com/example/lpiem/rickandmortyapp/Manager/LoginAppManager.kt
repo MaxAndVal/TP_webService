@@ -44,6 +44,8 @@ class LoginAppManager private constructor(private var context: Context) {
     var gameInProgress = true
     var memoryInProgress = true
     private var loginLiveData = MutableLiveData<ResponseFromApi>()
+    lateinit var loaderDisplay: MutableLiveData<Int>
+    lateinit var googleBtnSwitch: MutableLiveData<Boolean>
 
     companion object : SingletonHolder<LoginAppManager, Context>(::LoginAppManager)
 
@@ -53,8 +55,7 @@ class LoginAppManager private constructor(private var context: Context) {
         if (mail == "" || pass == "") {
             Toast.makeText(context, context.getString(R.string.thanks_to_fill_all_fields), Toast.LENGTH_SHORT).show()
         } else {
-            (context as LoginActivity).login_progressBar.visibility = View.VISIBLE
-
+            loaderDisplay.postValue(View.VISIBLE)
             val jsonBody = JsonObject()
             jsonBody.addProperty(JsonProperty.UserEmail.string, mail)
             jsonBody.addProperty(JsonProperty.UserPassword.string, pass)
@@ -72,7 +73,8 @@ class LoginAppManager private constructor(private var context: Context) {
 
     // GOOGLE CONNECTION
 
-    fun googleSetup() {
+    fun googleSetup(btnSwitcher: MutableLiveData<Boolean>) {
+        googleBtnSwitch = btnSwitcher
         (context as LoginActivity).sign_in_button.setOnClickListener { googleSignIn() }
 
         gso = GoogleSignInOptions
@@ -85,8 +87,8 @@ class LoginAppManager private constructor(private var context: Context) {
         googleBtnTextView = ((context as LoginActivity).sign_in_button.getChildAt(0) as Button)
     }
 
-    private fun googleSignIn() {
-        (context as LoginActivity).login_progressBar.visibility = View.VISIBLE
+    fun googleSignIn() {
+        loaderDisplay.postValue(View.VISIBLE)
         val signInIntent = mGoogleSignInClient?.signInIntent
         (context as LoginActivity).startActivityForResult(signInIntent, RC_SIGN_IN)
     }
@@ -101,6 +103,8 @@ class LoginAppManager private constructor(private var context: Context) {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
             Log.w(TAG, "signInResult:failed code=" + e.statusCode)
+            loaderDisplay.postValue(View.GONE)
+            Toast.makeText(context, "Une erreur est arrivée lors de la connection, merci de réessayer plus tard.", Toast.LENGTH_SHORT).show()
         }
 
     }
@@ -129,7 +133,8 @@ class LoginAppManager private constructor(private var context: Context) {
             })
 
         } else {
-            Toast.makeText(context, "erreur : ${data.toString()}", Toast.LENGTH_LONG).show()
+            Toast.makeText(context, "erreur : ${data.toString()}", Toast.LENGTH_SHORT).show()
+            loaderDisplay.postValue(View.GONE)
         }
     }
 
@@ -137,6 +142,7 @@ class LoginAppManager private constructor(private var context: Context) {
         mGoogleSignInClient?.signOut()?.addOnCompleteListener { task ->
             task.result
             if (verbose) Toast.makeText(context, context.getString(R.string.google_disconnected), Toast.LENGTH_SHORT).show()
+            googleBtnSwitch.postValue(true)
             googleBtnTextView.text = context.getString(R.string.btn_connection_google)
             (context as LoginActivity).sign_in_button.setOnClickListener { googleSignIn() }
             connectedToGoogle = false
@@ -152,7 +158,7 @@ class LoginAppManager private constructor(private var context: Context) {
         (context as LoginActivity).facebook_login_button.registerCallback((context as LoginActivity).facebookCallbackManager, object : FacebookCallback<LoginResult> {
 
             override fun onSuccess(loginResult: LoginResult) {
-                (context as LoginActivity).login_progressBar.visibility = View.VISIBLE
+                loaderDisplay.postValue(View.VISIBLE)
                 val accessToken = loginResult.accessToken
                 val isLoggedIn = accessToken != null && !accessToken.isExpired
                 Log.d(TAG, "isLoggedIn on success = $isLoggedIn")
@@ -186,7 +192,7 @@ class LoginAppManager private constructor(private var context: Context) {
                             e.printStackTrace()
                             Toast.makeText(context, context.getString(R.string.no_access_to_DB), Toast.LENGTH_SHORT).show()
                             LoginManager.getInstance().logOut()
-                            (context as LoginActivity).login_progressBar.visibility = View.GONE
+                            loaderDisplay.postValue(View.GONE)
                         }
                     }
                     val parameters = Bundle()
@@ -199,11 +205,13 @@ class LoginAppManager private constructor(private var context: Context) {
             override fun onCancel() {
                 Log.d(TAG, "onCancel: ")
                 LoginManager.getInstance().logOut()
+                loaderDisplay.postValue(View.GONE)
             }
 
             override fun onError(exception: FacebookException) {
                 Toast.makeText(context, exception.toString(), Toast.LENGTH_SHORT).show()
-                Log.d(TAG, "onError: " + exception.toString())
+                Log.d(TAG, "onError: $exception")
+                loaderDisplay.postValue(View.GONE)
             }
         })
 
@@ -221,10 +229,10 @@ class LoginAppManager private constructor(private var context: Context) {
         val message = response.message
         if (code == SUCCESS) {
             val results = response.results
-            (context as LoginActivity).login_progressBar.visibility = View.GONE
+            loaderDisplay.postValue(View.GONE)
             if (connectedToGoogle) {
                 googleBtnTextView.text = context.getString(R.string.btn_disconnection_google)
-                (context as LoginActivity).sign_in_button.setOnClickListener { disconnectGoogleAccount(true) }
+                googleBtnSwitch.postValue(false)
             }
             val name = results?.userName
             Log.d(TAG, "code = $code body = $response")
@@ -234,7 +242,7 @@ class LoginAppManager private constructor(private var context: Context) {
             (context as LoginActivity).startActivity(homeIntent)
         } else {
             Toast.makeText(context, String.format(context.getString(R.string.code_message), code, message), Toast.LENGTH_SHORT).show()
-            (context as LoginActivity).login_progressBar.visibility = View.GONE
+            loaderDisplay.postValue(View.GONE)
         }
     }
 
