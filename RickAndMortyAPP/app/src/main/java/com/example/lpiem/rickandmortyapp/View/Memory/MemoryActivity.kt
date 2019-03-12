@@ -13,6 +13,7 @@ import androidx.lifecycle.Observer
 import com.example.lpiem.rickandmortyapp.Manager.LoginAppManager
 import com.example.lpiem.rickandmortyapp.Manager.MemoryGameManager
 import com.example.lpiem.rickandmortyapp.Model.ListOfCards
+import com.example.lpiem.rickandmortyapp.Model.MemoryReward
 import com.example.lpiem.rickandmortyapp.Model.Tile
 import com.example.lpiem.rickandmortyapp.Model.User
 import com.example.lpiem.rickandmortyapp.R
@@ -58,7 +59,7 @@ class MemoryActivity : AppCompatActivity() {
                             Toast.LENGTH_LONG).show()
                     break
                 } else {
-                    memoryGameManager.list.add(Pair(draw, drawAndCardList.second.cards!![i].cardName!!))
+                    memoryGameManager.list.add(Triple(draw, drawAndCardList.second.cards!![i].cardName!!, drawAndCardList.second.cards!![i].cardId!!))
                     if (memoryGameManager.list.size == 6) {
                         memoryGameManager.initGame(lisOfImageView, memoryGameManager.list)
                         break
@@ -129,12 +130,12 @@ class MemoryActivity : AppCompatActivity() {
     }
 
 
-    // MutableList<String> extension
-    private fun MutableList<String>.toFormattedString(): String {
+    // MutableList<MemoryReward> extension
+    private fun MutableList<MemoryReward>.toFormattedString(): String {
         val result = StringBuilder()
         result.append(getString(R.string.cards_won))
         for (item in this) {
-            result.append(item)
+            result.append(item.cardName)
             result.append("\n")
         }
         return result.toString()

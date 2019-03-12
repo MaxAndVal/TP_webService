@@ -66,8 +66,6 @@ class SocialFragment : androidx.fragment.app.Fragment(), SocialActionsInterface 
         } else {
             socialManager.callForValidateFriend(item)
         }
-        //TODO when it's done, go back to friend's List
-        //TODO refresh
     }
 
     override fun delFriends(item: Friend): Boolean {
@@ -92,14 +90,17 @@ class SocialFragment : androidx.fragment.app.Fragment(), SocialActionsInterface 
     }
 
     fun updateDataSetList(list: List<Friend>?) {
-        if (socialAdapter != null) {
-            socialAdapter!!.updateDataSet(list)
-            updateRv()
-        } else {
-            socialAdapter = SocialAdapter(listOfActualFriends, this)
-            rv_social.adapter = socialAdapter
-            updateRv()
+        if (rv_social != null) {
+            if (socialAdapter != null) {
+                socialAdapter!!.updateDataSet(list)
+                updateRv()
+            } else {
+                socialAdapter = SocialAdapter(listOfActualFriends, this)
+                rv_social.adapter = socialAdapter
+                updateRv()
+            }
         }
+
     }
 
     override fun openFriendsMArket(item: Friend) {
