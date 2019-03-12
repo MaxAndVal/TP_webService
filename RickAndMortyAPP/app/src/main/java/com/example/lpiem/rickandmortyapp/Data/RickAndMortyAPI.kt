@@ -13,7 +13,7 @@ interface RickAndMortyAPI {
 
     @GET("/")
     fun herokuAwaking(
-    ): Call<ResponseFromApi>
+    ): Call<Void>
 
 
     ///CONNEXION - INSCRIPTION

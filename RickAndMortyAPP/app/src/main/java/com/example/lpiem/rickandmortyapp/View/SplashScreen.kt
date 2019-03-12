@@ -28,7 +28,7 @@ class SplashScreen : AppCompatActivity() {
         setContentView(R.layout.activity_splash_screen)
 
         val resultCall = rickAndMortyAPI!!.herokuAwaking()
-        callRetrofit(resultCall, RetrofitCallTypes.RESPONSE_FROM_API)
+        callRetrofit(resultCall, RetrofitCallTypes.HEROKU_VOID)
 
         Picasso.get().load(R.drawable.splash_screen2).fit().centerCrop().into(iv_splashScreen)
 
@@ -45,15 +45,15 @@ class SplashScreen : AppCompatActivity() {
 
     }
 
-    private fun <ResponseFromApi> callRetrofit(call: Call<ResponseFromApi>, type: RetrofitCallTypes) {
+    private fun <Void> callRetrofit(call: Call<Void>, type: RetrofitCallTypes) {
 
-        call.enqueue(object : Callback<ResponseFromApi> {
-            override fun onFailure(call: Call<ResponseFromApi>, t: Throwable) {
-                Toast.makeText(this@SplashScreen, "fail", Toast.LENGTH_SHORT).show()
+        call.enqueue(object : Callback<Void> {
+            override fun onFailure(call: Call<Void>, t: Throwable) {
+                Log.d(TAG, "F : Heroku should be awake"+t.message.toString())
             }
 
-            override fun onResponse(call: Call<ResponseFromApi>, response: Response<ResponseFromApi>) {
-                Log.d(TAG, "Heroku should be awake")
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                Log.d(TAG, " R : Heroku should be awake")
             }
         })
     }
