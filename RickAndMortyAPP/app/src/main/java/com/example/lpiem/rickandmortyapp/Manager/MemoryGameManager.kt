@@ -26,26 +26,26 @@ import kotlin.collections.ArrayList
 
 class MemoryGameManager constructor( val context: Context) {
 
-    //companion object : SingletonHolder<MemoryGameManager, Context>(::MemoryGameManager)
-
     private var loginAppManager = LoginAppManager.getInstance(context)
     private val rickAndMortyAPI = RickAndMortyRetrofitSingleton.getInstance(context)
     private val animationTime = 350L
     var score = 0
     var turn = 8
     private var halfTurn = false
-    var list: MutableList<Pair<Drawable, String>> = ArrayList()
+    var list: MutableList<Triple<Drawable, String, Int>> = ArrayList()
     var startTheGame = MutableLiveData<Unit>()
     var displayNewTurn = MutableLiveData<Int>()
     var displayNewScore = MutableLiveData<Int>()
-    var rewardsReceiver = MutableLiveData<MutableList<String>>()
+    var rewardsReceiver = MutableLiveData<MutableList<MemoryReward>>()
     var drawableListReceiver = MutableLiveData<Pair<MutableList<Drawable?>, ListOfCards>>()
     private var userResponseReceiver = MutableLiveData<ResponseFromApi>()
     private var listOfTiles: MutableList<Tile> = ArrayList()
     private var clickedElements: MutableList<Tile> = ArrayList()
-    private val rewards: MutableList<String> = ArrayList()
+    private val rewards: MutableList<MemoryReward> = ArrayList()
     private var listOfCardsReceiver = MutableLiveData<ListOfCards>()
     private lateinit var viewListeners: MutableLiveData<MutableList<Tile>>
+    private var rewardToApiResult = MutableLiveData<ResponseFromApi>()
+    private lateinit var apiResultObserver: Observer<ResponseFromApi>
 
 
     fun cancelCall() {
@@ -85,7 +85,7 @@ class MemoryGameManager constructor( val context: Context) {
     }
 
     fun initGame(lisOfImageView: List<ImageView>,
-                 listOfPictures: MutableList<Pair<Drawable, String>>) {
+                 listOfPictures: MutableList<Triple<Drawable, String, Int>>) {
 
         listOfPictures.addAll(listOfPictures)
         var finalListOfPictures = listOfPictures.toList()
@@ -106,7 +106,8 @@ class MemoryGameManager constructor( val context: Context) {
                     refName = ref,
                     placeHolder = R.drawable.memory_card_back,
                     tapped = false,
-                    tileView = imageView)
+                    tileView = imageView,
+                    cardId = finalListOfPictures[position].third)
             )
         }
 
@@ -174,13 +175,13 @@ class MemoryGameManager constructor( val context: Context) {
         if (this.size % 2 == 0 && this.size != 0) {
             val firstTile = this.first()
             val secondTile = this.last()
-            if (firstTile.image != secondTile.image) {
+            if (firstTile.cardId != secondTile.cardId) {
                 handler.postDelayed({
                     setPlaceHolder(firstTile.tileView, firstTile.placeHolder, handler, firstTile.image, firstTile, false)
                     setPlaceHolder(secondTile.tileView, secondTile.placeHolder, handler, secondTile.image, secondTile, false)
                     this.clear()
                 }, animationTime)
-            } else if (firstTile.image == secondTile.image) {
+            } else if (firstTile.cardId == secondTile.cardId) {
                 score++
                 displayNewScore.postValue(score)
                 val toast = Toast.makeText(context, context.getString(R.string.youAlreadyWonThisTile), Toast.LENGTH_SHORT)
@@ -191,7 +192,7 @@ class MemoryGameManager constructor( val context: Context) {
                 secondTile.tileView.setOnClickListener {
                     toast.show()
                 }
-                rewards.add(newTile.refName)
+                rewards.add(MemoryReward(newTile.cardId, newTile.refName))
                 this.clear()
             }
         }
@@ -201,6 +202,15 @@ class MemoryGameManager constructor( val context: Context) {
                 item.tileView.setOnClickListener { }
             }
             list.clear()
+            apiResultObserver = Observer {
+                if (it.code == SUCCESS) {
+                    Log.d(TAG, "code: ${it.code} message: ${it.message}")
+                } else {
+                    Log.d(TAG, "error code: ${it.code} message: ${it.message}")
+                }
+            }
+            rewardToApiResult = rickAndMortyAPI.addRewardsToUser(rewards, loginAppManager.connectedUser!!.userId!!)
+            rewardToApiResult.observeOnce(apiResultObserver)
             rewardsReceiver.postValue(rewards)
             putDateToken()
         }

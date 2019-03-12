@@ -1,11 +1,16 @@
 package com.example.lpiem.rickandmortyapp.View.Social;
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lpiem.rickandmortyapp.Model.Friend
 import com.example.lpiem.rickandmortyapp.R
+import com.example.lpiem.rickandmortyapp.View.TAG
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.social_item.view.*
 
 
@@ -22,13 +27,19 @@ class SocialAdapter(private var dataSet: List<Friend>?, private val listener: So
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+
         val item = dataSet!![position]
+        Log.d(TAG, "friend image : ${item.friendImage}")
         holder.userName.text = item.userName
+        Picasso.get().load(item.friendImage)
+                .placeholder(R.drawable.ic_person_white_24dp)
+                .fit().centerInside()
+                .into(holder.userIcon)
         if (item.accepted !== null && item.accepted!!) {
             holder.ivIconFriends.setImageResource(R.drawable.ic_store_24dp)
             holder.ivIconFriends.setOnClickListener { listener.openFriendsMArket(item) }
 
-        }else{
+        } else {
             holder.ivIconFriends.setImageResource(R.drawable.ic_add_24dp)
             holder.ivIconFriends.setOnClickListener { listener.addFriends(item) }
 
@@ -42,7 +53,8 @@ class SocialAdapter(private var dataSet: List<Friend>?, private val listener: So
     }
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val userName = view.tv_userName
-        var ivIconFriends = view.iv_iconFriends
+        val userName = view.tv_userName as TextView
+        var ivIconFriends = view.iv_iconFriends as ImageView
+        val userIcon = view.iv_avatarFriends as ImageView
     }
 }

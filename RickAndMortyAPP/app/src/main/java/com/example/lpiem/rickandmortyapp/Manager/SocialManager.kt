@@ -143,6 +143,7 @@ class SocialManager private constructor(private val context: Context){
             Toast.makeText(context, String.format(context.getString(R.string.code_message), code, message), Toast.LENGTH_SHORT).show()
         }
         if (socialFragment != null && socialFragment!!.isVisible) {
+            socialFragment?.tv_list_title?.text = "Liste d'amis"
             socialFragment?.btn_friendsRequest?.text = context.getString(R.string.btn_pending_friend_requests)
             socialFragment?.btn_friendsRequest?.setOnClickListener { friendsRequest(link) }
         }
@@ -155,6 +156,7 @@ class SocialManager private constructor(private val context: Context){
 
     fun friendsRequest(link: SocialActionsInterface) {
         socialFragment?.updateDataSetList(socialFragment?.listOfPotentialFriends)
+        socialFragment?.tv_list_title?.text = "Requetes en attente"
         socialFragment?.btn_friendsRequest?.text = context.getString(R.string.btn_list_of_friends)
         socialFragment?.btn_friendsRequest?.setOnClickListener { getListOfFriends(loginAppManager.connectedUser!!.userId!!, link) }
     }

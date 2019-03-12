@@ -204,6 +204,7 @@ class LoginAppManager private constructor(private var context: Context) {
 
             override fun onCancel() {
                 Log.d(TAG, "onCancel: ")
+                //TODO : remove this line when app is finished
                 LoginManager.getInstance().logOut()
                 loaderDisplay.postValue(View.GONE)
             }

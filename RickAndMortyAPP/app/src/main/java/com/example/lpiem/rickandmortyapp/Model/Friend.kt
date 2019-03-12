@@ -33,6 +33,9 @@ class Friend : Parcelable{
     @SerializedName("accepted")
     @Expose
     var accepted: Boolean? = null
+    @SerializedName("user_image")
+    @Expose
+    var friendImage: String? = null
 
     constructor(inside: Parcel) {
         Log.d(TAG, "inside = $inside")
@@ -43,6 +46,7 @@ class Friend : Parcelable{
             0 -> accepted = false
             1 -> accepted = true
         }
+        this.friendImage = inside.readValue(String::class.java.classLoader) as String
     }
 
     override fun writeToParcel(dest: Parcel, flags: Int) {
@@ -53,6 +57,7 @@ class Friend : Parcelable{
         } else  {
             dest.writeInt(if (accepted!!) 1 else 0)
         }
+        dest.writeValue(friendImage)
     }
 
     override fun describeContents(): Int {

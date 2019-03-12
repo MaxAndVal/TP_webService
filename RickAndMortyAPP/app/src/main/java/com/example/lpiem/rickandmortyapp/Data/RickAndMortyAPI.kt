@@ -161,4 +161,17 @@ interface RickAndMortyAPI {
     fun putNewMemoryDate(
             @Path("id") userId: Int, @Body body: JsonObject
     ): Call<ResponseFromApi>
+
+    @POST("/cards/addRewards")
+    fun addRewards(
+            @Body body: JsonObject
+    ): Call<ResponseFromApi>
+
+    /*
+    cardsRoute.post("/addRewards", async (req, res) => {
+  addRewardsToUser(req.body.listOfCards, req.body.user_id)
+    .then(response => res.json(response))
+    .catch(err => res.send(err));
+});
+*/
 }

@@ -246,5 +246,14 @@ class RickAndMortyRetrofitSingleton private constructor(private val context: Con
         return callRetrofit(currentCall!!, BUY_CAR_FROM_FRIEND) as MutableLiveData<ResponseFromApi>
     }
 
+    fun addRewardsToUser(rewards: MutableList<MemoryReward>, userId: Int): MutableLiveData<ResponseFromApi> {
+        val jsonBody = JsonObject()
+        val gson = GsonBuilder().create()
+        jsonBody.add("listOfCards", gson.toJsonTree(rewards))
+        jsonBody.addProperty("user_id", userId)
+        currentCall = instance!!.addRewards(jsonBody)
+        return callRetrofit(currentCall!!, RESPONSE_FROM_API) as MutableLiveData<ResponseFromApi>
+    }
+
 }
 
