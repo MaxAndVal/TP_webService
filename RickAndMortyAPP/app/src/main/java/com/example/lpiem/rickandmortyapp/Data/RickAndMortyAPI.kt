@@ -9,6 +9,13 @@ import retrofit2.http.*
 
 interface RickAndMortyAPI {
 
+    // START HEROKU
+
+    @GET("/")
+    fun herokuAwaking(
+    ): Call<ResponseFromApi>
+
+
     ///CONNEXION - INSCRIPTION
 
     @POST("/auth/login")
