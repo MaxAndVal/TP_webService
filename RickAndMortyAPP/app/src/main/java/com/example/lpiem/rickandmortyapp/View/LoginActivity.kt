@@ -7,6 +7,8 @@ import android.os.Handler
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import com.example.lpiem.rickandmortyapp.Manager.LoginAppManager
 import com.example.lpiem.rickandmortyapp.R
 import com.facebook.CallbackManager
@@ -21,13 +23,34 @@ class LoginActivity : AppCompatActivity() {
     internal var facebookCallbackManager: CallbackManager? = null
     private lateinit var loginAppManager: LoginAppManager
     private var doubleBackToExitPressedOnce = false
+    private var loaderDisplayer = MutableLiveData<Int>()
+    private lateinit var loaderObserver: Observer<Int>
+    private var googleBtnSwitch = MutableLiveData<Boolean>()
+    private lateinit var googleBtnSwitchObserver : Observer<Boolean>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
         loginAppManager = LoginAppManager.getInstance(this)
+        loginAppManager.loaderDisplay = loaderDisplayer
 
+        loaderObserver = Observer {
+            login_progressBar.visibility = it
+        }
+        googleBtnSwitchObserver = Observer {connect ->
+            if (connect) {
+                sign_in_button.setOnClickListener {
+                    loginAppManager.googleSignIn()
+                }
+            } else {
+                sign_in_button.setOnClickListener {
+                    loginAppManager.disconnectGoogleAccount(true)
+                }
+            }
+        }
+        googleBtnSwitch.observeForever(googleBtnSwitchObserver)
+        loaderDisplayer.observeForever(loaderObserver)
         regularConnectionSetup()
         setUpGoogle()
         loginAppManager.facebookSetup()
@@ -62,7 +85,7 @@ class LoginActivity : AppCompatActivity() {
 
     private fun setUpGoogle() {
         sign_in_button.setSize(SignInButton.SIZE_STANDARD)
-        loginAppManager.googleSetup()
+        loginAppManager.googleSetup(googleBtnSwitch)
     }
 
 
@@ -78,6 +101,8 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         if (doubleBackToExitPressedOnce) {
+            loaderDisplayer.removeObserver(loaderObserver)
+            googleBtnSwitch.removeObserver(googleBtnSwitchObserver)
             super.onBackPressed()
             return
         }
