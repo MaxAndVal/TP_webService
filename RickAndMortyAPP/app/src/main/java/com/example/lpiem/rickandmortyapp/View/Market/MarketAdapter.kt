@@ -11,11 +11,11 @@ import com.example.lpiem.rickandmortyapp.View.Collection.list.DiffUtilCollection
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.market_item.view.*
 
-class MarketAdapter (private var dataSet: ListOfCards): RecyclerView.Adapter<MarketAdapter.ViewHolder>() {
+class MarketAdapter (internal var dataSet: ListOfCards): RecyclerView.Adapter<MarketAdapter.ViewHolder>() {
 
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.cardPrice.text = "X ${dataSet.cards!![position].price} "
+        holder.cardPrice.text = "$ ${dataSet.cards!![position].price}"
         holder.cardId.text = dataSet.cards!![position].cardId.toString()
         holder.title.text = dataSet.cards!![position].cardName.toString()
         Picasso.get().load(dataSet.cards!![position].cardImage).into(holder.image)
@@ -35,13 +35,6 @@ class MarketAdapter (private var dataSet: ListOfCards): RecyclerView.Adapter<Mar
     fun getDataSet(): ListOfCards {
         return dataSet
     }
-
-    fun updateList(newList: ListOfCards) {
-        dataSet = dataSet.sortById()
-        val diffResult = DiffUtil.calculateDiff(DiffUtilCollection(dataSet, newList.sortById()))
-        diffResult.dispatchUpdatesTo(this)
-    }
-
 
     class ViewHolder(view: View): RecyclerView.ViewHolder(view) {
         val image = view.iv_card!!
