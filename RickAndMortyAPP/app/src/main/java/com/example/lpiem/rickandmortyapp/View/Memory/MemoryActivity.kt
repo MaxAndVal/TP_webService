@@ -22,7 +22,7 @@ import kotlinx.android.synthetic.main.activity_memory.*
 
 class MemoryActivity : AppCompatActivity() {
 
-    private val memoryGameManager = MemoryGameManager.getInstance(this)
+    private val memoryGameManager = MemoryGameManager(this)
     private val loginAppManager = LoginAppManager.getInstance(this)
     private lateinit var turnObserver: Observer<Int>
     private lateinit var scoreObserver: Observer<Int>
@@ -40,13 +40,14 @@ class MemoryActivity : AppCompatActivity() {
         user = loginAppManager.connectedUser
 
         memoryGameManager.rewardsReceiver.observeOnce(Observer { rewards ->
-            if (loginAppManager.memoryInProgress) {
+            if (loginAppManager.memoryInProgress && memoryGameManager.turn == 0) {
                 Toast.makeText(this,
                         String.format(getString(R.string.memory_game_over),
                                 memoryGameManager.score,
                                 rewards.toFormattedString()),
                         Toast.LENGTH_LONG).show()
                 loginAppManager.memoryInProgress = false
+                memoryGameManager.turn = 8
             }
         })
 
