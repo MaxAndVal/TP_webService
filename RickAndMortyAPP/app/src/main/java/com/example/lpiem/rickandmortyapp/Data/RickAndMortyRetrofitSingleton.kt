@@ -90,6 +90,9 @@ class RickAndMortyRetrofitSingleton private constructor(private val context: Con
                         GET_FAQ -> {
                             liveData.postValue(result as ListOfFAQ)
                         }
+                        BUY_CAR_FROM_FRIEND -> {
+                            liveData.postValue(result as ResponseFromApi)
+                        }
                         LIST_OF_FRIENDS -> TODO()
                         RESULT_FRIENDS_SEARCHING -> TODO()
                         ADD_A_FRIENDS -> TODO()
@@ -221,6 +224,26 @@ class RickAndMortyRetrofitSingleton private constructor(private val context: Con
     fun getCardList(amount: Int): MutableLiveData<ListOfCards> {
         currentCall = instance!!.getCardSelection(amount)
         return callRetrofit(currentCall!!, LIST_OF_CARDS) as MutableLiveData<ListOfCards>
+    }
+
+    fun getMarket(user: User?, friendId: Int?): MutableLiveData<ListOfCards> {
+
+        val userId = user?.userId ?: -1
+        currentCall = if (friendId != null) {
+           instance!!.getFriendMarket(userId, friendId)
+        } else {
+            instance!!.getUserMarket(userId)
+        }
+        return  callRetrofit(currentCall!!, LIST_OF_CARDS) as MutableLiveData<ListOfCards>
+    }
+
+    fun buyCard(card: Card?, userId: Int?, friendId: Int?): MutableLiveData<ResponseFromApi> {
+        val jsonObject = JsonObject()
+        if (card != null) {
+            jsonObject.addProperty("price", card.price)
+        }
+        currentCall = instance!!.buyCardFromFriend(userId!!, friendId!!, card!!.cardId!!, jsonObject)
+        return callRetrofit(currentCall!!, BUY_CAR_FROM_FRIEND) as MutableLiveData<ResponseFromApi>
     }
 
 }

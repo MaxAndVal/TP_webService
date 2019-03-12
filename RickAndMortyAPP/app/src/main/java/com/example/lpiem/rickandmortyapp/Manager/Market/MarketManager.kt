@@ -3,6 +3,8 @@ package com.example.lpiem.rickandmortyapp.Manager.Market
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import com.example.lpiem.rickandmortyapp.Data.RetrofitCallTypes
 import com.example.lpiem.rickandmortyapp.Data.RickAndMortyRetrofitSingleton
 import com.example.lpiem.rickandmortyapp.Data.SUCCESS
@@ -12,6 +14,7 @@ import com.example.lpiem.rickandmortyapp.Model.ResponseFromApi
 import com.example.lpiem.rickandmortyapp.Model.User
 import com.example.lpiem.rickandmortyapp.R
 import com.example.lpiem.rickandmortyapp.Util.SingletonHolder
+import com.example.lpiem.rickandmortyapp.Util.observeOnce
 import com.example.lpiem.rickandmortyapp.View.Collection.list.CardListDisplay
 import com.example.lpiem.rickandmortyapp.View.Market.MarketActivity
 import com.example.lpiem.rickandmortyapp.View.TAG
@@ -26,6 +29,10 @@ class MarketManager private constructor(private val context: Context) {
     internal var rickAndMortyAPI = RickAndMortyRetrofitSingleton.getInstance(context)
     private var currentCall: Call<*>? = null
     lateinit var cardListDisplay: CardListDisplay
+    private var marketLiveData = MutableLiveData<ListOfCards>()
+    private var marketResponseLiveData = MutableLiveData<ResponseFromApi>()
+
+
     var friendId = -1
 
     companion object : SingletonHolder<MarketManager, Context>(::MarketManager)
@@ -35,34 +42,8 @@ class MarketManager private constructor(private val context: Context) {
         currentCall?.cancel()
         Log.d(TAG, "call canceled")
     }
-
-    private fun <T> callRetrofit(call: Call<T>, type: RetrofitCallTypes) {
-
-        call.enqueue(object : Callback<T> {
-            override fun onResponse(call: Call<T>, response: Response<T>) {
-                if (response.isSuccessful) {
-                    val result = response.body()
-                    when (type) {
-                        RetrofitCallTypes.LIST_OF_CARDS -> {
-                            listOfCardTreatment(result as ListOfCards)
-                        }
-                        RetrofitCallTypes.BUY_CAR_FROM_FRIEND -> {
-                            buyCardTreatment(result as ResponseFromApi)
-                        }
-                    }
-                } else {
-                    val responseError = response.errorBody() as ResponseBody
-                    Log.d(TAG, "error: ${responseError.string()}")
-                }
-
-            }
-
-            override fun onFailure(call: Call<T>, t: Throwable) {
-                Log.d(TAG, "fail : $t")
-            }
-        })
-
-    }
+    //listOfCardTreatment
+    //buyCardTreatment
 
     private fun buyCardTreatment(responseFromApi: ResponseFromApi) {
         if(responseFromApi.code==200){
@@ -85,25 +66,19 @@ class MarketManager private constructor(private val context: Context) {
 
     fun getMarket(user: User?, link: CardListDisplay, friendId: Int?) {
         cardListDisplay = link
-        val userId = user?.userId ?: -1
-        currentCall = if (friendId != null) {
+        if (friendId != null) {
             this.friendId = friendId
-            rickAndMortyAPI!!.instance!!.getFriendMarket(userId, friendId)
-        } else {
-            rickAndMortyAPI!!.instance!!.getUserMarket(userId)
         }
-        callRetrofit(currentCall!!, RetrofitCallTypes.LIST_OF_CARDS)
+        marketLiveData = rickAndMortyAPI.getMarket(user, friendId)
+        marketLiveData.observeOnce(Observer {
+            listOfCardTreatment(it!!)
+        })
     }
 
     fun buyCard(card: Card?, userId: Int?, friendId: Int?) {
-
-        Log.d(TAG, "cardid:"+ card?.cardId.toString())
-
-        val jsonObject = JsonObject()
-        if (card != null) {
-            jsonObject.addProperty("price", card.price)
-        }
-        currentCall = rickAndMortyAPI!!.instance!!.buyCardFromFriend(userId!!, friendId!!, card!!.cardId!!, jsonObject)
-        callRetrofit(currentCall!!, RetrofitCallTypes.BUY_CAR_FROM_FRIEND)
+        marketResponseLiveData = rickAndMortyAPI.buyCard(card, userId, friendId)
+        marketResponseLiveData.observeOnce(Observer {
+            buyCardTreatment(it!!)
+        })
     }
 }

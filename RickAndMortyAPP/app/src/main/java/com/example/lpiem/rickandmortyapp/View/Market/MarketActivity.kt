@@ -50,7 +50,7 @@ class MarketActivity : AppCompatActivity(), CardListDisplay {
                 if (card!!.price!! < user!!.userWallet!!) {
                     marketManager.buyCard(card, user!!.userId, friendId)
                     //marketManager.getMarket(user, this@MarketActivity, friendId)
-                    //marketManager.rickAndMortyAPI.updateUserInfo(user!!.userId)
+                    marketManager.rickAndMortyAPI.updateUserInfo(user!!.userId)
 
                 } else {
                     Toast.makeText(applicationContext, "Too poor to buy anything... get a job", Toast.LENGTH_SHORT).show()
