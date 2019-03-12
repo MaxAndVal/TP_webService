@@ -13,7 +13,6 @@ import com.example.lpiem.rickandmortyapp.Data.RickAndMortyRetrofitSingleton
 import com.example.lpiem.rickandmortyapp.Data.SUCCESS
 import com.example.lpiem.rickandmortyapp.Model.*
 import com.example.lpiem.rickandmortyapp.R
-import com.example.lpiem.rickandmortyapp.Util.SingletonHolder
 import com.example.lpiem.rickandmortyapp.Util.observeOnce
 import com.example.lpiem.rickandmortyapp.View.TAG
 import java.io.IOException
@@ -25,9 +24,9 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 
-class MemoryGameManager private constructor(private val context: Context) {
+class MemoryGameManager constructor( val context: Context) {
 
-    companion object : SingletonHolder<MemoryGameManager, Context>(::MemoryGameManager)
+    //companion object : SingletonHolder<MemoryGameManager, Context>(::MemoryGameManager)
 
     private var loginAppManager = LoginAppManager.getInstance(context)
     private val rickAndMortyAPI = RickAndMortyRetrofitSingleton.getInstance(context)
