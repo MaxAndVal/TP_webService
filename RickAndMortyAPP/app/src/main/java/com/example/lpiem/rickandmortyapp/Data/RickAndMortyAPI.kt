@@ -36,6 +36,12 @@ interface RickAndMortyAPI {
             @Path("id") userId: Int
     ): Call<ResponseFromApi>
 
+    @PUT("/users/{id}/password")
+    fun changePassword(
+            @Path("id") userId: Int,
+            @Body body: JsonObject
+    ): Call<ResponseFromApi>
+
     ///KAAMELOTT GAME
 
     @PUT("/users/playGame/{id}")

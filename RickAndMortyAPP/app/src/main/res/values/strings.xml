@@ -73,4 +73,7 @@
     <string name="cards_won">\nVous avez gagne les cartes :\n</string>
     <string name="error_fetching_pictures">Une erreur est survenue lors de la récupération des images ...</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>
