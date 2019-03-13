@@ -65,6 +65,8 @@ class LoginActivity : AppCompatActivity() {
             }
         }
         tv_signIn.setOnClickListener { loginAppManager.regularSignIn() }
+        tv_lostPassword.setOnClickListener { loginAppManager.openActivityLostPassword() }
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
