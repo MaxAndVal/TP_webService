@@ -9,3 +9,4 @@ enum class JsonProperty(var string: String)  {
     NewWallet("newWallet"),
     NewDate("newDate")
 }
+

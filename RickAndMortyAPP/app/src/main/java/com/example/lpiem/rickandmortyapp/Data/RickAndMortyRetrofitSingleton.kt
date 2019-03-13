@@ -7,9 +7,9 @@ import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import com.example.lpiem.rickandmortyapp.Data.RetrofitCallTypes.*
+import com.example.lpiem.rickandmortyapp.Manager.LoginAppManager
 import com.example.lpiem.rickandmortyapp.Model.*
 import com.example.lpiem.rickandmortyapp.Util.SingletonHolder
-import com.example.lpiem.rickandmortyapp.View.LoginActivity
 import com.example.lpiem.rickandmortyapp.View.TAG
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
@@ -105,6 +105,10 @@ class RickAndMortyRetrofitSingleton private constructor(private val context: Con
                     }
                 } else {
                     val responseError = response.errorBody() as ResponseBody
+                    if (type == LOGIN) {
+                        val loginAppManager = LoginAppManager.getInstance(context)
+                        loginAppManager.loaderDisplay.postValue(View.GONE)
+                    }
                     Log.d(TAG, "error: ${responseError.string()}")
                 }
 
@@ -114,7 +118,8 @@ class RickAndMortyRetrofitSingleton private constructor(private val context: Con
                 Log.d(TAG, "fail : $t")
                 if (type == LOGIN) {
                     Toast.makeText(context, "Une erreur a eu lieu. Merci de tenter de vous reconnecter à nouveau", Toast.LENGTH_SHORT).show()
-                    LoginActivity.loader.postValue(View.GONE)
+                    val loginAppManager = LoginAppManager.getInstance(context)
+                    loginAppManager.loaderDisplay.postValue(View.GONE)
                 }
             }
         })

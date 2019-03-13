@@ -45,7 +45,7 @@ class LoginAppManager private constructor(private var context: Context) {
     var gameInProgress = true
     var memoryInProgress = true
     private var loginLiveData = MutableLiveData<ResponseFromApi>()
-    lateinit var loaderDisplay: MutableLiveData<Int>
+    var loaderDisplay = MutableLiveData<Int>()
     var googleBtnSwitch = MutableLiveData<Boolean>()
     var resolveIntent = MutableLiveData<Intent>()
     var facebookInit = MutableLiveData<Unit>()
@@ -88,7 +88,6 @@ class LoginAppManager private constructor(private var context: Context) {
                 .build()
 
         mGoogleSignInClient = GoogleSignIn.getClient((context as LoginActivity), gso)
-        /////googleBtnTextView = ((context as LoginActivity).sign_in_button.getChildAt(0) as Button)
     }
 
     private fun handleGoogleSignInResult(completedTask: Task<GoogleSignInAccount>) {

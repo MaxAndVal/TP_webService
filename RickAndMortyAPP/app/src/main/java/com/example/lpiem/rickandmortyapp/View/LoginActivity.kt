@@ -9,7 +9,6 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.example.lpiem.rickandmortyapp.Manager.LoginAppManager
 import com.example.lpiem.rickandmortyapp.R
@@ -30,7 +29,6 @@ class LoginActivity : AppCompatActivity() {
     var facebookCallbackManager: CallbackManager? = null
     private lateinit var loginAppManager: LoginAppManager
     private var doubleBackToExitPressedOnce = false
-    private var loaderDisplayer = MutableLiveData<Int>()
     private lateinit var loaderObserver: Observer<Int>
     private lateinit var googleBtnSwitchObserver : Observer<Boolean>
     private lateinit var resolveIntentObserver: Observer<Intent>
@@ -38,17 +36,11 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var facebookInitObserver: Observer<Unit>
     private lateinit var alreadyConnectedWithFacebookObserver: Observer<Boolean>
 
-    companion object {
-        lateinit var loader: MutableLiveData<Int>
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        LoginActivity.loader = loaderDisplayer
         loginAppManager = LoginAppManager.getInstance(this)
-        loginAppManager.loaderDisplay = loaderDisplayer
 
         initObservers()
         triggerLivesData()
@@ -161,12 +153,12 @@ class LoginActivity : AppCompatActivity() {
         loginAppManager.facebookInit.observeForever(facebookInitObserver)
         loginAppManager.resolveIntent.observeForever(resolveIntentObserver)
         loginAppManager.googleBtnSwitch.observeForever(googleBtnSwitchObserver)
-        loaderDisplayer.observeForever(loaderObserver)
+        loginAppManager.loaderDisplay.observeForever(loaderObserver)
     }
 
     override fun onBackPressed() {
         if (doubleBackToExitPressedOnce) {
-            loaderDisplayer.removeObserver(loaderObserver)
+            loginAppManager.loaderDisplay.removeObserver(loaderObserver)
             loginAppManager.alreadyConnectedToFacebook.removeObserver(alreadyConnectedWithFacebookObserver)
             loginAppManager.facebookInit.removeObserver(facebookInitObserver)
             loginAppManager.resolveIntent.removeObserver(resolveIntentObserver)
