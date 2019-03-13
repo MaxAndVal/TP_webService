@@ -16,8 +16,10 @@ import com.example.lpiem.rickandmortyapp.Util.SingletonHolder
 import com.example.lpiem.rickandmortyapp.Util.observeOnce
 import com.example.lpiem.rickandmortyapp.View.BottomActivity
 import com.example.lpiem.rickandmortyapp.View.Settings.FAQAdapter
+import com.example.lpiem.rickandmortyapp.View.Settings.PasswordFragment
 import com.example.lpiem.rickandmortyapp.View.TAG
 import kotlinx.android.synthetic.main.activity_bottom.*
+import kotlinx.android.synthetic.main.fragment_password.*
 
 class SettingsManager internal constructor(private val context: Context) {
 
@@ -65,6 +67,22 @@ class SettingsManager internal constructor(private val context: Context) {
         FAQLiveData.observeOnce(Observer {
             getFAQTreatment(it)
         })
+
+    }
+
+    fun openFragmentChangePassword(passwordFragment: PasswordFragment) {
+        val fragmentManager = (context as BottomActivity).supportFragmentManager
+        val fragmentTransaction = fragmentManager.beginTransaction()
+        fragmentTransaction.add(R.id.flMain, passwordFragment).addToBackStack(null)
+        fragmentTransaction.commit()
+        fragmentTransaction.addToBackStack(null)
+        //TODO : pass to Activity method
+        context.flMain.bringToFront()
+        context.tv_deckToOpen.visibility = GONE
+        context.tv_wallet.visibility = GONE
+        context.navigation.visibility = GONE
+        context.fragmentLayout.visibility = GONE
+        context.tv_message.visibility = GONE
 
     }
 }
