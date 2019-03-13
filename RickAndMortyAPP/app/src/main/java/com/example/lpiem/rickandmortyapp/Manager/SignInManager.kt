@@ -21,7 +21,7 @@ class SignInManager private constructor(private var context: Context) {
     private var loginAppManager: LoginAppManager = LoginAppManager.getInstance(context)
     private val rickAndMortyAPI = RickAndMortyRetrofitSingleton.getInstance(context)
     private var responseFromApiLiveData = MutableLiveData<ResponseFromApi>()
-    private var loaderLiveData = MutableLiveData<Int>()
+    var loaderLiveData = MutableLiveData<Int>()
 
     companion object : SingletonHolder<SignInManager, Context>(::SignInManager)
 
@@ -38,8 +38,7 @@ class SignInManager private constructor(private var context: Context) {
         })
     }
 
-    fun signIn(userName: String, email: String, password: String, loader: MutableLiveData<Int>) {
-        loaderLiveData = loader
+    fun signIn(userName: String, email: String, password: String) {
         responseFromApiLiveData = rickAndMortyAPI.signIn(userName, email, password)
         responseFromApiLiveData.observeOnce(Observer {
             signInTreatment(it, email, password)
