@@ -101,6 +101,9 @@ class RickAndMortyRetrofitSingleton private constructor(private val context: Con
                         ADD_A_FRIENDS -> TODO()
                         DEL_A_FRIEND -> TODO()
                         ACCEPT_FRIENDSHIP -> TODO()
+                        CHANGE_PASSWORD->{
+                        liveData.postValue(result as ResponseFromApi)
+                    }
                     }
                 } else {
                     val responseError = response.errorBody() as ResponseBody
@@ -260,6 +263,17 @@ class RickAndMortyRetrofitSingleton private constructor(private val context: Con
         jsonBody.addProperty("user_id", userId)
         currentCall = instance!!.addRewards(jsonBody)
         return callRetrofit(currentCall!!, RESPONSE_FROM_API) as MutableLiveData<ResponseFromApi>
+    }
+
+    fun changePassword(userId: Int?, userEmail: String?, oldPass: String, newPass: String): MutableLiveData<ResponseFromApi> {
+    val jsonBody = JsonObject()
+        jsonBody.addProperty("user_email", userEmail)
+        jsonBody.addProperty("user_old_password", oldPass)
+        jsonBody.addProperty("user_new_password", newPass)
+        currentCall = instance!!.changePassword(userId!!,jsonBody)
+        return callRetrofit(currentCall!!, CHANGE_PASSWORD) as MutableLiveData<ResponseFromApi>
+
+
     }
 
 }

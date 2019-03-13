@@ -42,7 +42,7 @@ class SettingsFragment : androidx.fragment.app.Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         tv_faq.setOnClickListener { settingsManager.openFragmentFAQ(FAQ_Fragment()) }
-
+        tv_change_password.setOnClickListener { settingsManager.openFragmentChangePassword(PasswordFragment()) }
         displayUserInformation()
     }
 
