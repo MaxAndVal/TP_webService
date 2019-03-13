@@ -119,6 +119,10 @@ class MemoryGameManager constructor( val context: Context) {
     }
 
     private fun isGameFinished(turn: Int): Boolean {
+        if (rewards.size == 6) {
+            this.turn = 0
+            return true
+        }
         return turn == 0
     }
 
