@@ -8,7 +8,6 @@ import android.view.View.VISIBLE
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.example.lpiem.rickandmortyapp.Manager.LoginAppManager
 import com.example.lpiem.rickandmortyapp.Manager.MemoryGameManager
@@ -30,7 +29,7 @@ class MemoryActivity : AppCompatActivity() {
     private lateinit var initListener: Observer<MutableList<Tile>>
     private lateinit var startGameObserver: Observer<Unit>
     private lateinit var drawObserver: Observer<Pair<MutableList<Drawable?>, ListOfCards>>
-    private var finalTilesListener = MutableLiveData<MutableList<Tile>>()
+    //private var finalTilesListener = MutableLiveData<MutableList<Tile>>()
     private var lisOfImageView: List<ImageView> = ArrayList()
     private var user: User? = null
 
@@ -112,7 +111,7 @@ class MemoryActivity : AppCompatActivity() {
 
         startGameObserver = Observer {
             if (loginAppManager.memoryInProgress) {
-                memoryGameManager.initCardList(6, finalTilesListener)
+                memoryGameManager.initCardList(6)
             } else {
                 tv_loading.text = getString(R.string.try_an_other_game_later)
             }
@@ -146,7 +145,7 @@ class MemoryActivity : AppCompatActivity() {
 
         memoryGameManager.displayNewScore.observeForever(scoreObserver)
 
-        finalTilesListener.observeForever(initListener)
+        memoryGameManager.finalViewListeners.observeForever(initListener)
 
         memoryGameManager.startTheGame.observeForever(startGameObserver)
 
@@ -155,7 +154,7 @@ class MemoryActivity : AppCompatActivity() {
     private fun removeAllObservers() {
         memoryGameManager.displayNewTurn.removeObserver(turnObserver)
         memoryGameManager.displayNewScore.removeObserver(scoreObserver)
-        finalTilesListener.removeObserver(initListener)
+        memoryGameManager.finalViewListeners.removeObserver(initListener)
         memoryGameManager.startTheGame.removeObserver(startGameObserver)
         memoryGameManager.drawableListReceiver.removeObserver(drawObserver)
     }
