@@ -139,3 +139,11 @@ P
 Qapp/src/main/java/com/example/lpiem/rickandmortyapp/View/Memory/MemoryActivity.kt,6/2/62131d402166e04d56332e45be4260e0c2352085
 €
 Papp/src/main/java/com/example/lpiem/rickandmortyapp/Manager/MemoryGameManager.kt,e/5/e53069893d32fab2b8c3b0187d76037ebf1c13aa
+q
+Aapp/src/main/java/com/example/lpiem/rickandmortyapp/Model/Tile.kt,9/e/9e2c6532f8b57fec9205c1068dde4b184c406c0f
+y
+Iapp/src/main/java/com/example/lpiem/rickandmortyapp/Model/MemoryReward.kt,9/1/91bce7bd00ef80a2b0feb872fb9258a0b3331ffe
+‡
+Wapp/src/main/java/com/example/lpiem/rickandmortyapp/View/Kaamelott/KaamelottActivity.kt,4/7/47b15022d6d14d2d1fcfbd638edde84572f0cd45
+
+Oapp/src/main/java/com/example/lpiem/rickandmortyapp/Manager/KaamelottManager.kt,f/e/fee6c00c9c20f1081d4b5225af3e19e5e760cdec

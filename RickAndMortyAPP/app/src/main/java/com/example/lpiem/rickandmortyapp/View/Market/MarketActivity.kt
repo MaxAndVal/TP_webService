@@ -5,18 +5,17 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
-import com.example.lpiem.rickandmortyapp.Data.RickAndMortyRetrofitSingleton
 import com.example.lpiem.rickandmortyapp.Manager.LoginAppManager
 import com.example.lpiem.rickandmortyapp.Manager.Market.MarketManager
 import com.example.lpiem.rickandmortyapp.Model.ListOfCards
 import com.example.lpiem.rickandmortyapp.Model.User
 import com.example.lpiem.rickandmortyapp.R
 import com.example.lpiem.rickandmortyapp.Util.RecyclerTouchListener
-import com.example.lpiem.rickandmortyapp.View.Collection.list.CardListDisplay
 import kotlinx.android.synthetic.main.activity_market.*
 
-class MarketActivity : AppCompatActivity(), CardListDisplay {
+class MarketActivity : AppCompatActivity() {
 
     var listOfCards: ListOfCards? = null
     private lateinit var marketManager: MarketManager
@@ -24,6 +23,7 @@ class MarketActivity : AppCompatActivity(), CardListDisplay {
     private var user: User? = null
     private var adapter: MarketAdapter? = null
     private var friendId: Int? = null
+    private lateinit var displayObserver: Observer<ListOfCards>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,19 +37,30 @@ class MarketActivity : AppCompatActivity(), CardListDisplay {
         Log.d(com.example.lpiem.rickandmortyapp.View.TAG, "user : $user")
 
         marketManager = MarketManager.getInstance(this)
+
+        displayObserver = Observer {list ->
+            if (adapter == null) {
+                adapter = MarketAdapter(list)
+                rv_market.adapter = adapter
+                adapter!!.notifyDataSetChanged()
+            } else {
+                adapter!!.dataSet = list
+                adapter!!.notifyDataSetChanged()
+            }
+        }
+        marketManager.cardListDisplay.observeForever(displayObserver)
     }
 
     override fun onResume() {
         super.onResume()
         rv_market.layoutManager = GridLayoutManager(this, 2)
-        marketManager.getMarket(user, this, friendId)
+        marketManager.getMarket(user, friendId)
 
         rv_market.addOnItemTouchListener(RecyclerTouchListener(this, rv_market, object : RecyclerTouchListener.ClickListener {
             override fun onClick(view: View, position: Int) {
                 val card = (rv_market.adapter as MarketAdapter).getDataSet().cards?.get(position)
                 if (card!!.price!! < user!!.userWallet!!) {
                     marketManager.buyCard(card, user!!.userId, friendId)
-                    //marketManager.getMarket(user, this@MarketActivity, friendId)
                     marketManager.rickAndMortyAPI.updateUserInfo(user!!.userId)
 
                 } else {
@@ -64,23 +75,9 @@ class MarketActivity : AppCompatActivity(), CardListDisplay {
 
     }
 
-    private fun updateAdapter(list: ListOfCards) {
-        if (adapter == null) {
-            adapter = MarketAdapter(list)
-            rv_market.adapter = adapter
-            adapter!!.notifyDataSetChanged()
-        } else {
-            adapter!!.dataSet = list
-            adapter!!.notifyDataSetChanged()
-        }
-    }
-
-    override fun displayResult(list: ListOfCards) {
-        updateAdapter(list)
-    }
-
     override fun onBackPressed() {
         marketManager.cancelCall()
+        marketManager.cardListDisplay.removeObserver(displayObserver)
         super.onBackPressed()
     }
 }

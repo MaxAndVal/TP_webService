@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import com.airbnb.lottie.LottieDrawable
 import com.example.lpiem.rickandmortyapp.Manager.OpenDeckManager
 import com.example.lpiem.rickandmortyapp.R
@@ -15,21 +16,25 @@ class OpenDeckActivity : AppCompatActivity() {
 
     private var openDeckManager = OpenDeckManager.getInstance(this)
     private var updateDeckCountLiveData = MutableLiveData<Int>()
-    private var infoNewCardLiveData = MutableLiveData<Int>()
-
+    private lateinit var updateDeckCountObserver: Observer<Int>
+    private lateinit var newCardObserver: Observer<Int>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_open_deck)
         iv_closeOpenDeck.setOnClickListener { finish() }
 
-
-        updateDeckCountLiveData.observeForever {
+        updateDeckCountObserver = Observer {
             updateDecksCount(it)
         }
-        infoNewCardLiveData.observeForever {
+
+        newCardObserver = Observer {
             getInfoNewCards(it)
         }
+
+        openDeckManager.updateDeckCountLiveData
+        updateDeckCountLiveData.observeForever(updateDeckCountObserver)
+        openDeckManager.infoNewCardLiveData.observeForever(newCardObserver)
     }
 
     override fun onResume() {
@@ -42,11 +47,7 @@ class OpenDeckActivity : AppCompatActivity() {
         iv_peaceAmongWorld.setOnClickListener {
             if (openDeckManager.loginAppManager.connectedUser!!.deckToOpen!! > 0) {
                 showAnimation(true)
-                openDeckManager.openRandomDeck(
-                        openDeckManager.loginAppManager.connectedUser!!.deckToOpen,
-                        updateDeckCountLiveData,
-                        infoNewCardLiveData
-                )
+                openDeckManager.openRandomDeck(openDeckManager.loginAppManager.connectedUser!!.deckToOpen)
             }
         }
     }
@@ -81,6 +82,8 @@ class OpenDeckActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
+        updateDeckCountLiveData.removeObserver(updateDeckCountObserver)
+        openDeckManager.infoNewCardLiveData.removeObserver(newCardObserver)
         openDeckManager.showDetails = false
         av_from_code.cancelAnimation()
         super.onBackPressed()

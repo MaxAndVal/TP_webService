@@ -32,19 +32,21 @@ class MemoryGameManager constructor( val context: Context) {
     var score = 0
     var turn = 8
     private var halfTurn = false
+    // LISTS
     var list: MutableList<Triple<Drawable, String, Int>> = ArrayList()
+    private var listOfTiles: MutableList<Tile> = ArrayList()
+    private var clickedElements: MutableList<Tile> = ArrayList()
+    private val rewards: MutableList<MemoryReward> = ArrayList()
+    // LIVE DATA
     var startTheGame = MutableLiveData<Unit>()
     var displayNewTurn = MutableLiveData<Int>()
     var displayNewScore = MutableLiveData<Int>()
     var rewardsReceiver = MutableLiveData<MutableList<MemoryReward>>()
     var drawableListReceiver = MutableLiveData<Pair<MutableList<Drawable?>, ListOfCards>>()
-    private var userResponseReceiver = MutableLiveData<ResponseFromApi>()
-    private var listOfTiles: MutableList<Tile> = ArrayList()
-    private var clickedElements: MutableList<Tile> = ArrayList()
-    private val rewards: MutableList<MemoryReward> = ArrayList()
-    private var listOfCardsReceiver = MutableLiveData<ListOfCards>()
-    private lateinit var viewListeners: MutableLiveData<MutableList<Tile>>
+    var finalViewListeners = MutableLiveData<MutableList<Tile>>()
     private var rewardToApiResult = MutableLiveData<ResponseFromApi>()
+    private var userResponseReceiver = MutableLiveData<ResponseFromApi>()
+    private var listOfCardsReceiver = MutableLiveData<ListOfCards>()
     private lateinit var apiResultObserver: Observer<ResponseFromApi>
 
 
@@ -52,13 +54,11 @@ class MemoryGameManager constructor( val context: Context) {
         rickAndMortyAPI.cancelCall()
     }
 
-    fun initCardList(amount: Int, imageViewsListeners: MutableLiveData<MutableList<Tile>>) {
-        viewListeners = imageViewsListeners
+    fun initCardList(amount: Int) {
         listOfCardsReceiver = rickAndMortyAPI.getCardList(amount)
         listOfCardsReceiver.observeOnce(Observer { listOfCards ->
             getPicturesFromList(listOfCards)
         })
-
     }
 
     private fun getPicturesFromList(listOfCards: ListOfCards) {
@@ -114,8 +114,7 @@ class MemoryGameManager constructor( val context: Context) {
         for (view in lisOfImageView) {
             view.visibility = VISIBLE
         }
-        viewListeners.postValue(listOfTiles)
-
+        finalViewListeners.postValue(listOfTiles)
     }
 
     private fun isGameFinished(turn: Int): Boolean {
@@ -149,7 +148,6 @@ class MemoryGameManager constructor( val context: Context) {
             view.isClickable = true
             if (onTwoTilesTapped) clickedElements.onTwoTilesTapped(newTile = tile)
         }, animationTime)
-
     }
 
     private fun isNewTurn(): Int {
@@ -221,7 +219,6 @@ class MemoryGameManager constructor( val context: Context) {
     }
 
     // Date and game available
-
     fun gameAvailable(user: User) {
         userResponseReceiver = rickAndMortyAPI.getUserById(user.userId)
         userResponseReceiver.observeOnce(Observer {
