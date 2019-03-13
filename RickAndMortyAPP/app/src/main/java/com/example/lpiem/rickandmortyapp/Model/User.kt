@@ -46,6 +46,9 @@ class User : Parcelable {
     @SerializedName("user_image")
     @Expose
     var userImage: String? = null
+    @SerializedName("external_id")
+    @Expose
+    var externalId: String? = null
 
     constructor(inside: Parcel) {
         Log.d(TAG, "inside = $inside")
@@ -57,6 +60,7 @@ class User : Parcelable {
         this.userLastGame = inside.readValue(String::class.java.classLoader) as String
         this.userLastMemory = inside.readValue(String::class.java.classLoader) as String
         this.userImage = inside.readValue(String::class.java.classLoader) as String
+        this.externalId = inside.readValue(String::class.java.classLoader) as String
     }
 
     override fun writeToParcel(dest: Parcel, flags: Int) {
@@ -68,6 +72,7 @@ class User : Parcelable {
         dest.writeValue(userLastGame)
         dest.writeValue(userLastMemory)
         dest.writeValue(userImage)
+        dest.writeValue(externalId)
     }
 
     override fun describeContents(): Int {
@@ -80,8 +85,9 @@ class User : Parcelable {
                 " userEmail=$userEmail," +
                 " deckToOpen=$deckToOpen," +
                 " userWallet=$userWallet," +
-                " userLastGameDate=$userLastGame)," +
-                " userLastMemoryDate=$userLastMemory)," +
-                " userImage=$userImage"
+                " userLastGameDate=$userLastGame," +
+                " userLastMemoryDate=$userLastMemory," +
+                " userImage=$userImage," +
+                " externalId=$externalId)"
     }
 }
