@@ -6,23 +6,25 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.example.lpiem.rickandmortyapp.Manager.SignInManager
 import com.example.lpiem.rickandmortyapp.R
-import com.example.lpiem.rickandmortyapp.Util.observeOnce
 import kotlinx.android.synthetic.main.activity_signin.*
 
 class SignInActivity : AppCompatActivity() {
 
     private lateinit var signInManager: SignInManager
-    private var loaderLiveData = MutableLiveData<Int>()
+    private lateinit var loaderObserver: Observer<Int>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_signin)
 
         signInManager = SignInManager.getInstance(this)
+
+        loaderObserver = Observer {
+            progress_bar_sign_in.visibility = it
+        }
 
         tv_alreadyAccount.setOnClickListener { finish() }
 
@@ -35,7 +37,7 @@ class SignInActivity : AppCompatActivity() {
                 val name = ed_username.text.toString()
                 val email = ed_email.text.toString()
                 val password = ed_password.text.toString()
-                signInManager.signIn(name, email, password, loaderLiveData)
+                signInManager.signIn(name, email, password)
                 val view = this.currentFocus
                 view?.let { v ->
                     val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as
@@ -49,10 +51,7 @@ class SignInActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        loaderLiveData.observeOnce(Observer {
-            progress_bar_sign_in.visibility = it
-        })
-
+        signInManager.loaderLiveData.observeForever(loaderObserver)
     }
 
     private fun fieldsAreEmpties(): Boolean {
@@ -61,6 +60,7 @@ class SignInActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         signInManager.cancelCall()
+        signInManager.loaderLiveData.removeObserver(loaderObserver)
         super.onBackPressed()
     }
 

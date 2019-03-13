@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import com.example.lpiem.rickandmortyapp.Data.RetrofitCallTypes.*
 import com.example.lpiem.rickandmortyapp.Manager.LoginAppManager
+import com.example.lpiem.rickandmortyapp.Manager.SignInManager
 import com.example.lpiem.rickandmortyapp.Model.*
 import com.example.lpiem.rickandmortyapp.Util.SingletonHolder
 import com.example.lpiem.rickandmortyapp.View.TAG
@@ -123,6 +124,10 @@ class RickAndMortyRetrofitSingleton private constructor(private val context: Con
                     Toast.makeText(context, "Une erreur a eu lieu. Merci de tenter de vous reconnecter à nouveau", Toast.LENGTH_SHORT).show()
                     val loginAppManager = LoginAppManager.getInstance(context)
                     loginAppManager.loaderDisplay.postValue(View.GONE)
+                } else if (type == SIGN_IN) {
+                    Toast.makeText(context, "Une erreur a eu lieu. Merci de tenter de vous reconnecter à nouveau", Toast.LENGTH_SHORT).show()
+                    val signInManager = SignInManager.getInstance(context)
+                    signInManager.loaderLiveData.postValue(View.GONE)
                 }
             }
         })

@@ -27,7 +27,3 @@ enum class RetrofitCallTypes {
     HEROKU_VOID,
     CHANGE_PASSWORD
 }
-
-//enum class RetrofitCallTest(types: RetrofitCallTypes) {
-//    UPDATE_WALLET(RetrofitCallTypes.RESPONSE_FROM_API)
-//}

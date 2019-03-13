@@ -80,7 +80,6 @@ class SocialManager private constructor(private val context: Context){
     }
 
     private fun addFriendTreatment(response: ResponseFromApi) {
-        //TODO: need implementation for rv
         val code = response.code
         val message = response.message
         if (code == SUCCESS) {
@@ -93,7 +92,6 @@ class SocialManager private constructor(private val context: Context){
     }
 
     private fun delFriendTreatment(response: ResponseFromApi) {
-        //TODO: need implementation for rv
         val code = response.code
         val message = response.message
         if (code == SUCCESS) {

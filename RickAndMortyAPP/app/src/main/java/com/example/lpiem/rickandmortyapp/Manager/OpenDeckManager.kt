@@ -10,7 +10,6 @@ import com.example.lpiem.rickandmortyapp.Model.ListOfCards
 import com.example.lpiem.rickandmortyapp.Model.ResponseFromApi
 import com.example.lpiem.rickandmortyapp.Util.SingletonHolder
 import com.example.lpiem.rickandmortyapp.Util.observeOnce
-import com.example.lpiem.rickandmortyapp.View.OpenDeck.OpenDeckActivity
 
 class OpenDeckManager  private constructor(private val context: Context) {
 
@@ -28,7 +27,6 @@ class OpenDeckManager  private constructor(private val context: Context) {
     private fun openRandomDeckTreatment(listOfCards: ListOfCards) {
         val user = loginAppManager.connectedUser
         val userId = user!!.userId
-        context as OpenDeckActivity
         DetailCollectionManager.getInstance(context).listOfNewCards = listOfCards.cards as MutableList<Card>
 
         updateDeckCountLiveData.postValue(user.deckToOpen!!)
@@ -52,7 +50,7 @@ class OpenDeckManager  private constructor(private val context: Context) {
 
     fun openRandomDeck(deckToOpen: Int?) {
         val userId = loginAppManager.connectedUser!!.userId
-        if(deckToOpen!! > 0){
+        if(deckToOpen!! > 0) {
             listOfCardsLiveData = rickAndMortyAPI.openRandomDeck(userId)
             listOfCardsLiveData.observeOnce(Observer {
                 openRandomDeckTreatment(it)

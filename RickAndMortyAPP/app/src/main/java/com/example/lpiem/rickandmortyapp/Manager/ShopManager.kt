@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.example.lpiem.rickandmortyapp.Data.RickAndMortyRetrofitSingleton
 import com.example.lpiem.rickandmortyapp.Data.SUCCESS
+import com.example.lpiem.rickandmortyapp.Model.CardBooster
 import com.example.lpiem.rickandmortyapp.Model.ResponseFromApi
 import com.example.lpiem.rickandmortyapp.Model.Wallet
 import com.example.lpiem.rickandmortyapp.R
@@ -95,9 +96,9 @@ class ShopManager private constructor(private val context: Context) {
 
     private fun howManyDecksToAdd(cost: Int) : Int {
         return when (cost) {
-            40 ->  1
-            100 -> 3
-            300 -> 10
+            CardBooster.LITTLE.cost ->  CardBooster.LITTLE.amount
+            CardBooster.MEDIUM.cost ->  CardBooster.MEDIUM.amount
+            CardBooster.LARGE.cost ->  CardBooster.LARGE.amount
             else -> 0
         }
     }
