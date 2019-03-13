@@ -40,8 +40,8 @@ class LoginActivity : AppCompatActivity() {
         loginAppManager = LoginAppManager.getInstance(this)
         loginAppManager.loaderDisplay = loaderDisplayer
 
-        loaderObserver = Observer {
-            login_progressBar.visibility = it
+        loaderObserver = Observer { isVisible ->
+            login_progressBar.visibility = isVisible
         }
         googleBtnSwitchObserver = Observer {connect ->
             if (connect) {
