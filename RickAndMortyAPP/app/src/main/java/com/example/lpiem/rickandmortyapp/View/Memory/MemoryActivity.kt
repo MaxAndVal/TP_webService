@@ -40,50 +40,8 @@ class MemoryActivity : AppCompatActivity() {
 
         user = loginAppManager.connectedUser
 
-        memoryGameManager.rewardsReceiver.observeOnce(Observer { rewards ->
-            if (loginAppManager.memoryInProgress && memoryGameManager.turn == 0) {
-                Toast.makeText(this,
-                        String.format(getString(R.string.memory_game_over),
-                                memoryGameManager.score,
-                                rewards.toFormattedString()),
-                        Toast.LENGTH_LONG).show()
-                loginAppManager.memoryInProgress = false
-                memoryGameManager.turn = 8
-            }
-        })
-
-        drawObserver = Observer { drawAndCardList ->
-            for ((i, draw) in drawAndCardList.first.withIndex()) {
-                if (draw == null) {
-                    Toast.makeText(this, getString(R.string.error_fetching_pictures),
-                            Toast.LENGTH_LONG).show()
-                    break
-                } else {
-                    memoryGameManager.list.add(Triple(draw, drawAndCardList.second.cards!![i].cardName!!, drawAndCardList.second.cards!![i].cardId!!))
-                    if (memoryGameManager.list.size == 6) {
-                        memoryGameManager.initGame(lisOfImageView, memoryGameManager.list)
-                        break
-                    }
-                }
-            }
-        }
-        memoryGameManager.drawableListReceiver.observeForever(drawObserver)
-
-        turnObserver = Observer { currentTurn ->
-            tv_turn.text = String.format(getString(R.string.turn_lefts), currentTurn)
-        }
-
-        scoreObserver = Observer { currentScore ->
-            tv_memory_score.text = String.format(getString(R.string.current_score), currentScore)
-        }
-
-        initListener = Observer { list ->
-            setAnimationListener(list)
-        }
-
-        memoryGameManager.displayNewTurn.observeForever(turnObserver)
-        memoryGameManager.displayNewScore.observeForever(scoreObserver)
-        finalTilesListener.observeForever(initListener)
+        declareAllObservers()
+        triggerLiveData()
 
         // init game counters
         tv_turn.text = String.format(getString(R.string.turn_lefts), memoryGameManager.turn)
@@ -92,24 +50,17 @@ class MemoryActivity : AppCompatActivity() {
         lisOfImageView = listOf(iv_1, iv_2, iv_3, iv_4, iv_5, iv_6, iv_7, iv_8, iv_9, iv_10,
                 iv_11, iv_12)
 
-        startGameObserver = Observer {
-            if (loginAppManager.memoryInProgress) {
-                memoryGameManager.initCardList(6, finalTilesListener)
-            } else {
-                tv_loading.text = getString(R.string.try_an_other_game_later)
-            }
-        }
-
-        memoryGameManager.startTheGame.observeForever(startGameObserver)
         memoryGameManager.gameAvailable(user!!)
     }
+
+
 
     private fun setAnimationListener(listOfTiles: MutableList<Tile>) {
         tv_turn.visibility = VISIBLE
         tv_memory_score.visibility = VISIBLE
         tv_memory_title.visibility = VISIBLE
         tv_loading.visibility = GONE
-        for (tile in listOfTiles) {
+        listOfTiles.forEach { tile ->
             val view = tile.tileView
             view.visibility = VISIBLE
 
@@ -129,6 +80,85 @@ class MemoryActivity : AppCompatActivity() {
         }
     }
 
+    private fun declareAllObservers() {
+
+        drawObserver = Observer { drawAndCardList ->
+            for ((i, draw) in drawAndCardList.first.withIndex()) {
+                if (draw == null) {
+                    Toast.makeText(this, getString(R.string.error_fetching_pictures),
+                            Toast.LENGTH_LONG).show()
+                    break
+                } else {
+                    memoryGameManager.list.add(Triple(draw, drawAndCardList.second.cards!![i].cardName!!, drawAndCardList.second.cards!![i].cardId!!))
+                    if (memoryGameManager.list.size == 6) {
+                        memoryGameManager.initGame(lisOfImageView, memoryGameManager.list)
+                        break
+                    }
+                }
+            }
+        }
+
+        turnObserver = Observer { currentTurn ->
+            tv_turn.text = String.format(getString(R.string.turn_lefts), currentTurn)
+        }
+
+        scoreObserver = Observer { currentScore ->
+            tv_memory_score.text = String.format(getString(R.string.current_score), currentScore)
+        }
+
+        initListener = Observer { list ->
+            setAnimationListener(list)
+        }
+
+        startGameObserver = Observer {
+            if (loginAppManager.memoryInProgress) {
+                memoryGameManager.initCardList(6, finalTilesListener)
+            } else {
+                tv_loading.text = getString(R.string.try_an_other_game_later)
+            }
+        }
+    }
+
+    private fun triggerLiveData() {
+
+        memoryGameManager.rewardsReceiver.observeOnce(Observer { rewards ->
+            if (loginAppManager.memoryInProgress && memoryGameManager.turn == 0) {
+                val handler = Handler()
+                handler.postDelayed({
+                    tv_loading.text = String.format(getString(R.string.memory_game_over),
+                            memoryGameManager.score,
+                            rewards.toFormattedString())
+                    tv_loading.visibility = VISIBLE
+                    lisOfImageView.forEach { it.visibility = GONE }
+                    tv_memory_score.visibility = GONE
+                    tv_memory_title.visibility = GONE
+                    tv_turn.visibility = GONE
+                }, 1000L)
+
+                loginAppManager.memoryInProgress = false
+                memoryGameManager.turn = 8
+            }
+        })
+
+        memoryGameManager.drawableListReceiver.observeForever(drawObserver)
+
+        memoryGameManager.displayNewTurn.observeForever(turnObserver)
+
+        memoryGameManager.displayNewScore.observeForever(scoreObserver)
+
+        finalTilesListener.observeForever(initListener)
+
+        memoryGameManager.startTheGame.observeForever(startGameObserver)
+
+    }
+
+    private fun removeAllObservers() {
+        memoryGameManager.displayNewTurn.removeObserver(turnObserver)
+        memoryGameManager.displayNewScore.removeObserver(scoreObserver)
+        finalTilesListener.removeObserver(initListener)
+        memoryGameManager.startTheGame.removeObserver(startGameObserver)
+        memoryGameManager.drawableListReceiver.removeObserver(drawObserver)
+    }
 
     // MutableList<MemoryReward> extension
     private fun MutableList<MemoryReward>.toFormattedString(): String {
@@ -142,11 +172,7 @@ class MemoryActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        memoryGameManager.displayNewTurn.removeObserver(turnObserver)
-        memoryGameManager.displayNewScore.removeObserver(scoreObserver)
-        finalTilesListener.removeObserver(initListener)
-        memoryGameManager.startTheGame.removeObserver(startGameObserver)
-        memoryGameManager.drawableListReceiver.removeObserver(drawObserver)
+        removeAllObservers()
         loginAppManager.memoryInProgress = true
         memoryGameManager.cancelCall()
         super.onBackPressed()

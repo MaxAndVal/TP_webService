@@ -28,10 +28,15 @@ class LoginActivity : AppCompatActivity() {
     private var googleBtnSwitch = MutableLiveData<Boolean>()
     private lateinit var googleBtnSwitchObserver : Observer<Boolean>
 
+    companion object {
+        lateinit var loader: MutableLiveData<Int>
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
+        LoginActivity.loader = loaderDisplayer
         loginAppManager = LoginAppManager.getInstance(this)
         loginAppManager.loaderDisplay = loaderDisplayer
 
@@ -81,7 +86,6 @@ class LoginActivity : AppCompatActivity() {
             loginAppManager.onGoogleConnectionResult(data)
         }
     }
-
 
     private fun setUpGoogle() {
         sign_in_button.setSize(SignInButton.SIZE_STANDARD)
