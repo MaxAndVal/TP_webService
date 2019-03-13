@@ -8,18 +8,21 @@ import android.view.View
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import com.example.lpiem.rickandmortyapp.Manager.KaamelottManager
 import com.example.lpiem.rickandmortyapp.Manager.LoginAppManager
+import com.example.lpiem.rickandmortyapp.Model.KaamelottQuizBundle
 import com.example.lpiem.rickandmortyapp.Model.User
 import com.example.lpiem.rickandmortyapp.R
-import com.example.lpiem.rickandmortyapp.View.Home.HomeDisplayUI
 import kotlinx.android.synthetic.main.activity_kaamelott.*
 
-class KaamelottActivity : AppCompatActivity(), HomeDisplayUI {
+class KaamelottActivity : AppCompatActivity() {
 
     private var kaamelottManager = KaamelottManager.getInstance(this)
     private var loginAppManager = LoginAppManager.getInstance(this)
     private var user: User? = null
+    private lateinit var initDisplayContentObserver: Observer<Unit>
+    private lateinit var updateUIObserver: Observer<KaamelottQuizBundle>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,36 +31,41 @@ class KaamelottActivity : AppCompatActivity(), HomeDisplayUI {
         user = loginAppManager.connectedUser
         Log.d(com.example.lpiem.rickandmortyapp.View.TAG, "user : $user")
 
-        if (loginAppManager.gameInProgress) {
-            kaamelottManager.gameAvailable(loginAppManager.connectedUser!!, this)
-        } else {
-            gameOver(false)
-        }
-
-    }
-
-    override fun displayActivityContent() {
-        if (loginAppManager.gameInProgress) {
-            makeGameDisplayed(false)
-            kaamelottManager.getRandomQuote(this)
-        } else {
-            gameOver(false)
-        }
-    }
-
-    override fun updateUI(citation: String, solution: String, list: List<String>) {
-        if (solution != "" && loginAppManager.connectedUser != null) {
-            tv_citation.text = citation
-            val buttons = listOf(btn_perso1, btn_perso2, btn_perso3, btn_perso4)
-            var i = 0
-            buttons.forEach {
-                it.text = list[i++]
-                it.setOnClickListener { view -> checkForWinner(view as Button, solution) }
+        initDisplayContentObserver = Observer {
+            if (loginAppManager.gameInProgress) {
+                makeGameDisplayed(false)
+                kaamelottManager.getRandomQuote()
+            } else {
+                gameOver(false)
             }
-            makeGameDisplayed(true)
-        } else {
-            Log.d(com.example.lpiem.rickandmortyapp.View.TAG, "listResult from API : $list")
         }
+
+        updateUIObserver = Observer { bundle ->
+            val citation = bundle.citation
+            val solution = bundle.solution
+            val list = bundle.list
+            if (solution != "" && loginAppManager.connectedUser != null) {
+                tv_citation.text = citation
+                val buttons = listOf(btn_perso1, btn_perso2, btn_perso3, btn_perso4)
+                var i = 0
+                buttons.forEach {
+                    it.text = list[i++]
+                    it.setOnClickListener { view -> checkForWinner(view as Button, solution) }
+                }
+                makeGameDisplayed(true)
+            } else {
+                Log.d(com.example.lpiem.rickandmortyapp.View.TAG, "listResult from API : $list")
+            }
+        }
+
+        kaamelottManager.updateUI.observeForever(updateUIObserver)
+        kaamelottManager.initDisplayContent.observeForever(initDisplayContentObserver)
+        if (loginAppManager.gameInProgress) {
+            kaamelottManager.gameAvailable(loginAppManager.connectedUser!!)
+        } else {
+            gameOver(false)
+        }
+
     }
 
     private fun makeGameDisplayed(display: Boolean) {
@@ -130,7 +138,7 @@ class KaamelottActivity : AppCompatActivity(), HomeDisplayUI {
     }
 
     private fun checkForTurn() {
-        if (kaamelottManager.turn <= 4) kaamelottManager.getRandomQuote(this)
+        if (kaamelottManager.turn <= 4) kaamelottManager.getRandomQuote()
         if (kaamelottManager.turn == 5) {
             gameOver(true)
             kaamelottManager.putDateToken()
@@ -139,6 +147,8 @@ class KaamelottActivity : AppCompatActivity(), HomeDisplayUI {
 
     override fun onBackPressed() {
         kaamelottManager.cancelCall()
+        kaamelottManager.updateUI.removeObserver(updateUIObserver)
+        kaamelottManager.initDisplayContent.removeObserver(initDisplayContentObserver)
         super.onBackPressed()
     }
 }

@@ -11,19 +11,17 @@ import com.example.lpiem.rickandmortyapp.Model.DetailledCard
 import com.example.lpiem.rickandmortyapp.R
 import com.example.lpiem.rickandmortyapp.Util.SingletonHolder
 import com.example.lpiem.rickandmortyapp.Util.observeOnce
-import com.example.lpiem.rickandmortyapp.View.Collection.detail.CardDetailDisplay
 
 class DetailCollectionManager private constructor(private val context: Context) {
 
     private val rickAndMortyAPI = RickAndMortyRetrofitSingleton.getInstance(context)
-    private lateinit var cardDetailDisplay: CardDetailDisplay
+    var cardDetailDisplay = MutableLiveData<DetailledCard>()
     var listOfNewCards: MutableList<Card>? = null
     private var detailedCardLiveData = MutableLiveData<DetailledCard>()
 
     companion object : SingletonHolder<DetailCollectionManager, Context>(::DetailCollectionManager)
 
-    fun getCardDetails(id: Int, link: CardDetailDisplay) {
-        cardDetailDisplay = link
+    fun getCardDetails(id: Int) {
         detailedCardLiveData = rickAndMortyAPI.getDetail(id)
         detailedCardLiveData.observeOnce(Observer {
             getCardDetailTreatment(it)
@@ -33,7 +31,7 @@ class DetailCollectionManager private constructor(private val context: Context) 
     private fun getCardDetailTreatment(response: DetailledCard) {
         val code = response.code
         if (code == SUCCESS) {
-            cardDetailDisplay.displayResult(response)
+            cardDetailDisplay.postValue(response)
         } else {
             Toast.makeText(context, String.format(context.getString(R.string.code_message), code, response.message), Toast.LENGTH_SHORT).show()
         }

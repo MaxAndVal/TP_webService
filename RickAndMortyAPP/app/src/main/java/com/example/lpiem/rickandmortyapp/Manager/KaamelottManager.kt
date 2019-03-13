@@ -7,14 +7,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.example.lpiem.rickandmortyapp.Data.RickAndMortyRetrofitSingleton
 import com.example.lpiem.rickandmortyapp.Data.SUCCESS
-import com.example.lpiem.rickandmortyapp.Model.KaamlottQuote
-import com.example.lpiem.rickandmortyapp.Model.ResponseFromApi
-import com.example.lpiem.rickandmortyapp.Model.User
-import com.example.lpiem.rickandmortyapp.Model.Wallet
+import com.example.lpiem.rickandmortyapp.Model.*
 import com.example.lpiem.rickandmortyapp.R
 import com.example.lpiem.rickandmortyapp.Util.SingletonHolder
 import com.example.lpiem.rickandmortyapp.Util.observeOnce
-import com.example.lpiem.rickandmortyapp.View.Home.HomeDisplayUI
 import com.example.lpiem.rickandmortyapp.View.TAG
 import java.text.SimpleDateFormat
 import java.util.*
@@ -24,11 +20,12 @@ class KaamelottManager private constructor(private var context: Context) {
     private val rickAndMortyAPI = RickAndMortyRetrofitSingleton.getInstance(context)
     internal var score = 0
     internal var turn = 0
-    private lateinit var homeDisplayUI: HomeDisplayUI
     private val loginAppManager = LoginAppManager.getInstance(context)
     private var kaamelottLiveData = MutableLiveData<KaamlottQuote>()
     private var responseFromApiLiveData = MutableLiveData<ResponseFromApi>()
     private var walletLiveData = MutableLiveData<Wallet>()
+    var initDisplayContent = MutableLiveData<Unit>()
+    var updateUI = MutableLiveData<KaamelottQuizBundle>()
 
     companion object : SingletonHolder<KaamelottManager, Context>(::KaamelottManager)
 
@@ -36,9 +33,7 @@ class KaamelottManager private constructor(private var context: Context) {
         rickAndMortyAPI.cancelCall()
     }
 
-    fun getRandomQuote(link: HomeDisplayUI) {
-        homeDisplayUI = link
-
+    fun getRandomQuote() {
         kaamelottLiveData = rickAndMortyAPI.getRandomQuote()
         kaamelottLiveData.observeOnce(Observer {
             getKaamelottQuoteTreatment(it)
@@ -53,14 +48,14 @@ class KaamelottManager private constructor(private var context: Context) {
             val personage = response.personnage!!
             val personageNameList = response.personnageList!!
             val shuffleList = listOf(personage, personageNameList[0], personageNameList[1], personageNameList[2]).shuffled()
-            homeDisplayUI.updateUI(citation, personage, shuffleList)
+            val bundle = KaamelottQuizBundle(citation,personage, shuffleList)
+            updateUI.postValue(bundle)
         } else {
             Log.d(TAG, "code : $code, message $message")
         }
     }
 
-    fun gameAvailable(user: User, link: HomeDisplayUI) {
-        homeDisplayUI = link
+    fun gameAvailable(user: User) {
         responseFromApiLiveData = rickAndMortyAPI.getUserById(user.userId)
         responseFromApiLiveData.observeOnce(Observer {
             getUserByIdTreatment(it)
@@ -73,7 +68,7 @@ class KaamelottManager private constructor(private var context: Context) {
         if (code == SUCCESS) {
             val user = response.results
             loginAppManager.gameInProgress = getDate() != user?.userLastGame
-            homeDisplayUI.displayActivityContent()
+            initDisplayContent.postValue(Unit)
         } else {
             Toast.makeText(context, String.format(context.getString(R.string.code_message_userNotFound), code, message), Toast.LENGTH_SHORT).show()
         }
