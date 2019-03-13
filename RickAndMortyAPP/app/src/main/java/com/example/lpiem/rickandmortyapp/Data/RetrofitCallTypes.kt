@@ -25,7 +25,8 @@ enum class RetrofitCallTypes {
     ADD_CARD_TO_MARKET,
     BUY_CAR_FROM_FRIEND,
     HEROKU_VOID,
-    CHANGE_PASSWORD
+    CHANGE_PASSWORD,
+    LOST_CODE
 }
 
 //enum class RetrofitCallTest(types: RetrofitCallTypes) {

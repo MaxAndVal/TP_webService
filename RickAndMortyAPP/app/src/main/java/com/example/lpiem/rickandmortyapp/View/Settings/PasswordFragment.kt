@@ -7,8 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.example.lpiem.rickandmortyapp.Manager.settings.ChangePasswordManager
 import com.example.lpiem.rickandmortyapp.Manager.settings.SettingsManager
@@ -37,16 +35,16 @@ private const val ARG_PARAM2 = "param2"
 class PasswordFragment : androidx.fragment.app.Fragment() {
 
     private lateinit var changePasswordManager: ChangePasswordManager
-    private lateinit var changePasswordObserver : Observer<Boolean>
+    private lateinit var changePasswordObserver: Observer<Boolean>
 
     companion object : SingletonHolder<SettingsManager, Context>(::SettingsManager)
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-       changePasswordManager = ChangePasswordManager.getInstance(context!!)
-        changePasswordObserver = Observer {isChangeIsSuccesfull ->
-                if(isChangeIsSuccesfull)closeChangePassword(this)
+        changePasswordManager = ChangePasswordManager.getInstance(context!!)
+        changePasswordObserver = Observer { isChangeIsSuccesfull ->
+            if (isChangeIsSuccesfull) closeChangePassword(this)
         }
     }
 
@@ -58,7 +56,7 @@ class PasswordFragment : androidx.fragment.app.Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         iv_closeFragment.setOnClickListener { closeChangePassword(this) }
-        btn_changePassword.setOnClickListener{changePassword()}
+        btn_changePassword.setOnClickListener { changePassword() }
 
     }
 
@@ -67,17 +65,17 @@ class PasswordFragment : androidx.fragment.app.Fragment() {
         val newPass = ed_NewPassword.text.toString()
         val newPassConf = ed_NewPasswordConf.text.toString()
 
-    if(!newPass.isEmpty() && !oldPass.isEmpty() && !newPassConf.isEmpty()){
-        if (newPass.equals(newPassConf)){
-            changePasswordManager.isPasswordChangeSucceded.observeOnce(changePasswordObserver)
-            changePasswordManager.changePassword(oldPass, newPass)
-            closeChangePassword(this)
-        }else{
-            Toast.makeText(context, "new passwords are not the same", Toast.LENGTH_LONG).show()
+        if (!newPass.isEmpty() && !oldPass.isEmpty() && !newPassConf.isEmpty()) {
+            if (newPass.equals(newPassConf)) {
+                changePasswordManager.isPasswordChangeSucceded.observeOnce(changePasswordObserver)
+                changePasswordManager.changePassword(oldPass, newPass)
+                closeChangePassword(this)
+            } else {
+                Toast.makeText(context, "new passwords are not the same", Toast.LENGTH_LONG).show()
+            }
+        } else {
+            Toast.makeText(context, "All fields are required", Toast.LENGTH_LONG).show()
         }
-    }else{
-        Toast.makeText(context, "All fields are required", Toast.LENGTH_LONG).show()
-    }
 
     }
 

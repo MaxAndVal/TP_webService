@@ -28,6 +28,11 @@ interface RickAndMortyAPI {
             @Body body: JsonObject
     ): Call<ResponseFromApi>
 
+    @POST("/auth/lostpassword")
+    fun sendCodeForPassword(
+            @Body body: JsonObject
+    ): Call<ResponseFromApi>
+
     ///USER
 
 
