@@ -6,7 +6,6 @@
     <string name="fb_login_protocol_scheme">fb715136128867008</string>
     <string name="code_message">code : %s message : %s</string>
 
-
     //Main Activity
     <string name="title_activity_bottom">BottomActivity</string>
     <string name="title_home">Home</string>
@@ -59,21 +58,21 @@
     <string name="number_of_deck_to_open">Vous avez %s decks à ouvrir</string>
 
     //Shop Activity
+    <string name="shop_title">Rick and Morty Shop</string>
     <string name="not_enought_money">Pas assez d\'argent pour ce pack</string>
     <string name="account_created">Compte créé</string>
     <string name="sellThisCard">Vendre cette carte ?</string>
     <string name="which_price_for_this_card">À quel prix la vendez-vous ?</string>
     <string name="X_decks_added">%d decks ajoutés à votre pool !</string>
     <string name="youAlreadyWonThisTile">Vous avez déjà gagné cette tuille !</string>
+    <string name="booster_amount">%d Boosters</string>
+
 
     //Memory Game
     <string name="current_score">Score : %d</string>
     <string name="memory_game_over">Partie terminee. Votre score final est de %d.%s</string>
     <string name="turn_lefts">Coups restants : %d</string>
     <string name="cards_won">\nVous avez gagne les cartes :\n</string>
-    <string name="error_fetching_pictures">Une erreur est survenue lors de la récupération des images ...</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="error_fetching_pictures">Une erreur est survenue lors de la récupération des images …</string>
 
 </resources>
