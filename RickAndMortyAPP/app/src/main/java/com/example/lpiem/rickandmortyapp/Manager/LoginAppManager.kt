@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Button
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
@@ -18,8 +17,13 @@ import com.example.lpiem.rickandmortyapp.Model.User
 import com.example.lpiem.rickandmortyapp.R
 import com.example.lpiem.rickandmortyapp.Util.SingletonHolder
 import com.example.lpiem.rickandmortyapp.Util.observeOnce
-import com.example.lpiem.rickandmortyapp.View.*
-import com.facebook.*
+import com.example.lpiem.rickandmortyapp.View.BottomActivity
+import com.example.lpiem.rickandmortyapp.View.LoginActivity
+import com.example.lpiem.rickandmortyapp.View.SignInActivity
+import com.example.lpiem.rickandmortyapp.View.TAG
+import com.facebook.AccessToken
+import com.facebook.FacebookException
+import com.facebook.GraphRequest
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -29,23 +33,23 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.google.gson.JsonObject
-import kotlinx.android.synthetic.main.activity_login.*
-import java.util.*
 
 class LoginAppManager private constructor(private var context: Context) {
 
     private val rickAndMortyAPI = RickAndMortyRetrofitSingleton.getInstance(context)
     private var connectedToGoogle = false
     private lateinit var gso: GoogleSignInOptions
-    private var mGoogleSignInClient: GoogleSignInClient? = null
+    var mGoogleSignInClient: GoogleSignInClient? = null
     private var account: GoogleSignInAccount? = null
-    private lateinit var googleBtnTextView: Button
     var connectedUser: User? = null
     var gameInProgress = true
     var memoryInProgress = true
     private var loginLiveData = MutableLiveData<ResponseFromApi>()
     lateinit var loaderDisplay: MutableLiveData<Int>
-    lateinit var googleBtnSwitch: MutableLiveData<Boolean>
+    var googleBtnSwitch = MutableLiveData<Boolean>()
+    var resolveIntent = MutableLiveData<Intent>()
+    var facebookInit = MutableLiveData<Unit>()
+    var alreadyConnectedToFacebook = MutableLiveData<Boolean>()
 
     companion object : SingletonHolder<LoginAppManager, Context>(::LoginAppManager)
 
@@ -68,14 +72,14 @@ class LoginAppManager private constructor(private var context: Context) {
 
     fun regularSignIn() {
         val signInIntent = Intent(context, SignInActivity::class.java)
-        context.startActivity(signInIntent)
+        resolveIntent.postValue(signInIntent)
     }
 
     // GOOGLE CONNECTION
 
-    fun googleSetup(btnSwitcher: MutableLiveData<Boolean>) {
-        googleBtnSwitch = btnSwitcher
-        (context as LoginActivity).sign_in_button.setOnClickListener { googleSignIn() }
+    fun googleSetup() {
+
+        googleBtnSwitch.postValue(true)
 
         gso = GoogleSignInOptions
                 .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -84,13 +88,7 @@ class LoginAppManager private constructor(private var context: Context) {
                 .build()
 
         mGoogleSignInClient = GoogleSignIn.getClient((context as LoginActivity), gso)
-        googleBtnTextView = ((context as LoginActivity).sign_in_button.getChildAt(0) as Button)
-    }
-
-    fun googleSignIn() {
-        loaderDisplay.postValue(View.VISIBLE)
-        val signInIntent = mGoogleSignInClient?.signInIntent
-        (context as LoginActivity).startActivityForResult(signInIntent, RC_SIGN_IN)
+        /////googleBtnTextView = ((context as LoginActivity).sign_in_button.getChildAt(0) as Button)
     }
 
     private fun handleGoogleSignInResult(completedTask: Task<GoogleSignInAccount>) {
@@ -143,8 +141,7 @@ class LoginAppManager private constructor(private var context: Context) {
             task.result
             if (verbose) Toast.makeText(context, context.getString(R.string.google_disconnected), Toast.LENGTH_SHORT).show()
             googleBtnSwitch.postValue(true)
-            googleBtnTextView.text = context.getString(R.string.btn_connection_google)
-            (context as LoginActivity).sign_in_button.setOnClickListener { googleSignIn() }
+            googleBtnSwitch.postValue(true)
             connectedToGoogle = false
         }
     }
@@ -152,77 +149,71 @@ class LoginAppManager private constructor(private var context: Context) {
     // FACEBOOK CONNECTION
 
     fun facebookSetup() {
-        (context as LoginActivity).facebookCallbackManager = CallbackManager.Factory.create()
-        (context as LoginActivity).facebook_login_button.setReadPermissions("email")
-
-        (context as LoginActivity).facebook_login_button.registerCallback((context as LoginActivity).facebookCallbackManager, object : FacebookCallback<LoginResult> {
-
-            override fun onSuccess(loginResult: LoginResult) {
-                loaderDisplay.postValue(View.VISIBLE)
-                val accessToken = loginResult.accessToken
-                val isLoggedIn = accessToken != null && !accessToken.isExpired
-                Log.d(TAG, "isLoggedIn on success = $isLoggedIn")
-
-                if (isLoggedIn) {
-                    val request = GraphRequest.newMeRequest(
-                            accessToken
-                    ) { obj, response ->
-                        val result = response.jsonObject
-                        Log.d(TAG, "request Body: $result")
-                        try {
-                            val userNameFB = result.getString("name")
-                            val userEmail = result.getString("email")
-                            val userId = result.getString("id")
-                            val image = "https://graph.facebook.com/$userId/picture?type=large"
-                            val jsonBody = JsonObject()
-
-                            jsonBody.addProperty(UserEmail.string, userEmail)
-                            jsonBody.addProperty(UserName.string, userNameFB)
-                            jsonBody.addProperty(UserPassword.string, userId)
-                            jsonBody.addProperty(UserImage.string, image)
-                            jsonBody.addProperty(ExternalID.string, userId)
-
-                            loginLiveData = rickAndMortyAPI.login(jsonBody)
-                            loginLiveData.observeOnce(Observer {
-                                loginTreatment(it)
-                            })
-
-                        } catch (e: Throwable) {
-                            Log.d(TAG, "error : $e")
-                            e.printStackTrace()
-                            Toast.makeText(context, context.getString(R.string.no_access_to_DB), Toast.LENGTH_SHORT).show()
-                            LoginManager.getInstance().logOut()
-                            loaderDisplay.postValue(View.GONE)
-                        }
-                    }
-                    val parameters = Bundle()
-                    parameters.putString("fields", "id,name,email,picture")
-                    request.parameters = parameters
-                    request.executeAsync()
-                }
-            }
-
-            override fun onCancel() {
-                Log.d(TAG, "onCancel: ")
-                //TODO : remove this line when app is finished
-                LoginManager.getInstance().logOut()
-                loaderDisplay.postValue(View.GONE)
-            }
-
-            override fun onError(exception: FacebookException) {
-                Toast.makeText(context, exception.toString(), Toast.LENGTH_SHORT).show()
-                Log.d(TAG, "onError: $exception")
-                loaderDisplay.postValue(View.GONE)
-            }
-        })
+        facebookInit.postValue(Unit)
 
         val accessToken = AccessToken.getCurrentAccessToken()
         val isLoggedIn = accessToken != null && !accessToken.isExpired
         Log.d(TAG, "isLoggedIn = $isLoggedIn")
+        alreadyConnectedToFacebook.postValue(isLoggedIn)
+
+    }
+
+    fun facebookSuccess(loginResult: LoginResult) {
+        loaderDisplay.postValue(View.VISIBLE)
+        val accessToken = loginResult.accessToken
+        val isLoggedIn = accessToken != null && !accessToken.isExpired
+        Log.d(TAG, "isLoggedIn on success = $isLoggedIn")
 
         if (isLoggedIn) {
-            LoginManager.getInstance().logInWithReadPermissions((context as LoginActivity), Arrays.asList("public_profile, email, user_birthday, user_friends"))
+            val request = GraphRequest.newMeRequest(
+                    accessToken
+            ) { obj, response ->
+                val result = response.jsonObject
+                Log.d(TAG, "request Body: $result")
+                try {
+                    val userNameFB = result.getString("name")
+                    val userEmail = result.getString("email")
+                    val userId = result.getString("id")
+                    val image = "https://graph.facebook.com/$userId/picture?type=large"
+                    val jsonBody = JsonObject()
+
+                    jsonBody.addProperty(UserEmail.string, userEmail)
+                    jsonBody.addProperty(UserName.string, userNameFB)
+                    jsonBody.addProperty(UserPassword.string, userId)
+                    jsonBody.addProperty(UserImage.string, image)
+                    jsonBody.addProperty(ExternalID.string, userId)
+
+                    loginLiveData = rickAndMortyAPI.login(jsonBody)
+                    loginLiveData.observeOnce(Observer {
+                        loginTreatment(it)
+                    })
+
+                } catch (e: Throwable) {
+                    Log.d(TAG, "error : $e")
+                    e.printStackTrace()
+                    Toast.makeText(context, context.getString(R.string.no_access_to_DB), Toast.LENGTH_SHORT).show()
+                    LoginManager.getInstance().logOut()
+                    loaderDisplay.postValue(View.GONE)
+                }
+            }
+            val parameters = Bundle()
+            parameters.putString("fields", "id,name,email,picture")
+            request.parameters = parameters
+            request.executeAsync()
         }
+    }
+
+    fun facebookCancel() {
+        Log.d(TAG, "onCancel: ")
+        //TODO : remove this line when app is finished
+        LoginManager.getInstance().logOut()
+        loaderDisplay.postValue(View.GONE)
+    }
+
+    fun facebookError(exception: FacebookException) {
+        Toast.makeText(context, exception.toString(), Toast.LENGTH_SHORT).show()
+        Log.d(TAG, "onError: $exception")
+        loaderDisplay.postValue(View.GONE)
     }
 
     private fun loginTreatment(response: ResponseFromApi) {
@@ -232,15 +223,14 @@ class LoginAppManager private constructor(private var context: Context) {
             val results = response.results
             loaderDisplay.postValue(View.GONE)
             if (connectedToGoogle) {
-                googleBtnTextView.text = context.getString(R.string.btn_disconnection_google)
                 googleBtnSwitch.postValue(false)
             }
             val name = results?.userName
             Log.d(TAG, "code = $code body = $response")
             Toast.makeText(context, String.format(context.getString(R.string.welcome, name)), Toast.LENGTH_SHORT).show()
-            val homeIntent = Intent(context, BottomActivity::class.java)
             connectedUser = response.results!!
-            (context as LoginActivity).startActivity(homeIntent)
+            val homeIntent = Intent(context, BottomActivity::class.java)
+            resolveIntent.postValue(homeIntent)
         } else {
             Toast.makeText(context, String.format(context.getString(R.string.code_message), code, message), Toast.LENGTH_SHORT).show()
             loaderDisplay.postValue(View.GONE)

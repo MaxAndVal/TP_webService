@@ -27,6 +27,7 @@ class RickAndMortyRetrofitSingleton private constructor(private val context: Con
 
     companion object : SingletonHolder<RickAndMortyRetrofitSingleton, Context>(::RickAndMortyRetrofitSingleton)
 
+
     private var rickAndMortyAPIInstance: RickAndMortyAPI? = null
     private var currentCall: Call<*>? = null
 
