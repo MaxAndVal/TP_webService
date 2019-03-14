@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lpiem.rickandmortyapp.Model.Friend
 import com.example.lpiem.rickandmortyapp.Model.SocialListenerAction
@@ -16,10 +16,11 @@ import com.example.lpiem.rickandmortyapp.View.TAG
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.social_item.view.*
 
+typealias BundleActionFriend = Pair<SocialListenerAction, Friend>
 
 class SocialAdapter(private var dataSet: List<Friend>?) : RecyclerView.Adapter<SocialAdapter.ViewHolder>() {
 
-    var liveDataListener = MediatorLiveData<Pair<SocialListenerAction, Friend>>()
+    var liveDataListener = MutableLiveData<BundleActionFriend>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val v = LayoutInflater.from(parent.context)
@@ -33,28 +34,28 @@ class SocialAdapter(private var dataSet: List<Friend>?) : RecyclerView.Adapter<S
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
-        val item = dataSet!![position]
-        Log.d(TAG, "friend image : ${item.friendImage}")
-        holder.userName.text = item.userName
-        Picasso.get().load(item.friendImage)
+        val friend = dataSet!![position]
+        Log.d(TAG, "friend image : ${friend.friendImage}")
+        holder.userName.text = friend.userName
+        Picasso.get().load(friend.friendImage)
                 .placeholder(R.drawable.ic_person_white_24dp)
                 .fit().centerInside()
                 .into(holder.userIcon)
-        if (item.accepted !== null && item.accepted!!) {
+        if (friend.accepted !== null && friend.accepted!!) {
             holder.ivIconFriends.setImageResource(R.drawable.ic_store_24dp)
             holder.ivIconFriends.setOnClickListener {
-                liveDataListener.postValue(Pair(OPEN_FRIEND_MARKET, item))
+                liveDataListener.postValue(BundleActionFriend(OPEN_FRIEND_MARKET, friend))
             }
 
         } else {
             holder.ivIconFriends.setImageResource(R.drawable.ic_add_24dp)
             holder.ivIconFriends.setOnClickListener {
-                liveDataListener.postValue(Pair(ADD_FRIENDS, item))
+                liveDataListener.postValue(BundleActionFriend(ADD_FRIENDS, friend))
             }
         }
 
         holder.userName.setOnLongClickListener {
-            liveDataListener.postValue(Pair(DEL_FRIENDS, item))
+            liveDataListener.postValue(BundleActionFriend(DEL_FRIENDS, friend))
             true
         }
     }
