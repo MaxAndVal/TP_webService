@@ -23,6 +23,7 @@
     <string name="no_account">Pas de compte ? <b><u>Cliquez ici</u></b> pour être Schwifty !</string>
     <string name="tv_password">Mot de passe</string>
     <string name="e_mail_hint">E-Mail</string>
+    <string name="password_hint">Password</string>
     <string name="et_password">Mot de passe</string>
     <string name="btn_connection">Connexion</string>
     <string name="tv_login_title">Login</string>
@@ -33,6 +34,7 @@
     <string name="no_access_to_DB">Impossible de se connecter à la base de donnée. Réessayez plus tard.</string>
     <string name="double_back_to_quit_app">S\'il vous plaît, cliquez sur retour une seconde fois pour quitter</string>
     <string name="welcome">Bienvenue %s</string>
+    <string name="forgotten_password">Mot de passe oublié ? <b><u>Cliquez ici</u></b></string>
 
     //Home Fragment
     <string name="pickle_rick">I\'m piclke Rick !!!\nCliquez pour accéder au Shop !!!</string>
@@ -53,6 +55,10 @@
     <string name="btn_pending_friend_requests">Voir les requetes en attente</string>
     <string name="btn_list_of_friends">Voir sa liste d\'ami</string>
     <string name="friend_added">Ami ajouté à votre liste !</string>
+    <string name="delete_a_friend">Delete a friend</string>
+    <string name="sure_to_delete_friend">Etes vous sur de vouloir supprimer %s de vos amis ?</string>
+    <string name="requests_of_friends_title">Requetes en attente</string>
+    <string name="list_of_friends_title">Liste d\'amis</string>
 
     //OpenDeck Activity
     <string name="number_of_deck_to_open">Vous avez %s decks à ouvrir</string>
@@ -67,12 +73,12 @@
     <string name="youAlreadyWonThisTile">Vous avez déjà gagné cette tuille !</string>
     <string name="booster_amount">%d Boosters</string>
 
-
     //Memory Game
     <string name="current_score">Score : %d</string>
     <string name="memory_game_over">Partie terminee. Votre score final est de %d.%s</string>
     <string name="turn_lefts">Coups restants : %d</string>
     <string name="cards_won">\nVous avez gagne les cartes :\n</string>
     <string name="error_fetching_pictures">Une erreur est survenue lors de la récupération des images …</string>
+
 
 </resources>
