@@ -3,6 +3,7 @@ package com.example.lpiem.rickandmortyapp.View
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import com.example.lpiem.rickandmortyapp.Manager.LoginAppManager
@@ -24,8 +25,23 @@ class LostPasswordActivity : AppCompatActivity() {
             if(it)openCodeModal()
         }
 
+        toggleView(false)
+
         tv_backToLogin.setOnClickListener { finish() }
         btn_sendCode.setOnClickListener{sendCode()}
+        tv_alreadyCode.setOnClickListener { toggleView(true) }
+    }
+
+    private fun toggleView(isCodeSend: Boolean) {
+
+        if(isCodeSend){
+            cl_codeSent.visibility = View.VISIBLE
+            cl_codeIsNotSent.visibility = View.GONE
+        }else{
+            cl_codeSent.visibility = View.GONE
+            cl_codeIsNotSent.visibility = View.VISIBLE
+        }
+
     }
 
     private fun openCodeModal() {
@@ -38,6 +54,7 @@ class LostPasswordActivity : AppCompatActivity() {
         if(!user_email.isEmpty()){
             lostPasswordManager.isSendCodeSucceded.observeOnce(isSendCodeObserver)
             lostPasswordManager.sendCodeManager(user_email)
+            toggleView(true)
         }else{
             Toast.makeText(this,"Merci de rentrer votre Email", Toast.LENGTH_LONG).show()
         }
