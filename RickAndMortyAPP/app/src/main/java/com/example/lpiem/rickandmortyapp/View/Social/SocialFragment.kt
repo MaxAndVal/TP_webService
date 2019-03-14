@@ -21,6 +21,7 @@ import com.example.lpiem.rickandmortyapp.View.Market.MarketActivity
 import com.example.lpiem.rickandmortyapp.View.TAG
 import kotlinx.android.synthetic.main.fragment_social.*
 
+
 class SocialFragment : androidx.fragment.app.Fragment() {
 
     private lateinit var socialManager: SocialManager
@@ -58,20 +59,21 @@ class SocialFragment : androidx.fragment.app.Fragment() {
         }
 
         adapterTouchItemObserver = Observer { item ->
-            when (item.first) {
+            val (action, friend) = item
+            when (action) {
                 SocialListenerAction.ADD_FRIENDS -> {
                     Log.d(TAG, item.toString())
                     if (item.second.accepted == null) {
-                        socialManager.callForAddFriend(item.second)
+                        socialManager.callForAddFriend(friend)
                     } else {
-                        socialManager.callForValidateFriend(item.second)
+                        socialManager.callForValidateFriend(friend)
                     }
                 }
                 SocialListenerAction.DEL_FRIENDS -> {
                     val builder: AlertDialog.Builder = AlertDialog.Builder(context, android.R.style.Theme_Material_Dialog_NoActionBar)
 
                     builder.setTitle(getString(R.string.delete_a_friend))
-                            .setMessage(String.format(getString(R.string.sure_to_delete_friend), item.second.userName))
+                            .setMessage(String.format(getString(R.string.sure_to_delete_friend), friend.userName))
                             .setPositiveButton(android.R.string.yes) { dialog, which ->
                                 socialManager.callToDelFriend(item.second)
                             }
@@ -84,7 +86,7 @@ class SocialFragment : androidx.fragment.app.Fragment() {
                 }
                 SocialListenerAction.OPEN_FRIEND_MARKET -> {
                     val intent = Intent(context, MarketActivity::class.java)
-                    intent.putExtra("friend_id", item.second.userId)
+                    intent.putExtra("friend_id", friend.userId)
                     startActivity(intent)
                 }
             }
