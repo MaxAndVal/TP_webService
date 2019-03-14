@@ -30,7 +30,7 @@ class SocialFragment : androidx.fragment.app.Fragment() {
     private lateinit var adapterTouchItemObserver: Observer<Pair<SocialListenerAction, Friend>>
     private var socialAdapter: SocialAdapter? = null
 
-//TODO(test before commit)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
