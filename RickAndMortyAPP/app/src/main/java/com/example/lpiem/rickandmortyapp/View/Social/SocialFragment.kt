@@ -18,8 +18,6 @@ import com.example.lpiem.rickandmortyapp.View.TAG
 import kotlinx.android.synthetic.main.fragment_social.*
 
 
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
 class SocialFragment : androidx.fragment.app.Fragment(), SocialActionsInterface {
 

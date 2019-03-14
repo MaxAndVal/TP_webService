@@ -85,7 +85,10 @@ class RickAndMortyRetrofitSingleton private constructor(private val context: Con
                         DECKS_INCREASED,
                         SIGN_IN,
                         CONNECTION,
-                        UPDATE_USER_INFO -> {
+                        UPDATE_USER_INFO,
+                        ADD_A_FRIENDS,
+                        ACCEPT_FRIENDSHIP,
+                        DEL_A_FRIEND -> {
                             liveData.postValue(result as ResponseFromApi)
                         }
                         GET_WALLET,
@@ -98,8 +101,10 @@ class RickAndMortyRetrofitSingleton private constructor(private val context: Con
                         BUY_CAR_FROM_FRIEND -> {
                             liveData.postValue(result as ResponseFromApi)
                         }
-                        LIST_OF_FRIENDS -> TODO()
-                        RESULT_FRIENDS_SEARCHING -> TODO()
+                        LIST_OF_FRIENDS,
+                        RESULT_FRIENDS_SEARCHING -> {
+                            liveData.postValue(result as ListOfFriends)
+                        }
                         ADD_A_FRIENDS -> TODO()
                         DEL_A_FRIEND -> TODO()
                         ACCEPT_FRIENDSHIP -> TODO()
@@ -285,6 +290,31 @@ class RickAndMortyRetrofitSingleton private constructor(private val context: Con
         return callRetrofit(currentCall!!, CHANGE_PASSWORD) as MutableLiveData<ResponseFromApi>
 
 
+    }
+
+    fun getFriendsList(userId: Int): MutableLiveData<ListOfFriends> {
+        currentCall = instance!!.getListOfFriends(userId)
+        return callRetrofit(currentCall!!, RetrofitCallTypes.LIST_OF_FRIENDS) as MutableLiveData<ListOfFriends>
+    }
+
+    fun getFriendSearchResult(userId: Int, friends: String?): MutableLiveData<ListOfFriends> {
+        currentCall = instance!!.searchForFriends(userId, friends)
+        return callRetrofit(currentCall!!, RetrofitCallTypes.RESULT_FRIENDS_SEARCHING) as MutableLiveData<ListOfFriends>
+    }
+
+    fun addThisFriend(currentUserId: Int, friendId: Int): MutableLiveData<ResponseFromApi> {
+        currentCall = instance!!.addAFriend(currentUserId, friendId)
+        return callRetrofit(currentCall!!, RetrofitCallTypes.ADD_A_FRIENDS) as MutableLiveData<ResponseFromApi>
+    }
+
+    fun validateFriendship(currentUserId: Int, friendId: Int): MutableLiveData<ResponseFromApi> {
+        currentCall = instance!!.validateAFriend(currentUserId, friendId)
+        return callRetrofit(currentCall!!, RetrofitCallTypes.ACCEPT_FRIENDSHIP) as MutableLiveData<ResponseFromApi>
+    }
+
+    fun deleteThisFriend(currentUserId: Int, friendId: Int): MutableLiveData<ResponseFromApi> {
+        currentCall = instance!!.deleteAFriend( currentUserId,friendId)
+        return callRetrofit(currentCall!!, RetrofitCallTypes.DEL_A_FRIEND) as MutableLiveData<ResponseFromApi>
     }
 
 }
