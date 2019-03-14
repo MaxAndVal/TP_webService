@@ -74,5 +74,7 @@
     <string name="turn_lefts">Coups restants : %d</string>
     <string name="cards_won">\nVous avez gagne les cartes :\n</string>
     <string name="error_fetching_pictures">Une erreur est survenue lors de la récupération des images …</string>
+    <string name="list_of_friends_title">Liste d\'amis</string>
+    <string name="requests_of_friends_title">Requetes en attente</string>
 
 </resources>

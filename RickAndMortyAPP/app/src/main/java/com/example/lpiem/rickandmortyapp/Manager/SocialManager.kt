@@ -10,31 +10,40 @@ import com.example.lpiem.rickandmortyapp.Data.SUCCESS
 import com.example.lpiem.rickandmortyapp.Model.Friend
 import com.example.lpiem.rickandmortyapp.Model.ListOfFriends
 import com.example.lpiem.rickandmortyapp.Model.ResponseFromApi
+import com.example.lpiem.rickandmortyapp.Model.SocialListLabel
+import com.example.lpiem.rickandmortyapp.Model.SocialListLabel.LIST_OF_FRIENDS
+import com.example.lpiem.rickandmortyapp.Model.SocialListLabel.LIST_OF_FRIENDS_REQUESTS
 import com.example.lpiem.rickandmortyapp.R
 import com.example.lpiem.rickandmortyapp.Util.SingletonHolder
 import com.example.lpiem.rickandmortyapp.Util.observeOnce
 import com.example.lpiem.rickandmortyapp.View.Social.SocialActionsInterface
 import com.example.lpiem.rickandmortyapp.View.Social.SocialFragment
 import com.example.lpiem.rickandmortyapp.View.TAG
-import kotlinx.android.synthetic.main.fragment_social.*
 
 
 class SocialManager private constructor(private val context: Context){
 
     private val rickAndMortyAPI = RickAndMortyRetrofitSingleton.getInstance(context)
-    var socialFragment: SocialFragment? = null
     private val loginAppManager = LoginAppManager.getInstance(context)
     private lateinit var link : SocialActionsInterface
+
+    var listOfFriends: ListOfFriends? = null
+    var listOfActualFriends: List<Friend>? = ArrayList()
+    var listOfPotentialFriends: List<Friend>? = ArrayList()
+    var resultFromSearch: ListOfFriends? = null
+
     private var listOfFriendsLiveData = MutableLiveData<ListOfFriends>()
     private var searchForFriendsLiveData = MutableLiveData<ListOfFriends>()
     private var callForFriendLiveData = MutableLiveData<ResponseFromApi>()
     private var validateFriendLiveData = MutableLiveData<ResponseFromApi>()
     private var delFriendLiveData = MutableLiveData<ResponseFromApi>()
+    var updateListLiveData = MutableLiveData<List<Friend>?>()
+    var changeBtnActionLiveData = MutableLiveData<SocialListLabel>()
 
     companion object : SingletonHolder<SocialManager, Context>(::SocialManager)
 
     fun captureFragmentInstance(fragment: SocialFragment) {
-        socialFragment = fragment
+        //socialFragment = fragment
     }
 
     @Synchronized
@@ -85,8 +94,8 @@ class SocialManager private constructor(private val context: Context){
         val message = list.message
         Log.d(TAG, "list of friends searching : $list")
         if (code == SUCCESS) {
-            socialFragment?.resultFromSearch = list
-            socialFragment?.updateDataSetList(list.friends)
+            resultFromSearch = list
+            updateListLiveData.postValue(list.friends)
         } else {
             Toast.makeText(context, String.format(context.getString(R.string.code_message), code, message), Toast.LENGTH_SHORT).show()
         }
@@ -96,22 +105,18 @@ class SocialManager private constructor(private val context: Context){
         val code = list.code
         val message = list.message
         if (code == SUCCESS) {
-            socialFragment?.listOfFriends = list
-            socialFragment?.listOfActualFriends = list.friends?.filter { it.accepted == true }
-            socialFragment?.listOfPotentialFriends = list.friends?.filter { it.accepted == false }
-            Log.d(TAG, "List : " + socialFragment?.listOfFriends)
-            Log.d(TAG, "List actual : " + socialFragment?.listOfActualFriends)
-            Log.d(TAG, "List potential : " + socialFragment?.listOfPotentialFriends)
+            listOfFriends = list
+            listOfActualFriends = list.friends?.filter { it.accepted == true }
+            listOfPotentialFriends = list.friends?.filter { it.accepted == false }
+            Log.d(TAG, "List : " + listOfFriends)
+            Log.d(TAG, "List actual : " + listOfActualFriends)
+            Log.d(TAG, "List potential : " + listOfPotentialFriends)
 
-            socialFragment?.updateDataSetList(socialFragment?.listOfActualFriends)
+            updateListLiveData.postValue(listOfActualFriends)
         } else {
             Toast.makeText(context, String.format(context.getString(R.string.code_message), code, message), Toast.LENGTH_SHORT).show()
         }
-        if (socialFragment != null && socialFragment!!.isVisible) {
-            socialFragment?.tv_list_title?.text = "Liste d'amis"
-            socialFragment?.btn_friendsRequest?.text = context.getString(R.string.btn_pending_friend_requests)
-            socialFragment?.btn_friendsRequest?.setOnClickListener { friendsRequest(link) }
-        }
+        changeBtnActionLiveData.postValue(LIST_OF_FRIENDS)
     }
 
     fun searchForFriends(friends: String?) {
@@ -123,10 +128,8 @@ class SocialManager private constructor(private val context: Context){
     }
 
     fun friendsRequest(link: SocialActionsInterface) {
-        socialFragment?.updateDataSetList(socialFragment?.listOfPotentialFriends)
-        socialFragment?.tv_list_title?.text = "Requetes en attente"
-        socialFragment?.btn_friendsRequest?.text = context.getString(R.string.btn_list_of_friends)
-        socialFragment?.btn_friendsRequest?.setOnClickListener { getListOfFriends(loginAppManager.connectedUser!!.userId!!, link) }
+        updateListLiveData.postValue(listOfPotentialFriends)
+        changeBtnActionLiveData.postValue(LIST_OF_FRIENDS_REQUESTS)
     }
 
     fun callForAddFriend(friend: Friend) {
