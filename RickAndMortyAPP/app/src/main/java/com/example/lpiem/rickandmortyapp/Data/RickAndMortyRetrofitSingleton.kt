@@ -108,6 +108,7 @@ class RickAndMortyRetrofitSingleton private constructor(private val context: Con
                         ADD_A_FRIENDS -> TODO()
                         DEL_A_FRIEND -> TODO()
                         ACCEPT_FRIENDSHIP -> TODO()
+                        LOST_CODE,
                         CHANGE_PASSWORD->{
                         liveData.postValue(result as ResponseFromApi)
                     }
@@ -288,8 +289,11 @@ class RickAndMortyRetrofitSingleton private constructor(private val context: Con
         jsonBody.addProperty("user_new_password", newPass)
         currentCall = instance!!.changePassword(userId!!,jsonBody)
         return callRetrofit(currentCall!!, CHANGE_PASSWORD) as MutableLiveData<ResponseFromApi>
+    }
 
-
+    fun sendCode(jsonBody: JsonObject): MutableLiveData<ResponseFromApi> {
+        currentCall = instance!!.sendCodeForPassword(jsonBody)
+        return callRetrofit(currentCall!!, LOST_CODE) as MutableLiveData<ResponseFromApi>
     }
 
     fun getFriendsList(userId: Int): MutableLiveData<ListOfFriends> {

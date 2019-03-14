@@ -17,10 +17,7 @@ import com.example.lpiem.rickandmortyapp.Model.User
 import com.example.lpiem.rickandmortyapp.R
 import com.example.lpiem.rickandmortyapp.Util.SingletonHolder
 import com.example.lpiem.rickandmortyapp.Util.observeOnce
-import com.example.lpiem.rickandmortyapp.View.BottomActivity
-import com.example.lpiem.rickandmortyapp.View.LoginActivity
-import com.example.lpiem.rickandmortyapp.View.SignInActivity
-import com.example.lpiem.rickandmortyapp.View.TAG
+import com.example.lpiem.rickandmortyapp.View.*
 import com.facebook.AccessToken
 import com.facebook.FacebookException
 import com.facebook.GraphRequest
@@ -73,6 +70,11 @@ class LoginAppManager private constructor(private var context: Context) {
     fun regularSignIn() {
         val signInIntent = Intent(context, SignInActivity::class.java)
         resolveIntent.postValue(signInIntent)
+    }
+
+    fun openActivityLostPassword() {
+        val lostPassIntent = Intent(context, LostPasswordActivity::class.java)
+        resolveIntent.postValue(lostPassIntent)
     }
 
     // GOOGLE CONNECTION
