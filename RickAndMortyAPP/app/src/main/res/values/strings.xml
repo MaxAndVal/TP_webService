@@ -53,6 +53,8 @@
     <string name="btn_pending_friend_requests">Voir les requetes en attente</string>
     <string name="btn_list_of_friends">Voir sa liste d\'ami</string>
     <string name="friend_added">Ami ajouté à votre liste !</string>
+    <string name="delete_a_friend">Delete a friend</string>
+    <string name="sure_to_delete_friend">Etes vous sur de vouloir supprimer %s de vos amis ?</string>
 
     //OpenDeck Activity
     <string name="number_of_deck_to_open">Vous avez %s decks à ouvrir</string>

@@ -16,8 +16,6 @@ import com.example.lpiem.rickandmortyapp.Model.SocialListLabel.LIST_OF_FRIENDS_R
 import com.example.lpiem.rickandmortyapp.R
 import com.example.lpiem.rickandmortyapp.Util.SingletonHolder
 import com.example.lpiem.rickandmortyapp.Util.observeOnce
-import com.example.lpiem.rickandmortyapp.View.Social.SocialActionsInterface
-import com.example.lpiem.rickandmortyapp.View.Social.SocialFragment
 import com.example.lpiem.rickandmortyapp.View.TAG
 
 
@@ -25,7 +23,6 @@ class SocialManager private constructor(private val context: Context){
 
     private val rickAndMortyAPI = RickAndMortyRetrofitSingleton.getInstance(context)
     private val loginAppManager = LoginAppManager.getInstance(context)
-    private lateinit var link : SocialActionsInterface
 
     var listOfFriends: ListOfFriends? = null
     var listOfActualFriends: List<Friend>? = ArrayList()
@@ -42,13 +39,8 @@ class SocialManager private constructor(private val context: Context){
 
     companion object : SingletonHolder<SocialManager, Context>(::SocialManager)
 
-    fun captureFragmentInstance(fragment: SocialFragment) {
-        //socialFragment = fragment
-    }
-
     @Synchronized
-    fun getListOfFriends(userId: Int, link: SocialActionsInterface) {
-        this.link = link
+    fun getListOfFriends(userId: Int) {
         listOfFriendsLiveData = rickAndMortyAPI.getFriendsList(userId)
         listOfFriendsLiveData.observeOnce(Observer {
             listOfFriendsTreatment(it)
@@ -127,7 +119,7 @@ class SocialManager private constructor(private val context: Context){
         })
     }
 
-    fun friendsRequest(link: SocialActionsInterface) {
+    fun friendsRequest() {
         updateListLiveData.postValue(listOfPotentialFriends)
         changeBtnActionLiveData.postValue(LIST_OF_FRIENDS_REQUESTS)
     }
