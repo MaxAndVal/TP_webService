@@ -19,7 +19,7 @@ import com.example.lpiem.rickandmortyapp.View.Settings.FAQAdapter
 import com.example.lpiem.rickandmortyapp.View.Settings.PasswordFragment
 import com.example.lpiem.rickandmortyapp.View.TAG
 import kotlinx.android.synthetic.main.activity_bottom.*
-import kotlinx.android.synthetic.main.fragment_password.*
+import kotlinx.android.synthetic.main.fragment_change_password.*
 
 class SettingsManager internal constructor(private val context: Context) {
 

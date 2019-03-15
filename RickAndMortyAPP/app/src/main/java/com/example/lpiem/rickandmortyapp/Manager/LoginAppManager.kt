@@ -217,7 +217,7 @@ class LoginAppManager private constructor(private var context: Context) {
         loaderDisplay.postValue(View.GONE)
     }
 
-    private fun loginTreatment(response: ResponseFromApi) {
+    fun loginTreatment(response: ResponseFromApi) {
         val code = response.code
         val message = response.message
         if (code == SUCCESS) {

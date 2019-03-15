@@ -60,7 +60,7 @@ class RickAndMortyRetrofitSingleton private constructor(private val context: Con
 
     private fun <T> callRetrofit(call: Call<T>, type: RetrofitCallTypes): MutableLiveData<Any> {
 
-        val liveData =  MutableLiveData<Any>()
+        val liveData = MutableLiveData<Any>()
         call.enqueue(object : Callback<T> {
             override fun onResponse(call: Call<T>, response: Response<T>) {
                 if (response.isSuccessful) {
@@ -105,13 +105,10 @@ class RickAndMortyRetrofitSingleton private constructor(private val context: Con
                         RESULT_FRIENDS_SEARCHING -> {
                             liveData.postValue(result as ListOfFriends)
                         }
-                        ADD_A_FRIENDS -> TODO()
-                        DEL_A_FRIEND -> TODO()
-                        ACCEPT_FRIENDSHIP -> TODO()
-                        LOST_CODE,
-                        CHANGE_PASSWORD->{
-                        liveData.postValue(result as ResponseFromApi)
-                    }
+                        LOST_CODE, LOGIN_WITH_CODE,
+                        CHANGE_PASSWORD -> {
+                            liveData.postValue(result as ResponseFromApi)
+                        }
                     }
                 } else {
                     val responseError = response.errorBody() as ResponseBody
@@ -166,7 +163,7 @@ class RickAndMortyRetrofitSingleton private constructor(private val context: Con
 
     fun getUserById(userId: Int?): MutableLiveData<ResponseFromApi> {
         currentCall = instance!!.getUserById(userId!!)
-       return callRetrofit(currentCall!!, GET_USER_BY_ID) as MutableLiveData<ResponseFromApi>
+        return callRetrofit(currentCall!!, GET_USER_BY_ID) as MutableLiveData<ResponseFromApi>
     }
 
     fun putDateToken(date: String, id: Int?): MutableLiveData<ResponseFromApi> {
@@ -175,6 +172,7 @@ class RickAndMortyRetrofitSingleton private constructor(private val context: Con
         currentCall = instance!!.putNewDate(id!!, jsonBody)
         return callRetrofit(currentCall!!, PUT_DATE) as MutableLiveData<ResponseFromApi>
     }
+
     fun putMemoryDateToken(date: String, id: Int?): MutableLiveData<ResponseFromApi> {
         val jsonBody = JsonObject()
         jsonBody.addProperty(JsonProperty.NewDate.string, date)
@@ -257,11 +255,11 @@ class RickAndMortyRetrofitSingleton private constructor(private val context: Con
 
         val userId = user?.userId ?: -1
         currentCall = if (friendId != null) {
-           instance!!.getFriendMarket(userId, friendId)
+            instance!!.getFriendMarket(userId, friendId)
         } else {
             instance!!.getUserMarket(userId)
         }
-        return  callRetrofit(currentCall!!, LIST_OF_CARDS) as MutableLiveData<ListOfCards>
+        return callRetrofit(currentCall!!, LIST_OF_CARDS) as MutableLiveData<ListOfCards>
     }
 
     fun buyCard(card: Card?, userId: Int?, friendId: Int?): MutableLiveData<ResponseFromApi> {
@@ -283,11 +281,11 @@ class RickAndMortyRetrofitSingleton private constructor(private val context: Con
     }
 
     fun changePassword(userId: Int?, userEmail: String?, oldPass: String, newPass: String): MutableLiveData<ResponseFromApi> {
-    val jsonBody = JsonObject()
+        val jsonBody = JsonObject()
         jsonBody.addProperty("user_email", userEmail)
         jsonBody.addProperty("user_old_password", oldPass)
         jsonBody.addProperty("user_new_password", newPass)
-        currentCall = instance!!.changePassword(userId!!,jsonBody)
+        currentCall = instance!!.changePassword(userId!!, jsonBody)
         return callRetrofit(currentCall!!, CHANGE_PASSWORD) as MutableLiveData<ResponseFromApi>
     }
 
@@ -298,27 +296,32 @@ class RickAndMortyRetrofitSingleton private constructor(private val context: Con
 
     fun getFriendsList(userId: Int): MutableLiveData<ListOfFriends> {
         currentCall = instance!!.getListOfFriends(userId)
-        return callRetrofit(currentCall!!, RetrofitCallTypes.LIST_OF_FRIENDS) as MutableLiveData<ListOfFriends>
+        return callRetrofit(currentCall!!, LIST_OF_FRIENDS) as MutableLiveData<ListOfFriends>
     }
 
     fun getFriendSearchResult(userId: Int, friends: String?): MutableLiveData<ListOfFriends> {
         currentCall = instance!!.searchForFriends(userId, friends)
-        return callRetrofit(currentCall!!, RetrofitCallTypes.RESULT_FRIENDS_SEARCHING) as MutableLiveData<ListOfFriends>
+        return callRetrofit(currentCall!!, RESULT_FRIENDS_SEARCHING) as MutableLiveData<ListOfFriends>
     }
 
     fun addThisFriend(currentUserId: Int, friendId: Int): MutableLiveData<ResponseFromApi> {
         currentCall = instance!!.addAFriend(currentUserId, friendId)
-        return callRetrofit(currentCall!!, RetrofitCallTypes.ADD_A_FRIENDS) as MutableLiveData<ResponseFromApi>
+        return callRetrofit(currentCall!!, ADD_A_FRIENDS) as MutableLiveData<ResponseFromApi>
     }
 
     fun validateFriendship(currentUserId: Int, friendId: Int): MutableLiveData<ResponseFromApi> {
         currentCall = instance!!.validateAFriend(currentUserId, friendId)
-        return callRetrofit(currentCall!!, RetrofitCallTypes.ACCEPT_FRIENDSHIP) as MutableLiveData<ResponseFromApi>
+        return callRetrofit(currentCall!!, ACCEPT_FRIENDSHIP) as MutableLiveData<ResponseFromApi>
     }
 
     fun deleteThisFriend(currentUserId: Int, friendId: Int): MutableLiveData<ResponseFromApi> {
-        currentCall = instance!!.deleteAFriend( currentUserId,friendId)
-        return callRetrofit(currentCall!!, RetrofitCallTypes.DEL_A_FRIEND) as MutableLiveData<ResponseFromApi>
+        currentCall = instance!!.deleteAFriend(currentUserId, friendId)
+        return callRetrofit(currentCall!!, DEL_A_FRIEND) as MutableLiveData<ResponseFromApi>
+    }
+
+    fun loginWithCode(code: JsonObject): MutableLiveData<ResponseFromApi> {
+        currentCall = instance!!.loginWithCode(code)
+        return callRetrofit(currentCall!!, LOGIN_WITH_CODE) as MutableLiveData<ResponseFromApi>
     }
 
 }
