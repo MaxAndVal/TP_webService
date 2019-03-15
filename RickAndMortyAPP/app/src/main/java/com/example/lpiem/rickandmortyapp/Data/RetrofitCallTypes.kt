@@ -26,5 +26,7 @@ enum class RetrofitCallTypes {
     BUY_CAR_FROM_FRIEND,
     HEROKU_VOID,
     CHANGE_PASSWORD,
-    LOST_CODE
+    LOST_CODE,
+
+    LOGIN_WITH_CODE
 }

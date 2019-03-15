@@ -79,6 +79,11 @@
     <string name="turn_lefts">Coups restants : %d</string>
     <string name="cards_won">\nVous avez gagne les cartes :\n</string>
     <string name="error_fetching_pictures">Une erreur est survenue lors de la récupération des images …</string>
+    <string name="ErrorInvalideCode">Le code est incorrect</string>
+    <string name="ErrorCodeExpired">Le code est expiré merci de faire une nouvelle demande</string>
+    <string name="ErrorUnknow">Une erreur est survenue, merci de reessayer plus tard</string>
+    <string name="ErrorEmptyCode">Merci de rentrer votre code</string>
+    <string name="ErrorEmptyEmail">Merci de rentrer votre adresse mail</string>
 
 
 </resources>
