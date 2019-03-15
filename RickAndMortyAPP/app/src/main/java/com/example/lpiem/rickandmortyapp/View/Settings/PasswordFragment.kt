@@ -15,7 +15,7 @@ import com.example.lpiem.rickandmortyapp.Util.SingletonHolder
 import com.example.lpiem.rickandmortyapp.Util.observeOnce
 import com.example.lpiem.rickandmortyapp.View.BottomActivity
 import kotlinx.android.synthetic.main.activity_bottom.*
-import kotlinx.android.synthetic.main.fragment_password.*
+import kotlinx.android.synthetic.main.fragment_change_password.*
 
 class PasswordFragment : androidx.fragment.app.Fragment() {
 
@@ -35,7 +35,7 @@ class PasswordFragment : androidx.fragment.app.Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_password, container, false)
+        return inflater.inflate(R.layout.fragment_change_password, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -49,17 +49,33 @@ class PasswordFragment : androidx.fragment.app.Fragment() {
         val oldPass = ed_OldPassword.text.toString()
         val newPass = ed_NewPassword.text.toString()
         val newPassConf = ed_NewPasswordConf.text.toString()
+        var isEmpty = false
 
-        if (!newPass.isEmpty() && !oldPass.isEmpty() && !newPassConf.isEmpty()) {
+        if (oldPass.isEmpty()) {
+            isEmpty = true
+            textInputOldPassword.isHelperTextEnabled = true
+            //textInputOldPassword.setHelperTextColor(R.color.colorstatelist(er)))
+        }
+        if (newPass.isEmpty()) {
+            isEmpty = true
+            textInputNewPassword.isHelperTextEnabled = true
+            //textInputNewPassword.setHelperTextColor()
+        }
+        if (newPassConf.isEmpty()) {
+            isEmpty = true
+            textInputNewPasswordConf.isHelperTextEnabled = true
+            //textInputNewPasswordConf.setHelperTextColor()
+        }
+
+        if (!isEmpty) {
             if (newPass.equals(newPassConf)) {
                 changePasswordManager.isPasswordChangeSucceded.observeOnce(changePasswordObserver)
                 changePasswordManager.changePassword(oldPass, newPass)
                 closeChangePassword(this)
             } else {
+                tv_errorInput.text = getString(R.string.ErrorSamePassword)
                 Toast.makeText(context, "new passwords are not the same", Toast.LENGTH_LONG).show()
             }
-        } else {
-            Toast.makeText(context, "All fields are required", Toast.LENGTH_LONG).show()
         }
 
     }
