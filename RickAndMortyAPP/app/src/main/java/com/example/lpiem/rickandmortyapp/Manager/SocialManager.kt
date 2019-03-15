@@ -36,6 +36,7 @@ class SocialManager private constructor(private val context: Context){
     private var delFriendLiveData = MutableLiveData<ResponseFromApi>()
     var updateListLiveData = MutableLiveData<List<Friend>?>()
     var changeBtnActionLiveData = MutableLiveData<SocialListLabel>()
+    var loaderLiveData = MutableLiveData<Boolean>()
 
     companion object : SingletonHolder<SocialManager, Context>(::SocialManager)
 
@@ -50,12 +51,15 @@ class SocialManager private constructor(private val context: Context){
     private fun addFriendTreatment(response: ResponseFromApi) {
         val code = response.code
         val message = response.message
-        if (code == SUCCESS) {
-            val result = response.results
-            Log.d(TAG, "code = $code message = $message result = $result")
-            Toast.makeText(context, String.format(context.getString(R.string.friend_added)), Toast.LENGTH_SHORT).show()
-        } else {
-            Toast.makeText(context, String.format(context.getString(R.string.code_message), code, message), Toast.LENGTH_SHORT).show()
+        when (code) {
+            SUCCESS -> {
+                val result = response.results
+                Log.d(TAG, "code = $code message = $message result = $result")
+                getListOfFriends(loginAppManager.connectedUser!!.userId!!)
+                Toast.makeText(context, context.getString(R.string.friend_demand_added), Toast.LENGTH_SHORT).show()
+            }
+            null -> Toast.makeText(context, "Vous etes déjà amis !", Toast.LENGTH_SHORT).show()
+            else -> Toast.makeText(context, String.format(context.getString(R.string.code_message), code, message), Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -63,8 +67,8 @@ class SocialManager private constructor(private val context: Context){
         val code = response.code
         val message = response.message
         if (code == SUCCESS) {
-            val results = response.results
-            Toast.makeText(context, "code : $code - delete : $message results : $results", Toast.LENGTH_SHORT).show()
+            getListOfFriends(loginAppManager.connectedUser!!.userId!!)
+            Toast.makeText(context, "Ami supprimé de votre liste", Toast.LENGTH_SHORT).show()
         } else {
             Toast.makeText(context, String.format(context.getString(R.string.code_message), code, message), Toast.LENGTH_SHORT).show()
         }
@@ -74,11 +78,10 @@ class SocialManager private constructor(private val context: Context){
         val code = response.code
         val message = response.message
         if (code == SUCCESS) {
-            val results = response.results
-            Toast.makeText(context, "code : $code, message $message , results $results", Toast.LENGTH_SHORT).show()
-        } else {
-            Toast.makeText(context, String.format(context.getString(R.string.code_message), code, message), Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Vous etes maintenant amis !", Toast.LENGTH_SHORT).show()
+            loaderLiveData.postValue(false)
         }
+        else Toast.makeText(context, String.format(context.getString(R.string.code_message), code, message), Toast.LENGTH_SHORT).show()
     }
 
     private fun resultFriendsSearchingTreatment(list: ListOfFriends) {
