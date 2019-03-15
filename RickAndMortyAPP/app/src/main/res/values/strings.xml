@@ -106,4 +106,9 @@
     <string name="btnValidate">Validez</string>
     <string name="ErrorSamePassword">Les mots de passe ne sont pas indentque</string>
     <string name="requiredInput">Requis</string>
+    <string name="AlreadyCode">J\'ai déja un code</string>
+    <string name="tipsCodeReceived">Si vous n\'avez pas recu le code merci de vérifier :  Que le mail ne soit pas dans vos indésirable  Que votre adresse mail soit bien lié à un compte RickAndMorty-TCG  Que vous votre compte ne soit pas un compte lié à Facebook ou Google  Si vous ne pouvez pas vous connecter, merci de contacter nos équipes.</string>
+    <string name="EnterCode">Entrez le code</string>
+    <string name="enter_code">Entrez votre Code recu par mail</string>
+    <string name="codeHasBeenSend">Le code a été envoyé à l\'adresse indiqué</string>
 </resources>

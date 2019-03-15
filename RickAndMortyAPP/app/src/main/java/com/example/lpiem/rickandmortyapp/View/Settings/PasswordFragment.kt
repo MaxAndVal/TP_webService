@@ -56,14 +56,20 @@ class PasswordFragment : androidx.fragment.app.Fragment() {
         if (oldPass.isEmpty()) {
             isEmpty = true
             textInputOldPassword.setHelperTextColor(resources.getColorStateList(R.color.ErrorLightRed))
+        }else{
+            textInputOldPassword.setHelperTextColor(resources.getColorStateList(R.color.black))
         }
         if (newPass.isEmpty()) {
             isEmpty = true
             textInputNewPassword.setHelperTextColor(resources.getColorStateList(R.color.ErrorLightRed))
+        }else{
+            textInputNewPassword.setHelperTextColor(resources.getColorStateList(R.color.black))
         }
         if (newPassConf.isEmpty()) {
             isEmpty = true
             textInputNewPasswordConf.setHelperTextColor(resources.getColorStateList(R.color.ErrorLightRed))
+        }else{
+            textInputNewPasswordConf.setHelperTextColor(resources.getColorStateList(R.color.black))
         }
 
         if (!isEmpty) {

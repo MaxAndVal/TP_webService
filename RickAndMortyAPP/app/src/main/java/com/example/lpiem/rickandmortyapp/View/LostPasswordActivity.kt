@@ -1,10 +1,8 @@
 package com.example.lpiem.rickandmortyapp.View
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.example.lpiem.rickandmortyapp.Manager.LostPasswordManager
 import com.example.lpiem.rickandmortyapp.R
@@ -14,8 +12,8 @@ import kotlinx.android.synthetic.main.activity_lost_password.*
 class LostPasswordActivity : AppCompatActivity() {
 
     private lateinit var lostPasswordManager: LostPasswordManager
-    private lateinit var isSendCodeObserver : Observer<Boolean>
-    private lateinit var isLoginWithCodeObserver : Observer<Int>
+    private lateinit var isSendCodeObserver: Observer<Boolean>
+    private lateinit var isLoginWithCodeObserver: Observer<Int>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,18 +21,18 @@ class LostPasswordActivity : AppCompatActivity() {
         lostPasswordManager = LostPasswordManager.getInstance(this)
 
         isSendCodeObserver = Observer {
-            if(it)openCodeModal()
+            if (it) openCodeModal()
         }
         isLoginWithCodeObserver = Observer {
-            if(it==200){
+            if (it == 200) {
                 finish()
-            }else if (it == 204){
+            } else if (it == 204) {
                 tv_errorInput.text = getString(R.string.ErrorInvalideCode)
                 tv_errorInput.visibility = View.VISIBLE
-            }else if (it == 205){
+            } else if (it == 205) {
                 tv_errorInput.visibility = View.VISIBLE
                 tv_errorInput.text = getString(R.string.ErrorCodeExpired)
-            }else{
+            } else {
                 tv_errorInput.visibility = View.VISIBLE
                 tv_errorInput.text = getString(R.string.ErrorUnknow)
             }
@@ -47,27 +45,30 @@ class LostPasswordActivity : AppCompatActivity() {
         toggleView(false)
 
         tv_backToLogin.setOnClickListener { finish() }
-        btn_sendCode.setOnClickListener{sendCode()}
+        btn_sendCode.setOnClickListener { sendCode() }
         tv_alreadyCode.setOnClickListener { toggleView(true) }
-        btn_enterCode.setOnClickListener{enterCode(et_enterCode.text.toString())}
+        btn_enterCode.setOnClickListener { enterCode(et_enterCode.text.toString()) }
 
     }
 
     private fun enterCode(code: String) {
-        if(!code.isEmpty()){
+        if (!code.isEmpty()) {
             tv_errorInput.visibility = View.GONE
             lostPasswordManager.enterWithCode(code)
-        }else{
+            layoutInputCode.setHelperTextColor(resources.getColorStateList(R.color.black))
+        } else {
             tv_errorInput.visibility = View.VISIBLE
-            tv_errorInput.text = getString(R.string.ErrorEmptyCode)        }
+            tv_errorInput.text = getString(R.string.ErrorEmptyCode)
+            layoutInputCode.setHelperTextColor(resources.getColorStateList(R.color.ErrorLightRed))
+        }
     }
 
     private fun toggleView(isCodeSend: Boolean) {
 
-        if(isCodeSend){
+        if (isCodeSend) {
             cl_codeSent.visibility = View.VISIBLE
             cl_codeIsNotSent.visibility = View.GONE
-        }else{
+        } else {
             cl_codeSent.visibility = View.GONE
             cl_codeIsNotSent.visibility = View.VISIBLE
         }
@@ -81,12 +82,14 @@ class LostPasswordActivity : AppCompatActivity() {
     private fun sendCode() {
         tv_errorInputEmail.visibility = View.GONE
         val userEmail = ed_email.text.toString()
-        if(!userEmail.isEmpty()){
+        if (!userEmail.isEmpty()) {
             lostPasswordManager.sendCodeManager(userEmail)
             toggleView(true)
-        }else{
+            textInputEmail.setHelperTextColor(resources.getColorStateList(R.color.black))
+        } else {
             tv_errorInputEmail.visibility = View.VISIBLE
             tv_errorInputEmail.text = getString(R.string.ErrorEmptyEmail)
+            textInputEmail.setHelperTextColor(resources.getColorStateList(R.color.ErrorLightRed))
         }
 
     }
