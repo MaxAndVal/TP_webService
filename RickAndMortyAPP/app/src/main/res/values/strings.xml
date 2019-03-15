@@ -20,7 +20,7 @@
     <string name="google_disconnected">Déconnecté de votre compte Google</string>
     <string name="btn_connection_google">Se connecter</string>
     <string name="btn_disconnection_google">Se déconnecter</string>
-    <string name="no_account">Pas de compte ? <b><u>Cliquez ici</u></b> pour être Schwifty !</string>
+    <string name="no_account">Pas de compte ? <b><u>Clique ici</u></b> pour être Schwifty !</string>
     <string name="tv_password">Mot de passe</string>
     <string name="e_mail_hint">E-Mail</string>
     <string name="password_hint">Password</string>
@@ -29,23 +29,23 @@
     <string name="tv_login_title">Login</string>
     <string name="tv_sign_in_title">Sign In</string>
     <string name="tv_e_mail">E-mail</string>
-    <string name="already_an_account">Déjà un compte ? <b><u>Cliquez ici</u></b> pour être Schwifty !</string>
+    <string name="already_an_account">Déjà un compte ? <b><u>Clique ici</u></b> pour être Schwifty !</string>
     <string name="network_problem_please_try_again">Problème de réseau, merci de tenter de vous connecter à nouveau</string>
     <string name="no_access_to_DB">Impossible de se connecter à la base de donnée. Réessayez plus tard.</string>
-    <string name="double_back_to_quit_app">S\'il vous plaît, cliquez sur retour une seconde fois pour quitter</string>
+    <string name="double_back_to_quit_app">S\'il te plaît, clique sur retour une seconde fois pour quitter</string>
     <string name="welcome">Bienvenue %s</string>
-    <string name="forgotten_password">Mot de passe oublié ? <b><u>Cliquez ici</u></b></string>
+    <string name="forgotten_password">Mot de passe oublié ? <b><u>Clique ici</u></b></string>
 
     //Home Fragment
-    <string name="pickle_rick">I\'m piclke Rick !!!\nCliquez pour accéder au Shop !!!</string>
+    <string name="pickle_rick">I\'m piclke Rick !!!\nClique pour accéder au Shop !!!</string>
     <string name="wallet_amount"> %1$d $%2$s</string>
     <string name="actual_turn">Question %1d\/5</string>
     <string name="actual_score">Score : %1d\/5</string>
     <string name="final_score">Votre score final est de :\n%1d\/5</string>
     <string name="good_answer">Bonne réponse !!!</string>
     <string name="wrong_answer">Mauvaise réponse …</string>
-    <string name="game_is_over">Partie terminée. Votre score final est de %1$d.\nVous avez gagné %2$d PickleRick !!</string>
-    <string name="try_an_other_game_later">Game over\nRetentez votre chance demain !!!</string>
+    <string name="game_is_over">Partie terminée. Ton score final est de %1$d.\nTu as gagné %2$d PickleRick !!</string>
+    <string name="try_an_other_game_later">Game over\nRetente ta chance demain !!!</string>
     <string name="code_message_userNotFound">code : %s user not found : %s</string>
 
     //Collection Fragment
@@ -59,28 +59,39 @@
     <string name="sure_to_delete_friend">Etes vous sur de vouloir supprimer %s de vos amis ?</string>
     <string name="requests_of_friends_title">Requetes en attente</string>
     <string name="list_of_friends_title">Liste d\'amis</string>
+    <string name="btn_search">Rechercher</string>
+    <string name="search_friend_by_attribute">Rechercher un ami par nom ou E-mail</string>
 
     //OpenDeck Activity
-    <string name="number_of_deck_to_open">Vous avez %s decks à ouvrir</string>
+    <string name="number_of_deck_to_open">Tu as %s decks à ouvrir</string>
 
     //Shop Activity
     <string name="shop_title">Rick and Morty Shop</string>
     <string name="not_enought_money">Pas assez d\'argent pour ce pack</string>
     <string name="account_created">Compte créé</string>
     <string name="sellThisCard">Vendre cette carte ?</string>
-    <string name="which_price_for_this_card">À quel prix la vendez-vous ?</string>
+    <string name="which_price_for_this_card">À quel prix la vends-tu ?</string>
     <string name="X_decks_added">%d decks ajoutés à votre pool !</string>
-    <string name="youAlreadyWonThisTile">Vous avez déjà gagné cette tuille !</string>
+    <string name="youAlreadyWonThisTile">Tu as déjà gagné cette tuille !</string>
     <string name="booster_amount">%d Boosters</string>
 
     //Memory Game
     <string name="current_score">Score : %d</string>
     <string name="memory_game_over">Partie terminee. Votre score final est de %d.%s</string>
     <string name="turn_lefts">Coups restants : %d</string>
-    <string name="cards_won">\nVous avez gagne les cartes :\n</string>
+    <string name="cards_won">\nTu as gagne les cartes :\n</string>
     <string name="error_fetching_pictures">Une erreur est survenue lors de la récupération des images …</string>
-    <string name="btn_search">Search</string>
-    <string name="search_friend_by_attribute">Search a friend by id, username or email</string>
+
+    //Password Changement
+    <string name="password_reminded"><b><u>Clique ici</u></b> Si tu te souviens de ton mot de passe</string>
+    <string name="btn_change_password">M\'envoyer le code</string>
+    <string name="hint_enter_your_mail">Entre ton E-mail</string>
+    <string name="lost_password_title">Mot de passe perdu</string>
+    <string name="change_your_password">Changer de mot de passe</string>
+    <string name="enter_old_password">Ancien mot de passe</string>
+    <string name="enter_new_password">Nouveau mot de passe</string>
+    <string name="confirm_new_password">Nouveau mot de passe</string>
+    <string name="btn_confirm_change_password">Confirmer</string>
 
 
 </resources>
