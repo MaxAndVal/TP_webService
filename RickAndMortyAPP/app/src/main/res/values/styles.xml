@@ -131,7 +131,7 @@
     <style name="tv_response_style">
         <item name="android:textColor">@android:color/black</item>
         <item name="android:background">@android:color/white</item>
-        <item name="android:textSize">14sp</item>
+        <item name="android:textSize">16sp</item>
     </style>
 
     <style name="customStyleInput" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
