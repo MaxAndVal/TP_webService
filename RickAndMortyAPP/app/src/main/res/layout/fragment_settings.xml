@@ -88,6 +88,7 @@
         app:layout_constraintTop_toBottomOf="@id/iv_profile_back"
         >
 
+        <!--TODO: visibility gone for now-->
         <TextView
             android:id="@+id/tv_change_name"
             style="@style/BigTextViewStyleWhite"
@@ -96,12 +97,14 @@
             android:layout_marginTop="12dp"
             android:paddingTop="4dp"
             android:paddingBottom="4dp"
+            android:visibility="gone"
             android:text=" Change Name"
             android:drawableStart="@drawable/ic_person_white_24dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             />
 
+        <!--TODO: visibility gone for now-->
         <TextView
             android:id="@+id/tv_change_email"
             style="@style/BigTextViewStyleWhite"
@@ -111,6 +114,7 @@
             android:paddingTop="4dp"
             android:paddingBottom="4dp"
             android:text=" Change Email"
+            android:visibility="gone"
             android:drawableStart="@drawable/ic_email_white_24dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_change_name"
