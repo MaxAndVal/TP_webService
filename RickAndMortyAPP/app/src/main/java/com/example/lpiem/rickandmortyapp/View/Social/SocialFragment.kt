@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -29,6 +31,7 @@ class SocialFragment : androidx.fragment.app.Fragment() {
     private lateinit var updateListObserver: Observer<List<Friend>?>
     private lateinit var changeBtnActionObserver: Observer<SocialListLabel>
     private lateinit var adapterTouchItemObserver: Observer<Pair<SocialListenerAction, Friend>>
+    private lateinit var loaderObserver: Observer<Boolean>
     private var socialAdapter: SocialAdapter? = null
 
 
@@ -48,12 +51,14 @@ class SocialFragment : androidx.fragment.app.Fragment() {
                 btn_friendsRequest?.text = getString(R.string.btn_pending_friend_requests)
                 btn_friendsRequest?.setOnClickListener {
                     socialManager.friendsRequest()
+                    loaderIsVisible(true)
                 }
             } else if (btnLabel == LIST_OF_FRIENDS_REQUESTS) {
                 tv_list_title?.text = getString(R.string.requests_of_friends_title)
                 btn_friendsRequest?.text = getString(R.string.btn_list_of_friends)
                 btn_friendsRequest?.setOnClickListener {
                     socialManager.getListOfFriends(loginAppManager.connectedUser!!.userId!!)
+                    loaderIsVisible(true)
                 }
             }
         }
@@ -65,8 +70,10 @@ class SocialFragment : androidx.fragment.app.Fragment() {
                     Log.d(TAG, item.toString())
                     if (item.second.accepted == null) {
                         socialManager.callForAddFriend(friend)
+                        loaderIsVisible(true)
                     } else {
                         socialManager.callForValidateFriend(friend)
+                        loaderIsVisible(true)
                     }
                 }
                 SocialListenerAction.DEL_FRIENDS -> {
@@ -76,6 +83,7 @@ class SocialFragment : androidx.fragment.app.Fragment() {
                             .setMessage(String.format(getString(R.string.sure_to_delete_friend), friend.userName))
                             .setPositiveButton(android.R.string.yes) { dialog, which ->
                                 socialManager.callToDelFriend(item.second)
+                                loaderIsVisible(true)
                             }
                             .setNegativeButton(android.R.string.no) { dialog, which ->
                                 // do nothing
@@ -92,6 +100,10 @@ class SocialFragment : androidx.fragment.app.Fragment() {
             }
         }
 
+        loaderObserver = Observer { isVisible ->
+            loaderIsVisible(isVisible)
+        }
+
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -104,16 +116,23 @@ class SocialFragment : androidx.fragment.app.Fragment() {
 
         socialManager.updateListLiveData.observeForever(updateListObserver)
         socialManager.changeBtnActionLiveData.observeForever(changeBtnActionObserver)
-
+        socialManager.loaderLiveData.observeForever(loaderObserver)
 
         rv_social.layoutManager = LinearLayoutManager(context)
         socialManager.getListOfFriends(loginAppManager.connectedUser!!.userId!!)
-        btn_searchFriends.setOnClickListener { socialManager.searchForFriends(sv_friends.query.toString()) }
-        btn_friendsRequest.setOnClickListener { socialManager.friendsRequest() }
+        btn_searchFriends.setOnClickListener {
+            socialManager.searchForFriends(sv_friends.query.toString())
+            loaderIsVisible(true)
+        }
+        btn_friendsRequest.setOnClickListener {
+            socialManager.friendsRequest()
+            loaderIsVisible(true)
+        }
     }
 
     private fun updateRv() {
         rv_social.adapter?.notifyDataSetChanged()
+        loaderIsVisible(false)
     }
 
     private fun updateDataSetList(list: List<Friend>?) {
@@ -131,12 +150,21 @@ class SocialFragment : androidx.fragment.app.Fragment() {
 
     }
 
-
+    private fun loaderIsVisible(isVisible: Boolean) {
+        if (isVisible) {
+            social_loading.visibility = VISIBLE
+        } else {
+            social_loading.visibility = GONE
+        }
+    }
 
     override fun onDestroyView() {
         socialManager.updateListLiveData.removeObserver(updateListObserver)
         socialManager.changeBtnActionLiveData.removeObserver(changeBtnActionObserver)
         socialAdapter?.liveDataListener?.removeObserver(adapterTouchItemObserver)
+        socialManager.loaderLiveData.removeObserver(loaderObserver)
+
+        loaderIsVisible(false)
         super.onDestroyView()
     }
 }

@@ -54,7 +54,7 @@
     //Social Fragment
     <string name="btn_pending_friend_requests">Voir les requetes en attente</string>
     <string name="btn_list_of_friends">Voir sa liste d\'ami</string>
-    <string name="friend_added">Ami ajouté à votre liste !</string>
+    <string name="friend_demand_added">Demande d\'amitié transmise !</string>
     <string name="delete_a_friend">Delete a friend</string>
     <string name="sure_to_delete_friend">Etes vous sur de vouloir supprimer %s de vos amis ?</string>
     <string name="requests_of_friends_title">Requetes en attente</string>
@@ -79,6 +79,8 @@
     <string name="turn_lefts">Coups restants : %d</string>
     <string name="cards_won">\nVous avez gagne les cartes :\n</string>
     <string name="error_fetching_pictures">Une erreur est survenue lors de la récupération des images …</string>
+    <string name="btn_search">Search</string>
+    <string name="search_friend_by_attribute">Search a friend by id, username or email</string>
 
 
 </resources>
