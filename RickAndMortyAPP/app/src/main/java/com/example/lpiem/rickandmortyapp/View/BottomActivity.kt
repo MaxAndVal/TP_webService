@@ -3,9 +3,10 @@ package com.example.lpiem.rickandmortyapp.View
 import android.content.Intent
 import android.media.MediaPlayer
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.Gravity
-import android.view.View
+import android.view.View.VISIBLE
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -25,6 +26,7 @@ import kotlinx.android.synthetic.main.activity_bottom.*
 class BottomActivity : AppCompatActivity() {
 
     private var loginAppManager = LoginAppManager.getInstance(this)
+    private var doubleBackToExitPressedOnce = false
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
@@ -57,7 +59,6 @@ class BottomActivity : AppCompatActivity() {
         setContentView(R.layout.activity_bottom)
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
-        Log.d(TAG, "game beginned : ${loginAppManager.gameInProgress}")
         tv_wallet.text = String.format(getString(R.string.wallet_amount), loginAppManager.connectedUser?.userWallet, " ")
         tv_wallet.setOnLongClickListener { iAmPickleRick() }
         tv_wallet.setOnClickListener { openShop() }
@@ -73,17 +74,29 @@ class BottomActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        val count = supportFragmentManager.backStackEntryCount
-        Log.d(TAG, "count : $count")
-        if (count == 0) {
+        val backStackLength = supportFragmentManager.backStackEntryCount
+        Log.d(TAG, "backStackLength for BottomActivity : $backStackLength")
+
+        // handling double tap to exit app
+        if (backStackLength == 0 && doubleBackToExitPressedOnce) {
             super.onBackPressed()
             loginAppManager.connectedUser = null
             loginAppManager.gameInProgress = true
             clearGame()
+            super.onBackPressed()
+            return
         } else {
             supportFragmentManager.popBackStack()
-            navigation.visibility = View.VISIBLE
+            navigation.visibility = VISIBLE
         }
+
+        if (backStackLength == 0) {
+            doubleBackToExitPressedOnce = true
+            Toast.makeText(this, getString(R.string.double_back_to_quit_app), Toast.LENGTH_SHORT).show()
+        }
+
+
+        Handler().postDelayed({ doubleBackToExitPressedOnce = false }, 2000)
     }
 
     private fun openFragment(fragment: Fragment) {

@@ -10,10 +10,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.example.lpiem.rickandmortyapp.Data.JsonProperty
 import com.example.lpiem.rickandmortyapp.Data.JsonProperty.*
+import com.example.lpiem.rickandmortyapp.Data.LoginFrom
 import com.example.lpiem.rickandmortyapp.Data.RickAndMortyRetrofitSingleton
 import com.example.lpiem.rickandmortyapp.Data.SUCCESS
-import com.example.lpiem.rickandmortyapp.Model.ResponseFromApi
 import com.example.lpiem.rickandmortyapp.Model.User
+import com.example.lpiem.rickandmortyapp.Model.UserResponse
 import com.example.lpiem.rickandmortyapp.R
 import com.example.lpiem.rickandmortyapp.Util.SingletonHolder
 import com.example.lpiem.rickandmortyapp.Util.observeOnce
@@ -35,13 +36,13 @@ class LoginAppManager private constructor(private var context: Context) {
 
     private val rickAndMortyAPI = RickAndMortyRetrofitSingleton.getInstance(context)
     private var connectedToGoogle = false
-    private lateinit var gso: GoogleSignInOptions
+    lateinit var gso: GoogleSignInOptions
     var mGoogleSignInClient: GoogleSignInClient? = null
     private var account: GoogleSignInAccount? = null
     var connectedUser: User? = null
     var gameInProgress = true
     var memoryInProgress = true
-    private var loginLiveData = MutableLiveData<ResponseFromApi>()
+    internal var loginLiveData = MutableLiveData<UserResponse>()
     var loaderDisplay = MutableLiveData<Int>()
     var googleBtnSwitch = MutableLiveData<Boolean>()
     var resolveIntent = MutableLiveData<Intent>()
@@ -62,9 +63,17 @@ class LoginAppManager private constructor(private var context: Context) {
             jsonBody.addProperty(JsonProperty.UserPassword.string, pass)
             loginLiveData = rickAndMortyAPI.login(jsonBody)
             loginLiveData.observeOnce(Observer {
-                loginTreatment(it)
+                loginTreatment(it, LoginFrom.FROM_LOGIN)
             })
         }
+    }
+
+    fun connectionWithToken(token: String, observer: Observer<UserResponse>) {
+        Log.d(TAG, " log 2")
+        val jsonBody = JsonObject()
+        jsonBody.addProperty("session_token", token)
+        loginLiveData = rickAndMortyAPI.loginWithToken(jsonBody)
+        loginLiveData.observeOnce(observer)
     }
 
     fun regularSignIn() {
@@ -80,16 +89,17 @@ class LoginAppManager private constructor(private var context: Context) {
     // GOOGLE CONNECTION
 
     fun googleSetup() {
-
         googleBtnSwitch.postValue(true)
+        gso = instanciateGSO()
+    }
 
+    fun instanciateGSO(): GoogleSignInOptions {
         gso = GoogleSignInOptions
                 .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .requestId()
                 .build()
-
-        mGoogleSignInClient = GoogleSignIn.getClient((context as LoginActivity), gso)
+        return gso
     }
 
     private fun handleGoogleSignInResult(completedTask: Task<GoogleSignInAccount>) {
@@ -128,7 +138,7 @@ class LoginAppManager private constructor(private var context: Context) {
 
             loginLiveData = rickAndMortyAPI.login(jsonBody)
             loginLiveData.observeOnce(Observer {
-                loginTreatment(it)
+                loginTreatment(it, LoginFrom.FROM_LOGIN)
             })
 
         } else {
@@ -186,7 +196,7 @@ class LoginAppManager private constructor(private var context: Context) {
 
                     loginLiveData = rickAndMortyAPI.login(jsonBody)
                     loginLiveData.observeOnce(Observer {
-                        loginTreatment(it)
+                        loginTreatment(it, LoginFrom.FROM_LOGIN)
                     })
 
                 } catch (e: Throwable) {
@@ -217,21 +227,26 @@ class LoginAppManager private constructor(private var context: Context) {
         loaderDisplay.postValue(View.GONE)
     }
 
-    private fun loginTreatment(response: ResponseFromApi) {
-        val code = response.code
-        val message = response.message
+    internal fun loginTreatment(userResponse: UserResponse, from: LoginFrom) {
+        Log.d(TAG, " log 4 User = ${userResponse.user}")
+        val code = userResponse.code
+        val message = userResponse.message
         if (code == SUCCESS) {
-            val results = response.results
+            val results = userResponse.user
             loaderDisplay.postValue(View.GONE)
             if (connectedToGoogle) {
                 googleBtnSwitch.postValue(false)
             }
             val name = results?.userName
-            Log.d(TAG, "code = $code body = $response")
+            Log.d(TAG, "code = $code body = $userResponse")
             Toast.makeText(context, String.format(context.getString(R.string.welcome, name)), Toast.LENGTH_SHORT).show()
-            connectedUser = response.results!!
+            connectedUser = userResponse.user!!
             val homeIntent = Intent(context, BottomActivity::class.java)
-            resolveIntent.postValue(homeIntent)
+            if (from == LoginFrom.FROM_LOGIN) {
+                resolveIntent.postValue(homeIntent)
+            } else {
+                (context as SplashScreen).startActivity(homeIntent)
+            }
         } else {
             Toast.makeText(context, String.format(context.getString(R.string.code_message), code, message), Toast.LENGTH_SHORT).show()
             loaderDisplay.postValue(View.GONE)

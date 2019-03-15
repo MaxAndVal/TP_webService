@@ -17,6 +17,7 @@ import com.facebook.FacebookCallback
 import com.facebook.FacebookException
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
+import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.common.SignInButton
 import kotlinx.android.synthetic.main.activity_login.*
 import java.util.*
@@ -41,6 +42,7 @@ class LoginActivity : AppCompatActivity() {
         setContentView(R.layout.activity_login)
 
         loginAppManager = LoginAppManager.getInstance(this)
+        loginAppManager.mGoogleSignInClient = GoogleSignIn.getClient(this, loginAppManager.instanciateGSO())
 
         initObservers()
         triggerLivesData()
@@ -59,9 +61,9 @@ class LoginActivity : AppCompatActivity() {
             // Check if no view has focus before hiding the keyboard:
             val view = this.currentFocus
             view?.let { v ->
-                val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as
+                val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as
                         InputMethodManager
-                imm.let { it.hideSoftInputFromWindow(v.windowToken, 0) }
+                inputMethodManager.let { it.hideSoftInputFromWindow(v.windowToken, 0) }
             }
         }
         tv_signIn.setOnClickListener { loginAppManager.regularSignIn() }

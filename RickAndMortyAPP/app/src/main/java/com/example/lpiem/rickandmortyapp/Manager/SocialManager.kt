@@ -9,7 +9,7 @@ import com.example.lpiem.rickandmortyapp.Data.RickAndMortyRetrofitSingleton
 import com.example.lpiem.rickandmortyapp.Data.SUCCESS
 import com.example.lpiem.rickandmortyapp.Model.Friend
 import com.example.lpiem.rickandmortyapp.Model.ListOfFriends
-import com.example.lpiem.rickandmortyapp.Model.ResponseFromApi
+import com.example.lpiem.rickandmortyapp.Model.UserResponse
 import com.example.lpiem.rickandmortyapp.Model.SocialListLabel
 import com.example.lpiem.rickandmortyapp.Model.SocialListLabel.LIST_OF_FRIENDS
 import com.example.lpiem.rickandmortyapp.Model.SocialListLabel.LIST_OF_FRIENDS_REQUESTS
@@ -31,9 +31,9 @@ class SocialManager private constructor(private val context: Context){
 
     private var listOfFriendsLiveData = MutableLiveData<ListOfFriends>()
     private var searchForFriendsLiveData = MutableLiveData<ListOfFriends>()
-    private var callForFriendLiveData = MutableLiveData<ResponseFromApi>()
-    private var validateFriendLiveData = MutableLiveData<ResponseFromApi>()
-    private var delFriendLiveData = MutableLiveData<ResponseFromApi>()
+    private var callForFriendLiveData = MutableLiveData<UserResponse>()
+    private var validateFriendLiveData = MutableLiveData<UserResponse>()
+    private var delFriendLiveData = MutableLiveData<UserResponse>()
     var updateListLiveData = MutableLiveData<List<Friend>?>()
     var changeBtnActionLiveData = MutableLiveData<SocialListLabel>()
     var loaderLiveData = MutableLiveData<Boolean>()
@@ -48,12 +48,12 @@ class SocialManager private constructor(private val context: Context){
         })
     }
 
-    private fun addFriendTreatment(response: ResponseFromApi) {
-        val code = response.code
-        val message = response.message
+    private fun addFriendTreatment(userResponse: UserResponse) {
+        val code = userResponse.code
+        val message = userResponse.message
         when (code) {
             SUCCESS -> {
-                val result = response.results
+                val result = userResponse.user
                 Log.d(TAG, "code = $code message = $message result = $result")
                 getListOfFriends(loginAppManager.connectedUser!!.userId!!)
                 Toast.makeText(context, context.getString(R.string.friend_demand_added), Toast.LENGTH_SHORT).show()
@@ -63,9 +63,9 @@ class SocialManager private constructor(private val context: Context){
         }
     }
 
-    private fun delFriendTreatment(response: ResponseFromApi) {
-        val code = response.code
-        val message = response.message
+    private fun delFriendTreatment(userResponse: UserResponse) {
+        val code = userResponse.code
+        val message = userResponse.message
         if (code == SUCCESS) {
             getListOfFriends(loginAppManager.connectedUser!!.userId!!)
             Toast.makeText(context, "Ami supprimé de votre liste", Toast.LENGTH_SHORT).show()
@@ -74,9 +74,9 @@ class SocialManager private constructor(private val context: Context){
         }
     }
 
-    private fun acceptFriendshipTreatment(response: ResponseFromApi) {
-        val code = response.code
-        val message = response.message
+    private fun acceptFriendshipTreatment(userResponse: UserResponse) {
+        val code = userResponse.code
+        val message = userResponse.message
         if (code == SUCCESS) {
             Toast.makeText(context, "Vous etes maintenant amis !", Toast.LENGTH_SHORT).show()
             loaderLiveData.postValue(false)

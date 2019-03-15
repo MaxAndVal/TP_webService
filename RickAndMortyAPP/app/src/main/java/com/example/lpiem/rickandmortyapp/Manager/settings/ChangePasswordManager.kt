@@ -7,7 +7,7 @@ import androidx.lifecycle.Observer
 import com.example.lpiem.rickandmortyapp.Data.RickAndMortyRetrofitSingleton
 import com.example.lpiem.rickandmortyapp.Data.SUCCESS
 import com.example.lpiem.rickandmortyapp.Manager.LoginAppManager
-import com.example.lpiem.rickandmortyapp.Model.ResponseFromApi
+import com.example.lpiem.rickandmortyapp.Model.UserResponse
 import com.example.lpiem.rickandmortyapp.Util.SingletonHolder
 import com.example.lpiem.rickandmortyapp.Util.observeOnce
 
@@ -15,7 +15,7 @@ class ChangePasswordManager internal constructor(internal val context: Context) 
 
     private val rickAndMortyAPI = RickAndMortyRetrofitSingleton.getInstance(context)
     private val loginAppManager = LoginAppManager.getInstance(context)
-    var changePasswordLiveData = MutableLiveData<ResponseFromApi>()
+    var changePasswordLiveData = MutableLiveData<UserResponse>()
     var isPasswordChangeSucceded = MutableLiveData<Boolean>()
 
 
@@ -30,7 +30,7 @@ class ChangePasswordManager internal constructor(internal val context: Context) 
 
     }
 
-    private fun changePasswordTreatment(it: ResponseFromApi?) {
+    private fun changePasswordTreatment(it: UserResponse?) {
         if (it?.code == SUCCESS) {
             //isPasswordChangeSucceded.postValue(true)
             Toast.makeText(context, it.message, Toast.LENGTH_SHORT).show()

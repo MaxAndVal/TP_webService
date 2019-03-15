@@ -44,10 +44,10 @@ class MemoryGameManager constructor( val context: Context) {
     var rewardsReceiver = MutableLiveData<MutableList<MemoryReward>>()
     var drawableListReceiver = MutableLiveData<Pair<MutableList<Drawable?>, ListOfCards>>()
     var finalViewListeners = MutableLiveData<MutableList<Tile>>()
-    private var rewardToApiResult = MutableLiveData<ResponseFromApi>()
-    private var userResponseReceiver = MutableLiveData<ResponseFromApi>()
+    private var rewardToApiResult = MutableLiveData<UserResponse>()
+    private var userResponseReceiver = MutableLiveData<UserResponse>()
     private var listOfCardsReceiver = MutableLiveData<ListOfCards>()
-    private lateinit var apiResultObserver: Observer<ResponseFromApi>
+    private lateinit var UserResponseObserver: Observer<UserResponse>
 
 
     fun cancelCall() {
@@ -204,7 +204,7 @@ class MemoryGameManager constructor( val context: Context) {
                 item.tileView.setOnClickListener { }
             }
             list.clear()
-            apiResultObserver = Observer {
+            UserResponseObserver = Observer {
                 if (it.code == SUCCESS) {
                     Log.d(TAG, "code: ${it.code} message: ${it.message}")
                 } else {
@@ -212,7 +212,7 @@ class MemoryGameManager constructor( val context: Context) {
                 }
             }
             rewardToApiResult = rickAndMortyAPI.addRewardsToUser(rewards, loginAppManager.connectedUser!!.userId!!)
-            rewardToApiResult.observeOnce(apiResultObserver)
+            rewardToApiResult.observeOnce(UserResponseObserver)
             rewardsReceiver.postValue(rewards)
             putDateToken()
         }
@@ -226,11 +226,11 @@ class MemoryGameManager constructor( val context: Context) {
         })
     }
 
-    private fun getUserByIdTreatment(response: ResponseFromApi) {
-        val code = response.code
-        val message = response.message
+    private fun getUserByIdTreatment(userResponse: UserResponse) {
+        val code = userResponse.code
+        val message = userResponse.message
         if (code == SUCCESS) {
-            val user = response.results
+            val user = userResponse.user
             loginAppManager.memoryInProgress = getDate() != user?.userLastMemory
             Log.d(TAG, "user Date : ${user?.userLastMemory} <==> Date : ${getDate()}")
             startTheGame.postValue(Unit)
@@ -247,9 +247,9 @@ class MemoryGameManager constructor( val context: Context) {
         })
     }
 
-    private fun putDateTreatment(response: ResponseFromApi) {
-        val code = response.code
-        val message = response.message
+    private fun putDateTreatment(userResponse: UserResponse) {
+        val code = userResponse.code
+        val message = userResponse.message
         if (code == SUCCESS) {
             Log.d(TAG, "success code : $code, message $message")
         } else {

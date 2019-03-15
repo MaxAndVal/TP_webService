@@ -9,7 +9,7 @@ import com.example.lpiem.rickandmortyapp.Data.RickAndMortyRetrofitSingleton
 import com.example.lpiem.rickandmortyapp.Data.SUCCESS
 import com.example.lpiem.rickandmortyapp.Model.Card
 import com.example.lpiem.rickandmortyapp.Model.ListOfCards
-import com.example.lpiem.rickandmortyapp.Model.ResponseFromApi
+import com.example.lpiem.rickandmortyapp.Model.UserResponse
 import com.example.lpiem.rickandmortyapp.Model.User
 import com.example.lpiem.rickandmortyapp.R
 import com.example.lpiem.rickandmortyapp.Util.SingletonHolder
@@ -24,7 +24,7 @@ class MarketManager private constructor(private val context: Context) {
     private var currentCall: Call<*>? = null
     var cardListDisplay = MutableLiveData<ListOfCards>()
     private var marketLiveData = MutableLiveData<ListOfCards>()
-    private var marketResponseLiveData = MutableLiveData<ResponseFromApi>()
+    private var marketResponseLiveData = MutableLiveData<UserResponse>()
     private var friendId = -1
 
     companion object : SingletonHolder<MarketManager, Context>(::MarketManager)
@@ -35,12 +35,12 @@ class MarketManager private constructor(private val context: Context) {
         Log.d(TAG, "call canceled")
     }
 
-    private fun buyCardTreatment(responseFromApi: ResponseFromApi) {
-        if(responseFromApi.code==200){
+    private fun buyCardTreatment(userResponse: UserResponse) {
+        if(userResponse.code==200){
             Toast.makeText(context, "Congrats, you got a new card", Toast.LENGTH_SHORT).show()
-            getMarket(responseFromApi.results, friendId)
+            getMarket(userResponse.user, friendId)
         }else{
-            Toast.makeText(context, "Error :"+responseFromApi.message, Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Error :"+userResponse.message, Toast.LENGTH_SHORT).show()
         }
     }
 

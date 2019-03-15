@@ -22,7 +22,7 @@ class KaamelottManager private constructor(private var context: Context) {
     internal var turn = 0
     private val loginAppManager = LoginAppManager.getInstance(context)
     private var kaamelottLiveData = MutableLiveData<KaamlottQuote>()
-    private var responseFromApiLiveData = MutableLiveData<ResponseFromApi>()
+    private var responseFromApiLiveData = MutableLiveData<UserResponse>()
     private var walletLiveData = MutableLiveData<Wallet>()
     var initDisplayContent = MutableLiveData<Unit>()
     var updateUI = MutableLiveData<KaamelottQuizBundle>()
@@ -62,11 +62,11 @@ class KaamelottManager private constructor(private var context: Context) {
         })
     }
 
-    private fun getUserByIdTreatment(response: ResponseFromApi) {
-        val code = response.code
-        val message = response.message
+    private fun getUserByIdTreatment(userResponse: UserResponse) {
+        val code = userResponse.code
+        val message = userResponse.message
         if (code == SUCCESS) {
-            val user = response.results
+            val user = userResponse.user
             loginAppManager.gameInProgress = getDate() != user?.userLastGame
             initDisplayContent.postValue(Unit)
         } else {
@@ -82,9 +82,9 @@ class KaamelottManager private constructor(private var context: Context) {
         })
     }
 
-    private fun putDateTreatment(response: ResponseFromApi) {
-        val code = response.code
-        val message = response.message
+    private fun putDateTreatment(userResponse: UserResponse) {
+        val code = userResponse.code
+        val message = userResponse.message
         if (code == SUCCESS) {
             Log.d(TAG, "success code : $code, message $message")
         } else {
@@ -108,9 +108,9 @@ class KaamelottManager private constructor(private var context: Context) {
         })
     }
 
-    private fun updateUserWalletTreatment(response: ResponseFromApi) {
-        val code = response.code
-        val message = response.message
+    private fun updateUserWalletTreatment(userResponse: UserResponse) {
+        val code = userResponse.code
+        val message = userResponse.message
         if (code == SUCCESS) {
             Log.d(TAG, "success code : $code, message $message")
             val id = loginAppManager.connectedUser!!.userId
