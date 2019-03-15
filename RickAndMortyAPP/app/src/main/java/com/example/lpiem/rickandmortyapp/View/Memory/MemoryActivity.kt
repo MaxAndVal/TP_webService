@@ -29,7 +29,6 @@ class MemoryActivity : AppCompatActivity() {
     private lateinit var initListener: Observer<MutableList<Tile>>
     private lateinit var startGameObserver: Observer<Unit>
     private lateinit var drawObserver: Observer<Pair<MutableList<Drawable?>, ListOfCards>>
-    //private var finalTilesListener = MutableLiveData<MutableList<Tile>>()
     private var lisOfImageView: List<ImageView> = ArrayList()
     private var user: User? = null
 
@@ -51,8 +50,6 @@ class MemoryActivity : AppCompatActivity() {
 
         memoryGameManager.gameAvailable(user!!)
     }
-
-
 
     private fun setAnimationListener(listOfTiles: MutableList<Tile>) {
         tv_turn.visibility = VISIBLE
@@ -140,15 +137,10 @@ class MemoryActivity : AppCompatActivity() {
         })
 
         memoryGameManager.drawableListReceiver.observeForever(drawObserver)
-
         memoryGameManager.displayNewTurn.observeForever(turnObserver)
-
         memoryGameManager.displayNewScore.observeForever(scoreObserver)
-
         memoryGameManager.finalViewListeners.observeForever(initListener)
-
         memoryGameManager.startTheGame.observeForever(startGameObserver)
-
     }
 
     private fun removeAllObservers() {

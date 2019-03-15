@@ -1,6 +1,7 @@
 package com.example.lpiem.rickandmortyapp.View.Settings
 
 import android.content.Context
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +12,7 @@ import androidx.lifecycle.Observer
 import com.example.lpiem.rickandmortyapp.Manager.settings.ChangePasswordManager
 import com.example.lpiem.rickandmortyapp.Manager.settings.SettingsManager
 import com.example.lpiem.rickandmortyapp.R
+import com.example.lpiem.rickandmortyapp.R.color.*
 import com.example.lpiem.rickandmortyapp.Util.SingletonHolder
 import com.example.lpiem.rickandmortyapp.Util.observeOnce
 import com.example.lpiem.rickandmortyapp.View.BottomActivity
@@ -53,18 +55,15 @@ class PasswordFragment : androidx.fragment.app.Fragment() {
 
         if (oldPass.isEmpty()) {
             isEmpty = true
-            textInputOldPassword.isHelperTextEnabled = true
-            //textInputOldPassword.setHelperTextColor(R.color.colorstatelist(er)))
+            textInputOldPassword.setHelperTextColor(resources.getColorStateList(R.color.ErrorLightRed))
         }
         if (newPass.isEmpty()) {
             isEmpty = true
-            textInputNewPassword.isHelperTextEnabled = true
-            //textInputNewPassword.setHelperTextColor()
+            textInputNewPassword.setHelperTextColor(resources.getColorStateList(R.color.ErrorLightRed))
         }
         if (newPassConf.isEmpty()) {
             isEmpty = true
-            textInputNewPasswordConf.isHelperTextEnabled = true
-            //textInputNewPasswordConf.setHelperTextColor()
+            textInputNewPasswordConf.setHelperTextColor(resources.getColorStateList(R.color.ErrorLightRed))
         }
 
         if (!isEmpty) {
