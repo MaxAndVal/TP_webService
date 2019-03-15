@@ -60,7 +60,7 @@ class RickAndMortyRetrofitSingleton private constructor(private val context: Con
 
     private fun <T> callRetrofit(call: Call<T>, type: RetrofitCallTypes): MutableLiveData<Any> {
 
-        val liveData =  MutableLiveData<Any>()
+        val liveData = MutableLiveData<Any>()
         call.enqueue(object : Callback<T> {
             override fun onResponse(call: Call<T>, response: Response<T>) {
                 if (response.isSuccessful) {
@@ -89,7 +89,9 @@ class RickAndMortyRetrofitSingleton private constructor(private val context: Con
                         UPDATE_USER_INFO,
                         ADD_A_FRIENDS,
                         ACCEPT_FRIENDSHIP,
-                        DEL_A_FRIEND -> {
+                        DEL_A_FRIEND,
+                        LOST_CODE,
+                        CHANGE_PASSWORD -> {
                             liveData.postValue(result as UserResponse)
                         }
                         GET_WALLET,
@@ -106,13 +108,6 @@ class RickAndMortyRetrofitSingleton private constructor(private val context: Con
                         RESULT_FRIENDS_SEARCHING -> {
                             liveData.postValue(result as ListOfFriends)
                         }
-                        ADD_A_FRIENDS -> TODO()
-                        DEL_A_FRIEND -> TODO()
-                        ACCEPT_FRIENDSHIP -> TODO()
-                        LOST_CODE,
-                        CHANGE_PASSWORD->{
-                        liveData.postValue(result as UserResponse)
-                    }
                     }
                 } else {
                     val responseError = response.errorBody() as ResponseBody
@@ -262,7 +257,7 @@ class RickAndMortyRetrofitSingleton private constructor(private val context: Con
         } else {
             instance!!.getUserMarket(userId)
         }
-        return  callRetrofit(currentCall!!, LIST_OF_CARDS) as MutableLiveData<ListOfCards>
+        return callRetrofit(currentCall!!, LIST_OF_CARDS) as MutableLiveData<ListOfCards>
     }
 
     fun buyCard(card: Card?, userId: Int?, friendId: Int?): MutableLiveData<UserResponse> {
@@ -325,6 +320,11 @@ class RickAndMortyRetrofitSingleton private constructor(private val context: Con
     fun loginWithToken(token: JsonObject): MutableLiveData<UserResponse> {
         currentCall = instance!!.connectUser(token)
         return callRetrofit(currentCall!!, CONNECTION) as MutableLiveData<UserResponse>
+    }
+
+    fun loginWithCode(code: JsonObject): MutableLiveData<UserResponse> {
+        currentCall = instance!!.loginWithCode(code)
+        return callRetrofit(currentCall!!, LOGIN_WITH_CODE) as MutableLiveData<UserResponse>
     }
 
 }

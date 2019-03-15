@@ -32,10 +32,10 @@ class ChangePasswordManager internal constructor(internal val context: Context) 
 
     private fun changePasswordTreatment(it: UserResponse?) {
         if (it?.code == SUCCESS) {
-            //isPasswordChangeSucceded.postValue(true)
+            isPasswordChangeSucceded.postValue(true)
             Toast.makeText(context, it.message, Toast.LENGTH_SHORT).show()
         } else {
-            //isPasswordChangeSucceded.postValue(false)
+            isPasswordChangeSucceded.postValue(false)
             Toast.makeText(context, it?.code.toString() + " " + it?.message, Toast.LENGTH_SHORT).show()
         }
     }

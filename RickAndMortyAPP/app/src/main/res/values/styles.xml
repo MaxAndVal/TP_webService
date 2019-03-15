@@ -151,6 +151,9 @@
         <item name="android:textSize">24sp</item>
         <item name="android:textAlignment">center</item>
     </style>
+    <style name="cl_codeSent">
+        <item name="android:background">@drawable/back_game_over</item>
+    </style>
 
     <style name="BigTextViewStyleWhite">
         <item name="android:textColor">#FFFFFF</item>
@@ -163,6 +166,13 @@
         <item name="android:textSize">24sp</item>
         <item name="android:fontFamily">@font/get_schwifty</item>
         <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="errorInputDarkRed">
+        <item name="android:textColor">@android:color/holo_red_dark</item>
+    </style>
+    <style name="errorInputLightRed">
+        <item name="android:textColor">@android:color/holo_red_light</item>
     </style>
 
 </resources>

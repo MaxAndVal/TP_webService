@@ -33,6 +33,10 @@ interface RickAndMortyAPI {
             @Body body: JsonObject
     ): Call<UserResponse>
 
+    @POST("/auth/loginwithcode")
+    fun loginWithCode(@Body body: JsonObject
+    ): Call<UserResponse>
+
     ///USER
 
 
