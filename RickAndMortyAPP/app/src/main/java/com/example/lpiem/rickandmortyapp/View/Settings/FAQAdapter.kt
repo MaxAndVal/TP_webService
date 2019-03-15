@@ -1,8 +1,10 @@
 package com.example.lpiem.rickandmortyapp.View.Settings
 
+import android.text.Spanned
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.text.HtmlCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lpiem.rickandmortyapp.Model.FAQ
 import com.example.lpiem.rickandmortyapp.R
@@ -20,8 +22,9 @@ class FAQAdapter(private val dataSet: List<FAQ>) : RecyclerView.Adapter<FAQAdapt
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = dataSet[position]
+        val spannedText: Spanned = HtmlCompat.fromHtml(item.response ?: "", HtmlCompat.FROM_HTML_MODE_COMPACT)
         holder.faqQuestion.text = item.question
-        holder.faqResponse.text = item.response
+        holder.faqResponse.text = spannedText
         holder.faqQuestion.setOnClickListener { showTopicDetail(holder) }
 
     }

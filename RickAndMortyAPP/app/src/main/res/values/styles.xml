@@ -120,16 +120,18 @@
     </style>
 
     <style name="tv_FAQ_question">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:fontFamily">@font/rick_and_morty_by_shi</item>
         <item name="android:textAlignment">center</item>
         <item name="android:background">@drawable/border_tv</item>
         <item name="android:textStyle">bold</item>
     </style>
 
     <style name="tv_response_style">
-        <item name="android:textColor">@android:color/white</item>
-        <item name="android:fontFamily">@font/rick_and_morty_by_shi</item>
-        <item name="android:textSize">24sp</item>
-        <item name="android:textAlignment">center</item>
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:background">@android:color/white</item>
+        <item name="android:textSize">14sp</item>
     </style>
 
     <style name="customStyleInput" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">

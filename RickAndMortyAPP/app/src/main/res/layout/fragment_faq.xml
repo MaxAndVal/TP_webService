@@ -18,6 +18,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        style="@style/BigTextViewStyleWhite"
+        android:textAlignment="center"
+        android:text="FAQ"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/iv_closeFAQ"
+        app:layout_constraintBottom_toBottomOf="@id/iv_closeFAQ"
+        />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_faq"
         android:layout_width="0dp"
