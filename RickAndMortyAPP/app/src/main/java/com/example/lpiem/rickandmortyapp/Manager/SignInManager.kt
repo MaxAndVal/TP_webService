@@ -7,9 +7,10 @@ import android.view.View.GONE
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import com.example.lpiem.rickandmortyapp.Data.PreferencesHelper
 import com.example.lpiem.rickandmortyapp.Data.RickAndMortyRetrofitSingleton
 import com.example.lpiem.rickandmortyapp.Data.SUCCESS
-import com.example.lpiem.rickandmortyapp.Model.ResponseFromApi
+import com.example.lpiem.rickandmortyapp.Model.UserResponse
 import com.example.lpiem.rickandmortyapp.R
 import com.example.lpiem.rickandmortyapp.Util.SingletonHolder
 import com.example.lpiem.rickandmortyapp.Util.observeOnce
@@ -18,9 +19,10 @@ import com.example.lpiem.rickandmortyapp.View.TAG
 
 class SignInManager private constructor(private var context: Context) {
 
+    private lateinit var preferencesHelper: PreferencesHelper
     private var loginAppManager: LoginAppManager = LoginAppManager.getInstance(context)
     private val rickAndMortyAPI = RickAndMortyRetrofitSingleton.getInstance(context)
-    private var responseFromApiLiveData = MutableLiveData<ResponseFromApi>()
+    private var responseFromApiLiveData = MutableLiveData<UserResponse>()
     var loaderLiveData = MutableLiveData<Int>()
 
     companion object : SingletonHolder<SignInManager, Context>(::SignInManager)
@@ -45,21 +47,27 @@ class SignInManager private constructor(private var context: Context) {
         })
     }
 
-    private fun connectionTreatment(response: ResponseFromApi) {
-        val code = response.code
-        val name = response.results?.userName
-        val userId = response.results?.userId
-        Log.d(TAG, "code = $code body = $response userId = $userId")
+    private fun connectionTreatment(userResponse: UserResponse) {
+        val code = userResponse.code
+        val name = userResponse.user?.userName
+        val userId = userResponse.user?.userId
+        val token = userResponse.user?.sessionToken
+        preferencesHelper = PreferencesHelper(context)
+        if (token != null) {
+            Log.d(TAG, "token added on signIn")
+            preferencesHelper.deviceToken = token
+        }
+        Log.d(TAG, "code = $code body = $userResponse userId = $userId")
         Toast.makeText(context, String.format(context.getString(R.string.welcome), name), Toast.LENGTH_SHORT).show()
-        loginAppManager.connectedUser = response.results!!
+        loginAppManager.connectedUser = userResponse.user!!
         val intent = Intent(context, BottomActivity::class.java)
         context.startActivity(intent)
     }
 
-    private fun signInTreatment(response: ResponseFromApi, email: String, password: String) {
+    private fun signInTreatment(userResponse: UserResponse, email: String, password: String) {
         loaderLiveData.postValue(GONE)
-        val code = response.code
-        val message = response.message
+        val code = userResponse.code
+        val message = userResponse.message
         if (code == SUCCESS) {
             regularConnection(email, password)
         } else {

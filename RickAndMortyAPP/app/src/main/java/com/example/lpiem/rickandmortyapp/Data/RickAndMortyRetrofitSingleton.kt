@@ -65,6 +65,7 @@ class RickAndMortyRetrofitSingleton private constructor(private val context: Con
             override fun onResponse(call: Call<T>, response: Response<T>) {
                 if (response.isSuccessful) {
                     val result = response.body()
+                    Log.d(TAG, result.toString())
                     when (type) {
                         LIST_OF_CARDS,
                         ADD_CARD_TO_MARKET,
@@ -88,8 +89,10 @@ class RickAndMortyRetrofitSingleton private constructor(private val context: Con
                         UPDATE_USER_INFO,
                         ADD_A_FRIENDS,
                         ACCEPT_FRIENDSHIP,
-                        DEL_A_FRIEND -> {
-                            liveData.postValue(result as ResponseFromApi)
+                        DEL_A_FRIEND,
+                        LOST_CODE,
+                        CHANGE_PASSWORD -> {
+                            liveData.postValue(result as UserResponse)
                         }
                         GET_WALLET,
                         BUY_BOOSTER -> {
@@ -99,15 +102,11 @@ class RickAndMortyRetrofitSingleton private constructor(private val context: Con
                             liveData.postValue(result as ListOfFAQ)
                         }
                         BUY_CAR_FROM_FRIEND -> {
-                            liveData.postValue(result as ResponseFromApi)
+                            liveData.postValue(result as UserResponse)
                         }
                         LIST_OF_FRIENDS,
                         RESULT_FRIENDS_SEARCHING -> {
                             liveData.postValue(result as ListOfFriends)
-                        }
-                        LOST_CODE, LOGIN_WITH_CODE,
-                        CHANGE_PASSWORD -> {
-                            liveData.postValue(result as ResponseFromApi)
                         }
                     }
                 } else {
@@ -161,30 +160,29 @@ class RickAndMortyRetrofitSingleton private constructor(private val context: Con
         return callRetrofit(currentCall!!, KAAMELOTT_QUOTE) as MutableLiveData<KaamlottQuote>
     }
 
-    fun getUserById(userId: Int?): MutableLiveData<ResponseFromApi> {
+    fun getUserById(userId: Int?): MutableLiveData<UserResponse> {
         currentCall = instance!!.getUserById(userId!!)
-        return callRetrofit(currentCall!!, GET_USER_BY_ID) as MutableLiveData<ResponseFromApi>
+       return callRetrofit(currentCall!!, GET_USER_BY_ID) as MutableLiveData<UserResponse>
     }
 
-    fun putDateToken(date: String, id: Int?): MutableLiveData<ResponseFromApi> {
+    fun putDateToken(date: String, id: Int?): MutableLiveData<UserResponse> {
         val jsonBody = JsonObject()
         jsonBody.addProperty(JsonProperty.NewDate.string, date)
         currentCall = instance!!.putNewDate(id!!, jsonBody)
-        return callRetrofit(currentCall!!, PUT_DATE) as MutableLiveData<ResponseFromApi>
+        return callRetrofit(currentCall!!, PUT_DATE) as MutableLiveData<UserResponse>
     }
-
-    fun putMemoryDateToken(date: String, id: Int?): MutableLiveData<ResponseFromApi> {
+    fun putMemoryDateToken(date: String, id: Int?): MutableLiveData<UserResponse> {
         val jsonBody = JsonObject()
         jsonBody.addProperty(JsonProperty.NewDate.string, date)
         currentCall = instance!!.putNewMemoryDate(id!!, jsonBody)
-        return callRetrofit(currentCall!!, PUT_DATE) as MutableLiveData<ResponseFromApi>
+        return callRetrofit(currentCall!!, PUT_DATE) as MutableLiveData<UserResponse>
     }
 
-    fun updateWallet(score: Int, user: User?): MutableLiveData<ResponseFromApi> {
+    fun updateWallet(score: Int, user: User?): MutableLiveData<UserResponse> {
         val jsonBody = JsonObject()
         jsonBody.addProperty(JsonProperty.NewWallet.string, (user!!.userWallet!! + (score * 10)))
         currentCall = instance!!.updateWallet(user.userId!!, jsonBody)
-        return callRetrofit(currentCall!!, UPDATE_WALLET) as MutableLiveData<ResponseFromApi>
+        return callRetrofit(currentCall!!, UPDATE_WALLET) as MutableLiveData<UserResponse>
     }
 
     fun getWallet(id: Int?): MutableLiveData<Wallet> {
@@ -197,9 +195,9 @@ class RickAndMortyRetrofitSingleton private constructor(private val context: Con
         return callRetrofit(currentCall!!, RetrofitCallTypes.GET_FAQ) as MutableLiveData<ListOfFAQ>
     }
 
-    fun login(jsonBody: JsonObject): MutableLiveData<ResponseFromApi> {
+    fun login(jsonBody: JsonObject): MutableLiveData<UserResponse> {
         currentCall = instance!!.connectUser(jsonBody)
-        return callRetrofit(currentCall!!, LOGIN) as MutableLiveData<ResponseFromApi>
+        return callRetrofit(currentCall!!, LOGIN) as MutableLiveData<UserResponse>
     }
 
     fun buyBooster(userId: Int): MutableLiveData<Wallet> {
@@ -207,33 +205,33 @@ class RickAndMortyRetrofitSingleton private constructor(private val context: Con
         return callRetrofit(currentCall!!, BUY_BOOSTER) as MutableLiveData<Wallet>
     }
 
-    fun updateWalletValue(jsonObject: JsonObject, userId: Int): MutableLiveData<ResponseFromApi> {
+    fun updateWalletValue(jsonObject: JsonObject, userId: Int): MutableLiveData<UserResponse> {
         currentCall = instance!!.updateWallet(userId, jsonObject)
-        return callRetrofit(currentCall!!, UPDATE_WALLET) as MutableLiveData<ResponseFromApi>
+        return callRetrofit(currentCall!!, UPDATE_WALLET) as MutableLiveData<UserResponse>
     }
 
-    fun increaseDeckNumber(jsonObject: JsonObject): MutableLiveData<ResponseFromApi> {
+    fun increaseDeckNumber(jsonObject: JsonObject): MutableLiveData<UserResponse> {
         currentCall = instance!!.increaseNumberOfDecks(jsonObject)
-        return callRetrofit(currentCall!!, DECKS_INCREASED) as MutableLiveData<ResponseFromApi>
+        return callRetrofit(currentCall!!, DECKS_INCREASED) as MutableLiveData<UserResponse>
     }
 
-    fun signIn(userName: String, email: String, password: String): MutableLiveData<ResponseFromApi> {
+    fun signIn(userName: String, email: String, password: String): MutableLiveData<UserResponse> {
         val jsonBody = JsonObject()
         jsonBody.addProperty(JsonProperty.UserName.string, userName)
         jsonBody.addProperty(JsonProperty.UserEmail.string, email)
         jsonBody.addProperty(JsonProperty.UserPassword.string, password)
         currentCall = instance!!.signInUser(jsonBody)
-        return callRetrofit(currentCall!!, SIGN_IN) as MutableLiveData<ResponseFromApi>
+        return callRetrofit(currentCall!!, SIGN_IN) as MutableLiveData<UserResponse>
     }
 
-    fun regularConnection(email: String, password: String): MutableLiveData<ResponseFromApi> {
+    fun regularConnection(email: String, password: String): MutableLiveData<UserResponse> {
         val jsonBody = JsonObject()
         jsonBody.addProperty(JsonProperty.UserEmail.string, email)
         jsonBody.addProperty(JsonProperty.UserPassword.string, password)
         currentCall = instance!!.connectUser(jsonBody)
         Log.d(TAG, "jsonBody : $jsonBody")
         Log.d(TAG, "$currentCall")
-        return callRetrofit(currentCall!!, RetrofitCallTypes.CONNECTION) as MutableLiveData<ResponseFromApi>
+        return callRetrofit(currentCall!!, RetrofitCallTypes.CONNECTION) as MutableLiveData<UserResponse>
     }
 
     fun openRandomDeck(userId: Int?): MutableLiveData<ListOfCards> {
@@ -241,9 +239,9 @@ class RickAndMortyRetrofitSingleton private constructor(private val context: Con
         return callRetrofit(currentCall!!, RetrofitCallTypes.OPEN_RANDOM_DECK) as MutableLiveData<ListOfCards>
     }
 
-    fun updateUserInfo(userId: Int?): MutableLiveData<ResponseFromApi> {
+    fun updateUserInfo(userId: Int?): MutableLiveData<UserResponse> {
         currentCall = instance!!.getUserById(userId!!)
-        return callRetrofit(currentCall!!, RetrofitCallTypes.UPDATE_USER_INFO) as MutableLiveData<ResponseFromApi>
+        return callRetrofit(currentCall!!, RetrofitCallTypes.UPDATE_USER_INFO) as MutableLiveData<UserResponse>
     }
 
     fun getCardList(amount: Int): MutableLiveData<ListOfCards> {
@@ -255,73 +253,78 @@ class RickAndMortyRetrofitSingleton private constructor(private val context: Con
 
         val userId = user?.userId ?: -1
         currentCall = if (friendId != null) {
-            instance!!.getFriendMarket(userId, friendId)
+           instance!!.getFriendMarket(userId, friendId)
         } else {
             instance!!.getUserMarket(userId)
         }
         return callRetrofit(currentCall!!, LIST_OF_CARDS) as MutableLiveData<ListOfCards>
     }
 
-    fun buyCard(card: Card?, userId: Int?, friendId: Int?): MutableLiveData<ResponseFromApi> {
+    fun buyCard(card: Card?, userId: Int?, friendId: Int?): MutableLiveData<UserResponse> {
         val jsonObject = JsonObject()
         if (card != null) {
             jsonObject.addProperty("price", card.price)
         }
         currentCall = instance!!.buyCardFromFriend(userId!!, friendId!!, card!!.cardId!!, jsonObject)
-        return callRetrofit(currentCall!!, BUY_CAR_FROM_FRIEND) as MutableLiveData<ResponseFromApi>
+        return callRetrofit(currentCall!!, BUY_CAR_FROM_FRIEND) as MutableLiveData<UserResponse>
     }
 
-    fun addRewardsToUser(rewards: MutableList<MemoryReward>, userId: Int): MutableLiveData<ResponseFromApi> {
+    fun addRewardsToUser(rewards: MutableList<MemoryReward>, userId: Int): MutableLiveData<UserResponse> {
         val jsonBody = JsonObject()
         val gson = GsonBuilder().create()
         jsonBody.add("listOfCards", gson.toJsonTree(rewards))
         jsonBody.addProperty("user_id", userId)
         currentCall = instance!!.addRewards(jsonBody)
-        return callRetrofit(currentCall!!, RESPONSE_FROM_API) as MutableLiveData<ResponseFromApi>
+        return callRetrofit(currentCall!!, RESPONSE_FROM_API) as MutableLiveData<UserResponse>
     }
 
-    fun changePassword(userId: Int?, userEmail: String?, oldPass: String, newPass: String): MutableLiveData<ResponseFromApi> {
-        val jsonBody = JsonObject()
+    fun changePassword(userId: Int?, userEmail: String?, oldPass: String, newPass: String): MutableLiveData<UserResponse> {
+    val jsonBody = JsonObject()
         jsonBody.addProperty("user_email", userEmail)
         jsonBody.addProperty("user_old_password", oldPass)
         jsonBody.addProperty("user_new_password", newPass)
-        currentCall = instance!!.changePassword(userId!!, jsonBody)
-        return callRetrofit(currentCall!!, CHANGE_PASSWORD) as MutableLiveData<ResponseFromApi>
+        currentCall = instance!!.changePassword(userId!!,jsonBody)
+        return callRetrofit(currentCall!!, CHANGE_PASSWORD) as MutableLiveData<UserResponse>
     }
 
-    fun sendCode(jsonBody: JsonObject): MutableLiveData<ResponseFromApi> {
+    fun sendCode(jsonBody: JsonObject): MutableLiveData<UserResponse> {
         currentCall = instance!!.sendCodeForPassword(jsonBody)
-        return callRetrofit(currentCall!!, LOST_CODE) as MutableLiveData<ResponseFromApi>
+        return callRetrofit(currentCall!!, LOST_CODE) as MutableLiveData<UserResponse>
     }
 
     fun getFriendsList(userId: Int): MutableLiveData<ListOfFriends> {
         currentCall = instance!!.getListOfFriends(userId)
-        return callRetrofit(currentCall!!, LIST_OF_FRIENDS) as MutableLiveData<ListOfFriends>
+        return callRetrofit(currentCall!!, RetrofitCallTypes.LIST_OF_FRIENDS) as MutableLiveData<ListOfFriends>
     }
 
     fun getFriendSearchResult(userId: Int, friends: String?): MutableLiveData<ListOfFriends> {
         currentCall = instance!!.searchForFriends(userId, friends)
-        return callRetrofit(currentCall!!, RESULT_FRIENDS_SEARCHING) as MutableLiveData<ListOfFriends>
+        return callRetrofit(currentCall!!, RetrofitCallTypes.RESULT_FRIENDS_SEARCHING) as MutableLiveData<ListOfFriends>
     }
 
-    fun addThisFriend(currentUserId: Int, friendId: Int): MutableLiveData<ResponseFromApi> {
+    fun addThisFriend(currentUserId: Int, friendId: Int): MutableLiveData<UserResponse> {
         currentCall = instance!!.addAFriend(currentUserId, friendId)
-        return callRetrofit(currentCall!!, ADD_A_FRIENDS) as MutableLiveData<ResponseFromApi>
+        return callRetrofit(currentCall!!, RetrofitCallTypes.ADD_A_FRIENDS) as MutableLiveData<UserResponse>
     }
 
-    fun validateFriendship(currentUserId: Int, friendId: Int): MutableLiveData<ResponseFromApi> {
+    fun validateFriendship(currentUserId: Int, friendId: Int): MutableLiveData<UserResponse> {
         currentCall = instance!!.validateAFriend(currentUserId, friendId)
-        return callRetrofit(currentCall!!, ACCEPT_FRIENDSHIP) as MutableLiveData<ResponseFromApi>
+        return callRetrofit(currentCall!!, RetrofitCallTypes.ACCEPT_FRIENDSHIP) as MutableLiveData<UserResponse>
     }
 
-    fun deleteThisFriend(currentUserId: Int, friendId: Int): MutableLiveData<ResponseFromApi> {
-        currentCall = instance!!.deleteAFriend(currentUserId, friendId)
-        return callRetrofit(currentCall!!, DEL_A_FRIEND) as MutableLiveData<ResponseFromApi>
+    fun deleteThisFriend(currentUserId: Int, friendId: Int): MutableLiveData<UserResponse> {
+        currentCall = instance!!.deleteAFriend( currentUserId,friendId)
+        return callRetrofit(currentCall!!, RetrofitCallTypes.DEL_A_FRIEND) as MutableLiveData<UserResponse>
     }
 
-    fun loginWithCode(code: JsonObject): MutableLiveData<ResponseFromApi> {
+    fun loginWithToken(token: JsonObject): MutableLiveData<UserResponse> {
+        currentCall = instance!!.connectUser(token)
+        return callRetrofit(currentCall!!, CONNECTION) as MutableLiveData<UserResponse>
+    }
+
+    fun loginWithCode(code: JsonObject): MutableLiveData<UserResponse> {
         currentCall = instance!!.loginWithCode(code)
-        return callRetrofit(currentCall!!, LOGIN_WITH_CODE) as MutableLiveData<ResponseFromApi>
+        return callRetrofit(currentCall!!, LOGIN_WITH_CODE) as MutableLiveData<UserResponse>
     }
 
 }

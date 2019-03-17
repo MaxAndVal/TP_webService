@@ -12,11 +12,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.example.lpiem.rickandmortyapp.Manager.LoginAppManager
 import com.example.lpiem.rickandmortyapp.R
+import com.example.lpiem.rickandmortyapp.Util.observeOnce
 import com.facebook.CallbackManager
 import com.facebook.FacebookCallback
 import com.facebook.FacebookException
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
+import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.common.SignInButton
 import kotlinx.android.synthetic.main.activity_login.*
 import java.util.*
@@ -35,12 +37,15 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var googleBtnLabel: Button
     private lateinit var facebookInitObserver: Observer<Unit>
     private lateinit var alreadyConnectedWithFacebookObserver: Observer<Boolean>
+    private lateinit var finishLoginActivityObserver: Observer<Boolean>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
         loginAppManager = LoginAppManager.getInstance(this)
+        loginAppManager.mGoogleSignInClient = GoogleSignIn.getClient(this, loginAppManager.instanciateGSO())
+
 
         initObservers()
         triggerLivesData()
@@ -59,9 +64,9 @@ class LoginActivity : AppCompatActivity() {
             // Check if no view has focus before hiding the keyboard:
             val view = this.currentFocus
             view?.let { v ->
-                val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as
+                val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as
                         InputMethodManager
-                imm.let { it.hideSoftInputFromWindow(v.windowToken, 0) }
+                inputMethodManager.let { it.hideSoftInputFromWindow(v.windowToken, 0) }
             }
         }
         tv_signIn.setOnClickListener { loginAppManager.regularSignIn() }
@@ -102,6 +107,11 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun initObservers() {
+
+        finishLoginActivityObserver = Observer {
+            if (it) finish()
+        }
+
         loaderObserver = Observer { isVisible ->
             login_progressBar.visibility = isVisible
         }
@@ -151,6 +161,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun triggerLivesData() {
+        loginAppManager.finishActivityLiveData.observeOnce(finishLoginActivityObserver)
         loginAppManager.alreadyConnectedToFacebook.observeForever(alreadyConnectedWithFacebookObserver)
         loginAppManager.facebookInit.observeForever(facebookInitObserver)
         loginAppManager.resolveIntent.observeForever(resolveIntentObserver)

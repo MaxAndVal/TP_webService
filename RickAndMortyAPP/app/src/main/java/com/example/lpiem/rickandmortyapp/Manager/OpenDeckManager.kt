@@ -7,7 +7,7 @@ import com.example.lpiem.rickandmortyapp.Data.RickAndMortyRetrofitSingleton
 import com.example.lpiem.rickandmortyapp.Manager.collection.DetailCollectionManager
 import com.example.lpiem.rickandmortyapp.Model.Card
 import com.example.lpiem.rickandmortyapp.Model.ListOfCards
-import com.example.lpiem.rickandmortyapp.Model.ResponseFromApi
+import com.example.lpiem.rickandmortyapp.Model.UserResponse
 import com.example.lpiem.rickandmortyapp.Util.SingletonHolder
 import com.example.lpiem.rickandmortyapp.Util.observeOnce
 
@@ -17,7 +17,7 @@ class OpenDeckManager  private constructor(private val context: Context) {
     private val rickAndMortyAPI = RickAndMortyRetrofitSingleton.getInstance(context)
     var showDetails = true
     private var listOfCardsLiveData = MutableLiveData<ListOfCards>()
-    private var responseFromApiLiveData = MutableLiveData<ResponseFromApi>()
+    private var responseFromApiLiveData = MutableLiveData<UserResponse>()
     var updateDeckCountLiveData = MutableLiveData<Int>()
     var infoNewCardLiveData = MutableLiveData<Int>()
 
@@ -39,7 +39,7 @@ class OpenDeckManager  private constructor(private val context: Context) {
         })
     }
 
-    private fun updateUserInfoTreatment(result: ResponseFromApi) {
+    private fun updateUserInfoTreatment(result: UserResponse) {
         val homeManager = HomeManager.getInstance(context)
         homeManager.updateUserInfo(result)
         val user = loginAppManager.connectedUser

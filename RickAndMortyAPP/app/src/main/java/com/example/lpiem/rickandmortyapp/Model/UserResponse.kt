@@ -7,15 +7,15 @@ import com.google.gson.annotations.SerializedName
 
 
 
-class ResponseFromApi : Parcelable {
+class UserResponse : Parcelable {
 
-    @JvmField val CREATOR: Parcelable.Creator<ResponseFromApi> = object : Parcelable.Creator<ResponseFromApi> {
+    @JvmField val CREATOR: Parcelable.Creator<UserResponse> = object : Parcelable.Creator<UserResponse> {
 
-        override fun createFromParcel(inside: Parcel): ResponseFromApi {
-            return ResponseFromApi(inside)
+        override fun createFromParcel(inside: Parcel): UserResponse {
+            return UserResponse(inside)
         }
 
-        override fun newArray(size: Int): Array<ResponseFromApi?> {
+        override fun newArray(size: Int): Array<UserResponse?> {
             return arrayOfNulls(size)
         }
 
@@ -29,20 +29,20 @@ class ResponseFromApi : Parcelable {
     var message: String? = null
     @SerializedName("user")
     @Expose
-    var results: User? = null
+    var user: User? = null
         private set
 
     constructor(inside: Parcel) {
         this.code = inside.readValue(Int::class.java.classLoader) as Int
         this.message = inside.readValue(String::class.java.classLoader) as String
-        this.results = inside.readValue(User::class.java.classLoader) as User
+        this.user = inside.readValue(User::class.java.classLoader) as User
     }
 
 
     override fun writeToParcel(dest: Parcel, flags: Int) {
         dest.writeValue(code)
         dest.writeValue(message)
-        dest.writeValue(results)
+        dest.writeValue(user)
     }
 
     override fun describeContents(): Int {
@@ -50,7 +50,7 @@ class ResponseFromApi : Parcelable {
     }
 
     override fun toString(): String {
-        return "ResponseFromApi(CREATOR=$CREATOR, code=$code, message=$message, results=${results.toString()})"
+        return "UserResponse( code=$code, message=$message, user=${user.toString()})"
     }
 
 

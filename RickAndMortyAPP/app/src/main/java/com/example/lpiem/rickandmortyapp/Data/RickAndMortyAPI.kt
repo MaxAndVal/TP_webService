@@ -21,21 +21,21 @@ interface RickAndMortyAPI {
     @POST("/auth/login")
     fun connectUser(
             @Body body: JsonObject
-    ): Call<ResponseFromApi>
+    ): Call<UserResponse>
 
     @POST("/users/")
     fun signInUser(
             @Body body: JsonObject
-    ): Call<ResponseFromApi>
+    ): Call<UserResponse>
 
     @POST("/auth/lostpassword")
     fun sendCodeForPassword(
             @Body body: JsonObject
-    ): Call<ResponseFromApi>
+    ): Call<UserResponse>
 
     @POST("/auth/loginwithcode")
     fun loginWithCode(@Body body: JsonObject
-    ): Call<ResponseFromApi>
+    ): Call<UserResponse>
 
     ///USER
 
@@ -43,20 +43,20 @@ interface RickAndMortyAPI {
     @GET("/users/{id}")
     fun getUserById(
             @Path("id") userId: Int
-    ): Call<ResponseFromApi>
+    ): Call<UserResponse>
 
     @PUT("/users/{id}/password")
     fun changePassword(
             @Path("id") userId: Int,
             @Body body: JsonObject
-    ): Call<ResponseFromApi>
+    ): Call<UserResponse>
 
     ///KAAMELOTT GAME
 
     @PUT("/users/playGame/{id}")
     fun putNewDate(
             @Path("id") userId: Int, @Body body: JsonObject
-    ): Call<ResponseFromApi>
+    ): Call<UserResponse>
 
     @GET("/kaamelott/randomQuote")
     fun getRandomQuote(
@@ -68,7 +68,7 @@ interface RickAndMortyAPI {
     @PUT("/users/wallet/{id}")
     fun updateWallet(
             @Path("id") userId: Int, @Body body: JsonObject
-    ): Call<ResponseFromApi>
+    ): Call<UserResponse>
 
     @GET("/users/wallet/{id}")
     fun getWallet(
@@ -96,7 +96,7 @@ interface RickAndMortyAPI {
     @POST("/cards/addDecks")
     fun increaseNumberOfDecks(
             @Body body: JsonObject
-    ): Call<ResponseFromApi>
+    ): Call<UserResponse>
 
 
     ///FRIEND
@@ -116,19 +116,19 @@ interface RickAndMortyAPI {
     fun addAFriend(
             @Path("user") userId1: Int,
             @Path("id2") userId2: Int
-    ): Call<ResponseFromApi>
+    ): Call<UserResponse>
 
     @DELETE("users/{user}/friends/{id2}")
     fun deleteAFriend(
             @Path("user") userId1: Int,
             @Path("id2") userId2: Int
-    ): Call<ResponseFromApi>
+    ): Call<UserResponse>
 
     @PUT("users/{user}/friends/{id2}")
     fun validateAFriend(
             @Path("user") userId1: Int,
             @Path("id2") userId2: Int
-    ): Call<ResponseFromApi>
+    ): Call<UserResponse>
 
 
     ///SETTINGS
@@ -162,7 +162,7 @@ interface RickAndMortyAPI {
             @Path("friend") friend: Int,
             @Path("card_id") card_id: Int,
             @Body body: JsonObject
-    ): Call<ResponseFromApi>
+    ): Call<UserResponse>
 
 
     ///MEMORY GAME
@@ -175,12 +175,10 @@ interface RickAndMortyAPI {
     @PUT("/users/playMemory/{id}")
     fun putNewMemoryDate(
             @Path("id") userId: Int, @Body body: JsonObject
-    ): Call<ResponseFromApi>
+    ): Call<UserResponse>
 
     @POST("/cards/addRewards")
     fun addRewards(
             @Body body: JsonObject
-    ): Call<ResponseFromApi>
-
-
+    ): Call<UserResponse>
 }

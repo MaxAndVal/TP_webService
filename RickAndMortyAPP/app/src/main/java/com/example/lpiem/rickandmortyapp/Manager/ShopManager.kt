@@ -7,7 +7,7 @@ import androidx.lifecycle.Observer
 import com.example.lpiem.rickandmortyapp.Data.RickAndMortyRetrofitSingleton
 import com.example.lpiem.rickandmortyapp.Data.SUCCESS
 import com.example.lpiem.rickandmortyapp.Model.CardBooster
-import com.example.lpiem.rickandmortyapp.Model.ResponseFromApi
+import com.example.lpiem.rickandmortyapp.Model.UserResponse
 import com.example.lpiem.rickandmortyapp.Model.Wallet
 import com.example.lpiem.rickandmortyapp.R
 import com.example.lpiem.rickandmortyapp.Util.SingletonHolder
@@ -22,7 +22,7 @@ class ShopManager private constructor(private val context: Context) {
     private var currentCall : Call<*>? = null
     private var cost = 0
     private var numberOfDeckToAdd = 0
-    private var responseFromApiLiveData = MutableLiveData<ResponseFromApi>()
+    private var responseFromApiLiveData = MutableLiveData<UserResponse>()
     private var walletLiveData = MutableLiveData<Wallet>()
 
     companion object : SingletonHolder<ShopManager, Context>(::ShopManager)
@@ -31,11 +31,11 @@ class ShopManager private constructor(private val context: Context) {
         currentCall?.cancel()
     }
 
-    private fun decksIncreasedTreatment(response: ResponseFromApi) {
-        val code = response.code
-        val message = response.message
+    private fun decksIncreasedTreatment(userResponse: UserResponse) {
+        val code = userResponse.code
+        val message = userResponse.message
         if (code == SUCCESS) {
-            val user = response.results!!
+            val user = userResponse.user!!
             loginAppManager.connectedUser = user
             Toast.makeText(context, String.format(context.getString(R.string.X_decks_added), numberOfDeckToAdd), Toast.LENGTH_SHORT).show()
         } else {
@@ -43,11 +43,11 @@ class ShopManager private constructor(private val context: Context) {
         }
     }
 
-    private fun updateWalletTreatment(response: ResponseFromApi) {
-        val code = response.code
-        val message = response.message
+    private fun updateWalletTreatment(userResponse: UserResponse) {
+        val code = userResponse.code
+        val message = userResponse.message
         if (code == SUCCESS) {
-            var deckToOpen = response.results!!.deckToOpen!!
+            var deckToOpen = userResponse.user!!.deckToOpen!!
             deckToOpen += numberOfDeckToAdd
             // Make a call to update the amount of decks to open
             val jsonObject = JsonObject()
