@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.example.lpiem.rickandmortyapp.Manager.LoginAppManager
 import com.example.lpiem.rickandmortyapp.R
+import com.example.lpiem.rickandmortyapp.Util.observeOnce
 import com.facebook.CallbackManager
 import com.facebook.FacebookCallback
 import com.facebook.FacebookException
@@ -36,6 +37,7 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var googleBtnLabel: Button
     private lateinit var facebookInitObserver: Observer<Unit>
     private lateinit var alreadyConnectedWithFacebookObserver: Observer<Boolean>
+    private lateinit var finishLoginActivityObserver: Observer<Boolean>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,6 +45,7 @@ class LoginActivity : AppCompatActivity() {
 
         loginAppManager = LoginAppManager.getInstance(this)
         loginAppManager.mGoogleSignInClient = GoogleSignIn.getClient(this, loginAppManager.instanciateGSO())
+
 
         initObservers()
         triggerLivesData()
@@ -104,6 +107,11 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun initObservers() {
+
+        finishLoginActivityObserver = Observer {
+            if (it) finish()
+        }
+
         loaderObserver = Observer { isVisible ->
             login_progressBar.visibility = isVisible
         }
@@ -153,6 +161,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun triggerLivesData() {
+        loginAppManager.finishActivityLiveData.observeOnce(finishLoginActivityObserver)
         loginAppManager.alreadyConnectedToFacebook.observeForever(alreadyConnectedWithFacebookObserver)
         loginAppManager.facebookInit.observeForever(facebookInitObserver)
         loginAppManager.resolveIntent.observeForever(resolveIntentObserver)

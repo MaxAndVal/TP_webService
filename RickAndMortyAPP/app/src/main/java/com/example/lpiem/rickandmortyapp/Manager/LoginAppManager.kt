@@ -8,11 +8,8 @@ import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
-import com.example.lpiem.rickandmortyapp.Data.JsonProperty
+import com.example.lpiem.rickandmortyapp.Data.*
 import com.example.lpiem.rickandmortyapp.Data.JsonProperty.*
-import com.example.lpiem.rickandmortyapp.Data.LoginFrom
-import com.example.lpiem.rickandmortyapp.Data.RickAndMortyRetrofitSingleton
-import com.example.lpiem.rickandmortyapp.Data.SUCCESS
 import com.example.lpiem.rickandmortyapp.Model.User
 import com.example.lpiem.rickandmortyapp.Model.UserResponse
 import com.example.lpiem.rickandmortyapp.R
@@ -34,6 +31,7 @@ import com.google.gson.JsonObject
 
 class LoginAppManager private constructor(private var context: Context) {
 
+    private lateinit var preferencesHelper: PreferencesHelper
     private val rickAndMortyAPI = RickAndMortyRetrofitSingleton.getInstance(context)
     private var connectedToGoogle = false
     lateinit var gso: GoogleSignInOptions
@@ -48,6 +46,7 @@ class LoginAppManager private constructor(private var context: Context) {
     var resolveIntent = MutableLiveData<Intent>()
     var facebookInit = MutableLiveData<Unit>()
     var alreadyConnectedToFacebook = MutableLiveData<Boolean>()
+    var finishActivityLiveData = MutableLiveData<Boolean>()
 
     companion object : SingletonHolder<LoginAppManager, Context>(::LoginAppManager)
 
@@ -229,27 +228,46 @@ class LoginAppManager private constructor(private var context: Context) {
 
     internal fun loginTreatment(userResponse: UserResponse, from: LoginFrom) {
         Log.d(TAG, " log 4 User = ${userResponse.user}")
+        preferencesHelper = PreferencesHelper(context)
         val code = userResponse.code
         val message = userResponse.message
-        if (code == SUCCESS) {
-            val results = userResponse.user
-            loaderDisplay.postValue(View.GONE)
-            if (connectedToGoogle) {
-                googleBtnSwitch.postValue(false)
+        when (code) {
+            SUCCESS -> {
+                val results = userResponse.user
+                loaderDisplay.postValue(View.GONE)
+                if (connectedToGoogle) {
+                    googleBtnSwitch.postValue(false)
+                }
+                val name = results?.userName
+                Log.d(TAG, "code = $code body = $userResponse")
+                connectedUser = userResponse.user!!
+                val homeIntent = Intent(context, BottomActivity::class.java)
+                val loginIntent = Intent(context, LoginActivity::class.java)
+                val token = userResponse.user?.sessionToken
+                when (from) {
+                    LoginFrom.FROM_LOGIN -> {
+                        if (token != null && token.length == 30) {
+                            preferencesHelper.deviceToken = token
+                        }
+                        Toast.makeText(context, String.format(context.getString(R.string.welcome, name)), Toast.LENGTH_SHORT).show()
+                        resolveIntent.postValue(homeIntent)
+                        finishActivityLiveData.postValue(true)
+                    }
+                    else -> {
+                        if (token != null && token.length == 30) {
+                            Toast.makeText(context, String.format(context.getString(R.string.welcome, name)), Toast.LENGTH_SHORT).show()
+                            (context as SplashScreen).startActivity(homeIntent)
+                        } else {
+                            Toast.makeText(context, "Session expirée, merci de vous reconnecter", Toast.LENGTH_SHORT).show()
+                            (context as SplashScreen).startActivity(loginIntent)
+                        }
+                    }
+                }
             }
-            val name = results?.userName
-            Log.d(TAG, "code = $code body = $userResponse")
-            Toast.makeText(context, String.format(context.getString(R.string.welcome, name)), Toast.LENGTH_SHORT).show()
-            connectedUser = userResponse.user!!
-            val homeIntent = Intent(context, BottomActivity::class.java)
-            if (from == LoginFrom.FROM_LOGIN) {
-                resolveIntent.postValue(homeIntent)
-            } else {
-                (context as SplashScreen).startActivity(homeIntent)
+            else -> {
+                Toast.makeText(context, String.format(context.getString(R.string.code_message), code, message), Toast.LENGTH_SHORT).show()
+                loaderDisplay.postValue(View.GONE)
             }
-        } else {
-            Toast.makeText(context, String.format(context.getString(R.string.code_message), code, message), Toast.LENGTH_SHORT).show()
-            loaderDisplay.postValue(View.GONE)
         }
     }
 

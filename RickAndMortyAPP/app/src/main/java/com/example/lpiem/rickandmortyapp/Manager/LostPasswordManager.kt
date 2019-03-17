@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.example.lpiem.rickandmortyapp.Data.JsonProperty
+import com.example.lpiem.rickandmortyapp.Data.LoginFrom
 import com.example.lpiem.rickandmortyapp.Data.RickAndMortyRetrofitSingleton
 import com.example.lpiem.rickandmortyapp.Data.SUCCESS
 import com.example.lpiem.rickandmortyapp.Model.UserResponse
@@ -54,10 +55,10 @@ class LostPasswordManager private constructor(private var context: Context) {
 
     }
 
-    private fun loginWithCodeTreatment(it: ResponseFromApi?) {
+    private fun loginWithCodeTreatment(it: UserResponse?) {
         if (it?.code == 200) {
             isLoginWithcode.postValue(it.code)
-            loginAppManager.loginTreatment(it)
+            loginAppManager.loginTreatment(it, LoginFrom.FROM_LOST_PASSWORD)
         } else {
             isLoginWithcode.postValue(it!!.code)
         }

@@ -28,40 +28,31 @@ class SplashScreen : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash_screen)
 
+        preferencesHelper = PreferencesHelper(this)
+        Log.d(TAG, "existing token = ${preferencesHelper.deviceToken}")
+
         tokenConnectionObserver = Observer {
             Log.d(TAG, " log 3")
             if (it.code == SUCCESS) {
                 loginAppManager.loginTreatment(it, LoginFrom.FROM_SPLASH_SCREEN)
                 finish()
             } else {
-                Log.d(TAG, "log5")
-//                val loginActivityIntent = Intent(this@SplashScreen, LoginActivity::class.java)
-//                startActivity(loginActivityIntent)
-//                finish()
+                val loginActivityIntent = Intent(this@SplashScreen, LoginActivity::class.java)
+                startActivity(loginActivityIntent)
+                finish()
             }
         }
 
-        preferencesHelper = PreferencesHelper(this)
-        preferencesHelper.deviceToken = "B9L6YQgLjDRIO3WNvYvXGFnG9GsOHr"
-
         loginAppManager = LoginAppManager.getInstance(this)
-        //loginAppManager.loginLiveData.observeOnce(tokenConnectionObserver)
 
         val resultCall = rickAndMortyAPI!!.herokuAwaking()
         callRetrofit(resultCall, RetrofitCallTypes.HEROKU_VOID)
 
         Picasso.get().load(R.drawable.splash_screen2).fit().centerCrop().into(iv_splashScreen)
 
-
-//        val handler = Handler()
-//        handler.postDelayed({
-//            val mainActivityIntent = Intent(this@SplashScreen, LoginActivity::class.java)
-//            startActivity(mainActivityIntent)
-//            finish()
-//        }, 2500L)
-
     }
 
+    //TODO : move to repo
     private fun <T> callRetrofit(call: Call<T>, type: RetrofitCallTypes) {
 
         call.enqueue(object : Callback<T> {
@@ -73,12 +64,9 @@ class SplashScreen : AppCompatActivity() {
                 when (type) {
                     HEROKU_VOID -> {
                         Log.d(TAG, " R : Heroku should be awake")
-                        if (preferencesHelper.deviceToken != "") {
+                        if (preferencesHelper.deviceToken.length == 30) {
                             Log.d(TAG, " log 1")
                             loginAppManager.connectionWithToken(preferencesHelper.deviceToken, tokenConnectionObserver)
-//                            val bottomActivityIntent = Intent(this@SplashScreen, BottomActivity::class.java)
-//                            startActivity(bottomActivityIntent)
-//                            finish()
                         } else {
                             val loginActivityIntent = Intent(this@SplashScreen, LoginActivity::class.java)
                             startActivity(loginActivityIntent)
