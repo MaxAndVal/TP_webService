@@ -32,7 +32,6 @@ class SplashScreen : AppCompatActivity() {
         Log.d(TAG, "existing token = ${preferencesHelper.deviceToken}")
 
         tokenConnectionObserver = Observer {
-            Log.d(TAG, " log 3")
             if (it.code == SUCCESS) {
                 loginAppManager.loginTreatment(it, LoginFrom.FROM_SPLASH_SCREEN)
                 finish()
@@ -65,7 +64,6 @@ class SplashScreen : AppCompatActivity() {
                     HEROKU_VOID -> {
                         Log.d(TAG, " R : Heroku should be awake")
                         if (preferencesHelper.deviceToken.length == 30) {
-                            Log.d(TAG, " log 1")
                             loginAppManager.connectionWithToken(preferencesHelper.deviceToken, tokenConnectionObserver)
                         } else {
                             val loginActivityIntent = Intent(this@SplashScreen, LoginActivity::class.java)

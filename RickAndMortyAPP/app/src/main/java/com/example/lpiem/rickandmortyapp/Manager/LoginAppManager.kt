@@ -68,7 +68,6 @@ class LoginAppManager private constructor(private var context: Context) {
     }
 
     fun connectionWithToken(token: String, observer: Observer<UserResponse>) {
-        Log.d(TAG, " log 2")
         val jsonBody = JsonObject()
         jsonBody.addProperty("session_token", token)
         loginLiveData = rickAndMortyAPI.loginWithToken(jsonBody)
@@ -141,7 +140,7 @@ class LoginAppManager private constructor(private var context: Context) {
             })
 
         } else {
-            Toast.makeText(context, "erreur : ${data.toString()}", Toast.LENGTH_SHORT).show()
+            Log.d(TAG, "google error : $data")
             loaderDisplay.postValue(View.GONE)
         }
     }
@@ -150,7 +149,6 @@ class LoginAppManager private constructor(private var context: Context) {
         mGoogleSignInClient?.signOut()?.addOnCompleteListener { task ->
             task.result
             if (verbose) Toast.makeText(context, context.getString(R.string.google_disconnected), Toast.LENGTH_SHORT).show()
-            googleBtnSwitch.postValue(true)
             googleBtnSwitch.postValue(true)
             connectedToGoogle = false
         }
@@ -215,7 +213,6 @@ class LoginAppManager private constructor(private var context: Context) {
 
     fun facebookCancel() {
         Log.d(TAG, "onCancel: ")
-        //TODO : remove this line when app is finished
         LoginManager.getInstance().logOut()
         loaderDisplay.postValue(View.GONE)
     }
@@ -227,7 +224,6 @@ class LoginAppManager private constructor(private var context: Context) {
     }
 
     internal fun loginTreatment(userResponse: UserResponse, from: LoginFrom) {
-        Log.d(TAG, " log 4 User = ${userResponse.user}")
         preferencesHelper = PreferencesHelper(context)
         val code = userResponse.code
         val message = userResponse.message
@@ -258,7 +254,7 @@ class LoginAppManager private constructor(private var context: Context) {
                             Toast.makeText(context, String.format(context.getString(R.string.welcome, name)), Toast.LENGTH_SHORT).show()
                             (context as SplashScreen).startActivity(homeIntent)
                         } else {
-                            Toast.makeText(context, "Session expirée, merci de vous reconnecter", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, context.getString(R.string.expired_session), Toast.LENGTH_SHORT).show()
                             (context as SplashScreen).startActivity(loginIntent)
                         }
                     }
@@ -269,6 +265,13 @@ class LoginAppManager private constructor(private var context: Context) {
                 loaderDisplay.postValue(View.GONE)
             }
         }
+    }
+
+    fun disconnectUser() {
+        preferencesHelper.deviceToken = "expired"
+        Toast.makeText(context, context.getString(R.string.disconnected), Toast.LENGTH_SHORT).show()
+        LoginManager.getInstance().logOut()
+        disconnectGoogleAccount(false)
     }
 
 }

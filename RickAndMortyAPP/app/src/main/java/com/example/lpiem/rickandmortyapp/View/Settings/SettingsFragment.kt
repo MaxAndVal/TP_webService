@@ -1,12 +1,15 @@
 package com.example.lpiem.rickandmortyapp.View.Settings
 
+import android.app.AlertDialog
 import android.os.Bundle
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.lpiem.rickandmortyapp.Manager.LoginAppManager
 import com.example.lpiem.rickandmortyapp.Manager.settings.SettingsManager
 import com.example.lpiem.rickandmortyapp.R
+import com.example.lpiem.rickandmortyapp.View.BottomActivity
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_settings.*
 
@@ -31,6 +34,25 @@ class SettingsFragment : androidx.fragment.app.Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        tv_disconnect.setOnClickListener {
+            val builder: AlertDialog.Builder = AlertDialog.Builder(context, android.R.style.Theme_Material_Dialog_NoActionBar)
+
+            builder.setTitle(getString(R.string.deconnection_alert))
+                    .setMessage(getString(R.string.deconnection_message))
+                    .setPositiveButton(android.R.string.yes) { dialog, which ->
+                        loginAppManager.disconnectUser()
+                        val handler = Handler()
+                        handler.postDelayed({
+                            (activity as BottomActivity).finish()
+                        }, 2000L)
+                    }
+                    .setNegativeButton(android.R.string.no) { dialog, which ->
+                        // do nothing
+                    }
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show()
+
+        }
         tv_faq.setOnClickListener { settingsManager.openFragmentFAQ(FAQ_Fragment()) }
         tv_change_password.setOnClickListener { settingsManager.openFragmentChangePassword(PasswordFragment()) }
         displayUserInformation()
