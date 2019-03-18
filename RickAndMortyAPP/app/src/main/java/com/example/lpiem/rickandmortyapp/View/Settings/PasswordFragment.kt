@@ -26,8 +26,8 @@ class PasswordFragment : androidx.fragment.app.Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         changePasswordManager = ChangePasswordManager.getInstance(context!!)
-        changePasswordObserver = Observer { isChangeSuccessfull ->
-            if (isChangeSuccessfull) closeChangePassword(this)
+        changePasswordObserver = Observer { isChangeSuccessFull ->
+            if (isChangeSuccessFull) closeChangePassword(this)
         }
     }
 
@@ -70,11 +70,11 @@ class PasswordFragment : androidx.fragment.app.Fragment() {
 
         if (!isEmpty) {
             if (newPass == newPassConf) {
-                changePasswordManager.isPasswordChangeSucceded.observeOnce(changePasswordObserver)
+                changePasswordManager.isPasswordChangeSucceeded.observeOnce(changePasswordObserver)
                 changePasswordManager.changePassword(oldPass, newPass)
             } else {
                 tv_errorInput.text = getString(R.string.ErrorSamePassword)
-                Toast.makeText(context, "new passwords are not the same", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, getString(R.string.ErrorSamePassword), Toast.LENGTH_LONG).show()
             }
         }
 

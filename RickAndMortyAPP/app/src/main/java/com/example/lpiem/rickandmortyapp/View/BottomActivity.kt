@@ -11,6 +11,7 @@ import android.view.View.VISIBLE
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import com.example.lpiem.rickandmortyapp.Manager.KaamelottManager
 import com.example.lpiem.rickandmortyapp.Manager.LoginAppManager
@@ -40,6 +41,7 @@ class BottomActivity : AppCompatActivity() {
     private lateinit var openFragChangePassObserver: Observer<PasswordFragment>
     private lateinit var closeFragPassObserver: Observer<Fragment>
     private lateinit var closeFaqFragObserver: Observer<Fragment>
+    private lateinit var fragmentManager: FragmentManager
 
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
@@ -71,6 +73,8 @@ class BottomActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_bottom)
+
+        fragmentManager = supportFragmentManager
 
         openFaqFragmentObserver = Observer {
             openFragmentFAQ(it)
@@ -109,7 +113,6 @@ class BottomActivity : AppCompatActivity() {
     }
 
     private fun openFragmentFAQ(fragment: Fragment) {
-        val fragmentManager = supportFragmentManager
         if (fragmentManager.backStackEntryCount > 0) fragmentManager.popBackStackImmediate()
         val fragmentTransaction = fragmentManager.beginTransaction()
         fragmentTransaction.add(R.id.flMain, fragment).addToBackStack(null)
@@ -123,7 +126,6 @@ class BottomActivity : AppCompatActivity() {
     }
 
     private fun openFragmentChangePassword(passwordFragment: PasswordFragment) {
-        val fragmentManager = supportFragmentManager
         if (fragmentManager.backStackEntryCount > 0) fragmentManager.popBackStackImmediate()
         val fragmentTransaction = fragmentManager.beginTransaction()
         fragmentTransaction.add(R.id.flMain, passwordFragment).addToBackStack(null)
@@ -138,7 +140,6 @@ class BottomActivity : AppCompatActivity() {
     }
 
     private fun closeChangePassword(fragment: Fragment) {
-        val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
         fragmentTransaction.remove(fragment).commit()
         tv_deckToOpen.visibility = View.VISIBLE
@@ -150,7 +151,6 @@ class BottomActivity : AppCompatActivity() {
     }
 
     private fun closeFAQ(fragment: Fragment) {
-        val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
         fragmentTransaction.remove(fragment).commit()
         tv_deckToOpen.visibility = View.VISIBLE
@@ -161,7 +161,6 @@ class BottomActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        val fragmentManager = supportFragmentManager
         if (fragmentManager.backStackEntryCount > 0) fragmentManager.popBackStackImmediate()
 
         val backStackLength = supportFragmentManager.backStackEntryCount
@@ -236,6 +235,7 @@ class BottomActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        fragmentManager = supportFragmentManager
         tv_deckToOpen.setOnClickListener {
             val deckToOpen = loginAppManager.connectedUser?.deckToOpen
             if (deckToOpen != null) {

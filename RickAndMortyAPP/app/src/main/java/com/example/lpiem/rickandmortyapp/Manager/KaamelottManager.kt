@@ -95,8 +95,6 @@ class KaamelottManager private constructor(private var context: Context) {
     private fun getDate(): String {
         val formatter = SimpleDateFormat("yyyy-MM-dd")
         val date = Date(System.currentTimeMillis())
-        Log.d(TAG, "date = $date")
-        Log.d(TAG,"date formatted : ${formatter.format(date)}")
         return formatter.format(date)
     }
 

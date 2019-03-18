@@ -17,7 +17,7 @@ class ChangePasswordManager internal constructor(internal val context: Context) 
     private val rickAndMortyAPI = RickAndMortyRetrofitSingleton.getInstance(context)
     private val loginAppManager = LoginAppManager.getInstance(context)
     var changePasswordLiveData = MutableLiveData<UserResponse>()
-    var isPasswordChangeSucceded = MutableLiveData<Boolean>()
+    var isPasswordChangeSucceeded = MutableLiveData<Boolean>()
     var closeFragPassLiveData = MutableLiveData<Fragment>()
 
 
@@ -35,10 +35,10 @@ class ChangePasswordManager internal constructor(internal val context: Context) 
 
     private fun changePasswordTreatment(it: UserResponse?) {
         if (it?.code == SUCCESS) {
-            isPasswordChangeSucceded.postValue(true)
+            isPasswordChangeSucceeded.postValue(true)
             Toast.makeText(context, it.message, Toast.LENGTH_SHORT).show()
         } else {
-            isPasswordChangeSucceded.postValue(false)
+            isPasswordChangeSucceeded.postValue(false)
             Toast.makeText(context, it?.code.toString() + " " + it?.message, Toast.LENGTH_SHORT).show()
         }
     }

@@ -68,7 +68,11 @@ class Card : Parcelable {
     }
 
     override fun toString(): String {
-        return "Card(cardName=$cardName)"
+        return "Card(cardName= $cardName, " +
+                "cardId= $cardId, " +
+                "cardImage= $cardImage, " +
+                "cardPrice= $price, " +
+                "amount= $amount)"
     }
 
 

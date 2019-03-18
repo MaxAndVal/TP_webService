@@ -4,6 +4,9 @@ import android.content.Context
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import com.example.lpiem.rickandmortyapp.Data.JsonProperty.NewWallet
+import com.example.lpiem.rickandmortyapp.Data.JsonProperty.UserID
+import com.example.lpiem.rickandmortyapp.Data.JsonProperty.DeckNumber
 import com.example.lpiem.rickandmortyapp.Data.RickAndMortyRetrofitSingleton
 import com.example.lpiem.rickandmortyapp.Data.SUCCESS
 import com.example.lpiem.rickandmortyapp.Model.CardBooster
@@ -51,8 +54,8 @@ class ShopManager private constructor(private val context: Context) {
             deckToOpen += numberOfDeckToAdd
             // Make a call to update the amount of decks to open
             val jsonObject = JsonObject()
-            jsonObject.addProperty("user_id", loginAppManager.connectedUser!!.userId)
-            jsonObject.addProperty("deckNumber", deckToOpen)
+            jsonObject.addProperty(UserID.dbField, loginAppManager.connectedUser!!.userId)
+            jsonObject.addProperty(DeckNumber.dbField, deckToOpen)
             responseFromApiLiveData = rickAndMortyAPI.increaseDeckNumber(jsonObject)
             responseFromApiLiveData.observeOnce(Observer {
                 decksIncreasedTreatment(it)
@@ -71,7 +74,7 @@ class ShopManager private constructor(private val context: Context) {
             if (actualValue - cost >= 0) {
                 numberOfDeckToAdd = howManyDecksToAdd(cost)
                 val jsonObject = JsonObject()
-                jsonObject.addProperty("newWallet", actualValue - cost)
+                jsonObject.addProperty(NewWallet.dbField, actualValue - cost)
                 val userId = loginAppManager.connectedUser!!.userId!!
                 responseFromApiLiveData = rickAndMortyAPI.updateWalletValue(jsonObject, userId)
                 responseFromApiLiveData.observeOnce(Observer {

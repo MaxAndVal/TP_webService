@@ -64,10 +64,9 @@ class Friend : Parcelable{
         return 0
     }
 
-
-
     override fun toString(): String {
-        return "Friend(userId=$userId, userName=$userName, accepted=$accepted)"
+        return "Friend(userId=$userId, userName=$userName, accepted=$accepted, friendImage=$friendImage)"
     }
+
 
 }

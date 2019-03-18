@@ -5,7 +5,8 @@ import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
-import com.example.lpiem.rickandmortyapp.Data.JsonProperty
+import com.example.lpiem.rickandmortyapp.Data.JsonProperty.UserCode
+import com.example.lpiem.rickandmortyapp.Data.JsonProperty.UserEmail
 import com.example.lpiem.rickandmortyapp.Data.LoginFrom
 import com.example.lpiem.rickandmortyapp.Data.RickAndMortyRetrofitSingleton
 import com.example.lpiem.rickandmortyapp.Data.SUCCESS
@@ -27,7 +28,7 @@ class LostPasswordManager private constructor(private var context: Context) {
 
     fun sendCodeManager(user_email: String) {
         val jsonBody = JsonObject()
-        jsonBody.addProperty(JsonProperty.UserEmail.string, user_email)
+        jsonBody.addProperty(UserEmail.dbField, user_email)
         lostPasswordLiveData = rickAndMortyAPI.sendCode(jsonBody)
         lostPasswordLiveData.observeOnce(Observer {
             lostPasswordTreatment(it)
@@ -47,7 +48,7 @@ class LostPasswordManager private constructor(private var context: Context) {
 
     fun enterWithCode(code: String) {
         val jsonBody = JsonObject()
-        jsonBody.addProperty("user_code", code)
+        jsonBody.addProperty(UserCode.dbField, code)
         enterCodeLiveData = rickAndMortyAPI.loginWithCode(jsonBody)
         enterCodeLiveData.observeOnce(Observer {
             loginWithCodeTreatment(it)
