@@ -38,15 +38,20 @@ class SignInActivity : AppCompatActivity() {
                 val email = ed_email.text.toString()
                 val password = ed_password.text.toString()
                 signInManager.signIn(name, email, password)
-                val view = this.currentFocus
-                view?.let { v ->
-                    val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as
-                            InputMethodManager
-                    imm.let { it.hideSoftInputFromWindow(v.windowToken, 0) }
-                }
+                // close keyboard on validation
+                closeKeyboard()
             }
         }
 
+    }
+
+    private fun closeKeyboard() {
+        val view = this.currentFocus
+        view?.let { v ->
+            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as
+                    InputMethodManager
+            imm.hideSoftInputFromWindow(v.windowToken, 0)
+        }
     }
 
     override fun onResume() {

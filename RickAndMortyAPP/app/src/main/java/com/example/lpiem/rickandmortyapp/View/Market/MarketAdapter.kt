@@ -3,11 +3,9 @@ package com.example.lpiem.rickandmortyapp.View.Market
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lpiem.rickandmortyapp.Model.ListOfCards
 import com.example.lpiem.rickandmortyapp.R
-import com.example.lpiem.rickandmortyapp.View.Collection.list.DiffUtilCollection
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.market_item.view.*
 
@@ -15,7 +13,7 @@ class MarketAdapter (internal var dataSet: ListOfCards): RecyclerView.Adapter<Ma
 
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.cardPrice.text = "$ ${dataSet.cards!![position].price}"
+        holder.cardPrice.text = "$ ${dataSet.cards!![position].price}  "
         holder.cardId.text = dataSet.cards!![position].cardId.toString()
         holder.title.text = dataSet.cards!![position].cardName.toString()
         Picasso.get().load(dataSet.cards!![position].cardImage).into(holder.image)

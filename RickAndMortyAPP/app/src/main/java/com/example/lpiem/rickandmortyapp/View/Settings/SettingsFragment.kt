@@ -3,6 +3,7 @@ package com.example.lpiem.rickandmortyapp.View.Settings
 import android.app.AlertDialog
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +11,7 @@ import com.example.lpiem.rickandmortyapp.Manager.LoginAppManager
 import com.example.lpiem.rickandmortyapp.Manager.settings.SettingsManager
 import com.example.lpiem.rickandmortyapp.R
 import com.example.lpiem.rickandmortyapp.View.BottomActivity
+import com.example.lpiem.rickandmortyapp.View.TAG
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_settings.*
 
@@ -34,6 +36,14 @@ class SettingsFragment : androidx.fragment.app.Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        if (!loginAppManager.connectedUser!!.externalId.isNullOrEmpty()) {
+            Log.d(TAG, "ext ID = ${loginAppManager.connectedUser!!.externalId}")
+            tv_change_password.isEnabled = false
+            tv_change_password.isClickable = false
+            tv_change_password.setTextColor(resources.getColor(R.color.grayDark, null))
+        }
+
         tv_disconnect.setOnClickListener {
             val builder: AlertDialog.Builder = AlertDialog.Builder(context, android.R.style.Theme_Material_Dialog_NoActionBar)
 
@@ -43,7 +53,7 @@ class SettingsFragment : androidx.fragment.app.Fragment() {
                         loginAppManager.disconnectUser()
                         val handler = Handler()
                         handler.postDelayed({
-                            (activity as BottomActivity).finish()
+                            (activity as BottomActivity).seekAndDestroy()
                         }, 2000L)
                     }
                     .setNegativeButton(android.R.string.no) { dialog, which ->
