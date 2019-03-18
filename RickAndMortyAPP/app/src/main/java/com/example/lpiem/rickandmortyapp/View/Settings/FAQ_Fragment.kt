@@ -11,8 +11,6 @@ import com.example.lpiem.rickandmortyapp.Manager.settings.FaqManager
 import com.example.lpiem.rickandmortyapp.Manager.settings.SettingsManager
 import com.example.lpiem.rickandmortyapp.R
 import com.example.lpiem.rickandmortyapp.Util.SingletonHolder
-import com.example.lpiem.rickandmortyapp.View.BottomActivity
-import kotlinx.android.synthetic.main.activity_bottom.*
 import kotlinx.android.synthetic.main.fragment_faq.*
 
 class FAQ_Fragment : androidx.fragment.app.Fragment(){
@@ -42,15 +40,7 @@ class FAQ_Fragment : androidx.fragment.app.Fragment(){
     }
 
     private fun closeFAQ(fragment: Fragment) {
-        val bottomActivity = (activity as BottomActivity)
-        val fragmentManager = bottomActivity.supportFragmentManager
-        val fragmentTransaction = fragmentManager.beginTransaction()
-        fragmentTransaction.remove(fragment).commit()
-        bottomActivity.tv_deckToOpen.visibility = View.VISIBLE
-        bottomActivity.tv_wallet.visibility = View.VISIBLE
-        bottomActivity.navigation.visibility = View.VISIBLE
-        bottomActivity.fragmentLayout.visibility = View.VISIBLE
-
+        faqManager.closeFaqLiveData.postValue(fragment)
     }
 
     override fun onDestroyView() {

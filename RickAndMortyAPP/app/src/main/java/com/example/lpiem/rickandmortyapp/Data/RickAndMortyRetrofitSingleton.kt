@@ -108,6 +108,9 @@ class RickAndMortyRetrofitSingleton private constructor(private val context: Con
                         RESULT_FRIENDS_SEARCHING -> {
                             liveData.postValue(result as ListOfFriends)
                         }
+                        HEROKU_VOID -> {
+                            Log.d(TAG, result.toString())
+                        }
                     }
                 } else {
                     val responseError = response.errorBody() as ResponseBody
@@ -122,14 +125,21 @@ class RickAndMortyRetrofitSingleton private constructor(private val context: Con
 
             override fun onFailure(call: Call<T>, t: Throwable) {
                 Log.d(TAG, "fail : $t")
-                if (type == LOGIN) {
-                    Toast.makeText(context, "Une erreur a eu lieu. Merci de tenter de vous reconnecter à nouveau", Toast.LENGTH_SHORT).show()
-                    val loginAppManager = LoginAppManager.getInstance(context)
-                    loginAppManager.loaderDisplay.postValue(View.GONE)
-                } else if (type == SIGN_IN) {
-                    Toast.makeText(context, "Une erreur a eu lieu. Merci de tenter de vous reconnecter à nouveau", Toast.LENGTH_SHORT).show()
-                    val signInManager = SignInManager.getInstance(context)
-                    signInManager.loaderLiveData.postValue(View.GONE)
+                when (type) {
+                    LOGIN -> {
+                        Toast.makeText(context, "Une erreur a eu lieu. Merci de tenter de vous reconnecter à nouveau", Toast.LENGTH_SHORT).show()
+                        val loginAppManager = LoginAppManager.getInstance(context)
+                        loginAppManager.loaderDisplay.postValue(View.GONE)
+                    }
+                    SIGN_IN -> {
+                        Toast.makeText(context, "Une erreur a eu lieu. Merci de tenter de vous reconnecter à nouveau", Toast.LENGTH_SHORT).show()
+                        val signInManager = SignInManager.getInstance(context)
+                        signInManager.loaderLiveData.postValue(View.GONE)
+                    }
+                    CONNECTION -> {
+                        Log.d(TAG, "connection failure")
+                        Toast.makeText(context, "Une erreur a eu lieu. Merci de relancer l'application", Toast.LENGTH_LONG).show()
+                    }
                 }
             }
         })

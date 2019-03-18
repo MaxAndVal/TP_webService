@@ -1,7 +1,6 @@
 package com.example.lpiem.rickandmortyapp.View.Settings
 
 import android.content.Context
-import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,11 +11,8 @@ import androidx.lifecycle.Observer
 import com.example.lpiem.rickandmortyapp.Manager.settings.ChangePasswordManager
 import com.example.lpiem.rickandmortyapp.Manager.settings.SettingsManager
 import com.example.lpiem.rickandmortyapp.R
-import com.example.lpiem.rickandmortyapp.R.color.*
 import com.example.lpiem.rickandmortyapp.Util.SingletonHolder
 import com.example.lpiem.rickandmortyapp.Util.observeOnce
-import com.example.lpiem.rickandmortyapp.View.BottomActivity
-import kotlinx.android.synthetic.main.activity_bottom.*
 import kotlinx.android.synthetic.main.fragment_change_password.*
 
 class PasswordFragment : androidx.fragment.app.Fragment() {
@@ -30,8 +26,8 @@ class PasswordFragment : androidx.fragment.app.Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         changePasswordManager = ChangePasswordManager.getInstance(context!!)
-        changePasswordObserver = Observer { isChangeIsSuccesfull ->
-            if (isChangeIsSuccesfull) closeChangePassword(this)
+        changePasswordObserver = Observer { isChangeSuccessfull ->
+            if (isChangeSuccessfull) closeChangePassword(this)
         }
     }
 
@@ -55,25 +51,25 @@ class PasswordFragment : androidx.fragment.app.Fragment() {
 
         if (oldPass.isEmpty()) {
             isEmpty = true
-            textInputOldPassword.setHelperTextColor(resources.getColorStateList(R.color.ErrorLightRed))
+            textInputOldPassword.setHelperTextColor(resources.getColorStateList(R.color.ErrorLightRed, null))
         }else{
-            textInputOldPassword.setHelperTextColor(resources.getColorStateList(R.color.black))
+            textInputOldPassword.setHelperTextColor(resources.getColorStateList(R.color.black, null))
         }
         if (newPass.isEmpty()) {
             isEmpty = true
-            textInputNewPassword.setHelperTextColor(resources.getColorStateList(R.color.ErrorLightRed))
+            textInputNewPassword.setHelperTextColor(resources.getColorStateList(R.color.ErrorLightRed, null))
         }else{
-            textInputNewPassword.setHelperTextColor(resources.getColorStateList(R.color.black))
+            textInputNewPassword.setHelperTextColor(resources.getColorStateList(R.color.black, null))
         }
         if (newPassConf.isEmpty()) {
             isEmpty = true
-            textInputNewPasswordConf.setHelperTextColor(resources.getColorStateList(R.color.ErrorLightRed))
+            textInputNewPasswordConf.setHelperTextColor(resources.getColorStateList(R.color.ErrorLightRed, null))
         }else{
-            textInputNewPasswordConf.setHelperTextColor(resources.getColorStateList(R.color.black))
+            textInputNewPasswordConf.setHelperTextColor(resources.getColorStateList(R.color.black, null))
         }
 
         if (!isEmpty) {
-            if (newPass.equals(newPassConf)) {
+            if (newPass == newPassConf) {
                 changePasswordManager.isPasswordChangeSucceded.observeOnce(changePasswordObserver)
                 changePasswordManager.changePassword(oldPass, newPass)
                 closeChangePassword(this)
@@ -86,15 +82,7 @@ class PasswordFragment : androidx.fragment.app.Fragment() {
     }
 
     private fun closeChangePassword(fragment: Fragment) {
-        val bottomActivity = (activity as BottomActivity)
-        val fragmentManager = bottomActivity.supportFragmentManager
-        val fragmentTransaction = fragmentManager.beginTransaction()
-        fragmentTransaction.remove(fragment).commit()
-        bottomActivity.tv_deckToOpen.visibility = View.VISIBLE
-        bottomActivity.tv_wallet.visibility = View.VISIBLE
-        bottomActivity.navigation.visibility = View.VISIBLE
-        bottomActivity.fragmentLayout.visibility = View.VISIBLE
-        bottomActivity.tv_message.visibility = View.VISIBLE
+        changePasswordManager.closeFragPassLiveData.postValue(fragment)
     }
 
     override fun onDestroyView() {

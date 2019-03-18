@@ -23,7 +23,7 @@ class SplashScreen : AppCompatActivity() {
     private val rickAndMortyAPI = RickAndMortyRetrofitSingleton.getInstance(this).instance
     private lateinit var loginAppManager: LoginAppManager
     private lateinit var preferencesHelper: PreferencesHelper
-    private lateinit var tokenConnectionObserver: Observer<UserResponse>
+    lateinit var tokenConnectionObserver: Observer<UserResponse>
 
     companion object {
         var serverConnectionCounter = 0

@@ -14,6 +14,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.example.lpiem.rickandmortyapp.Manager.KaamelottManager
 import com.example.lpiem.rickandmortyapp.Manager.LoginAppManager
+import com.example.lpiem.rickandmortyapp.Manager.settings.ChangePasswordManager
+import com.example.lpiem.rickandmortyapp.Manager.settings.FaqManager
 import com.example.lpiem.rickandmortyapp.Manager.settings.SettingsManager
 import com.example.lpiem.rickandmortyapp.R
 import com.example.lpiem.rickandmortyapp.View.Collection.list.CollectionFragment
@@ -31,9 +33,14 @@ class BottomActivity : AppCompatActivity() {
 
     private var loginAppManager = LoginAppManager.getInstance(this)
     private var settingsManager = SettingsManager.getInstance(this)
+    private var changePasswordManager = ChangePasswordManager.getInstance(this)
+    private var faqManager = FaqManager.getInstance(this)
     private var doubleBackToExitPressedOnce = false
     private lateinit var openFaqFragmentObserver: Observer<Fragment>
     private lateinit var openFragChangePassObserver: Observer<PasswordFragment>
+    private lateinit var closeFragPassObserver: Observer<Fragment>
+    private lateinit var closeFaqFragObserver: Observer<Fragment>
+
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
@@ -73,8 +80,18 @@ class BottomActivity : AppCompatActivity() {
             openFragmentChangePassword(it)
         }
 
+        closeFragPassObserver = Observer {
+            closeChangePassword(it)
+        }
+
+        closeFaqFragObserver = Observer {
+            closeFAQ(it)
+        }
+
         settingsManager.openFaqLiveData.observeForever(openFaqFragmentObserver)
         settingsManager.openFragChangePassLiveData.observeForever(openFragChangePassObserver)
+        changePasswordManager.closeFragPassLiveData.observeForever(closeFragPassObserver)
+        faqManager.closeFaqLiveData.observeForever(closeFaqFragObserver)
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
         tv_wallet.text = String.format(getString(R.string.wallet_amount), loginAppManager.connectedUser?.userWallet, " ")
@@ -120,7 +137,33 @@ class BottomActivity : AppCompatActivity() {
         tv_message.visibility = View.GONE
     }
 
+    private fun closeChangePassword(fragment: Fragment) {
+        val fragmentManager = supportFragmentManager
+        val fragmentTransaction = fragmentManager.beginTransaction()
+        fragmentTransaction.remove(fragment).commit()
+        tv_deckToOpen.visibility = View.VISIBLE
+        tv_wallet.visibility = View.VISIBLE
+        navigation.visibility = View.VISIBLE
+        fragmentLayout.visibility = View.VISIBLE
+        tv_message.visibility = View.VISIBLE
+        fragmentManager.popBackStackImmediate()
+    }
+
+    private fun closeFAQ(fragment: Fragment) {
+        val fragmentManager = supportFragmentManager
+        val fragmentTransaction = fragmentManager.beginTransaction()
+        fragmentTransaction.remove(fragment).commit()
+        tv_deckToOpen.visibility = View.VISIBLE
+        tv_wallet.visibility = View.VISIBLE
+        navigation.visibility = View.VISIBLE
+        fragmentLayout.visibility = View.VISIBLE
+        fragmentManager.popBackStackImmediate()
+    }
+
     override fun onBackPressed() {
+        val fragmentManager = supportFragmentManager
+        if (fragmentManager.backStackEntryCount > 0) fragmentManager.popBackStackImmediate()
+
         val backStackLength = supportFragmentManager.backStackEntryCount
         Log.d(TAG, "backStackLength for BottomActivity : $backStackLength")
 
@@ -130,6 +173,8 @@ class BottomActivity : AppCompatActivity() {
             loginAppManager.gameInProgress = true
             settingsManager.openFaqLiveData.removeObserver(openFaqFragmentObserver)
             settingsManager.openFragChangePassLiveData.removeObserver(openFragChangePassObserver)
+            changePasswordManager.closeFragPassLiveData.removeObserver(closeFragPassObserver)
+            faqManager.closeFaqLiveData.removeObserver(closeFaqFragObserver)
             clearGame()
             super.onBackPressed()
             return
@@ -183,6 +228,8 @@ class BottomActivity : AppCompatActivity() {
         loginAppManager.gameInProgress = true
         settingsManager.openFaqLiveData.removeObserver(openFaqFragmentObserver)
         settingsManager.openFragChangePassLiveData.removeObserver(openFragChangePassObserver)
+        changePasswordManager.closeFragPassLiveData.removeObserver(closeFragPassObserver)
+        faqManager.closeFaqLiveData.removeObserver(closeFaqFragObserver)
         clearGame()
         onDestroy()
     }
