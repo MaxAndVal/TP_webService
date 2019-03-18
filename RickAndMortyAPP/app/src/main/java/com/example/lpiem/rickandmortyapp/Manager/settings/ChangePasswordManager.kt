@@ -2,6 +2,7 @@ package com.example.lpiem.rickandmortyapp.Manager.settings
 
 import android.content.Context
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.example.lpiem.rickandmortyapp.Data.RickAndMortyRetrofitSingleton
@@ -17,6 +18,8 @@ class ChangePasswordManager internal constructor(internal val context: Context) 
     private val loginAppManager = LoginAppManager.getInstance(context)
     var changePasswordLiveData = MutableLiveData<UserResponse>()
     var isPasswordChangeSucceded = MutableLiveData<Boolean>()
+    var closeFragPassLiveData = MutableLiveData<Fragment>()
+
 
 
     fun changePassword(oldPass: String, newPass: String) {
