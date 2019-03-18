@@ -72,7 +72,6 @@ class PasswordFragment : androidx.fragment.app.Fragment() {
             if (newPass == newPassConf) {
                 changePasswordManager.isPasswordChangeSucceded.observeOnce(changePasswordObserver)
                 changePasswordManager.changePassword(oldPass, newPass)
-                closeChangePassword(this)
             } else {
                 tv_errorInput.text = getString(R.string.ErrorSamePassword)
                 Toast.makeText(context, "new passwords are not the same", Toast.LENGTH_LONG).show()
