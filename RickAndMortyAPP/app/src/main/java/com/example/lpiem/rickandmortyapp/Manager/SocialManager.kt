@@ -9,10 +9,10 @@ import com.example.lpiem.rickandmortyapp.Data.RickAndMortyRetrofitSingleton
 import com.example.lpiem.rickandmortyapp.Data.SUCCESS
 import com.example.lpiem.rickandmortyapp.Model.Friend
 import com.example.lpiem.rickandmortyapp.Model.ListOfFriends
-import com.example.lpiem.rickandmortyapp.Model.UserResponse
 import com.example.lpiem.rickandmortyapp.Model.SocialListLabel
 import com.example.lpiem.rickandmortyapp.Model.SocialListLabel.LIST_OF_FRIENDS
 import com.example.lpiem.rickandmortyapp.Model.SocialListLabel.LIST_OF_FRIENDS_REQUESTS
+import com.example.lpiem.rickandmortyapp.Model.UserResponse
 import com.example.lpiem.rickandmortyapp.R
 import com.example.lpiem.rickandmortyapp.Util.SingletonHolder
 import com.example.lpiem.rickandmortyapp.Util.observeOnce
@@ -103,10 +103,6 @@ class SocialManager private constructor(private val context: Context){
             listOfFriends = list
             listOfActualFriends = list.friends?.filter { it.accepted == true }
             listOfPotentialFriends = list.friends?.filter { it.accepted == false }
-            Log.d(TAG, "List : " + listOfFriends)
-            Log.d(TAG, "List actual : " + listOfActualFriends)
-            Log.d(TAG, "List potential : " + listOfPotentialFriends)
-
             updateListLiveData.postValue(listOfActualFriends)
         } else {
             Toast.makeText(context, String.format(context.getString(R.string.code_message), code, message), Toast.LENGTH_SHORT).show()

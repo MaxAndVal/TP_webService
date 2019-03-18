@@ -6,9 +6,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.lpiem.rickandmortyapp.Manager.settings.FaqManager
 import com.example.lpiem.rickandmortyapp.Manager.settings.SettingsManager
+import com.example.lpiem.rickandmortyapp.Model.FAQ
 import com.example.lpiem.rickandmortyapp.R
 import com.example.lpiem.rickandmortyapp.Util.SingletonHolder
 import kotlinx.android.synthetic.main.fragment_faq.*
@@ -16,6 +18,7 @@ import kotlinx.android.synthetic.main.fragment_faq.*
 class FAQ_Fragment : androidx.fragment.app.Fragment(){
 
     private lateinit var faqManager: FaqManager
+    private lateinit var faqObserver: Observer<List<FAQ>>
 
     companion object : SingletonHolder<SettingsManager, Context>(::SettingsManager)
 
@@ -24,6 +27,10 @@ class FAQ_Fragment : androidx.fragment.app.Fragment(){
         super.onCreate(savedInstanceState)
 
         faqManager = FaqManager.getInstance(context!!)
+
+        faqObserver = Observer {
+            uploadListFAQ(it)
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -35,7 +42,7 @@ class FAQ_Fragment : androidx.fragment.app.Fragment(){
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         rv_faq.layoutManager = LinearLayoutManager(context)
-        faqManager.captureRecyclerView(rv_faq)
+        faqManager.faqLoaderLiveData.observeForever(faqObserver)
         iv_closeFAQ.setOnClickListener { closeFAQ(this) }
     }
 
@@ -44,8 +51,14 @@ class FAQ_Fragment : androidx.fragment.app.Fragment(){
     }
 
     override fun onDestroyView() {
+        faqManager.faqLoaderLiveData.removeObserver(faqObserver)
         closeFAQ(this)
         super.onDestroyView()
+    }
+
+    private fun uploadListFAQ(listOfFaqFromSM: List<FAQ>) {
+        rv_faq.adapter = FAQAdapter(listOfFaqFromSM)
+        rv_faq.adapter?.notifyDataSetChanged()
     }
 
 }

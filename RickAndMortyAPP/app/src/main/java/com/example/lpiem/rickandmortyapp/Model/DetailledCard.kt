@@ -86,6 +86,9 @@ class DetailledCard : Parcelable {
         return 0
     }
 
+    override fun toString(): String {
+        return "DetailledCard(code=$code, message=$message, id=$id, name=$name, status=$status, species=$species, gender=$gender, origin=$origin, location=$location, image=$image)"
+    }
 
 
 }

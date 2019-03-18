@@ -50,7 +50,7 @@ class UserResponse : Parcelable {
     }
 
     override fun toString(): String {
-        return "UserResponse( code=$code, message=$message, user=${user.toString()})"
+        return "UserResponse( code=$code, message=$message, user= { ${user.toString()} })"
     }
 
 

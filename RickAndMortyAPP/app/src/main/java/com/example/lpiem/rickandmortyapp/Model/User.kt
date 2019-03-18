@@ -86,14 +86,16 @@ class User : Parcelable {
 
     override fun toString(): String {
         return "User(userId=$userId," +
-                " userName=$userName," +
-                " userEmail=$userEmail," +
-                " deckToOpen=$deckToOpen," +
-                " userWallet=$userWallet," +
-                " userLastGameDate=$userLastGame," +
-                " userLastMemoryDate=$userLastMemory," +
-                " userImage=$userImage," +
-                " externalId=$externalId," +
-                " sessionToken=$sessionToken)"
+                " userName=$userName, " +
+                "userEmail=$userEmail, " +
+                "deckToOpen=$deckToOpen, " +
+                "userWallet=$userWallet, " +
+                "userLastGame=$userLastGame, " +
+                "userLastMemory=$userLastMemory, " +
+                "userImage=$userImage, " +
+                "externalId=$externalId, " +
+                "sessionToken=$sessionToken)"
     }
+
+
 }

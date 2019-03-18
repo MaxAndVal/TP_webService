@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
+import com.example.lpiem.rickandmortyapp.Data.JsonProperty.*
 import com.example.lpiem.rickandmortyapp.Data.RetrofitCallTypes.*
 import com.example.lpiem.rickandmortyapp.Manager.LoginAppManager
 import com.example.lpiem.rickandmortyapp.Manager.SignInManager
@@ -154,8 +155,8 @@ class RickAndMortyRetrofitSingleton private constructor(private val context: Con
 
     fun addCardToMarket(userId: Int, card: Card, price: Int): MutableLiveData<ListOfCards> {
         val jsonBody = JsonObject()
-        jsonBody.addProperty("card_name", card.cardName)
-        jsonBody.addProperty("price", price)
+        jsonBody.addProperty(CardName.dbField, card.cardName)
+        jsonBody.addProperty(Price.dbField, price)
         currentCall = instance!!.addCardToMarket(userId, card.cardId!!, jsonBody)
         return callRetrofit(currentCall!!, ADD_CARD_TO_MARKET) as MutableLiveData<ListOfCards>
     }
@@ -177,20 +178,20 @@ class RickAndMortyRetrofitSingleton private constructor(private val context: Con
 
     fun putDateToken(date: String, id: Int?): MutableLiveData<UserResponse> {
         val jsonBody = JsonObject()
-        jsonBody.addProperty(JsonProperty.NewDate.string, date)
+        jsonBody.addProperty(JsonProperty.NewDate.dbField, date)
         currentCall = instance!!.putNewDate(id!!, jsonBody)
         return callRetrofit(currentCall!!, PUT_DATE) as MutableLiveData<UserResponse>
     }
     fun putMemoryDateToken(date: String, id: Int?): MutableLiveData<UserResponse> {
         val jsonBody = JsonObject()
-        jsonBody.addProperty(JsonProperty.NewDate.string, date)
+        jsonBody.addProperty(JsonProperty.NewDate.dbField, date)
         currentCall = instance!!.putNewMemoryDate(id!!, jsonBody)
         return callRetrofit(currentCall!!, PUT_DATE) as MutableLiveData<UserResponse>
     }
 
     fun updateWallet(score: Int, user: User?): MutableLiveData<UserResponse> {
         val jsonBody = JsonObject()
-        jsonBody.addProperty(JsonProperty.NewWallet.string, (user!!.userWallet!! + (score * 10)))
+        jsonBody.addProperty(JsonProperty.NewWallet.dbField, (user!!.userWallet!! + (score * 10)))
         currentCall = instance!!.updateWallet(user.userId!!, jsonBody)
         return callRetrofit(currentCall!!, UPDATE_WALLET) as MutableLiveData<UserResponse>
     }
@@ -227,20 +228,18 @@ class RickAndMortyRetrofitSingleton private constructor(private val context: Con
 
     fun signIn(userName: String, email: String, password: String): MutableLiveData<UserResponse> {
         val jsonBody = JsonObject()
-        jsonBody.addProperty(JsonProperty.UserName.string, userName)
-        jsonBody.addProperty(JsonProperty.UserEmail.string, email)
-        jsonBody.addProperty(JsonProperty.UserPassword.string, password)
+        jsonBody.addProperty(JsonProperty.UserName.dbField, userName)
+        jsonBody.addProperty(JsonProperty.UserEmail.dbField, email)
+        jsonBody.addProperty(JsonProperty.UserPassword.dbField, password)
         currentCall = instance!!.signInUser(jsonBody)
         return callRetrofit(currentCall!!, SIGN_IN) as MutableLiveData<UserResponse>
     }
 
     fun regularConnection(email: String, password: String): MutableLiveData<UserResponse> {
         val jsonBody = JsonObject()
-        jsonBody.addProperty(JsonProperty.UserEmail.string, email)
-        jsonBody.addProperty(JsonProperty.UserPassword.string, password)
+        jsonBody.addProperty(JsonProperty.UserEmail.dbField, email)
+        jsonBody.addProperty(JsonProperty.UserPassword.dbField, password)
         currentCall = instance!!.connectUser(jsonBody)
-        Log.d(TAG, "jsonBody : $jsonBody")
-        Log.d(TAG, "$currentCall")
         return callRetrofit(currentCall!!, RetrofitCallTypes.CONNECTION) as MutableLiveData<UserResponse>
     }
 
@@ -273,7 +272,7 @@ class RickAndMortyRetrofitSingleton private constructor(private val context: Con
     fun buyCard(card: Card?, userId: Int?, friendId: Int?): MutableLiveData<UserResponse> {
         val jsonObject = JsonObject()
         if (card != null) {
-            jsonObject.addProperty("price", card.price)
+            jsonObject.addProperty(Price.dbField, card.price)
         }
         currentCall = instance!!.buyCardFromFriend(userId!!, friendId!!, card!!.cardId!!, jsonObject)
         return callRetrofit(currentCall!!, BUY_CAR_FROM_FRIEND) as MutableLiveData<UserResponse>
@@ -282,17 +281,17 @@ class RickAndMortyRetrofitSingleton private constructor(private val context: Con
     fun addRewardsToUser(rewards: MutableList<MemoryReward>, userId: Int): MutableLiveData<UserResponse> {
         val jsonBody = JsonObject()
         val gson = GsonBuilder().create()
-        jsonBody.add("listOfCards", gson.toJsonTree(rewards))
-        jsonBody.addProperty("user_id", userId)
+        jsonBody.add(ListOfCard.dbField, gson.toJsonTree(rewards))
+        jsonBody.addProperty(UserID.dbField, userId)
         currentCall = instance!!.addRewards(jsonBody)
         return callRetrofit(currentCall!!, RESPONSE_FROM_API) as MutableLiveData<UserResponse>
     }
 
     fun changePassword(userId: Int?, userEmail: String?, oldPass: String, newPass: String): MutableLiveData<UserResponse> {
     val jsonBody = JsonObject()
-        jsonBody.addProperty("user_email", userEmail)
-        jsonBody.addProperty("user_old_password", oldPass)
-        jsonBody.addProperty("user_new_password", newPass)
+        jsonBody.addProperty(UserEmail.dbField, userEmail)
+        jsonBody.addProperty(UserOldPassword.dbField, oldPass)
+        jsonBody.addProperty(UserNewPassword.dbField, newPass)
         currentCall = instance!!.changePassword(userId!!,jsonBody)
         return callRetrofit(currentCall!!, CHANGE_PASSWORD) as MutableLiveData<UserResponse>
     }

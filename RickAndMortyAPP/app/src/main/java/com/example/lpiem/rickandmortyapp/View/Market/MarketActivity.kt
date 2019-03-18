@@ -64,7 +64,7 @@ class MarketActivity : AppCompatActivity() {
                     marketManager.rickAndMortyAPI.updateUserInfo(user!!.userId)
 
                 } else {
-                    Toast.makeText(applicationContext, "Too poor to buy anything... get a job", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(applicationContext, getString(R.string.too_poor_to_buy), Toast.LENGTH_SHORT).show()
                 }
             }
 

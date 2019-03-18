@@ -13,7 +13,6 @@ import com.example.lpiem.rickandmortyapp.Model.ListOfFAQ
 import com.example.lpiem.rickandmortyapp.R
 import com.example.lpiem.rickandmortyapp.Util.SingletonHolder
 import com.example.lpiem.rickandmortyapp.Util.observeOnce
-import com.example.lpiem.rickandmortyapp.View.Settings.FAQAdapter
 import com.example.lpiem.rickandmortyapp.View.Settings.PasswordFragment
 import com.example.lpiem.rickandmortyapp.View.TAG
 
@@ -37,8 +36,7 @@ class SettingsManager internal constructor(private val context: Context) {
             Log.d(TAG, listOfFaqFromSM.toString() + "SM")
             if (listOfFaqFromSM != null) {
                 faqManager = FaqManager.getInstance(context)
-                faqManager!!.recyclerView.adapter = FAQAdapter(listOfFaqFromSM!!)
-                faqManager!!.recyclerView.adapter?.notifyDataSetChanged()
+                faqManager?.faqLoaderLiveData?.postValue(listOfFaqFromSM)
             } else {
                 Log.d(TAG, "listOfFAQ is null")
             }

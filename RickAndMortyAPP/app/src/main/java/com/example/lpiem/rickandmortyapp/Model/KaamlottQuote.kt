@@ -58,5 +58,9 @@ class KaamlottQuote : Parcelable {
         return 0
     }
 
+    override fun toString(): String {
+        return "KaamlottQuote(code=$code, message=$message, citation=$citation, personnage=$personnage, personnageList=$personnageList)"
+    }
+
 
 }

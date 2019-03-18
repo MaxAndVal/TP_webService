@@ -58,8 +58,8 @@ class LoginAppManager private constructor(private var context: Context) {
         } else {
             loaderDisplay.postValue(View.VISIBLE)
             val jsonBody = JsonObject()
-            jsonBody.addProperty(JsonProperty.UserEmail.string, mail)
-            jsonBody.addProperty(JsonProperty.UserPassword.string, pass)
+            jsonBody.addProperty(JsonProperty.UserEmail.dbField, mail)
+            jsonBody.addProperty(JsonProperty.UserPassword.dbField, pass)
             loginLiveData = rickAndMortyAPI.login(jsonBody)
             loginLiveData.observeOnce(Observer {
                 loginTreatment(it, LoginFrom.FROM_LOGIN)
@@ -69,7 +69,7 @@ class LoginAppManager private constructor(private var context: Context) {
 
     fun connectionWithToken(token: String, observer: Observer<UserResponse>) {
         val jsonBody = JsonObject()
-        jsonBody.addProperty("session_token", token)
+        jsonBody.addProperty(SessionToken.dbField, token)
         loginLiveData = rickAndMortyAPI.loginWithToken(jsonBody)
         loginLiveData.observeOnce(observer)
     }
@@ -128,11 +128,11 @@ class LoginAppManager private constructor(private var context: Context) {
             val userId = account.id
             val userImage = account.photoUrl
             val jsonBody = JsonObject()
-            jsonBody.addProperty(UserEmail.string, userEmail)
-            jsonBody.addProperty(UserName.string, userName)
-            jsonBody.addProperty(UserPassword.string, userId)
-            jsonBody.addProperty(UserImage.string, userImage.toString())
-            jsonBody.addProperty(ExternalID.string, userId)
+            jsonBody.addProperty(UserEmail.dbField, userEmail)
+            jsonBody.addProperty(UserName.dbField, userName)
+            jsonBody.addProperty(UserPassword.dbField, userId)
+            jsonBody.addProperty(UserImage.dbField, userImage.toString())
+            jsonBody.addProperty(ExternalID.dbField, userId)
 
             loginLiveData = rickAndMortyAPI.login(jsonBody)
             loginLiveData.observeOnce(Observer {
@@ -185,11 +185,11 @@ class LoginAppManager private constructor(private var context: Context) {
                     val image = "https://graph.facebook.com/$userId/picture?type=large"
                     val jsonBody = JsonObject()
 
-                    jsonBody.addProperty(UserEmail.string, userEmail)
-                    jsonBody.addProperty(UserName.string, userNameFB)
-                    jsonBody.addProperty(UserPassword.string, userId)
-                    jsonBody.addProperty(UserImage.string, image)
-                    jsonBody.addProperty(ExternalID.string, userId)
+                    jsonBody.addProperty(UserEmail.dbField, userEmail)
+                    jsonBody.addProperty(UserName.dbField, userNameFB)
+                    jsonBody.addProperty(UserPassword.dbField, userId)
+                    jsonBody.addProperty(UserImage.dbField, image)
+                    jsonBody.addProperty(ExternalID.dbField, userId)
 
                     loginLiveData = rickAndMortyAPI.login(jsonBody)
                     loginLiveData.observeOnce(Observer {
