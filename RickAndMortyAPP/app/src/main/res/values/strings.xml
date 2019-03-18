@@ -16,8 +16,8 @@
     <string name="profilSettings">profil</string>
 
     //Login and Sign In Activity
-    <string name="thanks_to_fill_all_fields">Merci de remplir l\'ensemble des champs pour vous connecter</string>
-    <string name="google_disconnected">Déconnecté de votre compte Google</string>
+    <string name="thanks_to_fill_all_fields">Merci de remplir l\'ensemble des champs pour te connecter</string>
+    <string name="google_disconnected">Déconnecté de ton compte Google</string>
     <string name="btn_connection_google">Se connecter</string>
     <string name="btn_disconnection_google">Se déconnecter</string>
     <string name="no_account">Pas de compte ? <b><u>Clique ici</u></b> pour être Schwifty !</string>
@@ -30,7 +30,7 @@
     <string name="tv_sign_in_title">Sign In</string>
     <string name="tv_e_mail">E-mail</string>
     <string name="already_an_account">Déjà un compte ? <b><u>Clique ici</u></b> pour être Schwifty !</string>
-    <string name="network_problem_please_try_again">Problème de réseau, merci de tenter de vous connecter à nouveau</string>
+    <string name="network_problem_please_try_again">Problème de réseau, merci de tenter de te connecter à nouveau</string>
     <string name="no_access_to_DB">Impossible de se connecter à la base de donnée. Réessayez plus tard.</string>
     <string name="double_back_to_quit_app">S\'il te plaît, clique sur retour une seconde fois pour quitter</string>
     <string name="welcome">Bienvenue %s</string>
@@ -41,7 +41,7 @@
     <string name="wallet_amount"> %1$d $%2$s</string>
     <string name="actual_turn">Question %1d\/5</string>
     <string name="actual_score">Score : %1d\/5</string>
-    <string name="final_score">Votre score final est de :\n%1d\/5</string>
+    <string name="final_score">Ton score final est de :\n%1d\/5</string>
     <string name="good_answer">Bonne réponse !!!</string>
     <string name="wrong_answer">Mauvaise réponse …</string>
     <string name="game_is_over">Partie terminée. Ton score final est de %1$d.\nTu as gagné %2$d PickleRick !!</string>
@@ -56,7 +56,7 @@
     <string name="btn_list_of_friends">Voir sa liste d\'ami</string>
     <string name="friend_demand_added">Demande d\'amitié transmise !</string>
     <string name="delete_a_friend">Delete a friend</string>
-    <string name="sure_to_delete_friend">Etes vous sur de vouloir supprimer %s de vos amis ?</string>
+    <string name="sure_to_delete_friend">Es-tu sur de vouloir supprimer %s de tes amis ?</string>
     <string name="requests_of_friends_title">Requetes en attente</string>
     <string name="list_of_friends_title">Liste d\'amis</string>
     <string name="btn_search">Rechercher</string>
@@ -71,13 +71,13 @@
     <string name="account_created">Compte créé</string>
     <string name="sellThisCard">Vendre cette carte ?</string>
     <string name="which_price_for_this_card">À quel prix la vends-tu ?</string>
-    <string name="X_decks_added">%d decks ajoutés à votre pool !</string>
+    <string name="X_decks_added">%d decks ajoutés à ton pool !</string>
     <string name="youAlreadyWonThisTile">Tu as déjà gagné cette tuille !</string>
     <string name="booster_amount">%d Boosters</string>
 
     //Memory Game
     <string name="current_score">Score : %d</string>
-    <string name="memory_game_over">Partie terminee. Votre score final est de %d.%s</string>
+    <string name="memory_game_over">Partie terminee. Ton score final est de %d.%s</string>
     <string name="turn_lefts">Coups restants : %d</string>
     <string name="cards_won">\nTu as gagne les cartes :\n</string>
     <string name="error_fetching_pictures">Une erreur est survenue lors de la récupération des images …</string>
@@ -97,24 +97,25 @@
     <string name="ErrorInvalideCode">Le code est incorrect</string>
     <string name="ErrorCodeExpired">Le code est expiré merci de faire une nouvelle demande</string>
     <string name="ErrorUnknow">Une erreur est survenue, merci de reessayer plus tard</string>
-    <string name="ErrorEmptyCode">Merci de rentrer votre code</string>
-    <string name="ErrorEmptyEmail">Merci de rentrer votre adresse mail</string>
-    <string name="titleChangePassword">Modifier votre mot de passe</string>
-    <string name="inputOldPassword">Entrez votre mot de passe</string>
-    <string name="inputNewPassword">Entrez votre nouveau mot de passe</string>
-    <string name="inputConfPassword">Confirmer votre mot de passe</string>
+    <string name="ErrorEmptyCode">Merci de rentrer ton code</string>
+    <string name="ErrorEmptyEmail">Merci de rentrer ton adresse mail</string>
+    <string name="titleChangePassword">Modifier ton mot de passe</string>
+    <string name="inputOldPassword">Entre ton mot de passe</string>
+    <string name="inputNewPassword">Entre ton nouveau mot de passe</string>
+    <string name="inputConfPassword">Confirme ton mot de passe</string>
     <string name="btnValidate">Valider</string>
     <string name="ErrorSamePassword">Les mots de passe ne sont pas indentiques</string>
     <string name="requiredInput">Requis</string>
     <string name="AlreadyCode">J\'ai déja un code</string>
-    <string name="tipsCodeReceived">Si vous n\'avez pas recu le code merci de vérifier :  Que le mail ne soit pas dans vos indésirable  Que votre adresse mail soit bien lié à un compte RickAndMorty-TCG  Que vous votre compte ne soit pas un compte lié à Facebook ou Google  Si vous ne pouvez pas vous connecter, merci de contacter nos équipes.</string>
+    <string name="tipsCodeReceived">Si tu n\'as pas recu le code merci de vérifier :  Que le mail ne soit pas dans tes indésirables  Que ton adresse mail soit bien liée à un compte RickAndMorty-TCG  Que ton compte ne soit pas un compte lié à Facebook ou Google  Si tu ne peux pas te connecter, merci de contacter nos équipes.</string>
     <string name="EnterCode">Entrez le code</string>
-    <string name="enter_code">Entrez votre Code recu par mail</string>
+    <string name="enter_code">Entre ton Code recu par mail</string>
     <string name="codeHasBeenSend">Le code a été envoyé à l\'adresse indiqué</string>
 
     //Settings
     <string name="deconnection_alert">Déconnexion</string>
-    <string name="deconnection_message">Voulez-vous vraiment vous déconnecter et quitter l\'application ?</string>
-    <string name="disconnected">Vous etes déconnecté\nbientôt !</string>
-    <string name="expired_session">Session expirée, merci de vous reconnecter</string>
+    <string name="deconnection_message">Veux-tu vraiment te déconnecter et quitter l\'application ?</string>
+    <string name="disconnected">Tu es déconnecté\nÀ bientôt !</string>
+    <string name="expired_session">Session expirée, merci de te reconnecter</string>
+    <string name="please_fill_research_field">Merci de remplir le champ de recherche</string>
 </resources>

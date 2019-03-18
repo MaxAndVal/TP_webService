@@ -34,7 +34,7 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var loaderObserver: Observer<Int>
     private lateinit var googleBtnSwitchObserver : Observer<Boolean>
     private lateinit var resolveIntentObserver: Observer<Intent>
-    private lateinit var googleBtnLabel: Button
+    private var googleBtnLabel: Button? = null
     private lateinit var facebookInitObserver: Observer<Unit>
     private lateinit var alreadyConnectedWithFacebookObserver: Observer<Boolean>
     private lateinit var finishLoginActivityObserver: Observer<Boolean>
@@ -62,16 +62,20 @@ class LoginActivity : AppCompatActivity() {
         btnRegularConnection.setOnClickListener {
             loginAppManager.regularConnection(etEmail.text.toString(), etPassword.text.toString())
             // Check if no view has focus before hiding the keyboard:
-            val view = this.currentFocus
-            view?.let { v ->
-                val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as
-                        InputMethodManager
-                inputMethodManager.let { it.hideSoftInputFromWindow(v.windowToken, 0) }
-            }
+            closeKeyboard()
         }
         tv_signIn.setOnClickListener { loginAppManager.regularSignIn() }
         tv_lostPassword.setOnClickListener { loginAppManager.openActivityLostPassword() }
 
+    }
+
+    private fun closeKeyboard() {
+        val view = this.currentFocus
+        view?.let { v ->
+            val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as
+                    InputMethodManager
+            inputMethodManager.hideSoftInputFromWindow(v.windowToken, 0)
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -118,12 +122,12 @@ class LoginActivity : AppCompatActivity() {
 
         googleBtnSwitchObserver = Observer {connect ->
             if (connect) {
-                googleBtnLabel.text = getString(R.string.btn_connection_google)
+                googleBtnLabel?.text = getString(R.string.btn_connection_google)
                 sign_in_button.setOnClickListener {
                     googleSignIn()
                 }
             } else {
-                googleBtnLabel.text = getString(R.string.btn_disconnection_google)
+                googleBtnLabel?.text = getString(R.string.btn_disconnection_google)
                 sign_in_button.setOnClickListener {
                     loginAppManager.disconnectGoogleAccount(true)
                 }

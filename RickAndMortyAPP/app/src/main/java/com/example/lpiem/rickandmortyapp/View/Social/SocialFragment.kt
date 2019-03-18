@@ -1,6 +1,7 @@
 package com.example.lpiem.rickandmortyapp.View.Social
 
 import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -9,6 +10,8 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.lpiem.rickandmortyapp.Manager.LoginAppManager
@@ -19,6 +22,7 @@ import com.example.lpiem.rickandmortyapp.Model.SocialListLabel.LIST_OF_FRIENDS
 import com.example.lpiem.rickandmortyapp.Model.SocialListLabel.LIST_OF_FRIENDS_REQUESTS
 import com.example.lpiem.rickandmortyapp.Model.SocialListenerAction
 import com.example.lpiem.rickandmortyapp.R
+import com.example.lpiem.rickandmortyapp.View.BottomActivity
 import com.example.lpiem.rickandmortyapp.View.Market.MarketActivity
 import com.example.lpiem.rickandmortyapp.View.TAG
 import kotlinx.android.synthetic.main.fragment_social.*
@@ -59,12 +63,29 @@ class SocialFragment : androidx.fragment.app.Fragment() {
         rv_social.layoutManager = LinearLayoutManager(context)
         socialManager.getListOfFriends(loginAppManager.connectedUser!!.userId!!)
         btn_searchFriends.setOnClickListener {
-            socialManager.searchForFriends(sv_friends.query.toString())
-            loaderVisibility(true)
+            if (sv_friends.query.length != 0) {
+                socialManager.searchForFriends(sv_friends.query.toString())
+                loaderVisibility(true)
+            } else {
+                Toast.makeText(context, getString(R.string.please_fill_research_field), Toast.LENGTH_SHORT).show()
+            }
+
+            // Close KeyBoard on validation
+            closeKeyboard()
+
         }
         btn_friendsRequest.setOnClickListener {
             socialManager.friendsRequest()
             loaderVisibility(true)
+        }
+    }
+
+    private fun closeKeyboard() {
+        val currentFocusedView = (activity as BottomActivity).currentFocus
+        currentFocusedView?.let { v ->
+            val inputMethodManager = (activity as BottomActivity).getSystemService(Context.INPUT_METHOD_SERVICE) as
+                    InputMethodManager
+            inputMethodManager.hideSoftInputFromWindow(v.windowToken, 0)
         }
     }
 

@@ -3,6 +3,7 @@ package com.example.lpiem.rickandmortyapp.View
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.example.lpiem.rickandmortyapp.Data.*
@@ -23,6 +24,10 @@ class SplashScreen : AppCompatActivity() {
     private lateinit var loginAppManager: LoginAppManager
     private lateinit var preferencesHelper: PreferencesHelper
     private lateinit var tokenConnectionObserver: Observer<UserResponse>
+
+    companion object {
+        var serverConnectionCounter = 0
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,7 +61,14 @@ class SplashScreen : AppCompatActivity() {
 
         call.enqueue(object : Callback<T> {
             override fun onFailure(call: Call<T>, t: Throwable) {
-                Log.d(TAG, "F : Heroku should be awake" + t.message.toString())
+                if (SplashScreen.serverConnectionCounter < 3) {
+                    Log.d(TAG, "F : Heroku should be awake (${SplashScreen.serverConnectionCounter} connection times) : " + t.message.toString())
+                    val resultCall = rickAndMortyAPI!!.herokuAwaking()
+                    callRetrofit(resultCall, RetrofitCallTypes.HEROKU_VOID)
+                    SplashScreen.serverConnectionCounter++
+                } else {
+                    Toast.makeText(this@SplashScreen, "Problème de serveur. Merci de tenter de vous reconnecter plus tard", Toast.LENGTH_SHORT).show()
+                }
             }
 
             override fun onResponse(call: Call<T>, response: Response<T>) {

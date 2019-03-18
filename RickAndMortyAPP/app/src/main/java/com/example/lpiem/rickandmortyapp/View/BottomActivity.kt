@@ -126,7 +126,6 @@ class BottomActivity : AppCompatActivity() {
 
         // handling double tap to exit app
         if (backStackLength == 0 && doubleBackToExitPressedOnce) {
-            super.onBackPressed()
             loginAppManager.connectedUser = null
             loginAppManager.gameInProgress = true
             settingsManager.openFaqLiveData.removeObserver(openFaqFragmentObserver)
@@ -174,6 +173,18 @@ class BottomActivity : AppCompatActivity() {
     private fun openShop() {
         val shopIntent = Intent(this@BottomActivity, ShopActivity::class.java)
         startActivity(shopIntent)
+    }
+
+    fun seekAndDestroy() {
+        while (supportFragmentManager.backStackEntryCount > 0) {
+            supportFragmentManager.popBackStackImmediate()
+        }
+        loginAppManager.connectedUser = null
+        loginAppManager.gameInProgress = true
+        settingsManager.openFaqLiveData.removeObserver(openFaqFragmentObserver)
+        settingsManager.openFragChangePassLiveData.removeObserver(openFragChangePassObserver)
+        clearGame()
+        onDestroy()
     }
 
     override fun onResume() {
