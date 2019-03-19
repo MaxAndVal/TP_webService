@@ -60,9 +60,7 @@ class MarketActivity : AppCompatActivity() {
             override fun onClick(view: View, position: Int) {
                 val card = (rv_market.adapter as MarketAdapter).getDataSet().cards?.get(position)
                 if (card!!.price!! < user!!.userWallet!!) {
-                    marketManager.buyCard(card, user!!.userId, friendId)
-                    marketManager.rickAndMortyAPI.updateUserInfo(user!!.userId)
-
+                    marketManager.buyCard(card, user, friendId)
                 } else {
                     Toast.makeText(applicationContext, getString(R.string.too_poor_to_buy), Toast.LENGTH_SHORT).show()
                 }

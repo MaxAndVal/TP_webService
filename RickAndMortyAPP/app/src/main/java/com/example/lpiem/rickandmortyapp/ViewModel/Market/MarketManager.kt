@@ -9,8 +9,8 @@ import com.example.lpiem.rickandmortyapp.Data.Repository.RickAndMortyRetrofitSin
 import com.example.lpiem.rickandmortyapp.Data.Repository.SUCCESS
 import com.example.lpiem.rickandmortyapp.Model.ResponsesFromAPI.Card
 import com.example.lpiem.rickandmortyapp.Model.ResponsesFromAPI.ListOfCards
-import com.example.lpiem.rickandmortyapp.Model.ResponsesFromAPI.UserResponse
 import com.example.lpiem.rickandmortyapp.Model.ResponsesFromAPI.User
+import com.example.lpiem.rickandmortyapp.Model.ResponsesFromAPI.UserResponse
 import com.example.lpiem.rickandmortyapp.R
 import com.example.lpiem.rickandmortyapp.Util.SingletonHolder
 import com.example.lpiem.rickandmortyapp.Util.observeOnce
@@ -25,8 +25,10 @@ class MarketManager private constructor(private val context: Context) {
     var cardListDisplay = MutableLiveData<ListOfCards>()
     private var marketLiveData = MutableLiveData<ListOfCards>()
     private var marketResponseLiveData = MutableLiveData<UserResponse>()
+    var updateUserInfoLiveData = MutableLiveData<Int>()
     private var friendId = -1
     var listOfCards: ListOfCards? = null
+    private var isLoading = false
 
     companion object : SingletonHolder<MarketManager, Context>(::MarketManager)
 
@@ -36,13 +38,15 @@ class MarketManager private constructor(private val context: Context) {
         Log.d(TAG, "call canceled")
     }
 
-    private fun buyCardTreatment(userResponse: UserResponse) {
-        if(userResponse.code==200){
+    private fun buyCardTreatment(userResponse: UserResponse, cardPrice : Int) {
+        if (userResponse.code == 200) {
             Toast.makeText(context, "Congrats, you got a new card", Toast.LENGTH_SHORT).show()
             getMarket(userResponse.user, friendId)
-        }else{
-            Toast.makeText(context, "Error :"+userResponse.message, Toast.LENGTH_SHORT).show()
+            updateUserInfoLiveData.postValue(cardPrice)
+        } else {
+            Toast.makeText(context, "Error :" + userResponse.message, Toast.LENGTH_SHORT).show()
         }
+        isLoading = false
     }
 
     private fun listOfCardTreatment(response: ListOfCards) {
@@ -65,10 +69,13 @@ class MarketManager private constructor(private val context: Context) {
         })
     }
 
-    fun buyCard(card: Card?, userId: Int?, friendId: Int?) {
-        marketResponseLiveData = rickAndMortyAPI.buyCard(card, userId, friendId)
-        marketResponseLiveData.observeOnce(Observer {
-            buyCardTreatment(it!!)
-        })
+    fun buyCard(card: Card?, user: User?, friendId: Int?) {
+        var newWallet = user!!.userWallet!! - card!!.price!!
+        if (!isLoading) {
+            marketResponseLiveData = rickAndMortyAPI.buyCard(card, user.userId, friendId)
+            marketResponseLiveData.observeOnce(Observer {
+                buyCardTreatment(it!!, newWallet)
+            })
+        }
     }
 }

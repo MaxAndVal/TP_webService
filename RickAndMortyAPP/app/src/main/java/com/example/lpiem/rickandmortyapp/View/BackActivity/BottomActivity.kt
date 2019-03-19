@@ -24,6 +24,7 @@ import com.example.lpiem.rickandmortyapp.View.Home.HomeFragment
 import com.example.lpiem.rickandmortyapp.View.Settings.PasswordFragment
 import com.example.lpiem.rickandmortyapp.View.Settings.SettingsFragment
 import com.example.lpiem.rickandmortyapp.View.Social.SocialFragment
+import com.example.lpiem.rickandmortyapp.ViewModel.Market.MarketManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_bottom.*
 
@@ -34,11 +35,13 @@ class BottomActivity : AppCompatActivity() {
     private var settingsManager = SettingsManager.getInstance(this)
     private var changePasswordManager = ChangePasswordManager.getInstance(this)
     private var faqManager = FaqManager.getInstance(this)
+    private var marketManager = MarketManager.getInstance(this)
     private var doubleBackToExitPressedOnce = false
     private lateinit var openFaqFragmentObserver: Observer<Fragment>
     private lateinit var openFragChangePassObserver: Observer<PasswordFragment>
     private lateinit var closeFragPassObserver: Observer<Fragment>
     private lateinit var closeFaqFragObserver: Observer<Fragment>
+    private lateinit var updateUserInfoObserver : Observer<Int>
     private lateinit var fragmentManager: FragmentManager
 
 
@@ -90,10 +93,16 @@ class BottomActivity : AppCompatActivity() {
             closeFAQ(it)
         }
 
+        updateUserInfoObserver = Observer { 
+            updateUserInfo(it)
+        }
+
         settingsManager.openFaqLiveData.observeForever(openFaqFragmentObserver)
         settingsManager.openFragChangePassLiveData.observeForever(openFragChangePassObserver)
         changePasswordManager.closeFragPassLiveData.observeForever(closeFragPassObserver)
         faqManager.closeFaqLiveData.observeForever(closeFaqFragObserver)
+        marketManager.updateUserInfoLiveData.observeForever(updateUserInfoObserver)
+
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
         tv_wallet.text = String.format(getString(R.string.wallet_amount), loginAppManager.connectedUser?.userWallet, " ")
@@ -101,6 +110,12 @@ class BottomActivity : AppCompatActivity() {
         tv_wallet.setOnClickListener { openShop() }
         tv_deckToOpen.setOnClickListener { openDeck(loginAppManager.connectedUser!!.deckToOpen!!) }
         openFragment(HomeFragment())
+    }
+
+    private fun updateUserInfo(it: Int?) {
+        Log.d("TEST", it.toString())
+
+        loginAppManager.connectedUser?.userWallet = it
     }
 
     private fun openDeck(deckToOpen: Int) {
