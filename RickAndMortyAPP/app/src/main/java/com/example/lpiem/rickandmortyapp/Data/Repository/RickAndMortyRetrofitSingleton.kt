@@ -283,6 +283,7 @@ class RickAndMortyRetrofitSingleton private constructor(private val context: Con
         val jsonObject = JsonObject()
         if (card != null) {
             jsonObject.addProperty(Price.dbField, card.price)
+            jsonObject.addProperty(CardName.dbField, card.cardName)
         }
         currentCall = instance!!.buyCardFromFriend(userId!!, friendId!!, card!!.cardId!!, jsonObject)
         return callRetrofit(currentCall!!, BUY_CAR_FROM_FRIEND) as MutableLiveData<UserResponse>

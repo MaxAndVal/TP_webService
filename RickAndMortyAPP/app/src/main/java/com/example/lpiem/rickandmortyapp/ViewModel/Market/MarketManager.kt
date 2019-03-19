@@ -26,6 +26,7 @@ class MarketManager private constructor(private val context: Context) {
     private var marketLiveData = MutableLiveData<ListOfCards>()
     private var marketResponseLiveData = MutableLiveData<UserResponse>()
     private var friendId = -1
+    var listOfCards: ListOfCards? = null
 
     companion object : SingletonHolder<MarketManager, Context>(::MarketManager)
 
@@ -45,8 +46,8 @@ class MarketManager private constructor(private val context: Context) {
     }
 
     private fun listOfCardTreatment(response: ListOfCards) {
-        (context as MarketActivity).listOfCards = response
-        val list = context.listOfCards
+        listOfCards = response
+        val list = listOfCards
         if (list?.code == SUCCESS) {
             cardListDisplay.postValue(list)
         } else {

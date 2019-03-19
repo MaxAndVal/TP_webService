@@ -17,7 +17,7 @@ import kotlinx.android.synthetic.main.activity_market.*
 
 class MarketActivity : AppCompatActivity() {
 
-    var listOfCards: ListOfCards? = null
+    //var listOfCards: ListOfCards? = null
     private lateinit var marketManager: MarketManager
     private lateinit var loginAppManager: LoginAppManager
     private var user: User? = null
