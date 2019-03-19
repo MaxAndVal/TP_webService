@@ -4,18 +4,16 @@ import android.content.Context
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
-import com.example.lpiem.rickandmortyapp.Data.Helpers.JsonProperty.NewWallet
-import com.example.lpiem.rickandmortyapp.Data.Helpers.JsonProperty.UserID
-import com.example.lpiem.rickandmortyapp.Data.Helpers.JsonProperty.DeckNumber
+import com.example.lpiem.rickandmortyapp.Data.Helpers.JsonProperty.*
 import com.example.lpiem.rickandmortyapp.Data.Repository.RickAndMortyRetrofitSingleton
 import com.example.lpiem.rickandmortyapp.Data.Repository.SUCCESS
-import com.example.lpiem.rickandmortyapp.ViewModel.Connection.LoginAppManager
 import com.example.lpiem.rickandmortyapp.Model.ResponsesFromAPI.CardBooster
 import com.example.lpiem.rickandmortyapp.Model.ResponsesFromAPI.UserResponse
 import com.example.lpiem.rickandmortyapp.Model.ResponsesFromAPI.Wallet
 import com.example.lpiem.rickandmortyapp.R
 import com.example.lpiem.rickandmortyapp.Util.SingletonHolder
 import com.example.lpiem.rickandmortyapp.Util.observeOnce
+import com.example.lpiem.rickandmortyapp.ViewModel.Connection.LoginAppManager
 import com.google.gson.JsonObject
 import retrofit2.Call
 
@@ -28,6 +26,7 @@ class ShopManager private constructor(private val context: Context) {
     private var numberOfDeckToAdd = 0
     private var responseFromApiLiveData = MutableLiveData<UserResponse>()
     private var walletLiveData = MutableLiveData<Wallet>()
+    var transactionInProgress = false
 
     companion object : SingletonHolder<ShopManager, Context>(::ShopManager)
 
@@ -45,6 +44,7 @@ class ShopManager private constructor(private val context: Context) {
         } else {
             Toast.makeText(context, String.format(context.getString(R.string.code_message), code, message), Toast.LENGTH_SHORT).show()
         }
+        transactionInProgress = false
     }
 
     private fun updateWalletTreatment(userResponse: UserResponse) {
@@ -83,9 +83,12 @@ class ShopManager private constructor(private val context: Context) {
                 })
             } else {
                 Toast.makeText(context, context.getString(R.string.not_enought_money), Toast.LENGTH_SHORT).show()
+                transactionInProgress = false
             }
+
         } else {
             Toast.makeText(context, String.format(context.getString(R.string.code_message), code, message), Toast.LENGTH_SHORT).show()
+            transactionInProgress = false
         }
     }
 
