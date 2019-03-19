@@ -21,6 +21,10 @@ class DetailCollectionManager private constructor(private val context: Context) 
 
     companion object : SingletonHolder<DetailCollectionManager, Context>(::DetailCollectionManager)
 
+    fun cancelCall() {
+        rickAndMortyAPI.cancelCall()
+    }
+
     fun getCardDetails(id: Int) {
         detailedCardLiveData = rickAndMortyAPI.getDetail(id)
         detailedCardLiveData.observeOnce(Observer {

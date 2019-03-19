@@ -7,10 +7,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.example.lpiem.rickandmortyapp.Data.Repository.RickAndMortyRetrofitSingleton
 import com.example.lpiem.rickandmortyapp.Data.Repository.SUCCESS
-import com.example.lpiem.rickandmortyapp.ViewModel.Connection.LoginAppManager
 import com.example.lpiem.rickandmortyapp.Model.ResponsesFromAPI.UserResponse
 import com.example.lpiem.rickandmortyapp.Util.SingletonHolder
 import com.example.lpiem.rickandmortyapp.Util.observeOnce
+import com.example.lpiem.rickandmortyapp.ViewModel.Connection.LoginAppManager
 
 class ChangePasswordManager internal constructor(internal val context: Context) {
 
@@ -20,7 +20,9 @@ class ChangePasswordManager internal constructor(internal val context: Context) 
     var isPasswordChangeSucceeded = MutableLiveData<Boolean>()
     var closeFragPassLiveData = MutableLiveData<Fragment>()
 
-
+    fun cancelCall() {
+        rickAndMortyAPI.cancelCall()
+    }
 
     fun changePassword(oldPass: String, newPass: String) {
         val userEmail = loginAppManager.connectedUser?.userEmail

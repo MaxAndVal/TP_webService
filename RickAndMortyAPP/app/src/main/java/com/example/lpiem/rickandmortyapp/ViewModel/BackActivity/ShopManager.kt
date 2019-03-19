@@ -15,13 +15,11 @@ import com.example.lpiem.rickandmortyapp.Util.SingletonHolder
 import com.example.lpiem.rickandmortyapp.Util.observeOnce
 import com.example.lpiem.rickandmortyapp.ViewModel.Connection.LoginAppManager
 import com.google.gson.JsonObject
-import retrofit2.Call
 
 class ShopManager private constructor(private val context: Context) {
 
     private val loginAppManager = LoginAppManager.getInstance(context)
     private val rickAndMortyAPI = RickAndMortyRetrofitSingleton.getInstance(context)
-    private var currentCall : Call<*>? = null
     private var cost = 0
     private var numberOfDeckToAdd = 0
     private var responseFromApiLiveData = MutableLiveData<UserResponse>()
@@ -31,7 +29,7 @@ class ShopManager private constructor(private val context: Context) {
     companion object : SingletonHolder<ShopManager, Context>(::ShopManager)
 
     fun cancelCall() {
-        currentCall?.cancel()
+        rickAndMortyAPI.cancelCall()
     }
 
     private fun decksIncreasedTreatment(userResponse: UserResponse) {

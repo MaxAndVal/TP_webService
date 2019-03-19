@@ -51,7 +51,6 @@ class ShopActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         shopManager.cancelCall()
-
         super.onBackPressed()
 
     }

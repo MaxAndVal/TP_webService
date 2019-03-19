@@ -7,11 +7,11 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.lpiem.rickandmortyapp.ViewModel.Connection.LoginAppManager
-import com.example.lpiem.rickandmortyapp.ViewModel.settings.SettingsManager
 import com.example.lpiem.rickandmortyapp.R
 import com.example.lpiem.rickandmortyapp.View.BackActivity.BottomActivity
 import com.example.lpiem.rickandmortyapp.View.Connection.TAG
+import com.example.lpiem.rickandmortyapp.ViewModel.Connection.LoginAppManager
+import com.example.lpiem.rickandmortyapp.ViewModel.settings.SettingsManager
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_settings.*
 
@@ -73,6 +73,11 @@ class SettingsFragment : androidx.fragment.app.Fragment() {
         tv_email.text = user.userEmail
         tv_name.text = user.userName
         Picasso.get().load(user.userImage).placeholder(R.drawable.ic_person_black_24dp).into(iv_profile_picture)
+    }
+
+    override fun onDestroyView() {
+        settingsManager.cancelCall()
+        super.onDestroyView()
     }
 
 }

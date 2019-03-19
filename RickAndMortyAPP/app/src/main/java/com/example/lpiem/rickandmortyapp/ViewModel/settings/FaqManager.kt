@@ -13,7 +13,4 @@ class FaqManager internal constructor(internal val context: Context) {
 
     companion object : SingletonHolder<FaqManager, Context>(::FaqManager)
 
-
-
-
 }
