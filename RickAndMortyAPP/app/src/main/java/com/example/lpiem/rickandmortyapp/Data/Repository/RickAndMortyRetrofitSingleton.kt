@@ -6,18 +6,19 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
+import com.example.lpiem.rickandmortyapp.Data.DataSource.RickAndMortyAPI
 import com.example.lpiem.rickandmortyapp.Data.Helpers.JsonProperty
 import com.example.lpiem.rickandmortyapp.Data.Helpers.JsonProperty.*
 import com.example.lpiem.rickandmortyapp.Data.Helpers.RetrofitCallTypes
 import com.example.lpiem.rickandmortyapp.Data.Helpers.RetrofitCallTypes.*
-import com.example.lpiem.rickandmortyapp.Data.DataSource.RickAndMortyAPI
-import com.example.lpiem.rickandmortyapp.ViewModel.Connection.LoginAppManager
-import com.example.lpiem.rickandmortyapp.ViewModel.Connection.SignInManager
 import com.example.lpiem.rickandmortyapp.Model.Games.KaamlottQuote
 import com.example.lpiem.rickandmortyapp.Model.Games.MemoryReward
 import com.example.lpiem.rickandmortyapp.Model.ResponsesFromAPI.*
 import com.example.lpiem.rickandmortyapp.Util.SingletonHolder
 import com.example.lpiem.rickandmortyapp.View.Connection.TAG
+import com.example.lpiem.rickandmortyapp.ViewModel.BackActivity.ShopManager
+import com.example.lpiem.rickandmortyapp.ViewModel.Connection.LoginAppManager
+import com.example.lpiem.rickandmortyapp.ViewModel.Connection.SignInManager
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import okhttp3.ResponseBody
@@ -145,6 +146,10 @@ class RickAndMortyRetrofitSingleton private constructor(private val context: Con
                     CONNECTION -> {
                         Log.d(TAG, "connection failure")
                         Toast.makeText(context, "Une erreur a eu lieu. Merci de relancer l'application", Toast.LENGTH_LONG).show()
+                    }
+                    BUY_BOOSTER -> {
+                        val shopManager = ShopManager.getInstance(context)
+                        shopManager.transactionInProgress = false
                     }
                 }
             }
