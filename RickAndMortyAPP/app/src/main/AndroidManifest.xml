@@ -12,28 +12,28 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".View.LostPasswordActivity"
+            android:name=".View.Settings.LostPasswordActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".View.Kaamelott.KaamelottActivity"
+            android:name=".View.Games.KaamelottActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".View.Memory.MemoryActivity"
+            android:name=".View.Games.MemoryActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".View.Market.MarketActivity"
+            android:name=".View.Collection.Market.MarketActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".View.OpenDeck.OpenDeckActivity"
+            android:name=".View.BackActivity.OpenDeckActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".View.Shop.ShopActivity"
+            android:name=".View.BackActivity.ShopActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".View.Collection.detail.CollectionDetailActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".View.SignInActivity"
+            android:name=".View.Connection.SignInActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".View.SplashScreen"
@@ -66,10 +66,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".View.LoginActivity"
+            android:name=".View.Connection.LoginActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".View.BottomActivity"
+            android:name=".View.BackActivity.BottomActivity"
             android:label="@string/title_activity_bottom"
             android:screenOrientation="portrait" />
     </application>

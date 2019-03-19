@@ -2,7 +2,7 @@ package com.example.lpiem.rickandmortyapp.View.Collection.list
 
 import androidx.annotation.Nullable
 import androidx.recyclerview.widget.DiffUtil
-import com.example.lpiem.rickandmortyapp.Model.ListOfCards
+import com.example.lpiem.rickandmortyapp.Model.ResponsesFromAPI.ListOfCards
 
 
 class DiffUtilCollection(private var newListOfCards: ListOfCards, private var oldListOfCards: ListOfCards) : DiffUtil.Callback() {

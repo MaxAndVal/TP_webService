@@ -6,13 +6,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.lpiem.rickandmortyapp.Manager.HomeManager
-import com.example.lpiem.rickandmortyapp.Manager.LoginAppManager
-import com.example.lpiem.rickandmortyapp.Model.User
+import com.example.lpiem.rickandmortyapp.ViewModel.Home.HomeManager
+import com.example.lpiem.rickandmortyapp.ViewModel.Connection.LoginAppManager
+import com.example.lpiem.rickandmortyapp.Model.ResponsesFromAPI.User
 import com.example.lpiem.rickandmortyapp.R
-import com.example.lpiem.rickandmortyapp.View.Kaamelott.KaamelottActivity
-import com.example.lpiem.rickandmortyapp.View.Memory.MemoryActivity
-import com.example.lpiem.rickandmortyapp.View.TAG
+import com.example.lpiem.rickandmortyapp.View.Games.KaamelottActivity
+import com.example.lpiem.rickandmortyapp.View.Games.MemoryActivity
+import com.example.lpiem.rickandmortyapp.View.Connection.TAG
 import kotlinx.android.synthetic.main.fragment_home.*
 
 class HomeFragment : androidx.fragment.app.Fragment() {

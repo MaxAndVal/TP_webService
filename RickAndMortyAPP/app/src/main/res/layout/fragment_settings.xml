@@ -76,7 +76,6 @@
         />
 
 
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -88,38 +87,6 @@
         app:layout_constraintTop_toBottomOf="@id/iv_profile_back"
         >
 
-        <!--TODO: visibility gone for now-->
-        <TextView
-            android:id="@+id/tv_change_name"
-            style="@style/BigTextViewStyleWhite"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:paddingTop="4dp"
-            android:paddingBottom="4dp"
-            android:visibility="gone"
-            android:text=" Change Name"
-            android:drawableStart="@drawable/ic_person_white_24dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            />
-
-        <!--TODO: visibility gone for now-->
-        <TextView
-            android:id="@+id/tv_change_email"
-            style="@style/BigTextViewStyleWhite"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:paddingTop="4dp"
-            android:paddingBottom="4dp"
-            android:text=" Change Email"
-            android:visibility="gone"
-            android:drawableStart="@drawable/ic_email_white_24dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_change_name"
-            />
-
         <TextView
             android:id="@+id/tv_change_password"
             style="@style/BigTextViewStyleWhite"
@@ -129,14 +96,14 @@
             android:drawableStart="@drawable/ic_lock_white_24dp"
             android:paddingTop="4dp"
             android:paddingBottom="4dp"
-            android:text=" Change Password"
+            android:text=" Changer de mot de passe"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_change_email" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/tv_faq"
             style="@style/BigTextViewStyleWhite"
-            android:text=" FAQ"
+            android:text=" F.A.Q"
             android:layout_marginTop="12dp"
             android:paddingTop="4dp"
             android:paddingBottom="4dp"
@@ -149,7 +116,7 @@
         <TextView
             android:id="@+id/tv_disconnect"
             style="@style/BigTextViewStyleWhite"
-            android:text=" deconnecter"
+            android:text=" se deconnecter"
             android:layout_marginTop="12dp"
             android:paddingTop="4dp"
             android:paddingBottom="4dp"

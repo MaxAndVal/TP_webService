@@ -8,8 +8,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import com.example.lpiem.rickandmortyapp.Manager.settings.ChangePasswordManager
-import com.example.lpiem.rickandmortyapp.Manager.settings.SettingsManager
+import com.example.lpiem.rickandmortyapp.ViewModel.settings.ChangePasswordManager
+import com.example.lpiem.rickandmortyapp.ViewModel.settings.SettingsManager
 import com.example.lpiem.rickandmortyapp.R
 import com.example.lpiem.rickandmortyapp.Util.SingletonHolder
 import com.example.lpiem.rickandmortyapp.Util.observeOnce
