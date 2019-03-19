@@ -7,17 +7,17 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.example.lpiem.rickandmortyapp.Data.Repository.RickAndMortyRetrofitSingleton
 import com.example.lpiem.rickandmortyapp.Data.Repository.SUCCESS
-import com.example.lpiem.rickandmortyapp.ViewModel.Connection.LoginAppManager
 import com.example.lpiem.rickandmortyapp.Model.ResponsesFromAPI.Friend
 import com.example.lpiem.rickandmortyapp.Model.ResponsesFromAPI.ListOfFriends
+import com.example.lpiem.rickandmortyapp.Model.ResponsesFromAPI.UserResponse
 import com.example.lpiem.rickandmortyapp.Model.Social.SocialListLabel
 import com.example.lpiem.rickandmortyapp.Model.Social.SocialListLabel.LIST_OF_FRIENDS
 import com.example.lpiem.rickandmortyapp.Model.Social.SocialListLabel.LIST_OF_FRIENDS_REQUESTS
-import com.example.lpiem.rickandmortyapp.Model.ResponsesFromAPI.UserResponse
 import com.example.lpiem.rickandmortyapp.R
 import com.example.lpiem.rickandmortyapp.Util.SingletonHolder
 import com.example.lpiem.rickandmortyapp.Util.observeOnce
 import com.example.lpiem.rickandmortyapp.View.Connection.TAG
+import com.example.lpiem.rickandmortyapp.ViewModel.Connection.LoginAppManager
 
 
 class SocialManager private constructor(private val context: Context){
@@ -47,6 +47,10 @@ class SocialManager private constructor(private val context: Context){
         listOfFriendsLiveData.observeOnce(Observer {
             listOfFriendsTreatment(it)
         })
+    }
+
+    fun cancelCall() {
+        rickAndMortyAPI.cancelCall()
     }
 
     private fun addFriendTreatment(userResponse: UserResponse) {

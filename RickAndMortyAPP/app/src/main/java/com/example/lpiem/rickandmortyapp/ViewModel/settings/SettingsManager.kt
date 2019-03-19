@@ -13,8 +13,8 @@ import com.example.lpiem.rickandmortyapp.Model.ResponsesFromAPI.ListOfFAQ
 import com.example.lpiem.rickandmortyapp.R
 import com.example.lpiem.rickandmortyapp.Util.SingletonHolder
 import com.example.lpiem.rickandmortyapp.Util.observeOnce
-import com.example.lpiem.rickandmortyapp.View.Settings.PasswordFragment
 import com.example.lpiem.rickandmortyapp.View.Connection.TAG
+import com.example.lpiem.rickandmortyapp.View.Settings.PasswordFragment
 
 class SettingsManager internal constructor(private val context: Context) {
 
@@ -27,6 +27,10 @@ class SettingsManager internal constructor(private val context: Context) {
     var openFragChangePassLiveData = MutableLiveData<PasswordFragment>()
 
     companion object : SingletonHolder<SettingsManager, Context>(::SettingsManager)
+
+    fun cancelCall() {
+        rickAndMortyAPI.cancelCall()
+    }
 
     private fun getFAQTreatment(response: ListOfFAQ) {
         val code = response.code

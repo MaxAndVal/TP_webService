@@ -4,9 +4,9 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import com.example.lpiem.rickandmortyapp.ViewModel.settings.LostPasswordManager
 import com.example.lpiem.rickandmortyapp.R
 import com.example.lpiem.rickandmortyapp.Util.observeOnce
+import com.example.lpiem.rickandmortyapp.ViewModel.settings.LostPasswordManager
 import kotlinx.android.synthetic.main.activity_lost_password.*
 
 class LostPasswordActivity : AppCompatActivity() {
@@ -39,8 +39,8 @@ class LostPasswordActivity : AppCompatActivity() {
         }
 
 
-        lostPasswordManager.isSendCodeSucceded.observeOnce(isSendCodeObserver)
-        lostPasswordManager.isLoginWithcode.observeOnce(isLoginWithCodeObserver)
+        lostPasswordManager.isSendCodeSucceeded.observeOnce(isSendCodeObserver)
+        lostPasswordManager.isLoginWithCode.observeOnce(isLoginWithCodeObserver)
 
         toggleView(false)
 
@@ -101,6 +101,7 @@ class LostPasswordActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
+        lostPasswordManager.cancelCall()
         finish()
     }
 }

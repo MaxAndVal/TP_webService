@@ -10,26 +10,31 @@ import com.example.lpiem.rickandmortyapp.Data.Helpers.JsonProperty.UserEmail
 import com.example.lpiem.rickandmortyapp.Data.Helpers.LoginFrom
 import com.example.lpiem.rickandmortyapp.Data.Repository.RickAndMortyRetrofitSingleton
 import com.example.lpiem.rickandmortyapp.Data.Repository.SUCCESS
-import com.example.lpiem.rickandmortyapp.ViewModel.Connection.LoginAppManager
 import com.example.lpiem.rickandmortyapp.Model.ResponsesFromAPI.UserResponse
 import com.example.lpiem.rickandmortyapp.Util.SingletonHolder
 import com.example.lpiem.rickandmortyapp.Util.observeOnce
 import com.example.lpiem.rickandmortyapp.View.Connection.TAG
+import com.example.lpiem.rickandmortyapp.ViewModel.Connection.LoginAppManager
 import com.google.gson.JsonObject
 
 class LostPasswordManager private constructor(private var context: Context) {
 
+    private val rickAndMortyAPI = RickAndMortyRetrofitSingleton.getInstance(context)
+    private val loginAppManager = LoginAppManager.getInstance(context)
     var lostPasswordLiveData = MutableLiveData<UserResponse>()
     var enterCodeLiveData = MutableLiveData<UserResponse>()
-    private val rickAndMortyAPI = RickAndMortyRetrofitSingleton.getInstance(context)
-    var isSendCodeSucceded = MutableLiveData<Boolean>()
-    var isLoginWithcode = MutableLiveData<Int>()
-    private val loginAppManager = LoginAppManager.getInstance(context)
+    var isSendCodeSucceeded = MutableLiveData<Boolean>()
+    var isLoginWithCode = MutableLiveData<Int>()
 
+    companion object : SingletonHolder<LostPasswordManager, Context>(::LostPasswordManager)
 
-    fun sendCodeManager(user_email: String) {
+    fun cancelCall() {
+        rickAndMortyAPI.cancelCall()
+    }
+
+    fun sendCodeManager(userEmail: String) {
         val jsonBody = JsonObject()
-        jsonBody.addProperty(UserEmail.dbField, user_email)
+        jsonBody.addProperty(UserEmail.dbField, userEmail)
         lostPasswordLiveData = rickAndMortyAPI.sendCode(jsonBody)
         lostPasswordLiveData.observeOnce(Observer {
             lostPasswordTreatment(it)
@@ -39,10 +44,10 @@ class LostPasswordManager private constructor(private var context: Context) {
     private fun lostPasswordTreatment(it: UserResponse?) {
         Log.d(TAG, it?.message)
         if (it?.code == SUCCESS) {
-            isSendCodeSucceded.postValue(true)
+            isSendCodeSucceeded.postValue(true)
             Toast.makeText(context, it.message, Toast.LENGTH_SHORT).show()
         } else {
-            isSendCodeSucceded.postValue(false)
+            isSendCodeSucceeded.postValue(false)
             Toast.makeText(context, "Une erreur est survenu, merci de reessayer", Toast.LENGTH_LONG).show()
         }
     }
@@ -59,14 +64,11 @@ class LostPasswordManager private constructor(private var context: Context) {
 
     private fun loginWithCodeTreatment(it: UserResponse?) {
         if (it?.code == 200) {
-            isLoginWithcode.postValue(it.code)
+            isLoginWithCode.postValue(it.code)
             loginAppManager.loginTreatment(it, LoginFrom.FROM_LOST_PASSWORD)
         } else {
-            isLoginWithcode.postValue(it!!.code)
+            isLoginWithCode.postValue(it!!.code)
         }
     }
-
-
-    companion object : SingletonHolder<LostPasswordManager, Context>(::LostPasswordManager)
 
 }

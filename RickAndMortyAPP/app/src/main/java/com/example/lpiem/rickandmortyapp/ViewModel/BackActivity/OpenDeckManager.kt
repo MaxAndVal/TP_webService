@@ -4,14 +4,14 @@ import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.example.lpiem.rickandmortyapp.Data.Repository.RickAndMortyRetrofitSingleton
-import com.example.lpiem.rickandmortyapp.ViewModel.Connection.LoginAppManager
-import com.example.lpiem.rickandmortyapp.ViewModel.Home.HomeManager
-import com.example.lpiem.rickandmortyapp.ViewModel.collection.DetailCollectionManager
 import com.example.lpiem.rickandmortyapp.Model.ResponsesFromAPI.Card
 import com.example.lpiem.rickandmortyapp.Model.ResponsesFromAPI.ListOfCards
 import com.example.lpiem.rickandmortyapp.Model.ResponsesFromAPI.UserResponse
 import com.example.lpiem.rickandmortyapp.Util.SingletonHolder
 import com.example.lpiem.rickandmortyapp.Util.observeOnce
+import com.example.lpiem.rickandmortyapp.ViewModel.Connection.LoginAppManager
+import com.example.lpiem.rickandmortyapp.ViewModel.Home.HomeManager
+import com.example.lpiem.rickandmortyapp.ViewModel.collection.DetailCollectionManager
 
 class OpenDeckManager  private constructor(private val context: Context) {
 
@@ -25,6 +25,9 @@ class OpenDeckManager  private constructor(private val context: Context) {
 
     companion object : SingletonHolder<OpenDeckManager, Context>(::OpenDeckManager)
 
+    fun cancelCall() {
+        rickAndMortyAPI.cancelCall()
+    }
 
     private fun openRandomDeckTreatment(listOfCards: ListOfCards) {
         val user = loginAppManager.connectedUser

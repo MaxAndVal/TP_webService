@@ -14,8 +14,6 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.lpiem.rickandmortyapp.ViewModel.Connection.LoginAppManager
-import com.example.lpiem.rickandmortyapp.ViewModel.Social.SocialManager
 import com.example.lpiem.rickandmortyapp.Model.ResponsesFromAPI.Friend
 import com.example.lpiem.rickandmortyapp.Model.Social.SocialListLabel
 import com.example.lpiem.rickandmortyapp.Model.Social.SocialListLabel.LIST_OF_FRIENDS
@@ -25,6 +23,8 @@ import com.example.lpiem.rickandmortyapp.R
 import com.example.lpiem.rickandmortyapp.View.BackActivity.BottomActivity
 import com.example.lpiem.rickandmortyapp.View.Collection.Market.MarketActivity
 import com.example.lpiem.rickandmortyapp.View.Connection.TAG
+import com.example.lpiem.rickandmortyapp.ViewModel.Connection.LoginAppManager
+import com.example.lpiem.rickandmortyapp.ViewModel.Social.SocialManager
 import kotlinx.android.synthetic.main.fragment_social.*
 
 
@@ -189,7 +189,7 @@ class SocialFragment : androidx.fragment.app.Fragment() {
         socialManager.changeBtnActionLiveData.removeObserver(changeBtnActionObserver)
         socialAdapter?.liveDataListener?.removeObserver(adapterTouchItemObserver)
         socialManager.loaderLiveData.removeObserver(loaderObserver)
-
+        socialManager.cancelCall()
         loaderVisibility(false)
         super.onDestroyView()
     }

@@ -61,6 +61,10 @@ class LoginAppManager private constructor(private var context: Context) {
 
     //REGULAR CONNECTION AND SIGN IN
 
+    fun cancelCall() {
+        rickAndMortyAPI.cancelCall()
+    }
+
     fun regularConnection(mail: String, pass: String) {
         if (mail == "" || pass == "") {
             Toast.makeText(context, context.getString(R.string.thanks_to_fill_all_fields), Toast.LENGTH_SHORT).show()
