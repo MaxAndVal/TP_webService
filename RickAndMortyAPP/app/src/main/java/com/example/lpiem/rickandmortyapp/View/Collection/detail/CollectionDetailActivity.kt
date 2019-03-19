@@ -4,10 +4,10 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import com.example.lpiem.rickandmortyapp.ViewModel.collection.DetailCollectionManager
 import com.example.lpiem.rickandmortyapp.Model.ResponsesFromAPI.Card
 import com.example.lpiem.rickandmortyapp.Model.ResponsesFromAPI.DetailledCard
 import com.example.lpiem.rickandmortyapp.R
+import com.example.lpiem.rickandmortyapp.ViewModel.collection.DetailCollectionManager
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_collection_detail.*
 
@@ -61,6 +61,7 @@ class CollectionDetailActivity : AppCompatActivity() {
     override fun onBackPressed() {
         detailManager.listOfNewCards = null
         detailManager.cardDetailDisplay.removeObserver(cardDetailDisplayObserver)
+        detailManager.cancelCall()
         super.onBackPressed()
     }
 

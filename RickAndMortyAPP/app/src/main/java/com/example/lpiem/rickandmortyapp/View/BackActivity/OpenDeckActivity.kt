@@ -6,9 +6,9 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.airbnb.lottie.LottieDrawable
-import com.example.lpiem.rickandmortyapp.ViewModel.BackActivity.OpenDeckManager
 import com.example.lpiem.rickandmortyapp.R
 import com.example.lpiem.rickandmortyapp.View.Collection.detail.CollectionDetailActivity
+import com.example.lpiem.rickandmortyapp.ViewModel.BackActivity.OpenDeckManager
 import kotlinx.android.synthetic.main.activity_open_deck.*
 
 class OpenDeckActivity : AppCompatActivity() {
@@ -83,6 +83,7 @@ class OpenDeckActivity : AppCompatActivity() {
         openDeckManager.infoNewCardLiveData.removeObserver(newCardObserver)
         openDeckManager.showDetails = false
         av_from_code.cancelAnimation()
+        openDeckManager.cancelCall()
         super.onBackPressed()
     }
 

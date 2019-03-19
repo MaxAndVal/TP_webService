@@ -12,10 +12,10 @@ import com.example.lpiem.rickandmortyapp.Data.Helpers.RetrofitCallTypes
 import com.example.lpiem.rickandmortyapp.Data.Helpers.RetrofitCallTypes.HEROKU_VOID
 import com.example.lpiem.rickandmortyapp.Data.Repository.RickAndMortyRetrofitSingleton
 import com.example.lpiem.rickandmortyapp.Data.Repository.SUCCESS
-import com.example.lpiem.rickandmortyapp.ViewModel.Connection.LoginAppManager
 import com.example.lpiem.rickandmortyapp.Model.ResponsesFromAPI.UserResponse
 import com.example.lpiem.rickandmortyapp.R
 import com.example.lpiem.rickandmortyapp.View.Connection.LoginActivity
+import com.example.lpiem.rickandmortyapp.ViewModel.Connection.LoginAppManager
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_splash_screen.*
 import retrofit2.Call
@@ -61,7 +61,7 @@ class SplashScreen : AppCompatActivity() {
 
     }
 
-    //TODO : move to repo
+
     private fun <T> callRetrofit(call: Call<T>, type: RetrofitCallTypes) {
 
         call.enqueue(object : Callback<T> {

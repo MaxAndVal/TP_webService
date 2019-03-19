@@ -8,11 +8,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.lpiem.rickandmortyapp.ViewModel.settings.FaqManager
-import com.example.lpiem.rickandmortyapp.ViewModel.settings.SettingsManager
 import com.example.lpiem.rickandmortyapp.Model.ResponsesFromAPI.FAQ
 import com.example.lpiem.rickandmortyapp.R
 import com.example.lpiem.rickandmortyapp.Util.SingletonHolder
+import com.example.lpiem.rickandmortyapp.ViewModel.settings.FaqManager
+import com.example.lpiem.rickandmortyapp.ViewModel.settings.SettingsManager
 import kotlinx.android.synthetic.main.fragment_faq.*
 
 class FAQ_Fragment : androidx.fragment.app.Fragment(){

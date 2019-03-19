@@ -10,9 +10,9 @@ import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import com.example.lpiem.rickandmortyapp.ViewModel.Connection.LoginAppManager
 import com.example.lpiem.rickandmortyapp.R
 import com.example.lpiem.rickandmortyapp.Util.observeOnce
+import com.example.lpiem.rickandmortyapp.ViewModel.Connection.LoginAppManager
 import com.facebook.CallbackManager
 import com.facebook.FacebookCallback
 import com.facebook.FacebookException
@@ -180,6 +180,7 @@ class LoginActivity : AppCompatActivity() {
             loginAppManager.facebookInit.removeObserver(facebookInitObserver)
             loginAppManager.resolveIntent.removeObserver(resolveIntentObserver)
             loginAppManager.googleBtnSwitch.removeObserver(googleBtnSwitchObserver)
+            loginAppManager.cancelCall()
             super.onBackPressed()
             return
         }
