@@ -7,11 +7,11 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.lpiem.rickandmortyapp.Manager.LoginAppManager
-import com.example.lpiem.rickandmortyapp.Manager.settings.SettingsManager
+import com.example.lpiem.rickandmortyapp.ViewModel.Connection.LoginAppManager
+import com.example.lpiem.rickandmortyapp.ViewModel.settings.SettingsManager
 import com.example.lpiem.rickandmortyapp.R
-import com.example.lpiem.rickandmortyapp.View.BottomActivity
-import com.example.lpiem.rickandmortyapp.View.TAG
+import com.example.lpiem.rickandmortyapp.View.BackActivity.BottomActivity
+import com.example.lpiem.rickandmortyapp.View.Connection.TAG
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_settings.*
 

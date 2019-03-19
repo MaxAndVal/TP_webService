@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
-    tools:context=".View.BottomActivity">
+    tools:context=".View.BackActivity.BottomActivity">
 
     <TextView
         android:id="@+id/tv_message"

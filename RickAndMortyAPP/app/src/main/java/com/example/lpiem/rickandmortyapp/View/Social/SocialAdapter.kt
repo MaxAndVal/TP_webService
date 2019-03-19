@@ -8,11 +8,11 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
-import com.example.lpiem.rickandmortyapp.Model.Friend
-import com.example.lpiem.rickandmortyapp.Model.SocialListenerAction
-import com.example.lpiem.rickandmortyapp.Model.SocialListenerAction.*
+import com.example.lpiem.rickandmortyapp.Model.ResponsesFromAPI.Friend
+import com.example.lpiem.rickandmortyapp.Model.Social.SocialListenerAction
+import com.example.lpiem.rickandmortyapp.Model.Social.SocialListenerAction.*
 import com.example.lpiem.rickandmortyapp.R
-import com.example.lpiem.rickandmortyapp.View.TAG
+import com.example.lpiem.rickandmortyapp.View.Connection.TAG
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.social_item.view.*
 

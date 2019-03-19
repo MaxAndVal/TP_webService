@@ -6,11 +6,16 @@ import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import com.example.lpiem.rickandmortyapp.Data.*
-import com.example.lpiem.rickandmortyapp.Data.RetrofitCallTypes.HEROKU_VOID
-import com.example.lpiem.rickandmortyapp.Manager.LoginAppManager
-import com.example.lpiem.rickandmortyapp.Model.UserResponse
+import com.example.lpiem.rickandmortyapp.Data.Helpers.LoginFrom
+import com.example.lpiem.rickandmortyapp.Data.Helpers.PreferencesHelper
+import com.example.lpiem.rickandmortyapp.Data.Helpers.RetrofitCallTypes
+import com.example.lpiem.rickandmortyapp.Data.Helpers.RetrofitCallTypes.HEROKU_VOID
+import com.example.lpiem.rickandmortyapp.Data.Repository.RickAndMortyRetrofitSingleton
+import com.example.lpiem.rickandmortyapp.Data.Repository.SUCCESS
+import com.example.lpiem.rickandmortyapp.ViewModel.Connection.LoginAppManager
+import com.example.lpiem.rickandmortyapp.Model.ResponsesFromAPI.UserResponse
 import com.example.lpiem.rickandmortyapp.R
+import com.example.lpiem.rickandmortyapp.View.Connection.LoginActivity
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_splash_screen.*
 import retrofit2.Call
@@ -34,7 +39,7 @@ class SplashScreen : AppCompatActivity() {
         setContentView(R.layout.activity_splash_screen)
 
         preferencesHelper = PreferencesHelper(this)
-        Log.d(TAG, "existing token = ${preferencesHelper.deviceToken}")
+        Log.d(com.example.lpiem.rickandmortyapp.View.Connection.TAG, "existing token = ${preferencesHelper.deviceToken}")
 
         tokenConnectionObserver = Observer {
             if (it.code == SUCCESS) {
@@ -62,7 +67,7 @@ class SplashScreen : AppCompatActivity() {
         call.enqueue(object : Callback<T> {
             override fun onFailure(call: Call<T>, t: Throwable) {
                 if (SplashScreen.serverConnectionCounter < 3) {
-                    Log.d(TAG, "F : Heroku should be awake (${SplashScreen.serverConnectionCounter} connection times) : " + t.message.toString())
+                    Log.d(com.example.lpiem.rickandmortyapp.View.Connection.TAG, "F : Heroku should be awake (${SplashScreen.serverConnectionCounter} connection times) : " + t.message.toString())
                     val resultCall = rickAndMortyAPI!!.herokuAwaking()
                     callRetrofit(resultCall, RetrofitCallTypes.HEROKU_VOID)
                     SplashScreen.serverConnectionCounter++
@@ -74,7 +79,7 @@ class SplashScreen : AppCompatActivity() {
             override fun onResponse(call: Call<T>, response: Response<T>) {
                 when (type) {
                     HEROKU_VOID -> {
-                        Log.d(TAG, " R : Heroku should be awake")
+                        Log.d(com.example.lpiem.rickandmortyapp.View.Connection.TAG, " R : Heroku should be awake")
                         if (preferencesHelper.deviceToken.length == 30) {
                             loginAppManager.connectionWithToken(preferencesHelper.deviceToken, tokenConnectionObserver)
                         } else {
@@ -84,7 +89,7 @@ class SplashScreen : AppCompatActivity() {
                         }
                     }
                     else -> {
-                        Log.d(TAG, "Nothing have to pass by here ^^")
+                        Log.d(com.example.lpiem.rickandmortyapp.View.Connection.TAG, "Nothing have to pass by here ^^")
                     }
                 }
 

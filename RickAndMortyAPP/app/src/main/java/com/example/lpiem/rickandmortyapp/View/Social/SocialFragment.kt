@@ -14,17 +14,17 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.lpiem.rickandmortyapp.Manager.LoginAppManager
-import com.example.lpiem.rickandmortyapp.Manager.SocialManager
-import com.example.lpiem.rickandmortyapp.Model.Friend
-import com.example.lpiem.rickandmortyapp.Model.SocialListLabel
-import com.example.lpiem.rickandmortyapp.Model.SocialListLabel.LIST_OF_FRIENDS
-import com.example.lpiem.rickandmortyapp.Model.SocialListLabel.LIST_OF_FRIENDS_REQUESTS
-import com.example.lpiem.rickandmortyapp.Model.SocialListenerAction
+import com.example.lpiem.rickandmortyapp.ViewModel.Connection.LoginAppManager
+import com.example.lpiem.rickandmortyapp.ViewModel.Social.SocialManager
+import com.example.lpiem.rickandmortyapp.Model.ResponsesFromAPI.Friend
+import com.example.lpiem.rickandmortyapp.Model.Social.SocialListLabel
+import com.example.lpiem.rickandmortyapp.Model.Social.SocialListLabel.LIST_OF_FRIENDS
+import com.example.lpiem.rickandmortyapp.Model.Social.SocialListLabel.LIST_OF_FRIENDS_REQUESTS
+import com.example.lpiem.rickandmortyapp.Model.Social.SocialListenerAction
 import com.example.lpiem.rickandmortyapp.R
-import com.example.lpiem.rickandmortyapp.View.BottomActivity
-import com.example.lpiem.rickandmortyapp.View.Market.MarketActivity
-import com.example.lpiem.rickandmortyapp.View.TAG
+import com.example.lpiem.rickandmortyapp.View.BackActivity.BottomActivity
+import com.example.lpiem.rickandmortyapp.View.Collection.Market.MarketActivity
+import com.example.lpiem.rickandmortyapp.View.Connection.TAG
 import kotlinx.android.synthetic.main.fragment_social.*
 
 

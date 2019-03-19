@@ -4,9 +4,9 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import com.example.lpiem.rickandmortyapp.Manager.collection.DetailCollectionManager
-import com.example.lpiem.rickandmortyapp.Model.Card
-import com.example.lpiem.rickandmortyapp.Model.DetailledCard
+import com.example.lpiem.rickandmortyapp.ViewModel.collection.DetailCollectionManager
+import com.example.lpiem.rickandmortyapp.Model.ResponsesFromAPI.Card
+import com.example.lpiem.rickandmortyapp.Model.ResponsesFromAPI.DetailledCard
 import com.example.lpiem.rickandmortyapp.R
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_collection_detail.*
