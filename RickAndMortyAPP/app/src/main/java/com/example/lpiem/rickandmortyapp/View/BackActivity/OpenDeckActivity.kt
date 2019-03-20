@@ -20,7 +20,6 @@ class OpenDeckActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_open_deck)
-        iv_closeOpenDeck.setOnClickListener { finish() }
 
         updateDeckCountObserver = Observer {
             updateDecksCount(it)
@@ -31,12 +30,12 @@ class OpenDeckActivity : AppCompatActivity() {
         }
 
         openDeckManager.updateDeckCountLiveData.observeForever(updateDeckCountObserver)
-        openDeckManager.infoNewCardLiveData.observeForever(newCardObserver)
+
     }
 
     override fun onResume() {
         super.onResume()
-        openDeckManager.showDetails = true
+        iv_closeOpenDeck.setOnClickListener { onBackPressed() }
         tv_openYourDeck.text = String.format(
                 getString(R.string.number_of_deck_to_open),
                 openDeckManager.loginAppManager.connectedUser?.deckToOpen
@@ -44,6 +43,8 @@ class OpenDeckActivity : AppCompatActivity() {
         iv_peaceAmongWorld.setOnClickListener {
             if (openDeckManager.loginAppManager.connectedUser!!.deckToOpen!! > 0) {
                 showAnimation(true)
+                openDeckManager.infoNewCardLiveData.observeForever(newCardObserver)
+                openDeckManager.showDetails = true
                 openDeckManager.openRandomDeck(openDeckManager.loginAppManager.connectedUser!!.deckToOpen)
             }
         }

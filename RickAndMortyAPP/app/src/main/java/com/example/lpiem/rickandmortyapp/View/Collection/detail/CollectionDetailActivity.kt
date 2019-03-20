@@ -62,7 +62,7 @@ class CollectionDetailActivity : AppCompatActivity() {
         detailManager.listOfNewCards = null
         detailManager.cardDetailDisplay.removeObserver(cardDetailDisplayObserver)
         detailManager.cancelCall()
-        super.onBackPressed()
+        finish()
     }
 
     private fun updateCard() {
@@ -70,7 +70,7 @@ class CollectionDetailActivity : AppCompatActivity() {
         detailManager.listOfNewCards!!.removeAt(0)
 
         if (detailManager.listOfNewCards.isNullOrEmpty()) {
-            card_detail_background.setOnClickListener { finish() }
+            card_detail_background.setOnClickListener { onBackPressed() }
         }
         displayCard()
     }
