@@ -18,9 +18,8 @@ class CollectionManager private constructor(private val context: Context) {
     private var rickAndMortyAPI = RickAndMortyRetrofitSingleton.getInstance(context)
     private var collectionLiveData = MutableLiveData<ListOfCards>()
     var listOfCards: ListOfCards? = null
-
-
-    lateinit var cardListDisplay: MutableLiveData<ListOfCards>
+    var addCardSuccededLiveData = MutableLiveData<ListOfCards>()
+    var displayListLiveData = MutableLiveData<ListOfCards>()
 
     companion object : SingletonHolder<CollectionManager, Context>(::CollectionManager)
 
@@ -29,21 +28,26 @@ class CollectionManager private constructor(private val context: Context) {
     }
 
 
-    private fun addCardToMarket() {
-        Toast.makeText(context, "Card is now on the market !", Toast.LENGTH_LONG).show()
+    private fun addCardToMarket(it: ListOfCards) {
+        if(it.code == SUCCESS){
+            Toast.makeText(context, "Card is now on the market !", Toast.LENGTH_LONG).show()
+        }else{
+            Toast.makeText(context, it.message, Toast.LENGTH_LONG).show()
+        }
+        addCardSuccededLiveData.postValue(it)
+
     }
 
     private fun listOfCardTreatment(response: ListOfCards) {
         listOfCards = response
         if (listOfCards?.code == SUCCESS) {
-            cardListDisplay.postValue(listOfCards)
+            displayListLiveData.postValue(listOfCards)
         } else {
             Toast.makeText(context, String.format(context.getString(R.string.code_message), listOfCards?.code, listOfCards?.message), Toast.LENGTH_SHORT).show()
         }
     }
 
-    fun getListOfDecks(user: User?, UILink: MutableLiveData<ListOfCards>) {
-        cardListDisplay = UILink
+    fun getListOfDecks(user: User?) {
         val userId = user?.userId ?: -1
         collectionLiveData = rickAndMortyAPI.listOfCardsForCollectionList(userId)
         collectionLiveData.observeOnce(Observer {
@@ -51,10 +55,10 @@ class CollectionManager private constructor(private val context: Context) {
         })
     }
 
-    fun sellACard(userId: Int, card: Card, price: Int) {
-        collectionLiveData = rickAndMortyAPI.addCardToMarket(userId, card, price)
+    fun sellACard(user: User, card: Card, price: Int) {
+        collectionLiveData = rickAndMortyAPI.addCardToMarket(user.userId!!, card, price)
         collectionLiveData.observeOnce(Observer {
-            addCardToMarket()
+            addCardToMarket(it)
         })
     }
 }

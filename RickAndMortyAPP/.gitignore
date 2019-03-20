@@ -64,6 +64,7 @@ obj/
 
 # User-specific configurations
 .idea/caches/
+.idea/sonarLint/
 .idea/libraries/
 .idea/shelf/
 .idea/workspace.xml

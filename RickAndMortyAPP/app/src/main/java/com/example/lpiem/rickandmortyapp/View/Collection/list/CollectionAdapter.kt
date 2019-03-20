@@ -29,7 +29,7 @@ class CollectionAdapter(private var dataSet: ListOfCards): RecyclerView.Adapter<
     }
 
     override fun getItemCount(): Int {
-        return dataSet.cards!!.size
+        return if (dataSet.cards != null) dataSet.cards!!.size else 0
     }
 
     fun getDataSet(): ListOfCards {
@@ -37,11 +37,15 @@ class CollectionAdapter(private var dataSet: ListOfCards): RecyclerView.Adapter<
     }
 
     fun updateList(newList: ListOfCards) {
-        dataSet = dataSet.sortById()
-        val diffResult = DiffUtil.calculateDiff(DiffUtilCollection(dataSet, newList.sortById()))
+        dataSet = dataSet
+        val diffResult = DiffUtil.calculateDiff(DiffUtilCollection(dataSet, newList))
         diffResult.dispatchUpdatesTo(this)
     }
 
+    fun updateDataSet(newList: ListOfCards){
+        dataSet = newList
+        notifyDataSetChanged()
+    }
 
     class ViewHolder(view: View): RecyclerView.ViewHolder(view) {
         val image = view.iv_card!!

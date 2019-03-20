@@ -75,5 +75,31 @@ class Card : Parcelable {
                 "amount= $amount)"
     }
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as Card
+
+        if (userId != other.userId) return false
+        if (cardId != other.cardId) return false
+        if (cardName != other.cardName) return false
+        if (cardImage != other.cardImage) return false
+        if (amount != other.amount) return false
+        if (price != other.price) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = userId ?: 0
+        result = 31 * result + (cardId ?: 0)
+        result = 31 * result + (cardName?.hashCode() ?: 0)
+        result = 31 * result + (cardImage?.hashCode() ?: 0)
+        result = 31 * result + (amount ?: 0)
+        result = 31 * result + (price ?: 0)
+        return result
+    }
+
 
 }
