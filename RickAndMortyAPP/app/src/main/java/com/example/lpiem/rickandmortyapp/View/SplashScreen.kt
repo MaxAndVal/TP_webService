@@ -14,6 +14,7 @@ import com.example.lpiem.rickandmortyapp.Data.Repository.RickAndMortyRetrofitSin
 import com.example.lpiem.rickandmortyapp.Data.Repository.SUCCESS
 import com.example.lpiem.rickandmortyapp.Model.ResponsesFromAPI.UserResponse
 import com.example.lpiem.rickandmortyapp.R
+import com.example.lpiem.rickandmortyapp.Util.observeOnce
 import com.example.lpiem.rickandmortyapp.View.Connection.LoginActivity
 import com.example.lpiem.rickandmortyapp.ViewModel.Connection.LoginAppManager
 import com.squareup.picasso.Picasso
@@ -29,6 +30,7 @@ class SplashScreen : AppCompatActivity() {
     private lateinit var loginAppManager: LoginAppManager
     private lateinit var preferencesHelper: PreferencesHelper
     lateinit var tokenConnectionObserver: Observer<UserResponse>
+    lateinit var startIntentObserver: Observer<Intent>
 
     companion object {
         var serverConnectionCounter = 0
@@ -52,7 +54,12 @@ class SplashScreen : AppCompatActivity() {
             }
         }
 
+        startIntentObserver = Observer {
+            startActivity(it)
+        }
+
         loginAppManager = LoginAppManager.getInstance(this)
+        loginAppManager.startIntentSplashScreenLiveData.observeOnce(startIntentObserver)
 
         val resultCall = rickAndMortyAPI!!.herokuAwaking()
         callRetrofit(resultCall, RetrofitCallTypes.HEROKU_VOID)

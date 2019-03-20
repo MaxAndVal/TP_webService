@@ -8,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.lpiem.rickandmortyapp.R
-import com.example.lpiem.rickandmortyapp.View.BackActivity.BottomActivity
 import com.example.lpiem.rickandmortyapp.View.Connection.TAG
 import com.example.lpiem.rickandmortyapp.ViewModel.Connection.LoginAppManager
 import com.example.lpiem.rickandmortyapp.ViewModel.settings.SettingsManager
@@ -25,6 +24,7 @@ class SettingsFragment : androidx.fragment.app.Fragment() {
 
         settingsManager = SettingsManager.getInstance(context!!)
         loginAppManager = LoginAppManager.getInstance(context!!)
+
     }
 
 
@@ -53,7 +53,7 @@ class SettingsFragment : androidx.fragment.app.Fragment() {
                         loginAppManager.disconnectUser()
                         val handler = Handler()
                         handler.postDelayed({
-                            (activity as BottomActivity).seekAndDestroy()
+                            settingsManager.disconnect.postValue(true)
                         }, 2000L)
                     }
                     .setNegativeButton(android.R.string.no) { dialog, which ->

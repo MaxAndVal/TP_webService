@@ -19,7 +19,6 @@ import com.example.lpiem.rickandmortyapp.Model.ResponsesFromAPI.UserResponse
 import com.example.lpiem.rickandmortyapp.R
 import com.example.lpiem.rickandmortyapp.Util.SingletonHolder
 import com.example.lpiem.rickandmortyapp.Util.observeOnce
-import com.example.lpiem.rickandmortyapp.View.*
 import com.example.lpiem.rickandmortyapp.View.BackActivity.BottomActivity
 import com.example.lpiem.rickandmortyapp.View.Connection.LoginActivity
 import com.example.lpiem.rickandmortyapp.View.Connection.SignInActivity
@@ -49,13 +48,14 @@ class LoginAppManager private constructor(private var context: Context) {
     var connectedUser: User? = null
     var gameInProgress = true
     var memoryInProgress = true
-    internal var loginLiveData = MutableLiveData<UserResponse>()
+    private var loginLiveData = MutableLiveData<UserResponse>()
     var loaderDisplay = MutableLiveData<Int>()
     var googleBtnSwitch = MutableLiveData<Boolean>()
     var resolveIntent = MutableLiveData<Intent>()
     var facebookInit = MutableLiveData<Unit>()
     var alreadyConnectedToFacebook = MutableLiveData<Boolean>()
     var finishActivityLiveData = MutableLiveData<Boolean>()
+    var startIntentSplashScreenLiveData = MutableLiveData<Intent>()
 
     companion object : SingletonHolder<LoginAppManager, Context>(::LoginAppManager)
 
@@ -265,10 +265,10 @@ class LoginAppManager private constructor(private var context: Context) {
                     else -> {
                         if (token != null && token.length == 30) {
                             Toast.makeText(context, String.format(context.getString(R.string.welcome, name)), Toast.LENGTH_SHORT).show()
-                            (context as SplashScreen).startActivity(homeIntent)
+                            startIntentSplashScreenLiveData.postValue(homeIntent)
                         } else {
                             Toast.makeText(context, context.getString(R.string.expired_session), Toast.LENGTH_SHORT).show()
-                            (context as SplashScreen).startActivity(loginIntent)
+                            startIntentSplashScreenLiveData.postValue(loginIntent)
                         }
                     }
                 }

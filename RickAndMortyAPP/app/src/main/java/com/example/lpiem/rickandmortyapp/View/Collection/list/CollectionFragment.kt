@@ -11,27 +11,26 @@ import android.view.ViewGroup
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
-import com.example.lpiem.rickandmortyapp.ViewModel.Connection.LoginAppManager
-import com.example.lpiem.rickandmortyapp.ViewModel.collection.CollectionManager
 import com.example.lpiem.rickandmortyapp.Model.ResponsesFromAPI.ListOfCards
 import com.example.lpiem.rickandmortyapp.Model.ResponsesFromAPI.User
 import com.example.lpiem.rickandmortyapp.R
 import com.example.lpiem.rickandmortyapp.Util.RecyclerTouchListener
 import com.example.lpiem.rickandmortyapp.View.Collection.detail.CollectionDetailActivity
 import com.example.lpiem.rickandmortyapp.View.Connection.TAG
+import com.example.lpiem.rickandmortyapp.ViewModel.Connection.LoginAppManager
+import com.example.lpiem.rickandmortyapp.ViewModel.collection.CollectionManager
 import kotlinx.android.synthetic.main.fragment_collection.*
 import kotlinx.android.synthetic.main.price_input.view.*
 
 class CollectionFragment : androidx.fragment.app.Fragment() {
 
-    var listOfCards: ListOfCards? = null
     private lateinit var collectionManager: CollectionManager
     private lateinit var loginAppManager: LoginAppManager
     private var user: User? = null
     private var adapter: CollectionAdapter? = null
     private var displayListLiveData = MutableLiveData<ListOfCards>()
     private lateinit var displayListObserver: Observer<ListOfCards>
-    private lateinit var isAddCardSuccededObserver : Observer<Boolean>
+    private lateinit var isAddCardSuccededObserver: Observer<Boolean>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,7 +40,6 @@ class CollectionFragment : androidx.fragment.app.Fragment() {
         Log.d(TAG, "user : $user")
 
         collectionManager = CollectionManager.getInstance(context!!)
-        collectionManager.captureFragmentInstance(this)
 
         displayListObserver = Observer { list ->
             if (adapter == null) {
@@ -51,9 +49,11 @@ class CollectionFragment : androidx.fragment.app.Fragment() {
             updateAdapter(list)
         }
         displayListLiveData.observeForever(displayListObserver)
+
         isAddCardSuccededObserver = Observer {
-            if(it)onResume()
+            if(it)collectionManager.getListOfDecks(user, displayListLiveData)
         }
+        collectionManager.isAddCardSuccededLiveData.observeForever(isAddCardSuccededObserver)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -65,6 +65,7 @@ class CollectionFragment : androidx.fragment.app.Fragment() {
         super.onViewCreated(view, savedInstanceState)
         rv_collection.layoutManager = GridLayoutManager(context, 3)
         rv_collection.addOnItemTouchListener(RecyclerTouchListener(context!!, rv_collection, object : RecyclerTouchListener.ClickListener {
+
 
             override fun onClick(view: View, position: Int) {
                 val detailIntent = Intent(context, CollectionDetailActivity::class.java)
@@ -86,7 +87,7 @@ class CollectionFragment : androidx.fragment.app.Fragment() {
                                 isValid = false
                             }
                             if (isValid) {
-                                collectionManager.sellACard(user!!, card!!, price.toString().toInt(), displayListLiveData)
+                                collectionManager.sellACard(user!!, card!!, price.toString().toInt())
                             }
                             if (isValid) {
                                 dialog.dismiss()
