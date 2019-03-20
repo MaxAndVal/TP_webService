@@ -14,7 +14,6 @@ import com.example.lpiem.rickandmortyapp.Model.ResponsesFromAPI.UserResponse
 import com.example.lpiem.rickandmortyapp.R
 import com.example.lpiem.rickandmortyapp.Util.SingletonHolder
 import com.example.lpiem.rickandmortyapp.Util.observeOnce
-import com.example.lpiem.rickandmortyapp.View.Collection.Market.MarketActivity
 import com.example.lpiem.rickandmortyapp.View.Connection.TAG
 import retrofit2.Call
 

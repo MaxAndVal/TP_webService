@@ -12,23 +12,17 @@ import com.example.lpiem.rickandmortyapp.Model.ResponsesFromAPI.User
 import com.example.lpiem.rickandmortyapp.R
 import com.example.lpiem.rickandmortyapp.Util.SingletonHolder
 import com.example.lpiem.rickandmortyapp.Util.observeOnce
-import com.example.lpiem.rickandmortyapp.View.Collection.list.CollectionFragment
 
 class CollectionManager private constructor(private val context: Context) {
 
     private var rickAndMortyAPI = RickAndMortyRetrofitSingleton.getInstance(context)
     private var collectionLiveData = MutableLiveData<ListOfCards>()
+    var listOfCards: ListOfCards? = null
 
 
-    var collectionFragment: CollectionFragment? = null
     lateinit var cardListDisplay: MutableLiveData<ListOfCards>
 
     companion object : SingletonHolder<CollectionManager, Context>(::CollectionManager)
-
-
-    fun captureFragmentInstance(fragment: CollectionFragment) {
-        collectionFragment = fragment
-    }
 
     fun cancelCall() {
         rickAndMortyAPI.cancelCall()
@@ -40,12 +34,11 @@ class CollectionManager private constructor(private val context: Context) {
     }
 
     private fun listOfCardTreatment(response: ListOfCards) {
-        collectionFragment!!.listOfCards = response
-        val list = collectionFragment!!.listOfCards
-        if (list?.code == SUCCESS) {
-            cardListDisplay.postValue(list)
+        listOfCards = response
+        if (listOfCards?.code == SUCCESS) {
+            cardListDisplay.postValue(listOfCards)
         } else {
-            Toast.makeText(context, String.format(context.getString(R.string.code_message), list?.code, list?.message), Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, String.format(context.getString(R.string.code_message), listOfCards?.code, listOfCards?.message), Toast.LENGTH_SHORT).show()
         }
     }
 

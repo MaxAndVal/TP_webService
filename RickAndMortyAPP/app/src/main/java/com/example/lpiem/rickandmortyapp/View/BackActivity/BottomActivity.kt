@@ -13,18 +13,18 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
-import com.example.lpiem.rickandmortyapp.ViewModel.Home.KaamelottManager
-import com.example.lpiem.rickandmortyapp.ViewModel.Connection.LoginAppManager
-import com.example.lpiem.rickandmortyapp.ViewModel.settings.ChangePasswordManager
-import com.example.lpiem.rickandmortyapp.ViewModel.settings.FaqManager
-import com.example.lpiem.rickandmortyapp.ViewModel.settings.SettingsManager
 import com.example.lpiem.rickandmortyapp.R
 import com.example.lpiem.rickandmortyapp.View.Collection.list.CollectionFragment
 import com.example.lpiem.rickandmortyapp.View.Home.HomeFragment
 import com.example.lpiem.rickandmortyapp.View.Settings.PasswordFragment
 import com.example.lpiem.rickandmortyapp.View.Settings.SettingsFragment
 import com.example.lpiem.rickandmortyapp.View.Social.SocialFragment
+import com.example.lpiem.rickandmortyapp.ViewModel.Connection.LoginAppManager
+import com.example.lpiem.rickandmortyapp.ViewModel.Home.KaamelottManager
 import com.example.lpiem.rickandmortyapp.ViewModel.Market.MarketManager
+import com.example.lpiem.rickandmortyapp.ViewModel.settings.ChangePasswordManager
+import com.example.lpiem.rickandmortyapp.ViewModel.settings.FaqManager
+import com.example.lpiem.rickandmortyapp.ViewModel.settings.SettingsManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_bottom.*
 
@@ -43,6 +43,7 @@ class BottomActivity : AppCompatActivity() {
     private lateinit var closeFaqFragObserver: Observer<Fragment>
     private lateinit var updateUserInfoObserver : Observer<Int>
     private lateinit var fragmentManager: FragmentManager
+    private lateinit var disconnectObserver: Observer<Boolean>
 
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
@@ -97,8 +98,13 @@ class BottomActivity : AppCompatActivity() {
             updateUserInfo(it)
         }
 
+        disconnectObserver = Observer {
+            seekAndDestroy()
+        }
+
         settingsManager.openFaqLiveData.observeForever(openFaqFragmentObserver)
         settingsManager.openFragChangePassLiveData.observeForever(openFragChangePassObserver)
+        settingsManager.disconnect.observeForever(disconnectObserver)
         changePasswordManager.closeFragPassLiveData.observeForever(closeFragPassObserver)
         faqManager.closeFaqLiveData.observeForever(closeFaqFragObserver)
         marketManager.updateUserInfoLiveData.observeForever(updateUserInfoObserver)
@@ -185,6 +191,7 @@ class BottomActivity : AppCompatActivity() {
             loginAppManager.gameInProgress = true
             settingsManager.openFaqLiveData.removeObserver(openFaqFragmentObserver)
             settingsManager.openFragChangePassLiveData.removeObserver(openFragChangePassObserver)
+            settingsManager.disconnect.removeObserver(disconnectObserver)
             changePasswordManager.closeFragPassLiveData.removeObserver(closeFragPassObserver)
             faqManager.closeFaqLiveData.removeObserver(closeFaqFragObserver)
             clearGame()
@@ -232,7 +239,7 @@ class BottomActivity : AppCompatActivity() {
         startActivity(shopIntent)
     }
 
-    fun seekAndDestroy() {
+    private fun seekAndDestroy() {
         while (supportFragmentManager.backStackEntryCount > 0) {
             supportFragmentManager.popBackStackImmediate()
         }
@@ -240,6 +247,7 @@ class BottomActivity : AppCompatActivity() {
         loginAppManager.gameInProgress = true
         settingsManager.openFaqLiveData.removeObserver(openFaqFragmentObserver)
         settingsManager.openFragChangePassLiveData.removeObserver(openFragChangePassObserver)
+        settingsManager.disconnect.removeObserver(disconnectObserver)
         changePasswordManager.closeFragPassLiveData.removeObserver(closeFragPassObserver)
         faqManager.closeFaqLiveData.removeObserver(closeFaqFragObserver)
         clearGame()

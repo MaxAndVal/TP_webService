@@ -25,6 +25,7 @@ class SettingsManager internal constructor(private val context: Context) {
     private var faqLiveData = MutableLiveData<ListOfFAQ>()
     var openFaqLiveData = MutableLiveData<Fragment>()
     var openFragChangePassLiveData = MutableLiveData<PasswordFragment>()
+    var disconnect = MutableLiveData<Boolean>()
 
     companion object : SingletonHolder<SettingsManager, Context>(::SettingsManager)
 

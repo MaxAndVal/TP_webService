@@ -11,20 +11,19 @@ import android.view.ViewGroup
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
-import com.example.lpiem.rickandmortyapp.ViewModel.Connection.LoginAppManager
-import com.example.lpiem.rickandmortyapp.ViewModel.collection.CollectionManager
 import com.example.lpiem.rickandmortyapp.Model.ResponsesFromAPI.ListOfCards
 import com.example.lpiem.rickandmortyapp.Model.ResponsesFromAPI.User
 import com.example.lpiem.rickandmortyapp.R
 import com.example.lpiem.rickandmortyapp.Util.RecyclerTouchListener
 import com.example.lpiem.rickandmortyapp.View.Collection.detail.CollectionDetailActivity
 import com.example.lpiem.rickandmortyapp.View.Connection.TAG
+import com.example.lpiem.rickandmortyapp.ViewModel.Connection.LoginAppManager
+import com.example.lpiem.rickandmortyapp.ViewModel.collection.CollectionManager
 import kotlinx.android.synthetic.main.fragment_collection.*
 import kotlinx.android.synthetic.main.price_input.view.*
 
 class CollectionFragment : androidx.fragment.app.Fragment() {
 
-    var listOfCards: ListOfCards? = null
     private lateinit var collectionManager: CollectionManager
     private lateinit var loginAppManager: LoginAppManager
     private var user: User? = null
@@ -40,7 +39,6 @@ class CollectionFragment : androidx.fragment.app.Fragment() {
         Log.d(TAG, "user : $user")
 
         collectionManager = CollectionManager.getInstance(context!!)
-        collectionManager.captureFragmentInstance(this)
 
         displayListObserver = Observer { list ->
             if (adapter == null) {
