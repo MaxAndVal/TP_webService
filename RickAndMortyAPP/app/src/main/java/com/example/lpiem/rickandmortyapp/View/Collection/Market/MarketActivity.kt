@@ -17,7 +17,7 @@ import kotlinx.android.synthetic.main.activity_market.*
 
 class MarketActivity : AppCompatActivity() {
 
-    var listOfCards: ListOfCards? = null
+    //var listOfCards: ListOfCards? = null
     private lateinit var marketManager: MarketManager
     private lateinit var loginAppManager: LoginAppManager
     private var user: User? = null
@@ -60,9 +60,7 @@ class MarketActivity : AppCompatActivity() {
             override fun onClick(view: View, position: Int) {
                 val card = (rv_market.adapter as MarketAdapter).getDataSet().cards?.get(position)
                 if (card!!.price!! < user!!.userWallet!!) {
-                    marketManager.buyCard(card, user!!.userId, friendId)
-                    marketManager.rickAndMortyAPI.updateUserInfo(user!!.userId)
-
+                    marketManager.buyCard(card, user, friendId)
                 } else {
                     Toast.makeText(applicationContext, getString(R.string.too_poor_to_buy), Toast.LENGTH_SHORT).show()
                 }
