@@ -17,6 +17,16 @@ class OpenDeckActivity : AppCompatActivity() {
     private lateinit var updateDeckCountObserver: Observer<Int>
     private lateinit var newCardObserver: Observer<Int>
 
+    companion object {
+        lateinit var obs: Observer<Int>
+        fun setObserver(observer: Observer<Int>) {
+            obs = observer
+        }
+        fun getObserver() : Observer<Int> {
+            return obs
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_open_deck)
@@ -26,7 +36,10 @@ class OpenDeckActivity : AppCompatActivity() {
         }
 
         newCardObserver = Observer {
-            getInfoNewCards(it)
+            if (openDeckManager.showDetails) {
+                getInfoNewCards(it)
+                openDeckManager.showDetails = false
+            }
         }
 
         openDeckManager.updateDeckCountLiveData.observeForever(updateDeckCountObserver)
@@ -35,6 +48,11 @@ class OpenDeckActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+
+        while (openDeckManager.infoNewCardLiveData.hasObservers()) {
+            openDeckManager.infoNewCardLiveData.removeObserver(newCardObserver)
+        }
+
         iv_closeOpenDeck.setOnClickListener { onBackPressed() }
         tv_openYourDeck.text = String.format(
                 getString(R.string.number_of_deck_to_open),
@@ -44,7 +62,7 @@ class OpenDeckActivity : AppCompatActivity() {
             if (openDeckManager.loginAppManager.connectedUser!!.deckToOpen!! > 0) {
                 showAnimation(true)
                 openDeckManager.infoNewCardLiveData.observeForever(newCardObserver)
-                openDeckManager.showDetails = true
+                OpenDeckActivity.setObserver(newCardObserver)
                 openDeckManager.openRandomDeck(openDeckManager.loginAppManager.connectedUser!!.deckToOpen)
             }
         }
@@ -81,7 +99,6 @@ class OpenDeckActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         openDeckManager.updateDeckCountLiveData.removeObserver(updateDeckCountObserver)
-        openDeckManager.infoNewCardLiveData.removeObserver(newCardObserver)
         openDeckManager.showDetails = false
         av_from_code.cancelAnimation()
         openDeckManager.cancelCall()
