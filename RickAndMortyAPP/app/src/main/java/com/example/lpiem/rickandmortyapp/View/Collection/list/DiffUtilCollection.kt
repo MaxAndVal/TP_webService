@@ -25,7 +25,7 @@ class DiffUtilCollection(private var newListOfCards: ListOfCards, private var ol
 
     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
         return if (oldListOfCards.cards != null && newListOfCards.cards != null) {
-            oldListOfCards.cards!![oldItemPosition] == newListOfCards.cards!![newItemPosition]
+            oldListOfCards.cards!![oldItemPosition] == newListOfCards.cards!![newItemPosition] && oldListOfCards.cards!![oldItemPosition].amount == newListOfCards.cards!![newItemPosition].amount
         } else {
             return false
         }

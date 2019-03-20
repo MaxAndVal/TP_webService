@@ -61,5 +61,25 @@ class ListOfCards : Parcelable {
         return "ListOfCards(code=$code, message=$message, cards=$cards)"
     }
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as ListOfCards
+
+        if (code != other.code) return false
+        if (message != other.message) return false
+        if (cards != other.cards) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = code ?: 0
+        result = 31 * result + (message?.hashCode() ?: 0)
+        result = 31 * result + (cards?.hashCode() ?: 0)
+        return result
+    }
+
 
 }

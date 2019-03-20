@@ -28,9 +28,8 @@ class CollectionFragment : androidx.fragment.app.Fragment() {
     private lateinit var loginAppManager: LoginAppManager
     private var user: User? = null
     private var adapter: CollectionAdapter? = null
-    private var displayListLiveData = MutableLiveData<ListOfCards>()
     private lateinit var displayListObserver: Observer<ListOfCards>
-    private lateinit var isAddCardSuccededObserver: Observer<Boolean>
+    private lateinit var isAddCardSuccededObserver: Observer<ListOfCards>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,18 +41,17 @@ class CollectionFragment : androidx.fragment.app.Fragment() {
         collectionManager = CollectionManager.getInstance(context!!)
 
         displayListObserver = Observer { list ->
-            if (adapter == null) {
-                collection_loader.visibility = GONE
-                rv_collection.visibility = VISIBLE
-            }
             updateAdapter(list)
         }
-        displayListLiveData.observeForever(displayListObserver)
 
         isAddCardSuccededObserver = Observer {
-            if(it)collectionManager.getListOfDecks(user, displayListLiveData)
+            updateList(it)
         }
-        collectionManager.isAddCardSuccededLiveData.observeForever(isAddCardSuccededObserver)
+
+    }
+
+    private fun updateList(newList:ListOfCards) {
+        adapter?.updateDataSet(newList)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -64,6 +62,10 @@ class CollectionFragment : androidx.fragment.app.Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         rv_collection.layoutManager = GridLayoutManager(context, 3)
+
+        collectionManager.addCardSuccededLiveData.observeForever(isAddCardSuccededObserver)
+        collectionManager.displayListLiveData.observeForever(displayListObserver)
+
         rv_collection.addOnItemTouchListener(RecyclerTouchListener(context!!, rv_collection, object : RecyclerTouchListener.ClickListener {
 
 
@@ -107,16 +109,20 @@ class CollectionFragment : androidx.fragment.app.Fragment() {
         if (adapter == null) {
             adapter = CollectionAdapter(list)
             rv_collection.adapter = adapter
-            adapter!!.updateList(list)
+            adapter!!.updateDataSet(list)
+            collection_loader.visibility = GONE
+            rv_collection.visibility = VISIBLE
         } else {
-            adapter!!.updateList(list)
+            adapter!!.updateDataSet(list)
+            collection_loader.visibility = GONE
+            rv_collection.visibility = VISIBLE
         }
     }
 
     override fun onDestroyView() {
         collectionManager.cancelCall()
-        displayListLiveData.removeObserver(displayListObserver)
-        //isAddCardSucceded.removeObserver()
+        collectionManager.displayListLiveData.removeObserver(displayListObserver)
+        //addCardSucceded.removeObserver()
         super.onDestroyView()
     }
 
@@ -125,7 +131,7 @@ class CollectionFragment : androidx.fragment.app.Fragment() {
             rv_collection.visibility = GONE
             collection_loader.visibility = VISIBLE
         }
-        collectionManager.getListOfDecks(user, displayListLiveData)
+        collectionManager.getListOfDecks(user)
         super.onResume()
     }
 }
