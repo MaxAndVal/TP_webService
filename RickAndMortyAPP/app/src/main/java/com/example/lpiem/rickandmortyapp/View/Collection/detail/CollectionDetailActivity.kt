@@ -7,6 +7,8 @@ import androidx.lifecycle.Observer
 import com.example.lpiem.rickandmortyapp.Model.ResponsesFromAPI.Card
 import com.example.lpiem.rickandmortyapp.Model.ResponsesFromAPI.DetailledCard
 import com.example.lpiem.rickandmortyapp.R
+import com.example.lpiem.rickandmortyapp.View.BackActivity.OpenDeckActivity
+import com.example.lpiem.rickandmortyapp.ViewModel.BackActivity.OpenDeckManager
 import com.example.lpiem.rickandmortyapp.ViewModel.collection.DetailCollectionManager
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_collection_detail.*
@@ -16,12 +18,14 @@ class CollectionDetailActivity : AppCompatActivity() {
     private lateinit var currentCard: Card
     private val detailManager = DetailCollectionManager.getInstance(this)
     private lateinit var cardDetailDisplayObserver: Observer<DetailledCard>
+    private lateinit var openDeckManager: OpenDeckManager
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_collection_detail)
 
+        openDeckManager = OpenDeckManager.getInstance(this)
         cardDetailDisplayObserver = Observer { detailedCard ->
             card_detail_background.visibility = View.VISIBLE
             val status = detailedCard.status
@@ -61,6 +65,9 @@ class CollectionDetailActivity : AppCompatActivity() {
     override fun onBackPressed() {
         detailManager.listOfNewCards = null
         detailManager.cardDetailDisplay.removeObserver(cardDetailDisplayObserver)
+        while (openDeckManager.infoNewCardLiveData.hasObservers()) {
+            openDeckManager.infoNewCardLiveData.removeObserver(OpenDeckActivity.getObserver())
+        }
         detailManager.cancelCall()
         finish()
     }

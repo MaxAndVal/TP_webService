@@ -19,7 +19,7 @@ class OpenDeckManager  private constructor(private val context: Context) {
 
     internal val loginAppManager = LoginAppManager.getInstance(context)
     private val rickAndMortyAPI = RickAndMortyRetrofitSingleton.getInstance(context)
-    var showDetails = true
+    var showDetails = false
     private var listOfCardsLiveData = MutableLiveData<ListOfCards>()
     private var responseFromApiLiveData = MutableLiveData<UserResponse>()
     var updateDeckCountLiveData = MutableLiveData<Int>()
@@ -39,7 +39,6 @@ class OpenDeckManager  private constructor(private val context: Context) {
         updateDeckCountLiveData.postValue(user.deckToOpen!!)
 
         if (showDetails) infoNewCardLiveData.postValue(user.deckToOpen!!)
-
         responseFromApiLiveData = rickAndMortyAPI.updateUserInfo(userId)
         responseFromApiLiveData.observeOnce(Observer {
             updateUserInfoTreatment(it)
@@ -62,6 +61,7 @@ class OpenDeckManager  private constructor(private val context: Context) {
         if(deckToOpen!! > 0) {
             listOfCardsLiveData = rickAndMortyAPI.openRandomDeck(userId)
             listOfCardsLiveData.observeOnce(Observer {
+                showDetails = true
                 openRandomDeckTreatment(it)
             })
         }
