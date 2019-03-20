@@ -18,6 +18,7 @@ class CollectionManager private constructor(private val context: Context) {
 
     private var rickAndMortyAPI = RickAndMortyRetrofitSingleton.getInstance(context)
     private var collectionLiveData = MutableLiveData<ListOfCards>()
+    private var isAddCardSuccededLiveData = MutableLiveData<Boolean>()
 
 
     var collectionFragment: CollectionFragment? = null
@@ -35,8 +36,13 @@ class CollectionManager private constructor(private val context: Context) {
     }
 
 
-    private fun addCardToMarket() {
-        Toast.makeText(context, "Card is now on the market !", Toast.LENGTH_LONG).show()
+    private fun addCardToMarket(it: ListOfCards) {
+        if(it.code == SUCCESS){
+            Toast.makeText(context, "Card is now on the market !", Toast.LENGTH_LONG).show()
+        }else{
+            Toast.makeText(context, it.message, Toast.LENGTH_LONG).show()
+        }
+
     }
 
     private fun listOfCardTreatment(response: ListOfCards) {
@@ -58,10 +64,10 @@ class CollectionManager private constructor(private val context: Context) {
         })
     }
 
-    fun sellACard(userId: Int, card: Card, price: Int) {
-        collectionLiveData = rickAndMortyAPI.addCardToMarket(userId, card, price)
+    fun sellACard(user: User, card: Card, price: Int) {
+        collectionLiveData = rickAndMortyAPI.addCardToMarket(user.userId!!, card, price)
         collectionLiveData.observeOnce(Observer {
-            addCardToMarket()
+            addCardToMarket(it)
         })
     }
 }

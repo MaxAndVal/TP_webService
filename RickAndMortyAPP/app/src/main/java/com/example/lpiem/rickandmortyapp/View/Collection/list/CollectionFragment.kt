@@ -31,6 +31,7 @@ class CollectionFragment : androidx.fragment.app.Fragment() {
     private var adapter: CollectionAdapter? = null
     private var displayListLiveData = MutableLiveData<ListOfCards>()
     private lateinit var displayListObserver: Observer<ListOfCards>
+    private lateinit var isAddCardSuccededObserver : Observer<Boolean>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,6 +51,9 @@ class CollectionFragment : androidx.fragment.app.Fragment() {
             updateAdapter(list)
         }
         displayListLiveData.observeForever(displayListObserver)
+        isAddCardSuccededObserver = Observer {
+            if(it)onResume()
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -82,7 +86,7 @@ class CollectionFragment : androidx.fragment.app.Fragment() {
                                 isValid = false
                             }
                             if (isValid) {
-                                collectionManager.sellACard(user!!.userId!!, card!!, price.toString().toInt())
+                                collectionManager.sellACard(user!!, card!!, price.toString().toInt(), displayListLiveData)
                             }
                             if (isValid) {
                                 dialog.dismiss()
@@ -111,6 +115,7 @@ class CollectionFragment : androidx.fragment.app.Fragment() {
     override fun onDestroyView() {
         collectionManager.cancelCall()
         displayListLiveData.removeObserver(displayListObserver)
+        //isAddCardSucceded.removeObserver()
         super.onDestroyView()
     }
 
