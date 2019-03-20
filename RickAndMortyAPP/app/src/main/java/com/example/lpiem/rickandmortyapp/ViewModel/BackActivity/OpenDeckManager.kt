@@ -1,16 +1,18 @@
 package com.example.lpiem.rickandmortyapp.ViewModel.BackActivity
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.example.lpiem.rickandmortyapp.Data.Repository.RickAndMortyRetrofitSingleton
+import com.example.lpiem.rickandmortyapp.Data.Repository.SUCCESS
 import com.example.lpiem.rickandmortyapp.Model.ResponsesFromAPI.Card
 import com.example.lpiem.rickandmortyapp.Model.ResponsesFromAPI.ListOfCards
 import com.example.lpiem.rickandmortyapp.Model.ResponsesFromAPI.UserResponse
 import com.example.lpiem.rickandmortyapp.Util.SingletonHolder
 import com.example.lpiem.rickandmortyapp.Util.observeOnce
+import com.example.lpiem.rickandmortyapp.View.Connection.TAG
 import com.example.lpiem.rickandmortyapp.ViewModel.Connection.LoginAppManager
-import com.example.lpiem.rickandmortyapp.ViewModel.Home.HomeManager
 import com.example.lpiem.rickandmortyapp.ViewModel.collection.DetailCollectionManager
 
 class OpenDeckManager  private constructor(private val context: Context) {
@@ -45,8 +47,10 @@ class OpenDeckManager  private constructor(private val context: Context) {
     }
 
     private fun updateUserInfoTreatment(result: UserResponse) {
-        val homeManager = HomeManager.getInstance(context)
-        homeManager.updateUserInfo(result)
+        Log.d(TAG, "updateUserInfoTreatment -> user = $result")
+        if (result.code == SUCCESS) {
+            loginAppManager.connectedUser = result.user
+        }
         val user = loginAppManager.connectedUser
         val decks = user!!.deckToOpen!!
         updateDeckCountLiveData.postValue(decks)
