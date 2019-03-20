@@ -7,17 +7,16 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
-import com.example.lpiem.rickandmortyapp.ViewModel.Connection.LoginAppManager
-import com.example.lpiem.rickandmortyapp.ViewModel.Market.MarketManager
 import com.example.lpiem.rickandmortyapp.Model.ResponsesFromAPI.ListOfCards
 import com.example.lpiem.rickandmortyapp.Model.ResponsesFromAPI.User
 import com.example.lpiem.rickandmortyapp.R
 import com.example.lpiem.rickandmortyapp.Util.RecyclerTouchListener
+import com.example.lpiem.rickandmortyapp.ViewModel.Connection.LoginAppManager
+import com.example.lpiem.rickandmortyapp.ViewModel.Market.MarketManager
 import kotlinx.android.synthetic.main.activity_market.*
 
 class MarketActivity : AppCompatActivity() {
 
-    //var listOfCards: ListOfCards? = null
     private lateinit var marketManager: MarketManager
     private lateinit var loginAppManager: LoginAppManager
     private var user: User? = null
