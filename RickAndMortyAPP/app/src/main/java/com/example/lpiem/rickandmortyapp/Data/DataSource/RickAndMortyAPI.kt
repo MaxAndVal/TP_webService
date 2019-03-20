@@ -54,7 +54,7 @@ interface RickAndMortyAPI {
 
     ///KAAMELOTT GAME
 
-    @PUT("/users/playGame/{id}")
+    @PUT("/users/{id}/playGame")
     fun putNewDate(
             @Path("id") userId: Int, @Body body: JsonObject
     ): Call<UserResponse>
@@ -66,12 +66,12 @@ interface RickAndMortyAPI {
 
     ///WALLET
 
-    @PUT("/users/wallet/{id}")
+    @PUT("/users/{id}/wallet")
     fun updateWallet(
             @Path("id") userId: Int, @Body body: JsonObject
     ): Call<UserResponse>
 
-    @GET("/users/wallet/{id}")
+    @GET("/users/{id}/wallet/")
     fun getWallet(
             @Path("id") userId: Int
     ): Call<Wallet>
@@ -79,12 +79,12 @@ interface RickAndMortyAPI {
 
     ///CARD
 
-    @GET("/cards/randomDeckGenerator/{id}")
+    @GET("/users/{id}/cards/randomDeckGenerator/")
     fun getRandomDeck(
             @Path("id") userId: Int
     ): Call<ListOfCards>
 
-    @GET("/users/deck/{id}")
+    @GET("/users/{id}/deck/")
     fun getListOfCardsById(
             @Path("id") userId: Int
     ): Call<ListOfCards>
@@ -173,7 +173,7 @@ interface RickAndMortyAPI {
             @Path("amount") amount: Int
     ): Call<ListOfCards>
 
-    @PUT("/users/playMemory/{id}")
+    @PUT("/users/{id}/playMemory/")
     fun putNewMemoryDate(
             @Path("id") userId: Int, @Body body: JsonObject
     ): Call<UserResponse>
