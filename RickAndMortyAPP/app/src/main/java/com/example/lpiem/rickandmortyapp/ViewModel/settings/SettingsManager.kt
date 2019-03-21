@@ -11,6 +11,7 @@ import com.example.lpiem.rickandmortyapp.Data.Repository.SUCCESS
 import com.example.lpiem.rickandmortyapp.Model.ResponsesFromAPI.FAQ
 import com.example.lpiem.rickandmortyapp.Model.ResponsesFromAPI.ListOfFAQ
 import com.example.lpiem.rickandmortyapp.R
+import com.example.lpiem.rickandmortyapp.Util.SingleLiveEvent
 import com.example.lpiem.rickandmortyapp.Util.SingletonHolder
 import com.example.lpiem.rickandmortyapp.Util.observeOnce
 import com.example.lpiem.rickandmortyapp.View.Connection.TAG
@@ -25,7 +26,7 @@ class SettingsManager internal constructor(private val context: Context) {
     private var faqLiveData = MutableLiveData<ListOfFAQ>()
     var openFaqLiveData = MutableLiveData<Fragment>()
     var openFragChangePassLiveData = MutableLiveData<PasswordFragment>()
-    var disconnect = MutableLiveData<Boolean>()
+    var disconnect = SingleLiveEvent<Boolean>()
 
     companion object : SingletonHolder<SettingsManager, Context>(::SettingsManager)
 

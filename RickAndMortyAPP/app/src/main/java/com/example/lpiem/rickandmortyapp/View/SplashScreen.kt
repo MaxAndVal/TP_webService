@@ -44,11 +44,16 @@ class SplashScreen : AppCompatActivity() {
         Log.d(com.example.lpiem.rickandmortyapp.View.Connection.TAG, "existing token = ${preferencesHelper.deviceToken}")
 
         tokenConnectionObserver = Observer {
+            Log.d("TEST", "tokenConnectionObserver " + it.toString())
+
             if (it.code == SUCCESS) {
+                Log.d("TEST", "if from tokenConnectionObserver")
+
                 loginAppManager.loginTreatment(it, LoginFrom.FROM_SPLASH_SCREEN)
                 loginAppManager.loginLiveData.removeObserver(tokenConnectionObserver)
                 finish()
             } else {
+                Log.d("TEST", "else from tokenConnectionObserver")
                 val loginActivityIntent = Intent(this@SplashScreen, LoginActivity::class.java)
                 startActivity(loginActivityIntent)
                 loginAppManager.loginLiveData.removeObserver(tokenConnectionObserver)
@@ -90,8 +95,11 @@ class SplashScreen : AppCompatActivity() {
                     HEROKU_VOID -> {
                         Log.d(com.example.lpiem.rickandmortyapp.View.Connection.TAG, " R : Heroku should be awake")
                         if (preferencesHelper.deviceToken.length == 30) {
+                            Log.d("TEST", "true from heroku + token " + preferencesHelper.deviceToken)
+
                             loginAppManager.connectionWithToken(preferencesHelper.deviceToken, tokenConnectionObserver)
                         } else {
+                            Log.d("TEST", "esle from heroku")
                             val loginActivityIntent = Intent(this@SplashScreen, LoginActivity::class.java)
                             startActivity(loginActivityIntent)
                             finish()

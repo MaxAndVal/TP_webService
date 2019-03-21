@@ -41,7 +41,7 @@ class BottomActivity : AppCompatActivity() {
     private lateinit var openFragChangePassObserver: Observer<PasswordFragment>
     private lateinit var closeFragPassObserver: Observer<Fragment>
     private lateinit var closeFaqFragObserver: Observer<Fragment>
-    private lateinit var updateUserInfoObserver : Observer<Int>
+    private lateinit var updateUserInfoObserver: Observer<Int>
     private lateinit var fragmentManager: FragmentManager
     private lateinit var disconnectObserver: Observer<Boolean>
 
@@ -94,12 +94,12 @@ class BottomActivity : AppCompatActivity() {
             closeFAQ(it)
         }
 
-        updateUserInfoObserver = Observer { 
+        updateUserInfoObserver = Observer {
             updateUserInfo(it)
         }
 
         disconnectObserver = Observer {
-            seekAndDestroy()
+            if (loginAppManager.connectedUser == null) seekAndDestroy()
         }
 
         settingsManager.openFaqLiveData.observeForever(openFaqFragmentObserver)
@@ -111,10 +111,6 @@ class BottomActivity : AppCompatActivity() {
 
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
-        tv_wallet.text = String.format(getString(R.string.wallet_amount), loginAppManager.connectedUser?.userWallet, " ")
-        tv_wallet.setOnLongClickListener { iAmPickleRick() }
-        tv_wallet.setOnClickListener { openShop() }
-        tv_deckToOpen.setOnClickListener { openDeck(loginAppManager.connectedUser!!.deckToOpen!!) }
         openFragment(HomeFragment())
     }
 
@@ -240,6 +236,7 @@ class BottomActivity : AppCompatActivity() {
     }
 
     private fun seekAndDestroy() {
+        Log.d("TEST", "seek and destroy")
         while (supportFragmentManager.backStackEntryCount > 0) {
             supportFragmentManager.popBackStackImmediate()
         }
@@ -251,11 +248,12 @@ class BottomActivity : AppCompatActivity() {
         changePasswordManager.closeFragPassLiveData.removeObserver(closeFragPassObserver)
         faqManager.closeFaqLiveData.removeObserver(closeFaqFragObserver)
         clearGame()
-        onDestroy()
+        super.onBackPressed()
     }
 
     override fun onResume() {
         super.onResume()
+
         fragmentManager = supportFragmentManager
         tv_deckToOpen.setOnClickListener {
             val deckToOpen = loginAppManager.connectedUser?.deckToOpen
@@ -264,8 +262,11 @@ class BottomActivity : AppCompatActivity() {
                 openDeck(deckToOpen)
             }
         }
-        tv_wallet.text = String.format(getString(R.string.wallet_amount), loginAppManager.connectedUser?.userWallet, " ")
         tv_deckToOpen.text = loginAppManager.connectedUser?.deckToOpen.toString()
+        tv_wallet.text = String.format(getString(R.string.wallet_amount), loginAppManager.connectedUser?.userWallet, " ")
+        tv_wallet.setOnLongClickListener { iAmPickleRick() }
+        tv_wallet.setOnClickListener { openShop() }
+        tv_deckToOpen.setOnClickListener { openDeck(loginAppManager.connectedUser!!.deckToOpen!!) }
     }
 
 

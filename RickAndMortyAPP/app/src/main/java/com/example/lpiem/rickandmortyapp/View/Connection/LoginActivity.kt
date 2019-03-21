@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.example.lpiem.rickandmortyapp.R
 import com.example.lpiem.rickandmortyapp.Util.observeOnce
+import com.example.lpiem.rickandmortyapp.View.BackActivity.BottomActivity
 import com.example.lpiem.rickandmortyapp.View.Settings.LostPasswordActivity
 import com.example.lpiem.rickandmortyapp.ViewModel.Connection.LoginAppManager
 import com.facebook.CallbackManager
@@ -125,8 +126,15 @@ class LoginActivity : AppCompatActivity() {
     private fun initObservers() {
 
         finishLoginActivityObserver = Observer {
-            Log.d("TEST", "finishLoginActivityObserver")
-            finish()
+            Log.d("TEST", "finishLoginActivityObserver + user : " + loginAppManager.connectedUser.toString())
+            if (loginAppManager.connectedUser != null) {
+                var intent = Intent(this, BottomActivity::class.java)
+                startActivity(intent)
+                Handler().postDelayed({
+                    Log.d("TEST", "handler")
+                    finish()
+                }, 1000L)
+            }
         }
 
         loaderObserver = Observer { isVisible ->
@@ -149,9 +157,9 @@ class LoginActivity : AppCompatActivity() {
 
         resolveIntentObserver = Observer { intent ->
             if (loginAppManager.connectedUser != null) {
-                Log.d("TEST", "in resolve")
-                removeObs()
+                Log.d("TEST", "in resolve" + intent.type)
                 startActivity(intent)
+                removeObs()
             }
         }
 
@@ -191,6 +199,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun triggerLivesData() {
+        Log.d("TEST", "triggerLivesData")
         loginAppManager.finishActivityLiveData.observeOnce(finishLoginActivityObserver)
         loginAppManager.alreadyConnectedToFacebook.observeForever(alreadyConnectedWithFacebookObserver)
         loginAppManager.facebookInit.observeForever(facebookInitObserver)
