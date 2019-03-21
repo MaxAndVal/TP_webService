@@ -46,10 +46,12 @@ class SplashScreen : AppCompatActivity() {
         tokenConnectionObserver = Observer {
             if (it.code == SUCCESS) {
                 loginAppManager.loginTreatment(it, LoginFrom.FROM_SPLASH_SCREEN)
+                loginAppManager.loginLiveData.removeObserver(tokenConnectionObserver)
                 finish()
             } else {
                 val loginActivityIntent = Intent(this@SplashScreen, LoginActivity::class.java)
                 startActivity(loginActivityIntent)
+                loginAppManager.loginLiveData.removeObserver(tokenConnectionObserver)
                 finish()
             }
         }

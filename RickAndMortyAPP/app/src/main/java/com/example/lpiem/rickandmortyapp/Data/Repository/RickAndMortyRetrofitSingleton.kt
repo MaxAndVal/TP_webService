@@ -98,6 +98,7 @@ class RickAndMortyRetrofitSingleton private constructor(private val context: Con
                         ACCEPT_FRIENDSHIP,
                         DEL_A_FRIEND,
                         LOST_CODE,
+                        LOGIN_WITH_CODE,
                         CHANGE_PASSWORD -> {
                             liveData.postValue(result as UserResponse)
                         }

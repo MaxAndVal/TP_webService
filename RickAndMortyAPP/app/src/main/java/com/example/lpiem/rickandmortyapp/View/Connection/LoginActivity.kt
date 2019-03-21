@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
@@ -39,13 +40,13 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var alreadyConnectedWithFacebookObserver: Observer<Boolean>
     private lateinit var finishLoginActivityObserver: Observer<Boolean>
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
         loginAppManager = LoginAppManager.getInstance(this)
         loginAppManager.mGoogleSignInClient = GoogleSignIn.getClient(this, loginAppManager.instanciateGSO())
-
 
         initObservers()
         triggerLivesData()
@@ -113,7 +114,10 @@ class LoginActivity : AppCompatActivity() {
     private fun initObservers() {
 
         finishLoginActivityObserver = Observer {
-            if (it) finish()
+            if (it && loginAppManager.connectedUser!=null){
+                finish()
+            }
+
         }
 
         loaderObserver = Observer { isVisible ->

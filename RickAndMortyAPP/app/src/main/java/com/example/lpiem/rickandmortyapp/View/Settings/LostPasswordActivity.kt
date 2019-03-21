@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.example.lpiem.rickandmortyapp.R
 import com.example.lpiem.rickandmortyapp.Util.observeOnce
+import com.example.lpiem.rickandmortyapp.View.Connection.LoginActivity
+import com.example.lpiem.rickandmortyapp.ViewModel.Connection.LoginAppManager
 import com.example.lpiem.rickandmortyapp.ViewModel.settings.LostPasswordManager
 import kotlinx.android.synthetic.main.activity_lost_password.*
 
@@ -25,6 +27,7 @@ class LostPasswordActivity : AppCompatActivity() {
         }
         isLoginWithCodeObserver = Observer {
             if (it == 200) {
+                val loginAppManager = LoginAppManager.getInstance(this)
                 finish()
             } else if (it == 204) {
                 tv_errorInput.text = getString(R.string.ErrorInvalideCode)

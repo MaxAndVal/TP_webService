@@ -48,7 +48,7 @@ class LoginAppManager private constructor(private var context: Context) {
     var connectedUser: User? = null
     var gameInProgress = true
     var memoryInProgress = true
-    private var loginLiveData = MutableLiveData<UserResponse>()
+    var loginLiveData = MutableLiveData<UserResponse>()
     var loaderDisplay = MutableLiveData<Int>()
     var googleBtnSwitch = MutableLiveData<Boolean>()
     var resolveIntent = MutableLiveData<Intent>()
@@ -242,6 +242,7 @@ class LoginAppManager private constructor(private var context: Context) {
         val message = userResponse.message
         when (code) {
             SUCCESS -> {
+                Log.d("TEST", "success")
                 val results = userResponse.user
                 loaderDisplay.postValue(View.GONE)
                 if (connectedToGoogle) {
@@ -255,6 +256,8 @@ class LoginAppManager private constructor(private var context: Context) {
                 val token = userResponse.user?.sessionToken
                 when (from) {
                     LoginFrom.FROM_LOGIN -> {
+                        Log.d("TEST", "token from log:")
+
                         if (token != null && token.length == 30) {
                             preferencesHelper.deviceToken = token
                         }
@@ -262,7 +265,14 @@ class LoginAppManager private constructor(private var context: Context) {
                         resolveIntent.postValue(homeIntent)
                         finishActivityLiveData.postValue(true)
                     }
+                    LoginFrom.FROM_LOST_PASSWORD->{
+                        Log.d("TEST", "token from pass:")
+                        Toast.makeText(context, String.format(context.getString(R.string.welcome, name)), Toast.LENGTH_SHORT).show()
+                        resolveIntent.postValue(homeIntent)
+                        finishActivityLiveData.postValue(true)
+                    }
                     else -> {
+                        Log.d("TEST", "token :"+token)
                         if (token != null && token.length == 30) {
                             Toast.makeText(context, String.format(context.getString(R.string.welcome, name)), Toast.LENGTH_SHORT).show()
                             startIntentSplashScreenLiveData.postValue(homeIntent)
@@ -274,6 +284,7 @@ class LoginAppManager private constructor(private var context: Context) {
                 }
             }
             else -> {
+                Log.d("TEST", "fail")
                 Toast.makeText(context, String.format(context.getString(R.string.code_message), code, message), Toast.LENGTH_SHORT).show()
                 loaderDisplay.postValue(View.GONE)
             }

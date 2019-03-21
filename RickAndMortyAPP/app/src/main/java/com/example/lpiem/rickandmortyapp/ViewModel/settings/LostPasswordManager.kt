@@ -55,14 +55,14 @@ class LostPasswordManager private constructor(private var context: Context) {
     fun enterWithCode(code: String) {
         val jsonBody = JsonObject()
         jsonBody.addProperty(UserCode.dbField, code)
-        enterCodeLiveData = rickAndMortyAPI.loginWithCode(jsonBody)
         enterCodeLiveData.observeOnce(Observer {
             loginWithCodeTreatment(it)
         })
-
+        enterCodeLiveData = rickAndMortyAPI.loginWithCode(jsonBody)
     }
 
     private fun loginWithCodeTreatment(it: UserResponse?) {
+        Log.d(TAG, "login"+ it.toString())
         if (it?.code == 200) {
             isLoginWithCode.postValue(it.code)
             loginAppManager.loginTreatment(it, LoginFrom.FROM_LOST_PASSWORD)

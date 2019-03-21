@@ -27,6 +27,5 @@ enum class RetrofitCallTypes {
     HEROKU_VOID,
     CHANGE_PASSWORD,
     LOST_CODE,
-
     LOGIN_WITH_CODE
 }
