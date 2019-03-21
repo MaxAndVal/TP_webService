@@ -59,7 +59,7 @@ class LostPasswordManager private constructor(private var context: Context) {
         enterCodeLiveData.observeOnce(Observer {
             loginWithCodeTreatment(it)
         })
-
+        enterCodeLiveData = rickAndMortyAPI.loginWithCode(jsonBody)
     }
 
     private fun loginWithCodeTreatment(it: UserResponse?) {

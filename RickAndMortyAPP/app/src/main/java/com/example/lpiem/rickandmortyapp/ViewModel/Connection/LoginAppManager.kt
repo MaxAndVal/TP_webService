@@ -255,6 +255,16 @@ class LoginAppManager private constructor(private var context: Context) {
                 val token = userResponse.user?.sessionToken
                 when (from) {
                     LoginFrom.FROM_LOGIN -> {
+                        Log.d("TEST", "else")
+                        if (token != null && token.length == 30) {
+                            preferencesHelper.deviceToken = token
+                        }
+                        Toast.makeText(context, String.format(context.getString(R.string.welcome, name)), Toast.LENGTH_SHORT).show()
+                        resolveIntent.postValue(homeIntent)
+                        finishActivityLiveData.postValue(true)
+                    }
+                    LoginFrom.FROM_LOST_PASSWORD -> {
+                        Log.d("TEST", "token from pass:")
                         if (token != null && token.length == 30) {
                             preferencesHelper.deviceToken = token
                         }
@@ -263,6 +273,8 @@ class LoginAppManager private constructor(private var context: Context) {
                         finishActivityLiveData.postValue(true)
                     }
                     else -> {
+                        Log.d("TEST", "else")
+
                         if (token != null && token.length == 30) {
                             Toast.makeText(context, String.format(context.getString(R.string.welcome, name)), Toast.LENGTH_SHORT).show()
                             startIntentSplashScreenLiveData.postValue(homeIntent)
