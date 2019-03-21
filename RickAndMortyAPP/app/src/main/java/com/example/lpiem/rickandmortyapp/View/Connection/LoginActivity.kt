@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.example.lpiem.rickandmortyapp.R
 import com.example.lpiem.rickandmortyapp.Util.observeOnce
+import com.example.lpiem.rickandmortyapp.View.Settings.LostPasswordActivity
 import com.example.lpiem.rickandmortyapp.ViewModel.Connection.LoginAppManager
 import com.facebook.CallbackManager
 import com.facebook.FacebookCallback
@@ -47,11 +48,9 @@ class LoginActivity : AppCompatActivity() {
 
         loginAppManager = LoginAppManager.getInstance(this)
         loginAppManager.mGoogleSignInClient = GoogleSignIn.getClient(this, loginAppManager.instanciateGSO())
-
         initObservers()
         triggerLivesData()
 
-        regularConnectionSetup()
         setUpGoogle()
         loginAppManager.facebookSetup()
 
@@ -66,8 +65,15 @@ class LoginActivity : AppCompatActivity() {
             closeKeyboard()
         }
         tv_signIn.setOnClickListener { loginAppManager.regularSignIn() }
-        tv_lostPassword.setOnClickListener { loginAppManager.openActivityLostPassword() }
+        tv_lostPassword.setOnClickListener {lauchLostPassAct()}
 
+
+
+    }
+
+    private fun lauchLostPassAct() {
+        val lostPassIntent = Intent(this, LostPasswordActivity::class.java)
+        startActivity(lostPassIntent)
     }
 
     private fun closeKeyboard() {
@@ -104,6 +110,7 @@ class LoginActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         clearEditTexts()
+        regularConnectionSetup()
     }
 
     private fun clearEditTexts() {
@@ -112,7 +119,6 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun initObservers() {
-
         finishLoginActivityObserver = Observer {
             if (it && loginAppManager.connectedUser!=null){
                 finish()
@@ -137,9 +143,9 @@ class LoginActivity : AppCompatActivity() {
                 }
             }
         }
-
+        // TODO
         resolveIntentObserver = Observer { intent ->
-            startActivity(intent)
+            if(loginAppManager.connectedUser!=null)startActivity(intent)
         }
 
         facebookInitObserver = Observer {

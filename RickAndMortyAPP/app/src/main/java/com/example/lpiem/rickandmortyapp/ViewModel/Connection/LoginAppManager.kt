@@ -94,7 +94,7 @@ class LoginAppManager private constructor(private var context: Context) {
 
     fun openActivityLostPassword() {
         val lostPassIntent = Intent(context, LostPasswordActivity::class.java)
-        resolveIntent.postValue(lostPassIntent)
+        //resolveIntent.postValue(lostPassIntent)
     }
 
     // GOOGLE CONNECTION
@@ -267,6 +267,9 @@ class LoginAppManager private constructor(private var context: Context) {
                     }
                     LoginFrom.FROM_LOST_PASSWORD->{
                         Log.d("TEST", "token from pass:")
+                        if (token != null && token.length == 30) {
+                            preferencesHelper.deviceToken = token
+                        }
                         Toast.makeText(context, String.format(context.getString(R.string.welcome, name)), Toast.LENGTH_SHORT).show()
                         resolveIntent.postValue(homeIntent)
                         finishActivityLiveData.postValue(true)
