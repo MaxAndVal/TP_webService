@@ -54,6 +54,7 @@ class SettingsFragment : androidx.fragment.app.Fragment() {
                         val handler = Handler()
                         handler.postDelayed({
                             settingsManager.disconnect.postValue(true)
+                            onDestroyView()
                         }, 2000L)
                     }
                     .setNegativeButton(android.R.string.no) { dialog, which ->
