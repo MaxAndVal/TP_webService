@@ -43,7 +43,6 @@ class OpenDeckActivity : AppCompatActivity() {
         }
 
         openDeckManager.updateDeckCountLiveData.observeForever(updateDeckCountObserver)
-
     }
 
     override fun onResume() {
