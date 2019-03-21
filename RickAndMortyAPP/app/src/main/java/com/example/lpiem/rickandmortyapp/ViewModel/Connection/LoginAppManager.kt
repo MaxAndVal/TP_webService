@@ -48,7 +48,7 @@ class LoginAppManager private constructor(private var context: Context) {
     var connectedUser: User? = null
     var gameInProgress = true
     var memoryInProgress = true
-    private var loginLiveData = MutableLiveData<UserResponse>()
+    var loginLiveData = MutableLiveData<UserResponse>()
     var loaderDisplay = MutableLiveData<Int>()
     var googleBtnSwitch = MutableLiveData<Boolean>()
     var resolveIntent = MutableLiveData<Intent>()
