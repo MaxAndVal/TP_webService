@@ -55,7 +55,7 @@ class SettingsFragment : androidx.fragment.app.Fragment() {
                         handler.postDelayed({
                             if (loginAppManager.connectedUser != null) {
                                 loginAppManager.connectedUser = null
-                                settingsManager.disconnect.postValue(true)
+                                settingsManager.disconnect.value = true
                                 onDestroyView()
                             }
                         }, 2000L)
