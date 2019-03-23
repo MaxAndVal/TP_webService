@@ -68,5 +68,27 @@ class Friend : Parcelable{
         return "Friend(userId=$userId, userName=$userName, accepted=$accepted, friendImage=$friendImage)"
     }
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as Friend
+
+        if (userId != other.userId) return false
+        if (userName != other.userName) return false
+        if (accepted != other.accepted) return false
+        if (friendImage != other.friendImage) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = userId ?: 0
+        result = 31 * result + (userName?.hashCode() ?: 0)
+        result = 31 * result + (accepted?.hashCode() ?: 0)
+        result = 31 * result + (friendImage?.hashCode() ?: 0)
+        return result
+    }
+
 
 }

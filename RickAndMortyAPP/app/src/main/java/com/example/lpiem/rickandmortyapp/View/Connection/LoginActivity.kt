@@ -42,13 +42,14 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var alreadyConnectedWithFacebookObserver: Observer<Boolean>
     private lateinit var finishLoginActivityObserver: Observer<Boolean>
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
+
         loginAppManager = LoginAppManager.getInstance(this)
         loginAppManager.mGoogleSignInClient = GoogleSignIn.getClient(this, loginAppManager.instanciateGSO())
-
 
         initObservers()
         triggerLivesData()
@@ -73,12 +74,12 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun regularSignIn() {
-        var intent = Intent(this, SignInActivity::class.java)
+        val intent = Intent(this, SignInActivity::class.java)
         startActivity(intent)
     }
 
     private fun openActivityLostPassword() {
-        var intent = Intent(this, LostPasswordActivity::class.java)
+        val intent = Intent(this, LostPasswordActivity::class.java)
         startActivity(intent)
     }
 
@@ -126,14 +127,13 @@ class LoginActivity : AppCompatActivity() {
     private fun initObservers() {
 
         finishLoginActivityObserver = Observer {
-            Log.d("TEST", "finishLoginActivityObserver + user : " + loginAppManager.connectedUser.toString())
             if (loginAppManager.connectedUser != null) {
-                var intent = Intent(this, BottomActivity::class.java)
+                val intent = Intent(this, BottomActivity::class.java)
                 startActivity(intent)
                 Handler().postDelayed({
                     Log.d("TEST", "handler")
                     finish()
-                }, 1000L)
+                }, 20000L)
             }
         }
 
@@ -157,7 +157,6 @@ class LoginActivity : AppCompatActivity() {
 
         resolveIntentObserver = Observer { intent ->
             if (loginAppManager.connectedUser != null) {
-                Log.d("TEST", "in resolve" + intent.type)
                 startActivity(intent)
                 removeObs()
             }
@@ -189,7 +188,7 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    fun removeObs() {
+    private fun removeObs() {
         loginAppManager.finishActivityLiveData.removeObserver(finishLoginActivityObserver)
         loginAppManager.loaderDisplay.removeObserver(loaderObserver)
         loginAppManager.alreadyConnectedToFacebook.removeObserver(alreadyConnectedWithFacebookObserver)
@@ -199,7 +198,6 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun triggerLivesData() {
-        Log.d("TEST", "triggerLivesData")
         loginAppManager.finishActivityLiveData.observeOnce(finishLoginActivityObserver)
         loginAppManager.alreadyConnectedToFacebook.observeForever(alreadyConnectedWithFacebookObserver)
         loginAppManager.facebookInit.observeForever(facebookInitObserver)
@@ -210,12 +208,7 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         if (doubleBackToExitPressedOnce) {
-            loginAppManager.finishActivityLiveData.removeObserver(finishLoginActivityObserver)
-            loginAppManager.loaderDisplay.removeObserver(loaderObserver)
-            loginAppManager.alreadyConnectedToFacebook.removeObserver(alreadyConnectedWithFacebookObserver)
-            loginAppManager.facebookInit.removeObserver(facebookInitObserver)
-            loginAppManager.resolveIntent.removeObserver(resolveIntentObserver)
-            loginAppManager.googleBtnSwitch.removeObserver(googleBtnSwitchObserver)
+            removeObs()
             loginAppManager.cancelCall()
             super.onBackPressed()
             return

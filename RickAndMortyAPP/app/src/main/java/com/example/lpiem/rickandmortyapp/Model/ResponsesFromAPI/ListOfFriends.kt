@@ -53,4 +53,6 @@ class ListOfFriends : Parcelable {
     @Expose
     var friends: List<Friend>? = null
 
+
+
 }

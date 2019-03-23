@@ -80,7 +80,6 @@ class LoginAppManager private constructor(private var context: Context) {
     }
 
     fun connectionWithToken(token: String, observer: Observer<UserResponse>) {
-        Log.d("TEST", "connectionWithToken")
         val jsonBody = JsonObject()
         jsonBody.addProperty(SessionToken.dbField, token)
         loginLiveData = rickAndMortyAPI.loginWithToken(jsonBody)
@@ -250,22 +249,18 @@ class LoginAppManager private constructor(private var context: Context) {
                 val name = results?.userName
                 Log.d(TAG, "code = $code body = $userResponse")
                 connectedUser = userResponse.user!!
-                Log.d("TEST", "context : " + context)
-                var homeIntent = Intent(context, BottomActivity::class.java)
+                val homeIntent = Intent(context, BottomActivity::class.java)
                 val loginIntent = Intent(context, LoginActivity::class.java)
                 val token = userResponse.user?.sessionToken
                 when (from) {
                     LoginFrom.FROM_LOGIN -> {
-                        Log.d("TEST", "FROM_LOGIN")
                         if (token != null && token.length == 30) {
                             preferencesHelper.deviceToken = token
                         }
                         Toast.makeText(context, String.format(context.getString(R.string.welcome, name)), Toast.LENGTH_SHORT).show()
-                        Log.d("TEST", "FROM_LOGIN" + homeIntent.type)
                         finishActivityLiveData.value = true
                     }
                     LoginFrom.FROM_LOST_PASSWORD -> {
-                        Log.d("TEST", "FROM_LOST_PASSWORD")
                         if (token != null && token.length == 30) {
                             preferencesHelper.deviceToken = token
                         }
@@ -274,14 +269,11 @@ class LoginAppManager private constructor(private var context: Context) {
                         finishActivityLiveData.value = true
                     }
                     else -> {
-                        Log.d("TEST", "FROM else")
                         if (token != null && token.length == 30) {
                             Toast.makeText(context, String.format(context.getString(R.string.welcome, name)), Toast.LENGTH_SHORT).show()
-                            Log.d("TEST", "FROM else if" + homeIntent.type)
                             startIntentSplashScreenLiveData.value = homeIntent
                         } else {
                             Toast.makeText(context, context.getString(R.string.expired_session), Toast.LENGTH_SHORT).show()
-                            Log.d("TEST", "FROM else else" + loginIntent.type)
                             startIntentSplashScreenLiveData.value = loginIntent
                         }
                     }

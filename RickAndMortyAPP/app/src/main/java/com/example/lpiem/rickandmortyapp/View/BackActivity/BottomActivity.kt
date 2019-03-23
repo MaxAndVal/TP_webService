@@ -116,8 +116,6 @@ class BottomActivity : AppCompatActivity() {
     }
 
     private fun updateUserInfo(it: Int?) {
-        Log.d("TEST", it.toString())
-
         loginAppManager.connectedUser?.userWallet = it
     }
 
@@ -237,7 +235,6 @@ class BottomActivity : AppCompatActivity() {
     }
 
     private fun seekAndDestroy() {
-        Log.d("TEST", "seek and destroy")
         while (supportFragmentManager.backStackEntryCount > 0) {
             supportFragmentManager.popBackStackImmediate()
         }
