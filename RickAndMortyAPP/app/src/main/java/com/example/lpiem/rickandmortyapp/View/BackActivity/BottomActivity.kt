@@ -15,6 +15,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import com.example.lpiem.rickandmortyapp.R
 import com.example.lpiem.rickandmortyapp.View.Collection.list.CollectionFragment
+import com.example.lpiem.rickandmortyapp.View.Connection.LoginActivity
 import com.example.lpiem.rickandmortyapp.View.Home.HomeFragment
 import com.example.lpiem.rickandmortyapp.View.Settings.PasswordFragment
 import com.example.lpiem.rickandmortyapp.View.Settings.SettingsFragment
@@ -41,7 +42,7 @@ class BottomActivity : AppCompatActivity() {
     private lateinit var openFragChangePassObserver: Observer<PasswordFragment>
     private lateinit var closeFragPassObserver: Observer<Fragment>
     private lateinit var closeFaqFragObserver: Observer<Fragment>
-    private lateinit var updateUserInfoObserver : Observer<Int>
+    private lateinit var updateUserInfoObserver: Observer<Int>
     private lateinit var fragmentManager: FragmentManager
     private lateinit var disconnectObserver: Observer<Boolean>
 
@@ -94,12 +95,12 @@ class BottomActivity : AppCompatActivity() {
             closeFAQ(it)
         }
 
-        updateUserInfoObserver = Observer { 
+        updateUserInfoObserver = Observer {
             updateUserInfo(it)
         }
 
         disconnectObserver = Observer {
-            seekAndDestroy()
+            if (loginAppManager.connectedUser == null) seekAndDestroy()
         }
 
         settingsManager.openFaqLiveData.observeForever(openFaqFragmentObserver)
@@ -111,16 +112,10 @@ class BottomActivity : AppCompatActivity() {
 
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
-        tv_wallet.text = String.format(getString(R.string.wallet_amount), loginAppManager.connectedUser?.userWallet, " ")
-        tv_wallet.setOnLongClickListener { iAmPickleRick() }
-        tv_wallet.setOnClickListener { openShop() }
-        tv_deckToOpen.setOnClickListener { openDeck(loginAppManager.connectedUser!!.deckToOpen!!) }
         openFragment(HomeFragment())
     }
 
     private fun updateUserInfo(it: Int?) {
-        Log.d("TEST", it.toString())
-
         loginAppManager.connectedUser?.userWallet = it
     }
 
@@ -250,12 +245,17 @@ class BottomActivity : AppCompatActivity() {
         settingsManager.disconnect.removeObserver(disconnectObserver)
         changePasswordManager.closeFragPassLiveData.removeObserver(closeFragPassObserver)
         faqManager.closeFaqLiveData.removeObserver(closeFaqFragObserver)
-        clearGame()
-        onDestroy()
+        val kaamelottManager = KaamelottManager.getInstance(this)
+        kaamelottManager.turn = 0
+        kaamelottManager.score = 0
+        val intent = Intent(this, LoginActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 
     override fun onResume() {
         super.onResume()
+
         fragmentManager = supportFragmentManager
         tv_deckToOpen.setOnClickListener {
             val deckToOpen = loginAppManager.connectedUser?.deckToOpen
@@ -264,8 +264,11 @@ class BottomActivity : AppCompatActivity() {
                 openDeck(deckToOpen)
             }
         }
-        tv_wallet.text = String.format(getString(R.string.wallet_amount), loginAppManager.connectedUser?.userWallet, " ")
         tv_deckToOpen.text = loginAppManager.connectedUser?.deckToOpen.toString()
+        tv_wallet.text = String.format(getString(R.string.wallet_amount), loginAppManager.connectedUser?.userWallet, " ")
+        tv_wallet.setOnLongClickListener { iAmPickleRick() }
+        tv_wallet.setOnClickListener { openShop() }
+        tv_deckToOpen.setOnClickListener { openDeck(loginAppManager.connectedUser!!.deckToOpen!!) }
     }
 
 

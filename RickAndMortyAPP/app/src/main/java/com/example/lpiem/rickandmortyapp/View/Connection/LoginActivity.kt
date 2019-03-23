@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
@@ -12,6 +13,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.example.lpiem.rickandmortyapp.R
 import com.example.lpiem.rickandmortyapp.Util.observeOnce
+import com.example.lpiem.rickandmortyapp.View.BackActivity.BottomActivity
+import com.example.lpiem.rickandmortyapp.View.Settings.LostPasswordActivity
 import com.example.lpiem.rickandmortyapp.ViewModel.Connection.LoginAppManager
 import com.facebook.CallbackManager
 import com.facebook.FacebookCallback
@@ -32,20 +35,21 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var loginAppManager: LoginAppManager
     private var doubleBackToExitPressedOnce = false
     private lateinit var loaderObserver: Observer<Int>
-    private lateinit var googleBtnSwitchObserver : Observer<Boolean>
+    private lateinit var googleBtnSwitchObserver: Observer<Boolean>
     private lateinit var resolveIntentObserver: Observer<Intent>
     private var googleBtnLabel: Button? = null
     private lateinit var facebookInitObserver: Observer<Unit>
     private lateinit var alreadyConnectedWithFacebookObserver: Observer<Boolean>
     private lateinit var finishLoginActivityObserver: Observer<Boolean>
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
+
         loginAppManager = LoginAppManager.getInstance(this)
         loginAppManager.mGoogleSignInClient = GoogleSignIn.getClient(this, loginAppManager.instanciateGSO())
-
 
         initObservers()
         triggerLivesData()
@@ -64,9 +68,19 @@ class LoginActivity : AppCompatActivity() {
             // Check if no view has focus before hiding the keyboard:
             closeKeyboard()
         }
-        tv_signIn.setOnClickListener { loginAppManager.regularSignIn() }
-        tv_lostPassword.setOnClickListener { loginAppManager.openActivityLostPassword() }
+        tv_signIn.setOnClickListener { regularSignIn() }
+        tv_lostPassword.setOnClickListener { openActivityLostPassword() }
 
+    }
+
+    private fun regularSignIn() {
+        val intent = Intent(this, SignInActivity::class.java)
+        startActivity(intent)
+    }
+
+    private fun openActivityLostPassword() {
+        val intent = Intent(this, LostPasswordActivity::class.java)
+        startActivity(intent)
     }
 
     private fun closeKeyboard() {
@@ -113,14 +127,21 @@ class LoginActivity : AppCompatActivity() {
     private fun initObservers() {
 
         finishLoginActivityObserver = Observer {
-            if (it) finish()
+            if (loginAppManager.connectedUser != null) {
+                val intent = Intent(this, BottomActivity::class.java)
+                startActivity(intent)
+                Handler().postDelayed({
+                    Log.d("TEST", "handler")
+                    finish()
+                }, 20000L)
+            }
         }
 
         loaderObserver = Observer { isVisible ->
             login_progressBar.visibility = isVisible
         }
 
-        googleBtnSwitchObserver = Observer {connect ->
+        googleBtnSwitchObserver = Observer { connect ->
             if (connect) {
                 googleBtnLabel?.text = getString(R.string.btn_connection_google)
                 sign_in_button.setOnClickListener {
@@ -135,7 +156,10 @@ class LoginActivity : AppCompatActivity() {
         }
 
         resolveIntentObserver = Observer { intent ->
-            startActivity(intent)
+            if (loginAppManager.connectedUser != null) {
+                startActivity(intent)
+                removeObs()
+            }
         }
 
         facebookInitObserver = Observer {
@@ -157,11 +181,20 @@ class LoginActivity : AppCompatActivity() {
             })
         }
 
-        alreadyConnectedWithFacebookObserver = Observer {isLoggedIn ->
+        alreadyConnectedWithFacebookObserver = Observer { isLoggedIn ->
             if (isLoggedIn) {
                 LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile, email, user_birthday, user_friends"))
             }
         }
+    }
+
+    private fun removeObs() {
+        loginAppManager.finishActivityLiveData.removeObserver(finishLoginActivityObserver)
+        loginAppManager.loaderDisplay.removeObserver(loaderObserver)
+        loginAppManager.alreadyConnectedToFacebook.removeObserver(alreadyConnectedWithFacebookObserver)
+        loginAppManager.facebookInit.removeObserver(facebookInitObserver)
+        loginAppManager.resolveIntent.removeObserver(resolveIntentObserver)
+        loginAppManager.googleBtnSwitch.removeObserver(googleBtnSwitchObserver)
     }
 
     private fun triggerLivesData() {
@@ -175,11 +208,7 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         if (doubleBackToExitPressedOnce) {
-            loginAppManager.loaderDisplay.removeObserver(loaderObserver)
-            loginAppManager.alreadyConnectedToFacebook.removeObserver(alreadyConnectedWithFacebookObserver)
-            loginAppManager.facebookInit.removeObserver(facebookInitObserver)
-            loginAppManager.resolveIntent.removeObserver(resolveIntentObserver)
-            loginAppManager.googleBtnSwitch.removeObserver(googleBtnSwitchObserver)
+            removeObs()
             loginAppManager.cancelCall()
             super.onBackPressed()
             return

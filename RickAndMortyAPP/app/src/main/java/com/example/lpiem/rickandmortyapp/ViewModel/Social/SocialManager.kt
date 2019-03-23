@@ -106,8 +106,10 @@ class SocialManager private constructor(private val context: Context){
         val message = list.message
         if (code == SUCCESS) {
             listOfFriends = list
-            listOfActualFriends = list.friends?.filter { it.accepted == true }
-            listOfPotentialFriends = list.friends?.filter { it.accepted == false }
+            listOfActualFriends = list.friends?.filter { it.accepted == true }?.distinct()
+            listOfPotentialFriends = list.friends?.filter { it.accepted == false }?.distinct()
+            Log.d(TAG, "listActual = $listOfActualFriends")
+            Log.d(TAG, "listPotential = $listOfPotentialFriends")
             updateListLiveData.postValue(listOfActualFriends)
         } else {
             Toast.makeText(context, String.format(context.getString(R.string.code_message), code, message), Toast.LENGTH_SHORT).show()

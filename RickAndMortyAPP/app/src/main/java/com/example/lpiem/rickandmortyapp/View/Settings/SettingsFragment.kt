@@ -53,8 +53,11 @@ class SettingsFragment : androidx.fragment.app.Fragment() {
                         loginAppManager.disconnectUser()
                         val handler = Handler()
                         handler.postDelayed({
-                            settingsManager.disconnect.postValue(true)
-                            onDestroyView()
+                            if (loginAppManager.connectedUser != null) {
+                                loginAppManager.connectedUser = null
+                                settingsManager.disconnect.value = true
+                                onDestroyView()
+                            }
                         }, 2000L)
                     }
                     .setNegativeButton(android.R.string.no) { dialog, which ->
@@ -78,6 +81,7 @@ class SettingsFragment : androidx.fragment.app.Fragment() {
 
     override fun onDestroyView() {
         settingsManager.cancelCall()
+        settingsManager.disconnect.postValue(false)
         super.onDestroyView()
     }
 

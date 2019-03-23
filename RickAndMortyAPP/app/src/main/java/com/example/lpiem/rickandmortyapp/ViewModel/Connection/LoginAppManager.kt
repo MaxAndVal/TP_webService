@@ -17,13 +17,12 @@ import com.example.lpiem.rickandmortyapp.Data.Repository.SUCCESS
 import com.example.lpiem.rickandmortyapp.Model.ResponsesFromAPI.User
 import com.example.lpiem.rickandmortyapp.Model.ResponsesFromAPI.UserResponse
 import com.example.lpiem.rickandmortyapp.R
+import com.example.lpiem.rickandmortyapp.Util.SingleLiveEvent
 import com.example.lpiem.rickandmortyapp.Util.SingletonHolder
 import com.example.lpiem.rickandmortyapp.Util.observeOnce
 import com.example.lpiem.rickandmortyapp.View.BackActivity.BottomActivity
 import com.example.lpiem.rickandmortyapp.View.Connection.LoginActivity
-import com.example.lpiem.rickandmortyapp.View.Connection.SignInActivity
 import com.example.lpiem.rickandmortyapp.View.Connection.TAG
-import com.example.lpiem.rickandmortyapp.View.Settings.LostPasswordActivity
 import com.facebook.AccessToken
 import com.facebook.FacebookException
 import com.facebook.GraphRequest
@@ -54,8 +53,8 @@ class LoginAppManager private constructor(private var context: Context) {
     var resolveIntent = MutableLiveData<Intent>()
     var facebookInit = MutableLiveData<Unit>()
     var alreadyConnectedToFacebook = MutableLiveData<Boolean>()
-    var finishActivityLiveData = MutableLiveData<Boolean>()
-    var startIntentSplashScreenLiveData = MutableLiveData<Intent>()
+    var finishActivityLiveData = SingleLiveEvent<Boolean>()
+    var startIntentSplashScreenLiveData = SingleLiveEvent<Intent>()
 
     companion object : SingletonHolder<LoginAppManager, Context>(::LoginAppManager)
 
@@ -87,7 +86,7 @@ class LoginAppManager private constructor(private var context: Context) {
         loginLiveData.observeOnce(observer)
     }
 
-    fun regularSignIn() {
+/*    fun regularSignIn() {
         val signInIntent = Intent(context, SignInActivity::class.java)
         resolveIntent.postValue(signInIntent)
     }
@@ -95,7 +94,7 @@ class LoginAppManager private constructor(private var context: Context) {
     fun openActivityLostPassword() {
         val lostPassIntent = Intent(context, LostPasswordActivity::class.java)
         resolveIntent.postValue(lostPassIntent)
-    }
+    }*/
 
     // GOOGLE CONNECTION
 
@@ -259,16 +258,23 @@ class LoginAppManager private constructor(private var context: Context) {
                             preferencesHelper.deviceToken = token
                         }
                         Toast.makeText(context, String.format(context.getString(R.string.welcome, name)), Toast.LENGTH_SHORT).show()
+                        finishActivityLiveData.value = true
+                    }
+                    LoginFrom.FROM_LOST_PASSWORD -> {
+                        if (token != null && token.length == 30) {
+                            preferencesHelper.deviceToken = token
+                        }
+                        Toast.makeText(context, String.format(context.getString(R.string.welcome, name)), Toast.LENGTH_SHORT).show()
                         resolveIntent.postValue(homeIntent)
-                        finishActivityLiveData.postValue(true)
+                        finishActivityLiveData.value = true
                     }
                     else -> {
                         if (token != null && token.length == 30) {
                             Toast.makeText(context, String.format(context.getString(R.string.welcome, name)), Toast.LENGTH_SHORT).show()
-                            startIntentSplashScreenLiveData.postValue(homeIntent)
+                            startIntentSplashScreenLiveData.value = homeIntent
                         } else {
                             Toast.makeText(context, context.getString(R.string.expired_session), Toast.LENGTH_SHORT).show()
-                            startIntentSplashScreenLiveData.postValue(loginIntent)
+                            startIntentSplashScreenLiveData.value = loginIntent
                         }
                     }
                 }

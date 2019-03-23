@@ -98,6 +98,7 @@ class RickAndMortyRetrofitSingleton private constructor(private val context: Con
                         ACCEPT_FRIENDSHIP,
                         DEL_A_FRIEND,
                         LOST_CODE,
+                        LOGIN_WITH_CODE,
                         CHANGE_PASSWORD -> {
                             liveData.postValue(result as UserResponse)
                         }
@@ -183,7 +184,7 @@ class RickAndMortyRetrofitSingleton private constructor(private val context: Con
 
     fun getUserById(userId: Int?): MutableLiveData<UserResponse> {
         currentCall = instance!!.getUserById(userId!!)
-       return callRetrofit(currentCall!!, GET_USER_BY_ID) as MutableLiveData<UserResponse>
+        return callRetrofit(currentCall!!, GET_USER_BY_ID) as MutableLiveData<UserResponse>
     }
 
     fun putDateToken(date: String, id: Int?): MutableLiveData<UserResponse> {
@@ -192,6 +193,7 @@ class RickAndMortyRetrofitSingleton private constructor(private val context: Con
         currentCall = instance!!.putNewDate(id!!, jsonBody)
         return callRetrofit(currentCall!!, PUT_DATE) as MutableLiveData<UserResponse>
     }
+
     fun putMemoryDateToken(date: String, id: Int?): MutableLiveData<UserResponse> {
         val jsonBody = JsonObject()
         jsonBody.addProperty(JsonProperty.NewDate.dbField, date)
@@ -272,7 +274,7 @@ class RickAndMortyRetrofitSingleton private constructor(private val context: Con
 
         val userId = user?.userId ?: -1
         currentCall = if (friendId != null) {
-           instance!!.getFriendMarket(userId, friendId)
+            instance!!.getFriendMarket(userId, friendId)
         } else {
             instance!!.getUserMarket(userId)
         }
@@ -299,11 +301,11 @@ class RickAndMortyRetrofitSingleton private constructor(private val context: Con
     }
 
     fun changePassword(userId: Int?, userEmail: String?, oldPass: String, newPass: String): MutableLiveData<UserResponse> {
-    val jsonBody = JsonObject()
+        val jsonBody = JsonObject()
         jsonBody.addProperty(UserEmail.dbField, userEmail)
         jsonBody.addProperty(UserOldPassword.dbField, oldPass)
         jsonBody.addProperty(UserNewPassword.dbField, newPass)
-        currentCall = instance!!.changePassword(userId!!,jsonBody)
+        currentCall = instance!!.changePassword(userId!!, jsonBody)
         return callRetrofit(currentCall!!, CHANGE_PASSWORD) as MutableLiveData<UserResponse>
     }
 
@@ -333,7 +335,7 @@ class RickAndMortyRetrofitSingleton private constructor(private val context: Con
     }
 
     fun deleteThisFriend(currentUserId: Int, friendId: Int): MutableLiveData<UserResponse> {
-        currentCall = instance!!.deleteAFriend( currentUserId,friendId)
+        currentCall = instance!!.deleteAFriend(currentUserId, friendId)
         return callRetrofit(currentCall!!, RetrofitCallTypes.DEL_A_FRIEND) as MutableLiveData<UserResponse>
     }
 
