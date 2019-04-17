@@ -182,7 +182,7 @@ class BottomActivity : AppCompatActivity() {
 
         // handling double tap to exit app
         if (backStackLength == 0 && doubleBackToExitPressedOnce) {
-            loginAppManager.connectedUser = null
+            //loginAppManager.connectedUser = null
             loginAppManager.gameInProgress = true
             settingsManager.openFaqLiveData.removeObserver(openFaqFragmentObserver)
             settingsManager.openFragChangePassLiveData.removeObserver(openFragChangePassObserver)
@@ -238,7 +238,7 @@ class BottomActivity : AppCompatActivity() {
         while (supportFragmentManager.backStackEntryCount > 0) {
             supportFragmentManager.popBackStackImmediate()
         }
-        loginAppManager.connectedUser = null
+        //loginAppManager.connectedUser = null
         loginAppManager.gameInProgress = true
         settingsManager.openFaqLiveData.removeObserver(openFaqFragmentObserver)
         settingsManager.openFragChangePassLiveData.removeObserver(openFragChangePassObserver)
@@ -255,6 +255,8 @@ class BottomActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        loginAppManager = LoginAppManager.getInstance(this)
+        Log.d("LAST TEST", ""+loginAppManager?.connectedUser?.toString())
 
         fragmentManager = supportFragmentManager
         tv_deckToOpen.setOnClickListener {

@@ -79,7 +79,8 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun openActivityLostPassword() {
-        val intent = Intent(this, LostPasswordActivity::class.java)
+        val intent = Intent(this@LoginActivity, LostPasswordActivity::class.java)
+        Log.d("TEST",""+intent)
         startActivity(intent)
     }
 
@@ -117,6 +118,7 @@ class LoginActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         clearEditTexts()
+        tv_lostPassword.setOnClickListener { openActivityLostPassword() }
     }
 
     private fun clearEditTexts() {

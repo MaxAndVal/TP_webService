@@ -1,0 +1,23 @@
+
+î
+dapp/src/main/java/com/example/lpiem/rickandmortyapp/Data/Repository/RickAndMortyRetrofitSingleton.kt,9/5/958a28ed50ed08a4b13e9527eeb3ef7ee439f461
+x
+Happ/src/main/java/com/example/lpiem/rickandmortyapp/View/SplashScreen.kt,7/2/728337047fb276ab4015a0635ed7304508832a61
+u
+Eapp/src/main/java/com/example/lpiem/rickandmortyapp/Util/Extension.kt,d/f/df4543b3594fdedf750badca3dc793b378c6201f
+á
+Wapp/src/main/java/com/example/lpiem/rickandmortyapp/View/BackActivity/BottomActivity.kt,a/6/a6133d931ee61291b3abc3386499b30f4498671e
+P
+ app/src/main/AndroidManifest.xml,8/c/8c55c3ccc257e5907959013f99656e4c8ec3903e
+â
+Yapp/src/main/java/com/example/lpiem/rickandmortyapp/View/Settings/LostPasswordActivity.kt,b/d/bd35bff72d089deb5971a562256940886b6f23c6
+ç
+]app/src/main/java/com/example/lpiem/rickandmortyapp/ViewModel/settings/LostPasswordManager.kt,4/6/46d352be1a7cc90dffe96a85adfe647806c9a0a6
+ã
+[app/src/main/java/com/example/lpiem/rickandmortyapp/ViewModel/Connection/LoginAppManager.kt,d/4/d413200657780308eec8c041b24a72dac85facfe
+Ñ
+Tapp/src/main/java/com/example/lpiem/rickandmortyapp/View/Connection/LoginActivity.kt,8/8/88d0638193bf6dbe063d00f1d5d45e011e9292fd
+}
+Mapp/src/main/java/com/example/lpiem/rickandmortyapp/View/Home/HomeFragment.kt,4/6/463fb2b16795a6bf8803fd6f44ec7eeb24797d5f
+Ö
+Uapp/src/main/java/com/example/lpiem/rickandmortyapp/View/Connection/SignInActivity.kt,2/e/2edf0ef6e875820197b673b499bf17dad5449cc6
